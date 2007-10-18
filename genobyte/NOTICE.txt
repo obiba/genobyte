@@ -1,0 +1,19 @@
+GenoByte
+Copyright 2007 Génome Québec
+
+This product depends on and is distributed with the following open source libraries:
+
+    * SLF4J (http://www.slf4j.org/) is released under the SLF4J License
+
+    * commons-digester (http://commons.apache.org/digester/) is released under the Apache License
+
+    * commons-cli (http://commons.apache.org/cli) is released under the Apache License
+
+    * ibatis-common and ibatis-dao (http://ibatis.apache.org/) is released under the Apache License
+
+    * Berkeley DB Java Edition (http://www.oracle.com/technology/products/berkeley-db/je/index.html) is released under the bdb license
+
+    * junit (http://http://junit.org/) is released under the cpl license
+
+
+These licenses can be found in the licenses directory.

@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<store-schema name="affymetrix-genotyping" version="1.0">
+
+    <dictionaries>
+
+        <dictionary name="positiveInteger" class="org.obiba.bitwise.IntegerDictionary">
+          <property name="lower" value="0"/>
+          <property name="upper" value="2147483647"/>
+          <property name="step" value="1"/>
+        </dictionary>
+
+        <dictionary name="score" class="org.obiba.bitwise.DoubleDictionary">
+          <property name="lower" value="0"/>
+          <property name="upper" value="1"/>
+          <property name="step" value="0.000001"/>
+        </dictionary>
+
+        <dictionary name="rate" class="org.obiba.bitwise.DoubleDictionary">
+          <property name="lower" value="0"/>
+          <property name="upper" value="1"/>
+          <property name="step" value="0.00001"/>
+        </dictionary>
+
+        <dictionary name="names" type="static" class="org.obiba.bitwise.HuffmanDictionary">
+          <property name="provider" value="org.obiba.bitwise.client.GenericNameProvider"/>
+        </dictionary>
+
+        <dictionary name="diseaseStatus" type="static" class="org.obiba.bitwise.simulation.DiseaseStatusDictionary"/>
+
+        <dictionary name="snpCall" type="static" class="org.obiba.bitwise.genotyping.SnpCallDictionary"/>
+
+    </dictionaries>
+
+    <fields>
+        <field name="name" dictionary="names"/>
+        <field name="individualName" dictionary="names"/>
+        <field name="motherName" dictionary="names"/>
+        <field name="fatherName" dictionary="names"/>
+        <field name="diseaseStatus" dictionary="diseaseStatus"/>
+
+        <field name="callRate" dictionary="rate"/>
+
+        <field name="freqA" dictionary="positiveInteger"/>
+        <field name="freqB" dictionary="positiveInteger"/>
+        <field name="freqH" dictionary="positiveInteger"/>
+        <field name="freqU" dictionary="positiveInteger"/>
+
+        <field name="mendel" dictionary="positiveInteger"/>
+        <field name="mendelTests" dictionary="positiveInteger"/>
+        <field name="reproDna" dictionary="positiveInteger"/>
+        <field name="reproDnaTests" dictionary="positiveInteger"/>
+        <field name="reproAssay" dictionary="positiveInteger"/>
+        <field name="reproAssayTests" dictionary="positiveInteger"/>
+
+        <field name="calls" dictionary="snpCall" template="true"/>
+        <field name="comparableCalls" dictionary="snpCall" template="true"/>
+    </fields>
+
+</store-schema>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://maven.apache.org/xsd/maven-project-3.0.0.xsd">
+
+    <pomVersion>3</pomVersion>
+    <id>nanuq</id>
+    <name>Hapmap Bitwise implementation</name>
+    <groupId>nanuq</groupId>
+    <artifactId>nanuq-hapmap-bitwise</artifactId>
+    <currentVersion>1.0</currentVersion>
+
+    <!-- ================================================================ -->
+    <!-- Project management section                                       -->
+    <!-- ================================================================ -->
+    <organization>
+        <name>McGill University and Genome Québec Innovation Centre</name>
+        <url>http://www.genomequebec.mcgill.ca</url>
+        <logo>/images/logos/MUHC_trans.gif</logo>
+    </organization>
+
+    <inceptionYear>2006</inceptionYear>
+    <package>ca.mcgill.genome</package>
+
+    <logo>/images/logos/nanuq_blue_trans.gif</logo>
+
+    <description>
+        Bitwise storage technique
+    </description>
+
+    <shortDescription>Nanuq bitwise storage</shortDescription>
+
+    <url>https://genomequebec.mcgill.ca/nanuq</url>
+
+    <versions>
+        <version>
+            <id>current</id>
+            <name>Development</name>
+            <tag>HEAD</tag>
+        </version>
+    </versions>
+
+    <licenses/>
+
+    <mailingLists/>
+
+    <developers>
+        <developer>
+            <name>Philippe Laflamme</name>
+            <id>plaflamm</id>
+            <email>philippe.laflamme@mail.mcgill.ca</email>
+            <organization>
+                McGill University and Genome Québec Innovation Centre
+            </organization>
+            <roles>
+                <role>Java Developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <dependencies>
+        <dependency>
+            <groupId>nanuq</groupId>
+            <artifactId>nanuq-bitwise</artifactId>
+            <version>1.0</version>
+            <type>jar</type>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <sourceDirectory>src/main/java</sourceDirectory>
+
+        <unitTestSourceDirectory>src/test/java</unitTestSourceDirectory>
+
+        <resources>
+          <resource>
+                <directory>${maven.src.dir}/java</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                    <include>**/*.xml</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+    </build>
+</project>

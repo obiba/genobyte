@@ -1,0 +1,50 @@
+ ------
+GenoByte 1.4 Limitations
+ ------
+ ------
+September 2007
+ ------
+
+Limitations
+
+  * No "alter"
+
+    Currently, there is no way to alter an existing schema. Once a BitwiseStore is created, its schema may never be modified. We've decided not to implement an alter feature to limit the scope of the API.
+
+  * In-process memory only
+
+    There is no concept of client/server in the engine: everything runs in the calling process' memory space. In terms of performance this is usually an advantage, but may be an issue in terms of deployment flexibility.
+    
+  * No 1:n relationship
+
+    Each record may have one and only one value per field. Hence, it is currently not possible to represent and store a 1:n relationship. However, it is possible to circumvent this limitation by using the "Field Template" feature of a store's Schema, but it is not an elegant solution.
+
+  * Multiple copies of genotypes / transposing genotypes
+
+    Currently, GenoByte requires that genotypes be copied from one store to another which effectively creates two copies of every genotype. This allows quick access to genotypes by sample and by assay, but the down side is that the process is very memory and disk IO intensive and does not scale well.
+
+Capacity
+
+  * Number of records
+
+    A BitwiseStore uses an int (signed 32 bits) for a record's index. It follows that the maximum number of records that it can hold is 2^31 (2,147,483,648). Although this is the current limitation (1.4), it is not the theoretical upper limit. Also, please note that this is the maximum number of records (columns) that may be stored, not the maximum number of values that may be stored (see below). 
+
+    The underlying data structure (the BitVector) uses an array of long to hold record data: the first 64 records are stored in array[0], the next 64 in array[1] and so forth.
+    Since Java uses ints (signed 32 bits) to index arrays, it follows that we may have a maximum of 2^31 values in this array which sets the "physical" limit to 2^31 * 64 (2^37 or 137,438,953,472) records. 
+    We decided to use ints as record indexes because 2^37 is much smaller that what a long may hold (2^63) which would have required testing the index value on every vector access. We do not currently consider this as a limiting factor to Bitwise's adoption since 2G records is plenty for todays problems.
+
+  * Number of bit vectors
+
+    The unique ID of a single BitVector is an int. It follows that the total number of BitVectors that may be stored in a single BitwiseStore is 2^31 (2,147,483,648). Since BitVectors unique IDs are shared by all Fields, the number and dimension of all fields dictate the overall maximum number of fields in a single store. This limitation could easily be pushed-off since this unique ID is hidden from the external API.
+
+  * Number of fields
+
+    There is no theoretical limit to the number of fields per store, but there is a functional limit since the number of BitVectors is limited (remember: Field instances hold BitVector instances).
+
+  * Field dimension
+
+    The field dimension relates to the size (in bits) of a stored value in a field. The maximum dimension of any field is 2^31 (regardless of the maximum number of BitVector instances).
+
+  * Number of values
+
+    The maximum number of values that may be stored depends on the maximum number of records (2^31) and the dimension of each Field in the store: the sum of the dimensions may not exceed 2^31. For example, a store with 2^31 records for which all fields have a dimension of 32, would be able to store 67,108,864 (2^26) fields. The total number of values in such a store would be 144,115,188,075,855,872 (2^57).

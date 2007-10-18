@@ -1,0 +1,36 @@
+ ------
+GenoByte 1.4 Features
+ ------
+ ------
+September 2007
+ ------
+
+Main Features
+
+  * Geared for High-Throughput Genotyping Analysis
+  
+    GenoByte's design is geared towards working with large scale datasets involving hundreds of million of genotypes. As such, it comes with predefined functionalities appropriate for such applications.
+
+  * Supports addition and deletion of data
+  
+    GenoByte's datastore is dynamic: genotyping data can be added to (or removed from) an existing dataset with minimal cost. 
+
+  * Out of the box basic genotype analysis
+
+    GenoByte provides efficient genotype analysis statistics: allele frequencies (sums, call rates, MAF), H-W, heterozigosity. Genotyping inconsistencies are also identified: reproducibility errors and mendelian errors. 
+
+  * Extensible statistical calculation module
+
+    New statistical functions can be plugged into GenoByte's engine to provide custom analysis and reports.
+
+  * Compact (disk space usage is minimal)
+
+    Each piece of information stored in GenoByte's engine is transformed into the minimal amount of bits required. This effectively compresses the data while still providing efficient access.
+
+  * Transactional
+
+    GenoByte is fully transactional, meaning that an interrupted data modification operation will not cause data loss or corruption.  
+
+  * Thread-safe
+
+    A GenoByte store may be accessed simultaneously by multiple threads.

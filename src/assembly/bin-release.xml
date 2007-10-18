@@ -1,0 +1,135 @@
+<assembly>
+
+    <id>bin</id>
+
+    <formats>
+        <format>tar.gz</format>
+        <format>zip</format>
+    </formats>
+
+    <moduleSets>
+
+        <moduleSet>
+            <!-- Files from the genobyte module -->
+            <includes>
+                <include>org.obiba.genobyte:genobyte</include>
+            </includes>
+
+            <sources>
+              <!-- Map resources to the root of the assembly -->
+              <includeModuleDirectory>false</includeModuleDirectory>
+
+              <fileSets>
+
+                <fileSet>
+                    <outputDirectory>/</outputDirectory>
+                    <includes>
+                        <include>README.txt</include>
+                        <include>LICENSE.txt</include>
+                        <include>NOTICE.txt</include>
+                        <include>licenses/*</include>
+                    </includes>
+                </fileSet>
+
+              </fileSets>
+
+            </sources>
+
+            <!-- This will include the JAR in the root directory -->
+            <binaries>
+                <includeDependencies>true</includeDependencies>
+                <dependencySets>
+                  <dependencySet>
+                    <outputDirectory>lib</outputDirectory>
+                  </dependencySet>
+                </dependencySets>
+                <unpack>false</unpack>
+            </binaries>
+        </moduleSet>
+
+        <moduleSet>
+            <includes>
+                <include>org.obiba.genobyte:genobyte-infinium</include>
+            </includes>
+
+            <sources>
+                <!-- Map resources to the /example directory of the final assembly -->
+                <includeModuleDirectory>true</includeModuleDirectory>
+                <outputDirectoryMapping>example</outputDirectoryMapping>
+
+                <fileSets>
+
+                    <fileSet>
+                        <directory>src/main/java</directory>
+                        <outputDirectory>src</outputDirectory>
+                    </fileSet>
+
+                    <fileSet>
+                        <directory>src/main/resources</directory>
+                        <outputDirectory>src</outputDirectory>
+                    </fileSet>
+
+                    <fileSet>
+                        <directory>src/script</directory>
+                        <outputDirectory>bin</outputDirectory>
+                        <includes>
+                            <include>infinium-data-generator.pl</include>
+                        </includes>
+                        <fileMode>0744</fileMode>
+                    </fileSet>
+
+                    <fileSet>
+                        <directory>src/script</directory>
+                        <outputDirectory>bin</outputDirectory>
+                        <includes>
+                            <include>ldr_header.txt</include>
+                        </includes>
+                    </fileSet>
+
+                    <fileSet>
+                        <directory>src/bin</directory>
+                        <outputDirectory>bin</outputDirectory>
+                        <includes>
+                            <include>*.sh</include>
+                        </includes>
+                        <fileMode>0744</fileMode>
+                    </fileSet>
+
+                    <fileSet>
+                        <directory>src/bin</directory>
+                        <outputDirectory>bin</outputDirectory>
+                        <includes>
+                            <include>*.bat</include>
+                        </includes>
+                    </fileSet>
+
+                    <fileSet>
+                        <directory>src/data</directory>
+                        <outputDirectory>data</outputDirectory>
+                        <includes>
+                            <include>*</include>
+                        </includes>
+                    </fileSet>
+                </fileSets>
+            </sources>
+
+            <binaries>
+                <outputDirectory>example</outputDirectory>
+                <unpack>false</unpack>
+                <dependencySets>
+                  <dependencySet>
+                      <useTransitiveFiltering>true</useTransitiveFiltering>
+                      <outputDirectory>example/lib</outputDirectory>
+                      <includes>
+                        <include>commons-lang:commons-lang</include>
+                        <include>org.slf4j:slf4j-log4j12</include>
+                      </includes>
+                  </dependencySet>
+                </dependencySets>
+            </binaries>
+
+        </moduleSet>
+
+    </moduleSets>
+</assembly>
+

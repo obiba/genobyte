@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+   <properties>
+      <title>Nanuq Bitwise</title>
+      <author>David Bujold</author>
+   </properties>
+   <body>
+      <release version="current" date="2007-09-1" description="Current work version">    
+           <action dev="David Bujold" type="add">
+               A new cool feature.
+           </action>         
+         </release>
+      <release version="1.0.1" date="2007-08-31" description="Release fix">   
+           <action dev="David Bujold" type="add">
+               Added a cool feature.
+           </action>                      
+           <action dev="David Bujold" type="fix" issue="GEN-1234">
+               Fixed a nasty bug.
+           </action>        
+           <action dev="David Bujold" type="delete">
+               Removed a feature that nobody liked.
+           </action>        
+         </release>         
+   </body>
+</document>

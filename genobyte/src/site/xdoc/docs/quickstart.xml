@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+<body>  
+
+
+    <h1>Quick Start Manual</h1>
+    <p>GenoByte is a generic API for manipulating large collections of genotypes. Typically, GenoByte is used as the basis of a genotyping application. The package comes with an example of such an application: genobyte-infinium. This simple application can do some basic analysis on  high-throughput Infinium data. </p>
+    <p>This manual gives you instructions to install and run the genobyte-infinium. A detailed description of how the genobyte-infinium was built on top of the GenoByte will soon be available. </p>
+    <h1>Download and unpack the application</h1>
+    
+    <ul>
+        <li><div class="step">To run this application you will need a version of the Java Runtime Environment version 1.5 or newer. You can download it at <a href="http://www.java.com/en/download/">http://www.java.com/en/download/</a></div></li>
+        <li><div class="step">Download the latest GenoByte binary package from the <a href="../download.html">download section</a>. Select either the zip or tar.gz format. The package will contain everything you need to follow the steps described in this manual.</div></li>
+        <li><div class="step">
+            Unzip or untar the package at the location of your choice. You should obtain the following directory structure:
+                <ul>
+                    <li>genobyte-1.4
+                        <ul>
+                            <li>licences/
+                                <ul>
+                                    <li>bdb.txt</li>
+                                    <li>apache.txt</li>
+                                    <li>slf4j-license.txt</li>
+                                    <li>cpl.txt</li>
+                                </ul>
+                            </li>
+                            <li>lib/
+                                <ul>
+                                    <li>all GenoByte third-party dependencies (also includes optional dependencies)</li>
+                                </ul>
+                            </li>
+                            <li>genobyte-1.4.jar</li>
+                            <li>LICENSE.txt</li>
+                            <li>READEME.txt</li>
+                            <li>NOTICE.txt</li>
+                            <li>example/
+                                <ul>
+                                  <li>bin/
+                                      <ul>
+                                          <li>cp-append.bat</li>
+                                          <li>genobyte-infinium.bat</li>
+                                          <li>genobyte-infinium.sh</li>
+                                          <li>infinium-data-generator.pl</li>
+                                      </ul>
+                                  </li>
+                                  <li>data/
+                                      <ul>
+                                          <li>manifest.csv</li>
+                                          <li>samples.csv</li>
+                                          <li>genotypes.csv</li>
+                                          <li>ldr_header.csv</li>
+                                      </ul>
+                                  </li>
+                                  <li>lib/
+                                      <ul>
+                                          <li>example third-party dependencies</li>
+                                      </ul>
+                                  </li>
+                                  <li>src/
+                                      <ul>
+                                          <li>source files for the example application</li>
+                                      </ul>
+                                  </li>
+                                  <li>genobyte-infinium-1.4.jar</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+    
+    <p>This structure is rather self-explanatory. The data directory  contains a small dataset that  is used in the steps described in this manual. To obtain a dataset of a more realistic size, the perl script infinium-data-generator.pl can be executed as described in the <a href="#large_data">last section</a>. </p>
+    
+    <h1>Run the application</h1>
+    <ul>
+        <li>
+            <div class="step">On Windows, double-click on the icon for the file genobyte-infinium.bat located in the bin directory.</div>
+        </li>
+        
+        <li>
+            <div class="step">On Linux go to the bin directory and execute the script with the following commands:
+                <div class="console">
+                    # cd path-to-genobyte/example/bin <br />
+                    # ./genobyte-infinium.sh <br />
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="step">
+                After either of these steps,  you should have a console open with the sign &gt; as a prompt.
+                <div class="console"> &gt;<br /></div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="step">
+                Create a datastore named mystore with the following command:
+                <div class="console"> 
+                  &gt; --create mystore<br />
+                  Creating store mystore.<br />
+                  Selection: 0/0 samples 0/0 assays<br />
+                  mystore_samples><br />
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="step">
+                Your prompt should now be preceded with the name of the store and the word samples. Load some sample data from an Illumina Sample Sheet with the following command:
+                <div class="console">
+                    Selection: 0/0 samples 0/0 assays<br />
+                    mystore_samples&gt; --load samples data/samples.csv<br />
+                    Loading file [samples.csv]<br/>
+                    Loading sample sheet [samples.csv]<br/>
+                    Loaded 11 samples from sample sheet.<br/>
+                    Selection: 11/11 samples 0/0 assays<br /> 
+                    mystore_samples><br/>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="step">
+                Load some assay data (SNPs) from an Illumina Manifest text file with the following command:
+                <div class="console">
+                    Selection: 11/11 samples 0/0 assays<br /> 
+                    mystore_samples&gt; --load assays data/manifest.csv<br />
+                    Loading file [manifest.csv]<br/>
+                    Loading manifest [manifest.csv]<br/>
+                    Loaded 1000 assays from manifest.<br/>
+                    Selection: 11/11 samples 1000/1000 assays<br />
+                    mystore_samples><br/>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="step">
+                Load genotypes from an Illumina "Locus X DNA Report" with the following command:
+                <div class="console">
+                    Selection: 11/11 samples 1000/1000 assays<br /> 
+                    mystore_samples&gt; --load genotypes data/genotypes.csv<br />
+                    Loading file [genotypes.csv]<br />
+                    Loading LocusXDna report [genotypes.csv]<br />
+                    Processing sample 11/11<br />
+                    Loaded genotypes in XXX seconds<br />
+                    Selection: 11/11 samples 1000/1000 assays<br />
+                    mystore_samples><br />
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="step">
+                At this point, the samples' genotypes have been populated. To populate the assays' genotypes, the data needs to be "transposed" from the samples matrix to the assays matrix by using the following command:
+                <div class="console">
+                    Selection: 11/11 samples 1000/1000 assays<br /> 
+                    mystore_samples&gt; --transpose<br />
+                    Took X.XXXs<br />
+                    Selection: 11/11 samples 1000/1000 assays<br />
+                    mystore_samples&gt; <br />
+                </div>
+                <span class="note">This step takes a long time to execute. Executing this step is necessary in oder to obtain assay statistics. It is suggested to execute this command only once: after loading ALL the samples' genotypes.</span>
+            </div>
+        </li>
+        
+        <li>
+            <div class="step">
+                All the data you need has now been loaded and prepared, you are ready to do some work.
+            </div>
+        </li>
+        
+        <li>
+            <div class="step">
+                Select a subset of the samples to include in your analysis/reports. If you skip this step, all loaded samples will be used.
+                <div class="console">
+                    Selection: 11/11 samples 1000/1000 assays<br /> 
+                    mystore_samples&gt; group:AFFECTED<br />
+                    6 results in XX milliseconds.<br />
+                    Selection: 6/11 samples 1000/1000 assays<br />
+                    mystore_samples&gt;<br/>
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="step">
+                To select a subset of SNPs, you need to switch the to the assays store by executing the following command:
+                <div class="console"> 
+                    Selection: 6/11 samples 1000/1000 assays<br /> 
+                    mystore_samples&gt; --switch<br />
+                    Selection: 6/11 samples 1000/1000 assays<br />
+                    mystore_assays&gt;<br />
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="step">
+                Select a subset of the SNPs to include in your analysis/reports. If you skip this step, all loaded SNPs will be used.
+                <div class="console">
+                    Selection: 6/11 samples 1000/1000 assays<br /> 
+                    mystore_assays&gt; chromosome:chr1<br />
+                    90 results in XX milliseconds.<br />
+                    Selection: 6/11 samples 90/1000 assays<br />
+                    mystore_assays&gt;<br />
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="step">
+                Generate a DNA report in a file called dna_report.csv with the following command:
+                <div class="console">
+                    Selection: 6/11 samples 90/1000 assays<br /> 
+                    mystore_assays&gt; --report dna dna_report.csv<br />
+                    Producing report type [dna].<br />
+                    Calculating DNA report for 6 samples on 90 assays.<br />
+                    Producing DNA report.<br />
+                    Selection: 6/11 samples 90/1000 assays<br />
+                    mystore_assays&gt;
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="step">
+                Generate a locus report in a file called locus_report.csv with the following command:
+                <div class="console">
+                    Selection: 6/11 samples 90/1000 assays<br /> 
+                    mystore_assays&gt; --report locus locus_report.csv<br />
+                    Producing report type [locus].<br />
+                    Calculating locus report for 90 assays on 6 samples.<br />
+                    Producing locus report.<br />
+                    Selection: 6/11 samples 90/1000 assays<br /> 
+                    mystore_assays&gt;
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="step">
+                Generate  a genotype report in a file called ped_file.txt with the following command:
+                <div class="console">
+                    Selection: 6/11 samples 90/1000 assays<br /> 
+                    mystore_assays&gt; --genotypes pedfile ped_file.txt<br />
+                    Creating [pedfile] report on 6 samples and 90 assays. Outputing report to file(s) [ped_file.txt]<br />
+                    Selection: 6/11 samples 90/1000 assays<br />
+                    mystore_assays&gt;
+                </div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="step">
+                Close the application with the following command:
+                <div class="console">
+                    Selection: 6/11 samples 90/1000 assays<br /> 
+                    mystore_assays&gt; --quit
+                </div>
+            </div>
+        </li>
+        
+    </ul>
+    
+    <h1><a name="large_data" id="large_data"></a>Using a large dataset</h1>
+    <p>The data that came with your download was kept small voluntarily to limit the   size of the package. If you want to use the genobyte-infinium application with a very large dataset, you can use the perl script located in the bin directory to generate such a set. </p>
+    <ul>
+        <li>
+            <div class="step">To run this script, Perl is required.</div>
+            <div class="step">Be advised that before you can load genotypes, samples AND assays need to have been loaded previously. We cannot distribute the Illumina Manifest files with the bundle, hence you must have your own copy of the file in order to use the data generated by this script. The script generates data for the version 1 of the 300K Illumina chip (317503 assays).</div>
+        </li>
+        <li><div class="step">
+            Execute the perl script specifying as a parameter the number of samples to be simulated.
+                <div class="console"># bin/infinium-data-generator.pl 10<br /></div>
+            </div>
+        </li>
+        
+        <li>
+            <div class="step">
+                The data is generated simulating the distribution of samples on 96 well plates where one of the wells is unused because it is reserved as a control. If the number of samples you have chosen is smaller than 95, your samples are all on the same plate and two files will be generated in the directory data:
+                <ul>
+                    <li>samples-1.csv</li>
+                    <li>genotypes-1.csv</li>
+                </ul>
+            </div>
+        </li>
+        
+        <li>
+            <div class="step">If your samples fit on n plates, 2n files will be generated: samples-1.csv, genotypes-1.csv, ..., samples-n.csv, genotypes-n.csv</div>
+        </li>
+        
+        <li>
+            <div class="step">You can then load all these files simultaneously in the genobyte-infinium application using wild cards</div>
+            <div class="console"> 
+                mystore_samples&gt; --load samples data/samples* <br />
+                mystore_samples&gt; --load genotypes data/genotypes*<br />
+            </div>
+        </li>
+    </ul>    
+</body>
+</document>
