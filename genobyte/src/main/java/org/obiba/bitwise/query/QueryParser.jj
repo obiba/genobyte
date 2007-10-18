@@ -1,0 +1,251 @@
+options {
+	STATIC = false;
+	
+/**	
+ *    Commented due to maven plugin that uses old javacc-3.2 instead of javacc-4.0
+ *    JDK_VERSION = "1.5"; 
+ */
+	DEBUG_PARSER=false;
+}
+
+PARSER_BEGIN(QueryParser)
+
+package org.obiba.bitwise.query;
+
+import java.io.StringReader;
+import java.util.List;
+import java.util.ArrayList;
+import org.obiba.bitwise.query.sort.*;
+
+/**
+ * Generated using JavaCC. See QueryParser.jj
+ */
+public class QueryParser {
+
+	private QueryFactory factory_ = new DefaultQueryFactory();
+
+    public QueryParser() {
+      this(new StringReader("")); 
+    }
+
+    public QueryParser(QueryFactory f) {
+      this(new StringReader("")); 
+      factory_ = f;
+    }
+
+    public Query parse(String q) throws ParseException {
+      ReInit(new StringReader(q));
+      try {
+        return parse();
+      }
+      catch (TokenMgrError tme) {
+        throw new ParseException(tme.getMessage());
+      }
+    }
+    
+    public static void main(String args[])
+    {
+        try
+        {
+            QueryParser parser = new QueryParser();
+        	System.out.println("Parsing ["+args[0]+"]");
+            Query q = parser.parse(args[0]);
+			System.out.println("Parsed Query=["+q+"]");
+        }
+        catch(Exception e)
+        {
+              e.printStackTrace();
+        }
+    }
+}
+PARSER_END(QueryParser)
+
+<*> TOKEN : 
+{
+  <#_NUM_CHAR:   ["0"-"9"] >
+| <#_FIELD_CHAR: ["a"-"z", "A"-"Z", "-", "_", "$", "@", "." ] >
+}
+
+SKIP : { " " | "\n" | "\r" | "\t" }
+
+TOKEN [IGNORE_CASE]: 
+{
+    <AND: ("AND" | "&&") >
+  | <OR : ("OR"  | "||") >
+  | <XOR : ("XOR"  | "^") >
+  | <NOT: ("NOT" | "!") >
+  | <DIFF: ("DIFF" | "~") >
+  | <LPAREN: "(" >
+  | <RPAREN: ")" >
+  | <COLON: ":" >
+  | <RANGE_START: "[" >
+  | <COMMA: "," >
+  | <RANGE_END: "]" >
+  | <ORDER_BY: "ORDER BY" >
+  | <DESCENDING: ("DESC" | "NOT") >
+  | <ASCENDING: "ASC" >
+  | <QUOTED: "\"" (~["\""])+ "\"" >
+  | <FIELD_TERM: ( <_FIELD_CHAR> | <_NUM_CHAR> )+ >
+  | <WILDCARD: "*" >
+}
+
+Query parse() :
+{
+	Query q;
+	SortField sortField;
+	List tokens = new ArrayList();
+}
+{
+  q = orExp()
+  (
+    <ORDER_BY>
+    sortField = sortField()
+    {tokens.add(sortField);}
+    (
+      <COMMA> 
+      sortField = sortField()
+      {tokens.add(sortField);}
+    )*
+    <EOF>
+    {return factory_.getSortClause(q, new Sort((SortField[])tokens.toArray(new SortField[]{})));}
+  |
+    <EOF>
+  )
+  {return q;}
+}
+
+SortField sortField() :
+{
+	Token sortToken;
+	boolean reverse = false;
+}
+{
+	sortToken = <FIELD_TERM> 
+	( 
+	  <DESCENDING>
+	  {reverse = true;}
+	  |<ASCENDING>
+	)?
+	{return new SortField(sortToken.image, reverse);}
+}
+
+Query orExp() :
+{
+	Query q;
+	Query right;
+}
+{
+  q = andExp()
+  (
+    <OR> 
+    right = orExp()
+    {return factory_.getBooleanQuery(BooleanQuery.Operator.OR, q, right);}
+  | <XOR> 
+    right = orExp()
+    {return factory_.getBooleanQuery(BooleanQuery.Operator.XOR, q, right);}
+  )?		//From *
+  {return q;}
+}
+
+Query andExp() :
+{
+	Query q;
+	Query right;
+}
+{
+  q = clause()
+  ( LOOKAHEAD(2)
+    <AND> 
+    right = andExp()
+    {return factory_.getBooleanQuery(BooleanQuery.Operator.AND, q, right);}
+  )?		//From *
+  {return q;}
+}
+
+Query clause() :
+{
+	Token field;
+	Token field2;
+	Query q;
+}
+{
+	field = <FIELD_TERM> (
+	  <COLON> {
+		return term(field.image);
+	  }
+    | <DIFF> 
+      field2 = <FIELD_TERM> {
+        return factory_.getDiffQuery(field.image, field2.image); 
+      }
+    )
+  | <NOT> q = clause() {
+    	return factory_.getNotQuery(q); 
+	}
+  | <LPAREN> q = orExp() <RPAREN> { 
+    	return q; 
+	}
+}
+
+Query term(String field) :
+{
+	Token value;
+	Token from;
+	Token to;
+	
+	Token valuePre = null;
+	Token valuePost = null;
+}
+{
+	LOOKAHEAD(3)	
+	
+  //When there is a wildcard in the query
+	(
+		[valuePre = <FIELD_TERM>] <WILDCARD> [valuePost = <FIELD_TERM> ]
+    ) {
+      String valuePreString = null;
+      String valuePostString = null;
+      
+      if (valuePre != null) {
+      	valuePreString = valuePre.image;
+      }
+      
+      if (valuePost != null) {
+      	valuePostString = valuePost.image;
+      }
+      
+	  return factory_.getWildcardQuery(field, valuePreString, valuePostString); 
+    }
+    
+  |
+	
+  //When there is no wildcard in the query
+    (
+	    value = <FIELD_TERM>
+      | value = <QUOTED> {
+	  	value.image = value.image.substring(1, value.image.length()-1); 
+        }
+    ) { 
+	  return factory_.getFieldValueQuery(field, value.image); 
+    }
+    
+  |
+
+  //When there is a range in the query
+    ( <RANGE_START> (
+        from = <FIELD_TERM> 
+      | from = <QUOTED> {
+	  	from.image = from.image.substring(1, from.image.length()-1); 
+        }
+      )
+        <COMMA> (
+        to = <FIELD_TERM> 
+      | to = <QUOTED> {
+	  	to.image = to.image.substring(1, to.image.length()-1); 
+        }
+      )
+      <RANGE_END>
+    ) {
+      return factory_.getRangeQuery(field, from.image, to.image);
+    }
+}
+

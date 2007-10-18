@@ -1,0 +1,6 @@
+<body>
+	Defines a skeleton for a genotyping store, to hold genotyping data per sample and assay. This store
+	is composed of two bitwise stores which are kept in sync by transposing values from one store to the other.
+	The sample store will hold fields for each assay in the assay store, and vice versa. This allows to compute
+	statistics efficiently per sample and per assay.
+</body>	

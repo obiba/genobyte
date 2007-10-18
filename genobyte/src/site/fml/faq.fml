@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<faqs title="GenoByte API FAQ">
+	<part id="About GenoByte">
+		<faq id="what">
+			<question>What is the GenoByte API?</question> 
+			<answer>
+			GenoByte is a Java API for storing, querying and analysing data resulting from the aggregation of high-throughput 
+			genotyping experiments across many subjects.
+			Because the volume of such data is too large too manipulate with traditional tools, GenoByte was developed.
+			</answer>
+		</faq>
+
+		<faq id="audience">
+			<question>Who is the target audience of GenoByte?</question> 
+			<answer>
+			GenoByte is an Application Programming Interface (API). As such, using requires some java programming knowledge to use. 
+			GenoByte will be useful to people who want to build custom applications to visualise and/or analyse the output of 
+			high-throughput genotyping experiments.
+			</answer>
+		</faq>
+
+		<faq id="who"> 
+			<question>Who uses GenoByte?</question> 
+			<answer>
+			The McGill University and Génome Québec Innovation Center uses GenoByte as the basis of its in-house application for the management 
+			of the center's genotyping platform. 
+			In the last 12 months, this genotyping platform has generated roughly 1.5 billions of genotyping calls.
+			</answer> 
+		</faq>
+
+		<faq id="PLINK">
+			<question>What is the difference between GenoByte and PLINK?</question> 
+			<answer>
+			<a href="http://pngu.mgh.harvard.edu/~purcell/plink/">PLINK</a> is a feature-rich application that allows its users to run many different and complex statistical computation on a set of 
+			genotyping data. The dataset must conform to a pre-defined file format. 
+			The dataset to be analyzed is read once by PLINK and not meant to change over time.
+			GenoByte, on the other hand, is a foundation on top of which applications such as PLINK can be built. 
+			The acceptable data format(s) are defined by the programmer. Genobyte can add more data to the datastore dynamically.
+			As a result, it can be used as the primary storage for large collections of genotyping data. 
+			</answer> 
+		</faq>
+
+		<faq id="bitwise">
+			<question>What is Bitwise?</question> 
+			<answer>
+			Bitwise is the underlying data storage technique used by GenoByte. It is a generic implementation of a column-oriented database.
+			GenoByte offers a specialization of Bitwise tailored at genotyping applications.
+			</answer>
+		</faq>
+
+	</part>
+</faqs>

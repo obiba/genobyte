@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<store-schema name="nanuq-assay" version="1.0">
+
+    <dictionaries>
+
+        <dictionary name="positiveInteger" class="org.obiba.bitwise.IntegerDictionary">
+          <property name="lower" value="0"/>
+          <property name="upper" value="2147483647"/>
+          <property name="step" value="1"/>
+        </dictionary>
+
+        <dictionary name="physicalPosition" class="org.obiba.bitwise.IntegerDictionary">
+          <property name="lower" value="0"/>
+          <property name="upper" value="500000000"/>
+          <property name="step" value="1"/>
+        </dictionary>
+
+        <dictionary name="names" type="static" class="org.obiba.bitwise.HuffmanDictionary">
+          <property name="provider" value="org.obiba.bitwise.client.GenericNameProvider"/>
+        </dictionary>
+
+        <dictionary name="geneNames" type="static" class="org.obiba.bitwise.HuffmanDictionary">
+          <property name="provider" value="org.obiba.bitwise.client.GenericNameProvider"/>
+        </dictionary>
+
+        <dictionary name="snpAllele" type="static" class="org.obiba.bitwise.genotyping.SnpAlleleDictionary"/>
+        <dictionary name="orientation" type="static" class="org.obiba.bitwise.genotyping.OrientationDictionary"/>
+
+        <dictionary name="chromosomes" type="static" class="org.obiba.bitwise.genotyping.ChromosomeDictionary"/>
+
+        <dictionary name="score" class="org.obiba.bitwise.DoubleDictionary">
+          <property name="lower" value="0"/>
+          <property name="upper" value="1"/>
+          <property name="step" value="0.000001"/>
+        </dictionary>
+
+        <dictionary name="rate" class="org.obiba.bitwise.DoubleDictionary">
+          <property name="lower" value="0"/>
+          <property name="upper" value="1"/>
+          <property name="step" value="0.00001"/>
+        </dictionary>
+
+        <dictionary name="chiSquare" class="org.obiba.bitwise.DoubleDictionary">
+          <property name="lower" value="-10000"/>
+          <property name="upper" value="10000"/>
+          <property name="step" value="0.001"/>
+        </dictionary>
+
+        <dictionary name="snpCall" type="static" class="org.obiba.bitwise.genotyping.SnpCallDictionary"/>
+
+    </dictionaries>
+
+    <fields>
+        <field name="id" dictionary="positiveInteger"/>
+
+        <field name="name" dictionary="names"/>
+        <field name="snp" dictionary="names"/>
+
+        <field name="alleleA" dictionary="snpAllele"/>
+        <field name="alleleB" dictionary="snpAllele"/>
+        <field name="orientation" dictionary="orientation"/>
+        <field name="chromosome" dictionary="chromosomes"/>
+        <field name="position" dictionary="physicalPosition"/>
+
+        <field name="genes" dictionary="geneNames"/>
+
+        <field name="callRate" dictionary="rate"/>
+
+        <field name="freqA" dictionary="positiveInteger"/>
+        <field name="freqB" dictionary="positiveInteger"/>
+        <field name="freqH" dictionary="positiveInteger"/>
+        <field name="freqU" dictionary="positiveInteger"/>
+
+        <field name="maf" dictionary="rate"/>
+        <field name="hw" dictionary="chiSquare"/>
+        <field name="het" dictionary="rate"/>
+
+        <field name="mendel" dictionary="positiveInteger"/>
+        <field name="mendelTests" dictionary="positiveInteger"/>
+        <field name="reproDna" dictionary="positiveInteger"/>
+        <field name="reproDnaTests" dictionary="positiveInteger"/>
+        <field name="reproAssay" dictionary="positiveInteger"/>
+        <field name="reproAssayTests" dictionary="positiveInteger"/>
+
+        <field name="calls" dictionary="snpCall" template="true"/>
+    </fields>
+
+</store-schema>

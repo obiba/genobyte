@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE daoConfig
+    PUBLIC "-//iBATIS.com//DTD DAO Configuration 2.0//EN"
+    "http://www.ibatis.com/dtd/dao-2.dtd">
+<daoConfig>
+
+    <context id="bdb">
+
+        <transactionManager type="org.obiba.bitwise.dao.impl.bdb.BdbTransactionManager"></transactionManager>
+
+        <dao interface="org.obiba.bitwise.dao.BitVectorDtoDao" 
+             implementation="org.obiba.bitwise.dao.impl.bdb.BitVectorDtoDaoBdbImpl"/>
+
+        <dao interface="org.obiba.bitwise.dao.FieldDtoDao" 
+             implementation="org.obiba.bitwise.dao.impl.bdb.FieldDtoDaoBdbImpl"/>
+
+        <dao interface="org.obiba.bitwise.dao.DictionaryDtoDao" 
+             implementation="org.obiba.bitwise.dao.impl.bdb.DictionaryDtoDaoBdbImpl"/>
+
+        <dao interface="org.obiba.bitwise.dao.BitwiseStoreDtoDao" 
+             implementation="org.obiba.bitwise.dao.impl.bdb.BitwiseStoreDtoDaoBdbImpl"/>
+    </context>
+
+
+    <!-- Here is an example of a store mapping on a MySQL database -->
+    <!--context id="mysql">
+        <transactionManager type="JDBC"></transactionManager>
+
+        <dao interface="org.obiba.bitwise.dao.BitVectorDtoDao" 
+             implementation="org.obiba.bitwise.dao.impl.jdbc.BitVectorDtoDaoJdbcImpl"/>
+
+        <dao interface="org.obiba.bitwise.dao.FieldDtoDao" 
+             implementation="org.obiba.bitwise.dao.impl.jdbc.FieldDtoDaoJdbcImpl"/>
+    </context-->
+
+</daoConfig>

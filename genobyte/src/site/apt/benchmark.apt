@@ -1,0 +1,61 @@
+ ------
+GenoByte 1.4 Benchmark
+ ------
+ ------
+September 2007
+ ------
+
+Benchmark
+
+* Dataset
+  
+  The dataset used to compute these benchmark results was composed of 30,000 samples and 317,503 SNPs for a total of 9,525,090,000 genotypes. 
+  The data was built so that:
+
+  * 2500 pairs of samples were used for DNA reproducibility error calculation
+
+  * 5000 families of 3 individuals were used for mendelian error calculation 
+
+  * 5000 pairs of samples were used for case-control analysis (2500 cases, 2500 controls)
+
+  * 2000 pairs of SNPs were used for SNP reproducibility error calculation
+
+* Machine
+
+  The benchmark was executed on a machine with the following specifications:
+
+  * CPU: Intel(R) Core(TM)2 Duo 6700 2.66GHz
+  
+  * RAM: 8 GB, 6 GB allocated to Java VM heap space using -Xmx6G 
+
+  * HD: 7200 RPM, 16MB Cache, SATA 3.0Gb/s (model: ST3320620AS)
+
+  * OS: Ubuntu Linux 7.04
+
+  * Java VM: Java HotSpot(TM) 64-Bit Server VM (build 1.5.0_11-b03, mixed mode)
+
+* Results
+
+~~ Sample alleleFreq: (305.662 + 275.522 +  273.304 + 268.533 + 289.899) / 5
+~~ SNP alleleFreq: (2260.015 +  2837.762 + 2906.034 + 3018.647 ) / 4
+~~ reproDna runs:  (12.415 + 6.518 + 6.024 + 5.25 + 5.222) / 5 (this accounts for the code that "finds" the comparable records.)
+~~ reproAssay runs: (3.626 + 1.579 + 0.913 + 1.095 + 1.01) / 5 (this is after removing the portion that "finds" the comparable records. It took 99% of the time. Doing this may be misleading for someone trying to reproduce a similar benchmark.).
+~~ Mendel runs:  (42.415 + 36.267 + 35.544 + 35.004 + 32.43) / 5
+
+  The following table shows the time required to execute the benchmark. The execution time is an average of 5 sequential runs of the computation. Also, please note that this was executed on a fully-loaded dataset, in other words, it does not account for building the data structure.
+
+*------------------------------+---------+---------+
+| <<Benchmark>> | <<Nb. Comparisions>> | <<Execution Time (seconds)>> |
+*------------------------------+---------+---------+
+| Sample Reproducibility Errors | 793,757,500 | 7.1 |
+*------------------------------+---------+---------+
+| SNP Reproducibility Errors | 60,000,000 | 1.6 |
+*------------------------------+---------+---------+
+| Mendelian Errors | 4,762,545,000 | 35.9 |
+*------------------------------+---------+---------+
+| Case-Control Analysis | (to come...) | (to come...) |
+*------------------------------+---------+---------+
+| Sample Allele Frequecy Stats (30K samples) | N/A | 282 (4.7m) |
+*------------------------------+---------+---------+
+| SNP Allele Frequency Stats (317K SNPS) | N/A | 2755 (46m) |
+*------------------------------+---------+---------+

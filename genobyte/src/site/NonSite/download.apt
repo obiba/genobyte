@@ -1,0 +1,44 @@
+ ------
+Download GenoByte 1.4
+ ------
+ ------
+September 2007
+ ------
+
+{Download} GenoByte 1.4
+
+  GenoByte is distributed in several formats for your convenience. All packages also include an example application that uses the GenoByte API.
+
+  GenoByte 1.4 is distributed under the {{{http://www.gnu.org/licenses/gpl-3.0.html} GPL License, version 3.0}}.
+
+*------------------------------+---------+---------+
+|                              | Size    | Package
+*------------------------------+---------+---------+
+| GenoByte 1.4 (tar.gz)        | 9.3 MB  |{{{http://www.obiba.org/genobyte/downloads/genobyte-1.4-bin.tar.gz} genobyte-1.4-bin.tar.gz}}
+*------------------------------+---------+---------+
+| GenoByte 1.4 (zip)           | 9.3 MB  |{{{http://www.obiba.org/genobyte/downloads/genobyte-1.4-bin.zip} genobyte-1.4-bin.zip}}
+*------------------------------+---------+---------+
+| GenoByte 1.4 Source (tar.gz)        | 157.6 KB  |{{{http://www.obiba.org/genobyte/downloads/genobyte-1.4-src.tar.gz} genobyte-1.4-src.tar.gz}}
+*------------------------------+---------+---------+
+| GenoByte 1.4 Source (zip)           | 345.2 KB  |{{{http://www.obiba.org/genobyte/downloads/genobyte-1.4-src.zip} genobyte-1.4-src.zip}}
+*------------------------------+---------+---------+
+
+* Previous Releases
+
+  All previous releases of GenoByte can be found in {{{http://www.obiba.org/maven2/org/obiba/genobyte/genobyte}maven release repository}}.
+
+* System {Requirements}
+
+*----------------------+-+
+| <<JDK>>              | 1.5 or above
+*----------------------+-+
+| <<Memory>>           | 2 GB
+*----------------------+-+
+| <<Disk>>             | 10 GB
+*----------------------+-+
+| <<Operating System>> | No minimum requirement. Tested on Windows XP, Ubuntu Feisty and Mac OS X.
+*----------------------+-+
+
+* {Installation} Instructions
+
+  Please refer to the {{{docs/quickstart.html} Quick Start Manual}} for installation and execution instructions.

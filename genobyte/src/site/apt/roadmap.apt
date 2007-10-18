@@ -1,0 +1,50 @@
+ ------
+GenoByte 1.4 Roadmap
+ ------
+ ------
+September 2007
+ ------
+
+Roadmap
+
+* To Do:
+
+    These are items that are intended to be implemented in the API, but have not been officially planned in terms of delivery time.
+
+    * Refactor Field/AbstractField/VolatileField into an interface and different implementations (GEN-48)
+
+    * Remove dependency on iBatis DAO (GEN-45)
+
+    * Remove dependency on commons-digestor (GEN-58)
+
+    * Formalize the NULL query (GEN-49)
+
+    * Store the null vector with the Field to remove the requirement of encoding NULL as a vector of zeroes (GEN-8)
+
+    * Make the DefaultDictionary package more friendly (GEN-28)
+
+    * Improve the transposing performance
+    
+    * Implement a basic case-control analysis using the statistic module
+
+* Would Like To Do:
+
+    These are items that we think would be good additions to the API, but that either require heavy refactoring or major time investment, possibly deterring us from implementing them.
+
+    * Allow dealing with tri/quad-allelic SNPs (GEN-6), multi-allelelic markers (MNPs) and microsatellites
+
+    * Allow CNV storage/analysis
+
+    * Remove dependency on BDB-JE
+
+    * Refactor the inconsistencies package so it uses the statistics package (GEN-62)
+
+    * Add 1:n relationship allowing a record to have multiple values per field
+
+* May or may not Do:
+
+    These are items that we've, at some point, thought might be good ideas, but may not be implemented at all.
+
+    * Client/Server architecture. This would simplify deploying GenoByte for very large datasets, but adds lots of complexity to the code, which may not be desirable.
+
+    * Consider using vector processors (such as {{{http://developer.nvidia.com/object/cuda.html}nVidia's CUDA}}). This usually requires using a C/C++ library, which could be done using JNA.

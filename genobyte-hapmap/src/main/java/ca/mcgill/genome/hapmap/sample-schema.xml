@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<store-schema name="affymetrix-genotyping" version="1.0">
+
+    <dictionaries>
+
+        <dictionary name="names" class="org.obiba.bitwise.dictionary.HuffmanDictionary"/>
+
+        <dictionary name="positiveInteger" class="org.obiba.bitwise.dictionary.IntegerDictionary">
+          <property name="lower" value="0"/>
+          <property name="upper" value="2147483647"/>
+          <property name="step" value="1"/>
+        </dictionary>
+
+        <dictionary name="rate" class="org.obiba.bitwise.dictionary.DecimalDictionary">
+          <property name="lower" value="0"/>
+          <property name="upper" value="1"/>
+          <property name="step" value="0.00001"/>
+        </dictionary>
+
+        <dictionary name="chiSquare" class="org.obiba.bitwise.dictionary.DecimalDictionary">
+          <property name="lower" value="-10000"/>
+          <property name="upper" value="10000"/>
+          <property name="step" value="0.001"/>
+        </dictionary>
+
+        <dictionary name="snpCall" class="org.obiba.bitwise.genotyping.SnpCallDictionary"/>
+
+    </dictionaries>
+
+    <fields>
+        <field name="name" dictionary="names"/>
+
+        <field name="callRate" dictionary="rate"/>
+
+        <field name="freqA" dictionary="positiveInteger"/>
+        <field name="freqB" dictionary="positiveInteger"/>
+        <field name="freqH" dictionary="positiveInteger"/>
+        <field name="freqU" dictionary="positiveInteger"/>
+
+        <field name="maf" dictionary="rate"/>
+        <field name="chi2" dictionary="chiSquare"/>
+        <field name="het" dictionary="rate"/>
+
+        <field name="mendel" dictionary="positiveInteger"/>
+        <field name="sampleRepro" dictionary="positiveInteger"/>
+        <field name="assayRepro" dictionary="positiveInteger"/>
+
+        <field name="calls_" dictionary="snpCall" template="true"/>
+    </fields>
+
+</store-schema>
