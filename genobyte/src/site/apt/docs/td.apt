@@ -146,6 +146,7 @@ Technical Documentation
 	Figure 5: A BitwiseStore uses a Dictionary to transfer data from an object's attribute value (here an Integer) into a BitVector, and then back to an Integer.
 
 	* BitwiseRecordManager
+
 	The BitwiseRecordManager provides the necessary methods to handle records as a whole in a store, using column-based access. It allows such things as getting the unique key for a record from its index and vice versa, and records create / update / delete operations. Using the BitwiseRecordManager is optional, but makes it easier to handle a BitwiseStore as a store of Java objects.
 
 *** Last word on the Bitwise
