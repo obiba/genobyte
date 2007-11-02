@@ -39,13 +39,14 @@ import org.obiba.genobyte.cli.LoadFileCommand.FileTypeLoader;
  * instance using
  * {@link ReportCommand#addReportProducer(org.obiba.genobyte.cli.ReportCommand.ReportProducer)}.
  * 
- * {@link ReportProducer} instance are identified using a keyword. 
+ * {@link ReportProducer} instances are identified using a keyword. 
  * <p/>
- * The command format is "<tt>report &lt;report_name&gt; &lt;output_filename&gt;</tt>" where 
+ * The command format is "<tt>report &lt;report_name&gt; &lt;output_filename&gt; &lt;report_parameters&gt;</tt>" where 
  * <ul>
  *  <li><tt>report_name</tt> is the name of the report to be produced.</li>
- *  <li><tt>output_filename</tt> is the name of the output file containing the report. If none is identified,
- *  the report will be outputed to the {@link CliContext#getOutput()} stream.</li>
+ *  <li><tt>output_filename</tt> is the name of the output file for the report. If none is use or "-" is specified,
+ *  the report will be output to the {@link CliContext#getOutput()} stream.</li>
+ *  <li><tt>report_parameters</tt> is an optional list of report parameters.
  * </ul>
  */
 public class ReportCommand implements CliCommand {
@@ -102,7 +103,7 @@ public class ReportCommand implements CliCommand {
       context.getOutput().println("Open a store before loading a file of type ["+r.getReportType()+"]");
       return false;
     }
-    
+
     boolean closeStream = false;
     PrintStream output = context.getOutput();
     if(reportFilename != null && reportFilename.equals("-") == false) {
@@ -113,9 +114,11 @@ public class ReportCommand implements CliCommand {
         context.getOutput().println("Cannot output to file ["+reportFilename+"]: " + e.getMessage());
         return false;
       }
+    } else {
+      reportFilename = "console output";
     }
 
-    context.getOutput().println("Producing report type ["+r.getReportType()+"].");
+    context.getOutput().println("Producing report type ["+r.getReportType()+"]. Outputing report to ["+reportFilename+"].");
     try {
       r.generateReport(context, parameters, output);
     } catch(Exception e) {
@@ -139,7 +142,7 @@ public class ReportCommand implements CliCommand {
       if(sb.length() > 0) sb.append(", ");
       sb.append(report.getReportType());
     }
-    return OptionBuilder.withDescription("generates a report. Available types are ["+sb.toString()+"]").withLongOpt("report").hasArgs(2).withArgName("type> <file").create();
+    return OptionBuilder.withDescription("generates a report of type <type> and output to <filename> (use - for console output). Report parameters depend on its type. Available types are ["+sb.toString()+"]").withLongOpt("report").hasArgs(2).withArgName("type> <filename> <parameters").create();
   }
 
 
