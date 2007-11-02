@@ -59,8 +59,7 @@ public class ChiSquareModelStatistic extends AbstractStatistic implements FieldS
         if (Double.isNaN(chiSquare) == false) {
           pvalue = ChiSquare.chiSquareQ(chiSquare, model.getFreedom());
         }
-        modelChiSquare.setValue(r, modelChiSquare.getDictionary().lookup(
-            chiSquare));
+        modelChiSquare.setValue(r, modelChiSquare.getDictionary().lookup(chiSquare));
         modelPValue.setValue(r, modelPValue.getDictionary().lookup(pvalue));
       }
     }
