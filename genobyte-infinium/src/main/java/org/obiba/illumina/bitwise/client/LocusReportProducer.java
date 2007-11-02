@@ -18,8 +18,6 @@
  *******************************************************************************/
 package org.obiba.illumina.bitwise.client;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.PrintStream;
 
 import org.obiba.genobyte.cli.CliContext;
@@ -39,46 +37,30 @@ public class LocusReportProducer implements ReportProducer {
     return "locus";
   }
 
-
   public boolean requiresOpenStore() {
     return true;
   }
 
-
-  public void generateReport(CliContext pContext, String pFilename) {
+  public void generateReport(CliContext context, String[] parameters, PrintStream output) {
     //Prepare output file containing the report.
     CsvReport report = new FrequenciesReport();
-    report.setOutput(pContext.getOutput());
-    boolean closeStream = false;
-    if(pFilename != null) {
-      closeStream = true;
-      try {
-        report.setOutput(new PrintStream(new FileOutputStream(pFilename)));
-      } catch (FileNotFoundException e) {
-        pContext.getOutput().println("Cannot output to file ["+pFilename+"]: " + e.getMessage());
-        return;
-      }
-    }
-    
-    AssayStore store = ((InfiniumGenotypingStore)pContext.getStore()).getAssayRecordStore();
-    SampleStore samples = ((InfiniumGenotypingStore)pContext.getStore()).getSampleRecordStore();
+    report.setOutput(output);
+
+    AssayStore store = ((InfiniumGenotypingStore)context.getStore()).getAssayRecordStore();
+    SampleStore samples = ((InfiniumGenotypingStore)context.getStore()).getSampleRecordStore();
 
     StatsPool<Integer,String> assayStatsPool = new StatsPool<Integer,String>(store, new DefaultAssayStatsRunDefinition());
-    if(pContext.getStoreLastResult(store) != null) {
-      assayStatsPool.setRecordMask(pContext.getStoreLastResult(store));
+    if(context.getStoreLastResult(store) != null) {
+      assayStatsPool.setRecordMask(context.getStoreLastResult(store));
     }
-    if(pContext.getStoreLastResult(samples) != null) {
-      assayStatsPool.setTransposedMask(pContext.getStoreLastResult(samples));
+    if(context.getStoreLastResult(samples) != null) {
+      assayStatsPool.setTransposedMask(context.getStoreLastResult(samples));
     }
 
-    pContext.getOutput().println("Calculating locus report for "+assayStatsPool.getRecordMask().count()+" assays on "+assayStatsPool.getTransposedMask().count()+" samples.");
+    context.getOutput().println("Calculating locus report for "+assayStatsPool.getRecordMask().count()+" assays on "+assayStatsPool.getTransposedMask().count()+" samples.");
     assayStatsPool.calculate();
-    pContext.getOutput().println("Producing locus report.");
+    context.getOutput().println("Producing locus report.");
     report.digest(assayStatsPool);
-    
-    if(closeStream) {
-      report.getOutput().close();
-    }
   }
 
 }

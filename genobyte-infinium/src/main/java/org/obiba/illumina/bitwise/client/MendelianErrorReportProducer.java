@@ -18,8 +18,6 @@
  *******************************************************************************/
 package org.obiba.illumina.bitwise.client;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.PrintStream;
 
 import org.obiba.bitwise.Field;
@@ -45,37 +43,18 @@ public class MendelianErrorReportProducer implements ReportProducer {
   }
 
 
-  public void generateReport(CliContext pContext, String pFilename) {
-    //Prepare output file containing the report.
-    PrintStream output = pContext.getOutput();
-    boolean closeStream = false;
-    if(pFilename != null) {
-      closeStream = true;
-      try {
-        output = new PrintStream(new FileOutputStream(pFilename));
-      } catch (FileNotFoundException e) {
-        pContext.getOutput().println("Cannot output to file ["+pFilename+"]: " + e.getMessage());
-        return;
-      }
-    }
-    
-    SampleStore samples = ((InfiniumGenotypingStore)pContext.getStore()).getSampleRecordStore();
+  public void generateReport(CliContext context, String[] parameters, PrintStream output) {
+    SampleStore samples = ((InfiniumGenotypingStore)context.getStore()).getSampleRecordStore();
 
     try {
-      pContext.getStore().startTransaction();
+      context.getStore().startTransaction();
       MendelianErrorCalculator<String> mendelCalculator = new MendelianErrorCalculator<String>(samples);
       mendelCalculator.setRecordProvider(samples.getMendelianRecordTrioProvider());
       mendelCalculator.setCountingStrategy(new MendelianErrorReportingStrategy(output, samples));
       mendelCalculator.calculate();
-      pContext.getStore().commitTransaction();
+      context.getStore().commitTransaction();
     } finally {
-      pContext.getStore().endTransaction();
-      if(closeStream) {
-        try {
-          output.close();
-        } catch (RuntimeException e) {
-        }
-      }
+      context.getStore().endTransaction();
     }
   }
   

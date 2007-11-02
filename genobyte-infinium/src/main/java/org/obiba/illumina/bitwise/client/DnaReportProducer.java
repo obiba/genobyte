@@ -18,8 +18,6 @@
  *******************************************************************************/
 package org.obiba.illumina.bitwise.client;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.PrintStream;
 
 import org.obiba.genobyte.cli.CliContext;
@@ -39,46 +37,30 @@ public class DnaReportProducer implements ReportProducer {
     return "dna";
   }
 
-
   public boolean requiresOpenStore() {
     return true;
   }
 
-  public void generateReport(CliContext pContext, String pFilename) {
+  public void generateReport(CliContext context, String[] parameters, PrintStream output) {
     //Prepare output file containing the report.
     CsvReport report = new DnaReport();
-    report.setOutput(pContext.getOutput());
-    boolean closeStream = false;
-    if(pFilename != null) {
-      closeStream = true;
-      try {
-        report.setOutput(new PrintStream(new FileOutputStream(pFilename)));
-      } catch (FileNotFoundException e) {
-        pContext.getOutput().println("Cannot output to file ["+pFilename+"]: " + e.getMessage());
-        return;
-      }
-    }
+    report.setOutput(output);
 
-    SampleStore store = ((InfiniumGenotypingStore)pContext.getStore()).getSampleRecordStore();
-    AssayStore assays = ((InfiniumGenotypingStore)pContext.getStore()).getAssayRecordStore();
+    SampleStore store = ((InfiniumGenotypingStore)context.getStore()).getSampleRecordStore();
+    AssayStore assays = ((InfiniumGenotypingStore)context.getStore()).getAssayRecordStore();
 
     StatsPool<String,Integer> sampleStatsPool = new StatsPool<String,Integer>(store, new DefaultSampleStatsRunDefinition());
-    if(pContext.getStoreLastResult(store) != null) {
-      sampleStatsPool.setRecordMask(pContext.getStoreLastResult(store));
+    if(context.getStoreLastResult(store) != null) {
+      sampleStatsPool.setRecordMask(context.getStoreLastResult(store));
     }
-    if(pContext.getStoreLastResult(assays) != null) {
-      sampleStatsPool.setTransposedMask(pContext.getStoreLastResult(assays));
+    if(context.getStoreLastResult(assays) != null) {
+      sampleStatsPool.setTransposedMask(context.getStoreLastResult(assays));
     }
 
-
-    pContext.getOutput().println("Calculating DNA report for "+sampleStatsPool.getRecordMask().count()+" samples on "+sampleStatsPool.getTransposedMask().count()+" assays.");
+    context.getOutput().println("Calculating DNA report for "+sampleStatsPool.getRecordMask().count()+" samples on "+sampleStatsPool.getTransposedMask().count()+" assays.");
     sampleStatsPool.calculate();
-    pContext.getOutput().println("Producing DNA report.");
+    context.getOutput().println("Producing DNA report.");
     report.digest(sampleStatsPool);
-
-    if(closeStream) {
-      report.getOutput().close();
-    }
   }
 
 }

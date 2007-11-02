@@ -19,6 +19,9 @@
 package org.obiba.genobyte.cli;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -69,8 +72,15 @@ public class ReportCommand implements CliCommand {
 
     String reportType = args[0];
     String reportFilename = null;
-    if(args.length == 2) {
+    if(args.length > 1) {
       reportFilename = args[1];
+    }
+    String[] parameters = null;
+    if(args.length > 2) {
+      parameters = new String[args.length - 2]; 
+      for(int i = 2; i < args.length; i++) {
+        parameters[i-2] = args[i];
+      }
     }
 
     ReportProducer r = null;
@@ -81,20 +91,44 @@ public class ReportCommand implements CliCommand {
       }
     }
     
-    //Error if no report with such name exists
+    // Error if no report with such name exists
     if(r == null) {
       context.getOutput().println("There is no producer registered for the report type ["+reportType+"].");
       return false;
     }
     
-    //Error if store is not opened yet but is required (we could want to generate report on non store-related information)
+    // Error if store is not opened yet but is required (we could want to generate report on non store-related information)
     if(r.requiresOpenStore() && context.getStore() == null) {
       context.getOutput().println("Open a store before loading a file of type ["+r.getReportType()+"]");
       return false;
     }
+    
+    boolean closeStream = false;
+    PrintStream output = context.getOutput();
+    if(reportFilename != null && reportFilename.equals("-") == false) {
+      try {
+        output = new PrintStream(new FileOutputStream(reportFilename));
+        closeStream = true;
+      } catch (IOException e) {
+        context.getOutput().println("Cannot output to file ["+reportFilename+"]: " + e.getMessage());
+        return false;
+      }
+    }
 
     context.getOutput().println("Producing report type ["+r.getReportType()+"].");
-    r.generateReport(context, reportFilename);
+    try {
+      r.generateReport(context, parameters, output);
+    } catch(Exception e) {
+      context.getOutput().println("An error occured during the report generation: " + e.getMessage());
+    } finally {
+      if(closeStream) {
+        try {
+          output.close();
+        } catch(Throwable t) {
+          //ignore
+        }
+      }
+    }
     return false;
   }
 
@@ -140,7 +174,7 @@ public class ReportCommand implements CliCommand {
      * @param context the context of the CLI.
      * @param files the name of the output file, or <tt>null</tt> if result is outputed to client shell.
      */
-    public void generateReport(CliContext pContext, String pFilename);
+    public void generateReport(CliContext context, String[] parameters, PrintStream output);
 
 
     /**

@@ -18,11 +18,8 @@
  *******************************************************************************/
 package org.obiba.illumina.bitwise.client;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.PrintStream;
 
-import org.obiba.bitwise.BitVector;
 import org.obiba.bitwise.FieldValueIterator;
 import org.obiba.bitwise.query.QueryResult;
 import org.obiba.bitwise.util.BitVectorQueryResult;
@@ -46,28 +43,14 @@ public class MapFileReportProducer implements ReportProducer {
     return true;
   }
 
-  public void generateReport(CliContext pContext, String pFilename) {
-    PrintStream output = pContext.getOutput();
-    boolean closeStream = false;
-    if(pFilename != null) {
-      try {
-        output = new PrintStream(new FileOutputStream(pFilename));
-        closeStream = true;
-      } catch (FileNotFoundException e) {
-        pContext.getOutput().println("Cannot output to file ["+pFilename+"]: " + e.getMessage());
-        return;
-      }
-    }
-    
-    AssayStore store = ((InfiniumGenotypingStore)pContext.getStore()).getAssayRecordStore();
-    QueryResult assays = pContext.getStoreLastResult(store);
+  public void generateReport(CliContext context, String[] parameters, PrintStream output) {
+    AssayStore store = ((InfiniumGenotypingStore)context.getStore()).getAssayRecordStore();
+    QueryResult assays = context.getStoreLastResult(store);
     if(assays == null) {
-      BitVector all = new BitVector(store.getStore().getCapacity());
-      all.setAll().andNot(store.getStore().getDeleted());
-      assays = new BitVectorQueryResult(all);
+      assays = new BitVectorQueryResult(store.getStore().all());
     }
 
-    pContext.getOutput().println("Producing mapfile report on "+assays.count()+" assays.");
+    context.getOutput().println("Producing mapfile report on "+assays.count()+" assays.");
 
     FieldValueIterator<Chromosome> chromosomes = new FieldValueIterator<Chromosome>(store.getStore().getField("chromosome"), assays);
     FieldValueIterator<String> names = new FieldValueIterator<String>(store.getStore().getField("snpName"), assays);
@@ -84,12 +67,7 @@ public class MapFileReportProducer implements ReportProducer {
       output.println(sb.toString());
       sb.setLength(0);
     }
-
-    if(closeStream) {
-      output.close();
-    } else {
-      output.flush();
-    }
+    output.flush();
   }
 
   private String outputChromosome(Chromosome chr) {

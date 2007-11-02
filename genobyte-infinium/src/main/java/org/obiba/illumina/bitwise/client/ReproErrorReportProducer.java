@@ -18,8 +18,6 @@
  *******************************************************************************/
 package org.obiba.illumina.bitwise.client;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.PrintStream;
 
 import org.obiba.bitwise.Field;
@@ -57,29 +55,16 @@ public class ReproErrorReportProducer implements ReportProducer {
     return true;
   }
 
-  public void generateReport(CliContext pContext, String pFilename) {
-    //Prepare output file containing the report.
-    PrintStream output = pContext.getOutput();
-    boolean closeStream = false;
-    if(pFilename != null) {
-      closeStream = true;
-      try {
-        output = new PrintStream(new FileOutputStream(pFilename));
-      } catch (FileNotFoundException e) {
-        pContext.getOutput().println("Cannot output to file ["+pFilename+"]: " + e.getMessage());
-        return;
-      }
-    }
-
+  public void generateReport(CliContext context, String[] parameters, PrintStream output) {
     GenotypingRecordStore store = null;
     ReproducibilityErrorCountingStrategy report = null;
     switch(reproType) {
       case DNA: 
-        store = pContext.getStore().getSampleRecordStore();
+        store = context.getStore().getSampleRecordStore();
         report = new ReproDnaErrorReportingStrategy(output, store);
         break;
       case ASSAY: 
-        store = pContext.getStore().getAssayRecordStore();
+        store = context.getStore().getAssayRecordStore();
         report = new ReproAssayErrorReportingStrategy(output, store);
         break;
       default:
@@ -87,24 +72,16 @@ public class ReproErrorReportProducer implements ReportProducer {
     }
     
     try {
-      pContext.getStore().startTransaction();
+      context.getStore().startTransaction();
       ReproducibilityErrorCalculator calc = new ReproducibilityErrorCalculator(store);
       ComparableRecordProvider c = store.getComparableRecordProvider();
       c.getComparableReferenceRecords();
       calc.setComparableRecordProvider(c);
       calc.setCountingStrategy(report);
       calc.calculate();
-      pContext.getStore().commitTransaction();
+      context.getStore().commitTransaction();
     } finally {
-      pContext.getStore().endTransaction();
-      if(closeStream) {
-        try {
-          output.close();
-        } catch (RuntimeException e) {
-          // Ignore
-        }
-      }
-      
+      context.getStore().endTransaction();
     }
   }
 
