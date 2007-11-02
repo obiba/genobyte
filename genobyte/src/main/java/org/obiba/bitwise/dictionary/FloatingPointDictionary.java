@@ -81,6 +81,6 @@ public class FloatingPointDictionary extends AbstractStaticDictionary<Double> {
 
 
   public boolean isOrdered() {
-    return true;
+    return false;
   }
 }
