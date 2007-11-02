@@ -28,7 +28,6 @@ import java.util.TreeSet;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.ParseException;
-import org.obiba.bitwise.BitVector;
 import org.obiba.bitwise.query.QueryResult;
 import org.obiba.bitwise.util.BitVectorQueryResult;
 import org.obiba.genobyte.GenotypingRecordStore;
@@ -109,11 +108,11 @@ public class GenotypeReportCommand implements CliCommand {
     
     QueryResult assayMask = context.getStoreLastResult(assays);
     if(assayMask == null) {
-      assayMask = new BitVectorQueryResult(new BitVector(assays.getStore().getCapacity()).setAll().andNot(assays.getStore().getDeleted()));
+      assayMask = new BitVectorQueryResult(assays.getStore().all());
     }
     QueryResult sampleMask = context.getStoreLastResult(samples);
     if(sampleMask == null) {
-      sampleMask = new BitVectorQueryResult(new BitVector(samples.getStore().getCapacity()).setAll().andNot(samples.getStore().getDeleted()));
+      sampleMask = new BitVectorQueryResult(samples.getStore().all());
     }
 
     context.getOutput().println("Creating ["+r.getReportType()+"] report on "+sampleMask.count()+" samples and "+assayMask.count()+" assays. Outputing report to file(s) "+Arrays.toString(outputFiles));

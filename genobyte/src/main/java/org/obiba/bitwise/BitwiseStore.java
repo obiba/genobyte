@@ -33,7 +33,6 @@ import org.obiba.bitwise.schema.DictionaryMetaData;
 import org.obiba.bitwise.schema.FieldMetaData;
 import org.obiba.bitwise.util.StringUtil;
 
-
 import com.ibatis.dao.client.DaoManager;
 
 /**
@@ -175,6 +174,16 @@ public class BitwiseStore {
    */
   public BitVector getDeleted() {
     return new BitVector(data_.getDeleted());
+  }
+
+  
+  /**
+   * Returns a vector identifying all records (that are not deleted). Valid records' index is set in the 
+   * returned vector. 
+   * @return a vector of valid records.
+   */
+  public BitVector all() {
+    return getDeleted().not();
   }
 
 

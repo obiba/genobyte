@@ -62,12 +62,8 @@ public class StatsPool<K,TK> {
    * Sets the masks to consider all records.
    */
   public void resetMasks() {
-    BitVector allRecordsBv = new BitVector(rs_.getStore().getCapacity());
-    BitVector allTransposedBv = new BitVector(rs_.getTransposedStore().getStore().getCapacity());
-    allRecordsBv.setAll().andNot(rs_.getStore().getDeleted());
-    allTransposedBv.setAll().andNot(rs_.getTransposedStore().getStore().getDeleted());;
-    recordMask_ = new BitVectorQueryResult(allRecordsBv);
-    transposedMask_ = new BitVectorQueryResult(allTransposedBv);
+    recordMask_ = new BitVectorQueryResult(rs_.getStore().all());
+    transposedMask_ = new BitVectorQueryResult(rs_.getTransposedStore().getStore().all());
   }
 
 
