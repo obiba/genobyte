@@ -29,6 +29,9 @@ import org.obiba.genobyte.statistic.RecordStatistic;
 import org.obiba.genobyte.statistic.StatsPool;
 
 public class CaseControlFrequencies extends AbstractStatistic implements RecordStatistic {
+  
+  public static final String CASES_MASK_PARAMETER = "casesMask";
+  public static final String CONTROLS_MASK_PARAMETER = "controlsMask";
 
   public static final String CASE_FREQ_A = "caseFreqA";
   public static final String CASE_FREQ_B = "caseFreqB";
@@ -76,8 +79,8 @@ public class CaseControlFrequencies extends AbstractStatistic implements RecordS
       BitVector alleleH = calls.getDictionary().lookup(SnpCall.H);
       BitVector alleleU = calls.getDictionary().lookup(SnpCall.U);
 
-      QueryResult cases = ((QueryResult) pPool.getPool().get("casesFilter")).copy().and(pFilter);
-      QueryResult controls = ((QueryResult) pPool.getPool().get("controlsFilter")).copy().and(pFilter);
+      QueryResult cases = ((QueryResult) pPool.getPool().get(CASES_MASK_PARAMETER)).copy().and(pFilter);
+      QueryResult controls = ((QueryResult) pPool.getPool().get(CONTROLS_MASK_PARAMETER)).copy().and(pFilter);
 
       QueryResult[] filters = { cases, controls };
       String[] prefixes = { "case", "control" };

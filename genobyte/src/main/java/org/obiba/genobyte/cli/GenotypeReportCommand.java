@@ -74,7 +74,7 @@ public class GenotypeReportCommand implements CliCommand {
       context.getOutput().println("There is no genotype report registered for the type ["+type+"] specified.");
       return false;
     }
-    
+
     int filesToOutput = r.getNumberOfOutputFiles();
     File[] outputFiles = new File[filesToOutput];
     Set<String> filenames = new TreeSet<String>();
@@ -106,11 +106,11 @@ public class GenotypeReportCommand implements CliCommand {
     GenotypingRecordStore assays = context.getStore().getAssayRecordStore();
     GenotypingRecordStore samples = context.getStore().getSampleRecordStore();
     
-    QueryResult assayMask = context.getStoreLastResult(assays);
+    QueryResult assayMask = null;//context.getStoreLastResult(assays);
     if(assayMask == null) {
       assayMask = new BitVectorQueryResult(assays.getStore().all());
     }
-    QueryResult sampleMask = context.getStoreLastResult(samples);
+    QueryResult sampleMask = null;//context.getStoreLastResult(samples);
     if(sampleMask == null) {
       sampleMask = new BitVectorQueryResult(samples.getStore().all());
     }
@@ -143,7 +143,7 @@ public class GenotypeReportCommand implements CliCommand {
   public void addGenotypeReport(GenotypeReport report) {
     reports_.add(report);
   }
-  
+
   /**
    * Returns true if the command has an instance of {@link GenotypeReport} that uses the specified short name.
    * <p/>

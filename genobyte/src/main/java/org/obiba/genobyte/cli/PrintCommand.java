@@ -21,6 +21,7 @@ package org.obiba.genobyte.cli;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.obiba.bitwise.query.QueryResult;
+import org.obiba.genobyte.cli.CliContext.QueryExecution;
 
 
 /**
@@ -33,17 +34,23 @@ public class PrintCommand implements CliCommand {
   }
 
   public boolean execute(Option opt, CliContext context) {
-    QueryResult lastResult = context.getLastResult();
-    if(lastResult != null) {
-      if(lastResult.count() > 0) {
-        int hits = lastResult.count();
+    String str = opt.getValue();
+    QueryExecution qe = context.getHistory().resolveQuery(str);
+    if(qe != null) {
+      context.getOutput().println("Store: " + qe.getStore().getStore().getName());
+      context.getOutput().println("Query: " + qe.getQuery());
+      context.getOutput().println("Count: " + qe.count());
+      context.getOutput().println("Results: ");
+      if(qe.count() > 0) {
+        int hits = qe.count();
+        QueryResult qr = qe.getResult();
         for(int i = 0; i < hits; i++) {
-          int hit = lastResult.hit(i);
+          int hit = qr.hit(i);
           context.getOutput().print(hit + " ");
         }
         context.getOutput().println("");
       } else {
-        context.getOutput().println("Last query produced no result. Nothing to print.");
+        context.getOutput().println("Query ["+str+"] produced no result. Nothing to print.");
       }
     } else {
       context.getOutput().println("No query result to print. Execute a query first.");
@@ -52,7 +59,7 @@ public class PrintCommand implements CliCommand {
   }
 
   public Option getOption() {
-    return OptionBuilder.withDescription("print the record indexes of the last query result").withLongOpt("print").create('p');
+    return OptionBuilder.withDescription("print the record indexes of query <q#>").hasArgs(1).withArgName("q#").withLongOpt("print").create('p');
   }
 
 }

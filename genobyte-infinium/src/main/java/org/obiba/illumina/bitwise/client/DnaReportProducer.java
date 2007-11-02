@@ -21,11 +21,11 @@ package org.obiba.illumina.bitwise.client;
 import java.io.PrintStream;
 
 import org.obiba.genobyte.cli.CliContext;
+import org.obiba.genobyte.cli.CliContext.QueryExecution;
 import org.obiba.genobyte.cli.ReportCommand.ReportProducer;
 import org.obiba.genobyte.statistic.CsvReport;
 import org.obiba.genobyte.statistic.DefaultSampleStatsRunDefinition;
 import org.obiba.genobyte.statistic.StatsPool;
-import org.obiba.illumina.bitwise.AssayStore;
 import org.obiba.illumina.bitwise.DnaReport;
 import org.obiba.illumina.bitwise.InfiniumGenotypingStore;
 import org.obiba.illumina.bitwise.SampleStore;
@@ -47,14 +47,15 @@ public class DnaReportProducer implements ReportProducer {
     report.setOutput(output);
 
     SampleStore store = ((InfiniumGenotypingStore)context.getStore()).getSampleRecordStore();
-    AssayStore assays = ((InfiniumGenotypingStore)context.getStore()).getAssayRecordStore();
-
     StatsPool<String,Integer> sampleStatsPool = new StatsPool<String,Integer>(store, new DefaultSampleStatsRunDefinition());
-    if(context.getStoreLastResult(store) != null) {
-      sampleStatsPool.setRecordMask(context.getStoreLastResult(store));
+
+    QueryExecution qe = ReportProducerUtil.resolveSampleQuery(context, parameters, 0);
+    if(qe != null) {
+      sampleStatsPool.setRecordMask(qe.getResult());
     }
-    if(context.getStoreLastResult(assays) != null) {
-      sampleStatsPool.setTransposedMask(context.getStoreLastResult(assays));
+    qe = ReportProducerUtil.resolveAssayQuery(context, parameters, 1);
+    if(qe != null) {
+      sampleStatsPool.setTransposedMask(qe.getResult());
     }
 
     context.getOutput().println("Calculating DNA report for "+sampleStatsPool.getRecordMask().count()+" samples on "+sampleStatsPool.getTransposedMask().count()+" assays.");

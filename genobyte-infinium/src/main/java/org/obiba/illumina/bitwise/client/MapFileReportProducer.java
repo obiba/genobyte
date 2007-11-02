@@ -24,6 +24,7 @@ import org.obiba.bitwise.FieldValueIterator;
 import org.obiba.bitwise.query.QueryResult;
 import org.obiba.bitwise.util.BitVectorQueryResult;
 import org.obiba.genobyte.cli.CliContext;
+import org.obiba.genobyte.cli.CliContext.QueryExecution;
 import org.obiba.genobyte.cli.ReportCommand.ReportProducer;
 import org.obiba.genobyte.model.Chromosome;
 import org.obiba.illumina.bitwise.AssayStore;
@@ -45,9 +46,12 @@ public class MapFileReportProducer implements ReportProducer {
 
   public void generateReport(CliContext context, String[] parameters, PrintStream output) {
     AssayStore store = ((InfiniumGenotypingStore)context.getStore()).getAssayRecordStore();
-    QueryResult assays = context.getStoreLastResult(store);
-    if(assays == null) {
+    QueryExecution qe = ReportProducerUtil.resolveParameter(context, parameters, 0);
+    QueryResult assays = null;
+    if(qe == null) {
       assays = new BitVectorQueryResult(store.getStore().all());
+    } else {
+      assays = qe.getResult();
     }
 
     context.getOutput().println("Producing mapfile report on "+assays.count()+" assays.");

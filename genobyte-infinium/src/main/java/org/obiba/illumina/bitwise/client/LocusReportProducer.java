@@ -21,6 +21,7 @@ package org.obiba.illumina.bitwise.client;
 import java.io.PrintStream;
 
 import org.obiba.genobyte.cli.CliContext;
+import org.obiba.genobyte.cli.CliContext.QueryExecution;
 import org.obiba.genobyte.cli.ReportCommand.ReportProducer;
 import org.obiba.genobyte.statistic.CsvReport;
 import org.obiba.genobyte.statistic.DefaultAssayStatsRunDefinition;
@@ -28,7 +29,6 @@ import org.obiba.genobyte.statistic.StatsPool;
 import org.obiba.illumina.bitwise.AssayStore;
 import org.obiba.illumina.bitwise.FrequenciesReport;
 import org.obiba.illumina.bitwise.InfiniumGenotypingStore;
-import org.obiba.illumina.bitwise.SampleStore;
 
 
 public class LocusReportProducer implements ReportProducer {
@@ -47,14 +47,14 @@ public class LocusReportProducer implements ReportProducer {
     report.setOutput(output);
 
     AssayStore store = ((InfiniumGenotypingStore)context.getStore()).getAssayRecordStore();
-    SampleStore samples = ((InfiniumGenotypingStore)context.getStore()).getSampleRecordStore();
-
     StatsPool<Integer,String> assayStatsPool = new StatsPool<Integer,String>(store, new DefaultAssayStatsRunDefinition());
-    if(context.getStoreLastResult(store) != null) {
-      assayStatsPool.setRecordMask(context.getStoreLastResult(store));
+    QueryExecution qe = ReportProducerUtil.resolveAssayQuery(context, parameters, 0);
+    if(qe != null) {
+      assayStatsPool.setRecordMask(qe.getResult());
     }
-    if(context.getStoreLastResult(samples) != null) {
-      assayStatsPool.setTransposedMask(context.getStoreLastResult(samples));
+    qe = ReportProducerUtil.resolveSampleQuery(context, parameters, 1);
+    if(qe != null) {
+      assayStatsPool.setTransposedMask(qe.getResult());
     }
 
     context.getOutput().println("Calculating locus report for "+assayStatsPool.getRecordMask().count()+" assays on "+assayStatsPool.getTransposedMask().count()+" samples.");

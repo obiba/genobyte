@@ -69,6 +69,7 @@ public class BitwiseCli {
     registerCommand(new DropCommand());
     registerCommand(new StatsCommand());
     registerCommand(new InconsistenciesCommand());
+    registerCommand(new PrintHistoryCommand());
   }
 
   public BitwiseCli(PrintStream output) {
@@ -113,28 +114,6 @@ public class BitwiseCli {
    */
   private void prompt(CliContext context) {
     StringBuilder sb = new StringBuilder();
-    if(context.getStore() != null) {
-      int sampleSize = context.getStore().getSampleCount();
-      QueryResult samplesResult = context.getStoreLastResult(context.getStore().getSampleRecordStore());
-      int assaySize = context.getStore().getAssayCount();
-      QueryResult assaysResult = context.getStoreLastResult(context.getStore().getAssayRecordStore());
-      
-      sb.append("Selection: ");
-      if(samplesResult == null) {
-        sb.append(sampleSize);
-      } else {
-        sb.append(samplesResult.count());
-      }
-      sb.append('/').append(sampleSize).append(" samples ");
-
-      if(assaysResult == null) {
-        sb.append(assaySize);
-      } else {
-        sb.append(assaysResult.count());
-      }
-      sb.append('/').append(assaySize).append(" assays");
-      sb.append("\n");
-    }
     if(context.getActiveRecordStore() != null) {
       sb.append(context.getActiveRecordStore().getStore().getName());
     }
@@ -180,6 +159,8 @@ public class BitwiseCli {
               quit = c.execute(o, context);
             } catch (ParseException e) {
               quit = help.execute(null, context);
+            } catch(Exception e) {
+              output.println("An unexpected error occurred while executing the command: " + e.getMessage());
             }
           }
         }
@@ -193,9 +174,9 @@ public class BitwiseCli {
             if(StringUtil.isEmptyString(queryString) == false) {
               Query q = parser.parse(queryString);
               QueryResult qr = q.execute(context.getActiveRecordStore().getStore());
-              context.setLastResult(qr);
+              String reference = context.addQuery(queryString, qr);
               long end = System.currentTimeMillis(); 
-              output.println(qr.count() + " results in " + (end - start) + " milliseconds.");
+              output.println(reference + ": " + qr.count() + " results in " + (end - start) + " milliseconds.");
             }
           } catch (org.obiba.bitwise.query.UnknownFieldException e) {
             output.println(e.getMessage());

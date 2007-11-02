@@ -25,6 +25,7 @@ import org.obiba.genobyte.cli.BitwiseCli;
 import org.obiba.genobyte.cli.GenotypeReportCommand;
 import org.obiba.genobyte.cli.LoadFileCommand;
 import org.obiba.genobyte.cli.ReportCommand;
+import org.obiba.illumina.bitwise.client.CaseControlReportProducer;
 import org.obiba.illumina.bitwise.client.CreateStoreCommand;
 import org.obiba.illumina.bitwise.client.DnaReportProducer;
 import org.obiba.illumina.bitwise.client.LocusReportProducer;
@@ -71,8 +72,8 @@ public class InfiniumApp {
     reportCommand.addReport(new MendelianErrorReportProducer());
     reportCommand.addReport(new ReproErrorReportProducer(ReproErrorReportProducer.ReproType.DNA));
     reportCommand.addReport(new ReproErrorReportProducer(ReproErrorReportProducer.ReproType.ASSAY));
+    reportCommand.addReport(new CaseControlReportProducer());
     cli.registerCommand(reportCommand);
-    
     cli.execute();
   }
 

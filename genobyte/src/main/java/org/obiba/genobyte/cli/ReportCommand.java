@@ -72,6 +72,7 @@ public class ReportCommand implements CliCommand {
     }
 
     String reportType = args[0];
+
     String reportFilename = null;
     if(args.length > 1) {
       reportFilename = args[1];
@@ -123,6 +124,7 @@ public class ReportCommand implements CliCommand {
       r.generateReport(context, parameters, output);
     } catch(Exception e) {
       context.getOutput().println("An error occured during the report generation: " + e.getMessage());
+      e.printStackTrace();
     } finally {
       if(closeStream) {
         try {
@@ -142,7 +144,7 @@ public class ReportCommand implements CliCommand {
       if(sb.length() > 0) sb.append(", ");
       sb.append(report.getReportType());
     }
-    return OptionBuilder.withDescription("generates a report of type <type> and output to <filename> (use - for console output). Report parameters depend on its type. Available types are ["+sb.toString()+"]").withLongOpt("report").hasArgs(2).withArgName("type> <filename> <parameters").create();
+    return OptionBuilder.withDescription("generates a report of type <type> and output to <filename> (use - for console output). Report parameters depend on its type. Available types are ["+sb.toString()+"]").withLongOpt("report").hasArgs().withArgName("type> <filename> <parameters").create();
   }
 
 
@@ -187,5 +189,5 @@ public class ReportCommand implements CliCommand {
     public boolean requiresOpenStore();
 
   }
-  
+
 }
