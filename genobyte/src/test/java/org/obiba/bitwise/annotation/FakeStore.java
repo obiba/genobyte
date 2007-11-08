@@ -31,7 +31,7 @@ package org.obiba.bitwise.annotation;
           property={
               @DictionaryProperty(
                   name="provider",
-                  value="org.obiba.bitwise.client.GenericNameProvider"
+                  value="org.obiba.bitwise.annotation.GenericNameProvider"
               )
           }
         ),

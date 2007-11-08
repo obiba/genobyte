@@ -20,7 +20,6 @@ package org.obiba.illumina.bitwise;
 
 import java.io.IOException;
 
-import org.obiba.bitwise.util.BdbPropertiesProvider;
 import org.obiba.genobyte.cli.BitwiseCli;
 import org.obiba.genobyte.cli.GenotypeReportCommand;
 import org.obiba.genobyte.cli.LoadFileCommand;
@@ -48,8 +47,6 @@ public class InfiniumApp {
    * @throws IOException 
    */
   public static void main(String[] args) throws IOException {
-    BdbPropertiesProvider.setAsProvider();
-
     BitwiseCli cli = new BitwiseCli();
     cli.registerCommand(new CreateStoreCommand());
     cli.registerCommand(new OpenStoreCommand());

@@ -21,7 +21,7 @@ package org.obiba.genobyte.cli;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.ParseException;
-import org.obiba.bitwise.util.BdbEnvUtil;
+import org.obiba.bitwise.util.BitwiseDiskUtil;
 
 
 /**
@@ -44,7 +44,7 @@ public class DropCommand implements CliCommand {
     }
 
     context.getOutput().println("Deleting store "+storeName+".");
-    BdbEnvUtil.deleteStores(storeName + "_samples", storeName+"_assays");
+    BitwiseDiskUtil.deleteStores(storeName + "_samples", storeName+"_assays");
     return false;
   }
 

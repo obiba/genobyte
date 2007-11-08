@@ -21,7 +21,7 @@ package org.obiba.bitwise.client;
 import java.io.IOException;
 
 import org.obiba.bitwise.BitwiseStore;
-import org.obiba.bitwise.util.BdbRootDirectoryProvider;
+import org.obiba.bitwise.util.DefaultConfigurationPropertiesProvider;
 
 
 public class GenericClient {
@@ -41,9 +41,8 @@ public class GenericClient {
         storeName = args[++i];
       }
     }
-    
-    org.obiba.bitwise.client.GenericNameProvider.setSource();
-    BdbRootDirectoryProvider.setRoot(storeLocation);
+
+    DefaultConfigurationPropertiesProvider.setRoot(storeLocation);
 
     BitwiseStore myStore = null;
     try {

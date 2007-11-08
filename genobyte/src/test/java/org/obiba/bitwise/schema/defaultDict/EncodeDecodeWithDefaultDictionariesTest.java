@@ -35,13 +35,6 @@ import org.obiba.bitwise.schema.StoreSchema;
  */
 public class EncodeDecodeWithDefaultDictionariesTest extends BaseBdbDaoTestCase {
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    org.obiba.bitwise.client.GenericNameProvider.setSource();
-  }
-
-
   /**
    * Build a valid store from a schema built with annotation, insert data in that store, and try to
    * run a query.

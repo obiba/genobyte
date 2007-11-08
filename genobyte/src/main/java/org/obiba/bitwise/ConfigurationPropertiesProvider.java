@@ -23,9 +23,15 @@ import java.util.Properties;
 
 /**
  * Classes implementing this interface will provide a variety of parameters to the bitwise, such as
- * JVM and database-specific parameters.
+ * JVM and store-specific parameters.
  */
 public interface ConfigurationPropertiesProvider {
+
+  /**
+   * Returns the default Bitwise configuration properties 
+   * @return the default configuration properties
+   */
+  public Properties getDefaultProperties();
 
   /** 
    * Store the custom properties provided to a store.

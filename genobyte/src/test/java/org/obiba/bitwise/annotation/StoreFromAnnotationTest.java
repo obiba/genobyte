@@ -32,13 +32,6 @@ import org.obiba.bitwise.schema.StoreSchema;
 
 public class StoreFromAnnotationTest extends BaseBdbDaoTestCase {
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-    org.obiba.bitwise.client.GenericNameProvider.setSource();
-  }
-  
-  
   /**
    * Build a store from an annotated class which uses inheritance.
    *

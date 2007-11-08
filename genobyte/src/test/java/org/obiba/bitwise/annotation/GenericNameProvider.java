@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
  *******************************************************************************/
-package org.obiba.bitwise.client;
+package org.obiba.bitwise.annotation;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -25,12 +25,11 @@ import java.util.List;
 import org.obiba.bitwise.util.HuffmanSeedProvider;
 
 
-public class GenericNameProvider extends SeparatedValuesProvider implements HuffmanSeedProvider {
+public class GenericNameProvider implements HuffmanSeedProvider {
 
-  static private List<String> SOURCE = null;
-
-  static public void setSource() {
-    SOURCE = new ArrayList<String>();
+  static private List<String> SOURCE = new ArrayList<String>();
+  
+  static {
     SOURCE.add("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
     SOURCE.add("abcdefghijklmnopqrstuvwxyz");
     SOURCE.add("1234567890");

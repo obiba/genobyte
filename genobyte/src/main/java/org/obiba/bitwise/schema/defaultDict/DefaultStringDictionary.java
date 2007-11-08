@@ -22,13 +22,20 @@ package org.obiba.bitwise.schema.defaultDict;
  * Default dictionary parameters for dealing with String fields.
  */
 public class DefaultStringDictionary extends DefaultDictionary {
-  public DefaultStringDictionary() {
-    super();
-    className_ = "org.obiba.bitwise.dictionary.HuffmanDictionary";
+
+  private static final String SEED_STRING;
+
+  static {
     StringBuilder sb = new StringBuilder();
     for(char c = 1; c < 256; c++) {
       sb.append(c);
     }
-    properties_.put("seedString", sb.toString());
+    SEED_STRING = sb.toString();
+  }
+
+  public DefaultStringDictionary() {
+    super();
+    className_ = "org.obiba.bitwise.dictionary.HuffmanDictionary";
+    properties_.put("seedString", SEED_STRING);
   }
 }

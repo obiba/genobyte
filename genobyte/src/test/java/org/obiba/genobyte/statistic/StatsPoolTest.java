@@ -21,11 +21,8 @@ package org.obiba.genobyte.statistic;
 import org.obiba.bitwise.BitVector;
 import org.obiba.bitwise.VolatileField;
 import org.obiba.bitwise.dao.BaseBdbDaoTestCase;
-import org.obiba.bitwise.util.BdbPropertiesProvider;
 import org.obiba.bitwise.util.BitVectorQueryResult;
 import org.obiba.genobyte.model.SnpCall;
-import org.obiba.genobyte.statistic.StatsPool;
-import org.obiba.genobyte.statistic.StatsRunDefinition;
 import org.obiba.genobyte.statistic.util.CallRate;
 import org.obiba.genobyte.statistic.util.Frequencies;
 import org.obiba.genobyte.statistic.util.Maf;
@@ -49,9 +46,7 @@ public class StatsPoolTest extends BaseBdbDaoTestCase {
     srd.addStatistic(new TotalCalls());
     srd.addStatistic(new Maf());
     srd.addStatistic(new CallRate());
-    
-    BdbPropertiesProvider.setAsProvider();
-    
+
     MockBitwiseStore bsAssay = new MockBitwiseStore("mock_assay");
     MockBitwiseStore bsSample = new MockBitwiseStore("mock_sample");
     store = new MockGenotypingStore(bsSample, bsAssay);

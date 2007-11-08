@@ -21,15 +21,13 @@ package org.obiba.bitwise.util;
 import java.io.IOException;
 import java.util.Properties;
 
+import junit.framework.TestCase;
+
 import org.obiba.bitwise.BitwiseStore;
 import org.obiba.bitwise.BitwiseStoreUtil;
 import org.obiba.bitwise.annotation.AnnotationStoreSchemaBuilder;
 import org.obiba.bitwise.annotation.FakeStoreWithInheritance;
 import org.obiba.bitwise.schema.StoreSchema;
-import org.obiba.bitwise.util.BdbPropertiesProvider;
-import org.obiba.bitwise.util.FileUtil;
-
-import junit.framework.TestCase;
 
 public class StorePropertiesFileTest extends TestCase {
 
@@ -50,29 +48,27 @@ public class StorePropertiesFileTest extends TestCase {
    * Build a store using a default properties file, and set specific properties to it.
    */
   public void testPropertiesFile() {
-    org.obiba.bitwise.client.GenericNameProvider.setSource();
-    
     String storeName = "greatNewStore";
     int storeSize = 10;
     
-    BdbPropertiesProvider.setAsProvider(propertyFileLocation_);
-    BdbPropertiesProvider cpp = (BdbPropertiesProvider) BitwiseStoreUtil.getInstance().getConfigurationPropertiesProvider();
-    
+    DefaultConfigurationPropertiesProvider.setAsProvider(propertyFileLocation_);
+    DefaultConfigurationPropertiesProvider cpp = (DefaultConfigurationPropertiesProvider) BitwiseStoreUtil.getInstance().getConfigurationPropertiesProvider();
+
     BitwiseStore myStore = null;
     try {
       Properties p = cpp.loadProperties(storeName);
       
       //Create store from Annotations schema
       myStore = createDb(storeName, storeSize);
+      //Make sure the new store has been created
+      assertNotNull(myStore);
+      
       myStore.startTransaction();
       myStore.commitTransaction();
       myStore.endTransaction();
       
-      //Make sure the new store has been created
-      assertNotNull(myStore);
-      
       //Make sure properties from the default file have been extracted.
-      assertTrue(p.getProperty("bdb.root").equals(storeLocation_));
+      assertEquals(p.getProperty(DefaultConfigurationPropertiesProvider.ROOT_DIR_PROPERTY), storeLocation_);
     }
     finally {
       if(myStore != null) {
@@ -84,7 +80,7 @@ public class StorePropertiesFileTest extends TestCase {
     try { 
       myStore = BitwiseStoreUtil.getInstance().open(storeName);
       Properties p = cpp.loadProperties(storeName);
-      assertEquals(p.getProperty("sp.test"), "It works.");
+      assertEquals(p.toString(), p.getProperty("sp.test"), "It works.");
       assertEquals(p.getProperty("overwrittenProperty"), "2");
     }
     finally {

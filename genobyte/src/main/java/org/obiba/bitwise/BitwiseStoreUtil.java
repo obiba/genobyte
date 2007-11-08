@@ -29,9 +29,9 @@ import org.obiba.bitwise.dao.DaoKey;
 import org.obiba.bitwise.dao.KeyedDaoManager;
 import org.obiba.bitwise.dto.BitwiseStoreDto;
 import org.obiba.bitwise.schema.StoreSchema;
+import org.obiba.bitwise.util.DefaultConfigurationPropertiesProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 import com.ibatis.dao.client.DaoManager;
 
@@ -49,7 +49,7 @@ public class BitwiseStoreUtil {
   private static Set<String> LOCKS = new TreeSet<String>();
   private static Object MUTEX = new Object();
 
-  private ConfigurationPropertiesProvider provider_ = null;
+  private ConfigurationPropertiesProvider provider_ = new DefaultConfigurationPropertiesProvider();
 
   private BitwiseStoreUtil() {
     
@@ -124,20 +124,15 @@ public class BitwiseStoreUtil {
       log.debug("Creating store [{}]", key);
 
       //Get default properties
-      Properties p = null;
-      if (provider_ != null) {
-        p = provider_.loadProperties(name);
+      Properties p = provider_.loadProperties(name);
+      if(p == null) {
+        p = new Properties();
       }
-      
+
       //If store-specific properties were defined, merge them with default properties
       //(giving priority to the store-specific ones).
       if (specificProps != null) {
-        if (p == null) {        //There are no default properties, so use only the specific ones.    
-          p = specificProps;
-        }
-        else {
-          p.putAll(specificProps);
-        }
+        p.putAll(specificProps);
       }
       
       DaoManager daoManager = KeyedDaoManager.getInstance(key);

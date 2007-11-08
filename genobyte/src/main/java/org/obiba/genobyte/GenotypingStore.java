@@ -94,12 +94,6 @@ abstract public class GenotypingStore<AK, AT, SK, ST> {
     return getSampleRecordStore().getRecordManager();
   }
 
-  public void empty() {
-    getSampleRecordStore().empty();
-    getAssayRecordStore().empty();
-  }
-
-
   /**
    * Starts a transaction on the two bitwise stores <b>sample</b> and <b>assay</b>.
    * @see org.obiba.bitwise.BitwiseStore.startTransaction()

@@ -30,20 +30,20 @@ import org.obiba.bitwise.BitwiseStoreUtil;
 
 
 /**
- * Utility class for manipulating BDB bitwise stores on disk. 
+ * Utility class for manipulating bitwise stores directly on disk. 
  */
-public class BdbEnvUtil {
+public class BitwiseDiskUtil {
   
   /** The configuration key for the root directory of bitwise stores. */
-  public static final String BDB_ROOT_PROPERTY = "bdb.root";
+  public static final String ROOT_DIR_PROPERTY = "bitwise.dir.root";
 
   /**
    * Returns the root directory where all bitwise store instances are stored under. This
-   * is the value of the {@link BdbEnvUtil#BDB_ROOT_PROPERTY} configuration key. 
+   * is the value of the {@link BitwiseDiskUtil#ROOT_DIR_PROPERTY} configuration key. 
    * @return the root directory of all bitwise stores.
    */
   public static String getRoot() {
-    return BitwiseStoreUtil.getInstance().getConfigurationPropertiesProvider().loadProperties(null).getProperty(BDB_ROOT_PROPERTY);
+    return BitwiseStoreUtil.getInstance().getConfigurationPropertiesProvider().getDefaultProperties().getProperty(ROOT_DIR_PROPERTY);
   }
 
   /**
@@ -67,7 +67,7 @@ public class BdbEnvUtil {
 
   /**
    * Removes the specified bitwise stores from disk. This method will call
-   * {@link BdbEnvUtil#deleteStore(String)} for each name specified.
+   * {@link BitwiseDiskUtil#deleteStore(String)} for each name specified.
    * 
    * @param names the unique names of the bitwise stores to remove
    */

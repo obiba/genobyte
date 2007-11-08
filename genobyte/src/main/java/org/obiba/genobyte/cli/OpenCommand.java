@@ -23,7 +23,7 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.ParseException;
 import org.obiba.bitwise.BitwiseStore;
 import org.obiba.bitwise.BitwiseStoreUtil;
-import org.obiba.bitwise.util.BdbEnvUtil;
+import org.obiba.bitwise.util.BitwiseDiskUtil;
 import org.obiba.genobyte.GenotypingStore;
 
 
@@ -86,8 +86,8 @@ public abstract class OpenCommand implements CliCommand {
         throw new IllegalArgumentException("Cannot open store ["+samplesName+"]");
       }
     } else {
-      // TODO: remove reference to Bdb. When a call to "exists" is made, the underlying directory is created. This will delete it.
-      BdbEnvUtil.deleteStore(samplesName);
+      // TODO: When a call to "exists" is made, the underlying directory is created. This will delete it.
+      BitwiseDiskUtil.deleteStore(samplesName);
       return null;
     }
     if(BitwiseStoreUtil.getInstance().exists(assaysName)) {
@@ -96,7 +96,7 @@ public abstract class OpenCommand implements CliCommand {
         throw new IllegalArgumentException("Cannot open store ["+assaysName+"]");
       }
     } else {
-      BdbEnvUtil.deleteStore(assaysName);
+      BitwiseDiskUtil.deleteStore(assaysName);
       return null;
     }
     

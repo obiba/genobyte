@@ -21,18 +21,15 @@ package org.obiba.bitwise.dao;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.Set;
 
-import org.obiba.bitwise.BitwiseStoreUtil;
-import org.obiba.bitwise.dao.DaoKey;
-import org.obiba.bitwise.dao.KeyedDaoManager;
-import org.obiba.bitwise.mock.MockBitwiseStore;
-import org.obiba.bitwise.util.BdbEnvUtil;
-import org.obiba.bitwise.util.BdbPropertiesProvider;
-import org.obiba.bitwise.util.FileUtil;
-
 import junit.framework.TestCase;
+
+import org.obiba.bitwise.BitwiseStoreUtil;
+import org.obiba.bitwise.mock.MockBitwiseStore;
+import org.obiba.bitwise.util.BitwiseDiskUtil;
+import org.obiba.bitwise.util.DefaultConfigurationPropertiesProvider;
+import org.obiba.bitwise.util.FileUtil;
 
 public class BaseBdbDaoTestCase extends TestCase {
 
@@ -49,9 +46,9 @@ public class BaseBdbDaoTestCase extends TestCase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();
-    BdbPropertiesProvider.setAsProvider("./src/test/java/test-bitwise.properties");
+    DefaultConfigurationPropertiesProvider.setAsProvider("./src/test/java/test-bitwise.properties");
     try {
-      FileUtil.deltree(BdbEnvUtil.getRoot());
+      FileUtil.deltree(BitwiseDiskUtil.getRoot());
     } catch (IOException e) {
     }
   }
@@ -66,18 +63,17 @@ public class BaseBdbDaoTestCase extends TestCase {
       KeyedDaoManager.destroyInstance(store.getDaoKey());
     }
     try {
-      FileUtil.deltree(BdbEnvUtil.getRoot());
+      FileUtil.deltree(BitwiseDiskUtil.getRoot());
     } catch (IOException e) {
     }
     super.tearDown();
   }
 
   protected MockBitwiseStore createMockStore(String name, int capacity) {
-    Properties props = new Properties();
-    props.setProperty(BdbEnvUtil.BDB_ROOT_PROPERTY, BdbEnvUtil.getRoot());
+    DefaultConfigurationPropertiesProvider provider = new DefaultConfigurationPropertiesProvider("./src/test/java/test-bitwise.properties");
     MockBitwiseStore store = new MockBitwiseStore(name, capacity);
     stores_.add(store);
-    KeyedDaoManager.createInstance(new DaoKey(name), props);
+    KeyedDaoManager.createInstance(new DaoKey(name), provider.getDefaultProperties());
     return store;
   }
 
