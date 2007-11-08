@@ -23,6 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.obiba.bitwise.dao.FieldDtoDao;
+import org.obiba.bitwise.dao.impl.util.BitPackingUtil;
 import org.obiba.bitwise.dto.FieldDto;
 
 import com.ibatis.dao.client.DaoManager;
@@ -79,12 +80,12 @@ public class FieldDtoDaoBdbImpl extends BaseCrudDaoImpl<FieldDto, String> implem
      * @see com.sleepycat.bind.EntityBinding#entryToObject(com.sleepycat.je.DatabaseEntry, com.sleepycat.je.DatabaseEntry)
      */
     public Object entryToObject(DatabaseEntry key, DatabaseEntry entry) {
-      ByteBuffer bb = BdbUtil.toByteBuffer(entry);
+      ByteBuffer bb = BitPackingUtil.toByteBuffer(entry.getData());
       FieldDto d = new FieldDto();
       d.setName(StringBinding.entryToString(key));
       d.setSize(bb.getInt());
-      d.setBitIndex(BdbUtil.readLongArray(bb));
-      d.setDictionaryName(BdbUtil.readString(bb));
+      d.setBitIndex(BitPackingUtil.readLongArray(bb));
+      d.setDictionaryName(BitPackingUtil.readString(bb));
       return d;
     }
 
@@ -94,10 +95,10 @@ public class FieldDtoDaoBdbImpl extends BaseCrudDaoImpl<FieldDto, String> implem
     public void objectToData(Object o, DatabaseEntry entry) {
       FieldDto d = (FieldDto)o;
 
-      ByteBuffer bb = BdbUtil.allocate(4 + d.getBitIndex().length * 8 + 256);
+      ByteBuffer bb = BitPackingUtil.allocate(4 + d.getBitIndex().length * 8 + 256);
       bb.putInt(d.getSize());
-      BdbUtil.putLongArray(d.getBitIndex(), bb);
-      BdbUtil.putString(d.getDictionaryName(), bb);
+      BitPackingUtil.putLongArray(d.getBitIndex(), bb);
+      BitPackingUtil.putString(d.getDictionaryName(), bb);
       entry.setData(bb.array(), 0, bb.position());
     }
 

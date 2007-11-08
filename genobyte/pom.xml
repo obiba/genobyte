@@ -58,7 +58,11 @@
             <artifactId>je</artifactId>
         </dependency>
 
-    </dependencies>    
+        <dependency>
+            <groupId>jdbm</groupId>
+            <artifactId>jdbm</artifactId>
+        </dependency>
+    </dependencies>
     
     
 <!--=============================================================================================-->

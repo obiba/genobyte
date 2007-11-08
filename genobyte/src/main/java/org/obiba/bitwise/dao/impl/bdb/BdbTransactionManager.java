@@ -43,7 +43,7 @@ public class BdbTransactionManager implements DaoTransactionManager {
 
   public void configure(Properties props) {
     try {
-      key_ = new DaoKey((String)props.remove(KeyedDaoManager.DAO_MANAGER_KEY));
+      key_ = new DaoKey((String)props.get(KeyedDaoManager.DAO_MANAGER_KEY));
       BdbContext.createInstance(key_, props);
       isTransactional_ = BdbContext.getInstance(key_).getEnvironment().getConfig().getTransactional();
       if(isTransactional_) {

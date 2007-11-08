@@ -16,50 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
  *******************************************************************************/
-package org.obiba.bitwise.dao.impl.bdb;
+package org.obiba.bitwise.dao.impl.jdbm;
 
-import java.util.LinkedList;
-import java.util.List;
+public class JdbmRuntimeException extends RuntimeException {
 
-public class Timer {
-
-  public static final List<Timer> TIMERS = new LinkedList<Timer>();
-
-  private String name_ = null;
-  private String key_ = null;
-  private long start_; 
-  private long time_ = 0;
+  private static final long serialVersionUID = 8387030653865077867L;
   
-  public Timer(String name, String key) {
-    super();
-    name_ = name;
-    key_ = key;
-    TIMERS.add(this);
-  }
-  
-  public String getName() {
-    return name_;
-  }
-  
-  public String getKey() {
-    return key_;
-  }
-  
-  public long getTime() {
-    return time_;
+  public JdbmRuntimeException(Exception e) {
+    super(e);
   }
 
-  public void start() {
-    start_ = System.currentTimeMillis();
-  }
-
-  public void end() {
-    time_ += System.currentTimeMillis() - start_;
-  }
-  
-  static public void reset() {
-    for (Timer timer : TIMERS) {
-      timer.time_ = 0;
-    }
-  }
 }

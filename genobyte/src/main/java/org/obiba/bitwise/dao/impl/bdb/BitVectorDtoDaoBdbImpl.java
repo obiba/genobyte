@@ -21,6 +21,7 @@ package org.obiba.bitwise.dao.impl.bdb;
 import java.nio.ByteBuffer;
 
 import org.obiba.bitwise.dao.BitVectorDtoDao;
+import org.obiba.bitwise.dao.impl.util.BitPackingUtil;
 import org.obiba.bitwise.dto.BitVectorDto;
 
 import com.ibatis.dao.client.DaoManager;
@@ -82,11 +83,11 @@ public class BitVectorDtoDaoBdbImpl extends BaseAutoKeyDaoImpl<BitVectorDto, Lon
      * @see com.sleepycat.bind.EntityBinding#entryToObject(com.sleepycat.je.DatabaseEntry, com.sleepycat.je.DatabaseEntry)
      */
     public Object entryToObject(DatabaseEntry key, DatabaseEntry entry) {
-      ByteBuffer bb = BdbUtil.toByteBuffer(entry);
+      ByteBuffer bb = BitPackingUtil.toByteBuffer(entry.getData());
       BitVectorDto d = new BitVectorDto();
       d.setId(LongBinding.entryToLong(key));
       d.setSize(bb.getInt());
-      d.setBits(BdbUtil.readLongArray(bb));
+      d.setBits(BitPackingUtil.readLongArray(bb));
       return d;
     }
 
@@ -95,9 +96,9 @@ public class BitVectorDtoDaoBdbImpl extends BaseAutoKeyDaoImpl<BitVectorDto, Lon
      */
     public void objectToData(Object o, DatabaseEntry entry) {
       BitVectorDto v = (BitVectorDto)o;
-      ByteBuffer bb = BdbUtil.allocate(4 + 4 + v.getBits().length * 8); 
+      ByteBuffer bb = BitPackingUtil.allocate(4 + 4 + v.getBits().length * 8); 
       bb.putInt(v.getSize());
-      BdbUtil.putLongArray(v.getBits(), bb);
+      BitPackingUtil.putLongArray(v.getBits(), bb);
       entry.setData(bb.array(), 0, bb.position());
     }
 

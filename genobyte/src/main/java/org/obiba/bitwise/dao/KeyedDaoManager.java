@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.obiba.bitwise.util.DefaultConfigurationPropertiesProvider;
+
 import com.ibatis.dao.client.Dao;
 import com.ibatis.dao.client.DaoManagerBuilder;
 import com.ibatis.dao.client.DaoTransaction;
@@ -57,7 +59,11 @@ public class KeyedDaoManager {
     Reader config = new InputStreamReader(KeyedDaoManager.class.getResourceAsStream("conf/ibatis-dao-config.xml"));
     local.setProperty(DAO_MANAGER_KEY, key.toString());
     com.ibatis.dao.client.DaoManager instance = DaoManagerBuilder.buildDaoManager(config, local);
-    instanceMap_.put(key, new KeyedDaoManagerImpl(key, instance));
+    String context = p.getProperty(DefaultConfigurationPropertiesProvider.BITWISE_DAO_IMPL);
+    if(context == null || context.length() == 0) {
+      throw new IllegalArgumentException(DefaultConfigurationPropertiesProvider.BITWISE_DAO_IMPL + " property must be set.");
+    }
+    instanceMap_.put(key, new KeyedDaoManagerImpl(key, context, instance));
   }
 
   static public com.ibatis.dao.client.DaoManager getInstance(DaoKey key) {
@@ -83,10 +89,12 @@ public class KeyedDaoManager {
   static private class KeyedDaoManagerImpl implements com.ibatis.dao.client.DaoManager {
 
     DaoKey key_ = null;
+    String context = null;
     com.ibatis.dao.client.DaoManager impl_ = null;
 
-    private KeyedDaoManagerImpl(DaoKey key, com.ibatis.dao.client.DaoManager impl) {
+    private KeyedDaoManagerImpl(DaoKey key, String ctx, com.ibatis.dao.client.DaoManager impl) {
       key_ = key;
+      context = ctx;
       impl_ = impl;
     }
     
@@ -114,9 +122,7 @@ public class KeyedDaoManager {
      * @see com.ibatis.dao.client.DaoManager#getDao(java.lang.Class)
      */
     public Dao getDao(Class type) {
-      KeyedDao impl = (KeyedDao)impl_.getDao(type);
-      impl.setDaoKey(key_);
-      return impl;
+      return getDao(type, this.context);
     }
 
     /*

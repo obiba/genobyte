@@ -19,6 +19,7 @@
 package org.obiba.bitwise.dao.impl.bdb;
 
 import org.obiba.bitwise.dao.DaoKey;
+import org.obiba.bitwise.dao.impl.util.Timer;
 
 import com.ibatis.dao.client.DaoManager;
 import com.sleepycat.collections.StoredMap;

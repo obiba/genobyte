@@ -29,9 +29,9 @@ import java.util.Properties;
 import org.obiba.bitwise.dao.DaoKey;
 import org.obiba.bitwise.dao.KeyedDaoManager;
 import org.obiba.bitwise.dao.KeyedDaoManagerDestroyListener;
+import org.obiba.bitwise.util.DefaultConfigurationPropertiesProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 import com.sleepycat.je.CheckpointConfig;
 import com.sleepycat.je.Database;
@@ -50,14 +50,20 @@ import com.sleepycat.je.StatsConfig;
 
 public class BdbContext implements KeyedDaoManagerDestroyListener {
 
-  static public final String BDB_ROOT = "bdb.root";
-  static public final String BDB_TRUNCATE = "bdb.truncate";
+  static private final Logger log = LoggerFactory.getLogger(BdbContext.class);
 
   static private final String SEQUENCE_DATABASE = "seq.db";
 
   static private Map<DaoKey, BdbContext> instanceMap_ = new HashMap<DaoKey, BdbContext>();
 
   private DaoKey key_ = null;
+
+  /** The Properties used to created the JE Environment*/
+  private Properties envProps_ = null;
+  /** The directory where the Environment points to */
+  private File envDir_ = null;
+
+  /** The JE Environment (one per store). Lazily instantiated: see {@link BdbContext#getEnvironment()} */
   private Environment env_ = null;
   private Map<String, Database> dbMap_ = new HashMap<String, Database>();
   private Map<String, SecondaryDatabase> secDbMap_ = new HashMap<String, SecondaryDatabase>();
@@ -82,20 +88,14 @@ public class BdbContext implements KeyedDaoManagerDestroyListener {
   }
 
   static void createInstance(DaoKey key, Properties props) throws DatabaseException {
-    final Logger log = LoggerFactory.getLogger(BdbContext.class);
-
-    BdbContext instance_ = new BdbContext(key);
+    BdbContext instance = new BdbContext(key);
 
     String root = null;
-    String truncate = null;
-
     Properties localProps = new Properties();
     for (Enumeration e = props.propertyNames(); e.hasMoreElements() ;) {
       String propName = (String)e.nextElement();
-      if(BDB_ROOT.equals(propName)) {
+      if(DefaultConfigurationPropertiesProvider.ROOT_DIR_PROPERTY.equals(propName)) {
         root = props.getProperty(propName);
-      } else if(BDB_TRUNCATE.equals(propName)) {
-        truncate = localProps.getProperty(BDB_TRUNCATE);
       } else {
         // JE doesn't like having extra properties, so we need to remove them...
         if(propName.startsWith("je")) {
@@ -103,17 +103,19 @@ public class BdbContext implements KeyedDaoManagerDestroyListener {
         }
       }
     }
+    instance.envProps_ = localProps;
 
     if(root == null) {
-      throw new IllegalStateException("BDB property ["+BDB_ROOT+"] is missing.");
+      throw new IllegalStateException("Configuration property ["+DefaultConfigurationPropertiesProvider.ROOT_DIR_PROPERTY+"] is missing.");
     }
     File rootDir = new File(root);
     if(rootDir.exists() == false) {
       if(rootDir.mkdirs() == false) {
-        log.error("Cannot create BDB root directory [{}].", rootDir);
+        log.error("Cannot create bitwise root directory [{}].", rootDir);
         throw new RuntimeException("Cannot mkdir ["+rootDir+"]");
       }
     }
+
     File envDir = new File(root, key.toString());
     if(envDir.exists() == false) {
       if(envDir.mkdirs() == false) {
@@ -121,23 +123,10 @@ public class BdbContext implements KeyedDaoManagerDestroyListener {
         throw new RuntimeException("Cannot mkdir ["+envDir+"]");
       }
     }
+    instance.envDir_ = envDir;
 
-    log.debug("Creating BDB environment in [{}] with properties {}", envDir, localProps);
-
-    EnvironmentConfig cfg = new EnvironmentConfig(localProps);
-    cfg.setAllowCreate(true);
-    instance_.env_ = new Environment(envDir, cfg);
-
-    // Force a checkpoint: this helps cleaning log files.
-    CheckpointConfig chkpt = new CheckpointConfig();
-    chkpt.setForce(true);
-    instance_.env_.checkpoint(chkpt);
-
-    if(truncate != null && truncate.equalsIgnoreCase("true")) {
-      instance_.truncate();
-    }
-    KeyedDaoManager.addDestroyListener(key, instance_);
-    instanceMap_.put(key, instance_);
+    KeyedDaoManager.addDestroyListener(key, instance);
+    instanceMap_.put(key, instance);
   }
 
   static BdbContext getInstance(DaoKey key) {
@@ -153,8 +142,27 @@ public class BdbContext implements KeyedDaoManagerDestroyListener {
     destroyInstance(key_);
   }
 
-  Environment getEnvironment() {
+  Environment getEnvironment() throws DatabaseException {
+    if(env_ == null) {
+      initEnvironment();
+    }
     return env_;
+  }
+  
+  synchronized void initEnvironment() throws DatabaseException {
+    // Test to avoid race condition
+    if(env_ == null) {
+      log.debug("Creating BDB environment in [{}] with properties {}", envDir_, envProps_);
+
+      EnvironmentConfig cfg = new EnvironmentConfig(envProps_);
+      cfg.setAllowCreate(true);
+      env_ = new Environment(envDir_, cfg);
+
+      // Force a checkpoint: this helps cleaning log files.
+      CheckpointConfig chkpt = new CheckpointConfig();
+      chkpt.setForce(true);
+      env_.checkpoint(chkpt);
+    }
   }
 
   synchronized Database getDatabase(String name) throws DatabaseException {

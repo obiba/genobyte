@@ -16,15 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
  *******************************************************************************/
-package org.obiba.bitwise.dao.impl.bdb;
+package org.obiba.bitwise.dao.impl.util;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import com.sleepycat.je.DatabaseEntry;
-
-public class BdbUtil {
+public class BitPackingUtil {
 
   private static final String STORED_ENCODING = "UTF-8";
   private static final ByteOrder STORED_BYTE_ORDER = ByteOrder.BIG_ENDIAN; 
@@ -33,8 +31,8 @@ public class BdbUtil {
     return ByteBuffer.allocate(size).order(STORED_BYTE_ORDER);
   }
 
-  static public ByteBuffer toByteBuffer(DatabaseEntry entry) {
-    return ByteBuffer.wrap(entry.getData()).order(STORED_BYTE_ORDER);
+  static public ByteBuffer toByteBuffer(byte[] bytes) {
+    return ByteBuffer.wrap(bytes).order(STORED_BYTE_ORDER);
   }
 
   static public ByteBuffer putString(String str, ByteBuffer bb) {
