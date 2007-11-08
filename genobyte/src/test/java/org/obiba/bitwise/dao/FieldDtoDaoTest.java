@@ -18,8 +18,6 @@
  *******************************************************************************/
 package org.obiba.bitwise.dao;
 
-import org.obiba.bitwise.dao.FieldDtoDao;
-import org.obiba.bitwise.dao.KeyedDaoManager;
 import org.obiba.bitwise.dto.FieldDto;
 import org.obiba.bitwise.mock.MockBitwiseStore;
 
@@ -54,7 +52,7 @@ public class FieldDtoDaoTest extends BaseBdbDaoTestCase {
   private FieldDto getBogusDto() {
    FieldDto d = new FieldDto();
    d.setName("newField");
-   d.setBitIndex(new int[5]);
+   d.setBitIndex(new long[5]);
    d.setSize(40);
    d.setDictionaryName("bogusDictionary");
    return d;

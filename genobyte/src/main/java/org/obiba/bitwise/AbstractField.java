@@ -384,7 +384,7 @@ public abstract class AbstractField {
       System.arraycopy(vectors_, 0, tempVectors, 0, vectors_.length);
       vectors_ = tempVectors;
 
-      int[] tempIndex = new int[d+1];
+      long[] tempIndex = new long[d+1];
       Arrays.fill(tempIndex, -1);
       System.arraycopy(data_.getBitIndex(), 0, tempIndex, 0, data_.getBitIndex().length);
       data_.setBitIndex(tempIndex);

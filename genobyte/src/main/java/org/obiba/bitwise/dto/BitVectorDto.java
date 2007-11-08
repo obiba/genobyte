@@ -26,7 +26,7 @@ package org.obiba.bitwise.dto;
 public class BitVectorDto {
 
   /** The unique identifier of this bit vector (primary key)*/
-  int id_ = -1;
+  long id_ = -1;
   /** The number of bits this vector holds */
   private int size_;
   /** Array of bits (holds the actual bit values) */
@@ -49,7 +49,7 @@ public class BitVectorDto {
   /**
    * @return the id.
    */
-  public int getId() {
+  public long getId() {
     return id_;
   }
 
@@ -70,7 +70,7 @@ public class BitVectorDto {
   /**
    * @param id the id to set.
    */
-  public void setId(int id) {
+  public void setId(long id) {
     id_ = id;
   }
 

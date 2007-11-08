@@ -18,9 +18,6 @@
  *******************************************************************************/
 package org.obiba.bitwise;
 
-import org.obiba.bitwise.BitVector;
-import org.obiba.bitwise.BitwiseStore;
-import org.obiba.bitwise.BitwiseStoreUtil;
 import org.obiba.bitwise.dao.BaseBdbDaoTestCase;
 import org.obiba.bitwise.schema.DictionaryMetaData;
 import org.obiba.bitwise.schema.FieldMetaData;
@@ -96,4 +93,21 @@ public class BitwiseStoreTest extends BaseBdbDaoTestCase {
     assertNotNull(bs);
     assertTrue(bs.getDeleted().get(index));
   }
+  
+
+  public void testFieldPersistence() {
+    BitwiseStore bs = BitwiseStoreUtil.getInstance().create("fieldPersistence", testSchema, 10);
+    Field f = bs.getField("f");
+    assertNotNull(f);
+    int record = bs.nextIndex();
+    f.setValue(record, f.getDictionary().lookup(Boolean.TRUE));
+    bs.close();
+
+    bs = BitwiseStoreUtil.getInstance().open("fieldPersistence");
+    assertNotNull(bs);
+    f = bs.getField("f");
+    assertEquals(Boolean.TRUE, f.getDictionary().reverseLookup(f.getValue(record)));
+    bs.close();
+  }
+  
 }

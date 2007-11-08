@@ -25,7 +25,6 @@ import java.util.List;
 import org.obiba.bitwise.dao.FieldDtoDao;
 import org.obiba.bitwise.dto.FieldDto;
 
-
 import com.ibatis.dao.client.DaoManager;
 import com.sleepycat.bind.EntityBinding;
 import com.sleepycat.bind.EntryBinding;
@@ -84,7 +83,7 @@ public class FieldDtoDaoBdbImpl extends BaseCrudDaoImpl<FieldDto, String> implem
       FieldDto d = new FieldDto();
       d.setName(StringBinding.entryToString(key));
       d.setSize(bb.getInt());
-      d.setBitIndex(BdbUtil.readIntArray(bb));
+      d.setBitIndex(BdbUtil.readLongArray(bb));
       d.setDictionaryName(BdbUtil.readString(bb));
       return d;
     }
@@ -95,9 +94,9 @@ public class FieldDtoDaoBdbImpl extends BaseCrudDaoImpl<FieldDto, String> implem
     public void objectToData(Object o, DatabaseEntry entry) {
       FieldDto d = (FieldDto)o;
 
-      ByteBuffer bb = BdbUtil.allocate(4 + d.getBitIndex().length * 4 + 256);
+      ByteBuffer bb = BdbUtil.allocate(4 + d.getBitIndex().length * 8 + 256);
       bb.putInt(d.getSize());
-      BdbUtil.putIntArray(d.getBitIndex(), bb);
+      BdbUtil.putLongArray(d.getBitIndex(), bb);
       BdbUtil.putString(d.getDictionaryName(), bb);
       entry.setData(bb.array(), 0, bb.position());
     }

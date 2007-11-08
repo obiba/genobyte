@@ -34,7 +34,7 @@ public class VolatileField extends AbstractField {
     super.data_ = new FieldDto();
     super.data_.setName(pName);
     super.data_.setSize(pStore.getCapacity());
-    super.data_.setBitIndex(new int[pDict.dimension()]);
+    super.data_.setBitIndex(new long[pDict.dimension()]);
     super.data_.setDictionaryName(pDict.getName());
   }
 

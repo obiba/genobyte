@@ -23,11 +23,10 @@ import java.nio.ByteBuffer;
 import org.obiba.bitwise.dao.BitVectorDtoDao;
 import org.obiba.bitwise.dto.BitVectorDto;
 
-
 import com.ibatis.dao.client.DaoManager;
 import com.sleepycat.bind.EntityBinding;
 import com.sleepycat.bind.EntryBinding;
-import com.sleepycat.bind.tuple.IntegerBinding;
+import com.sleepycat.bind.tuple.LongBinding;
 import com.sleepycat.bind.tuple.TupleBinding;
 import com.sleepycat.collections.PrimaryKeyAssigner;
 import com.sleepycat.collections.StoredMap;
@@ -35,7 +34,7 @@ import com.sleepycat.je.Database;
 import com.sleepycat.je.DatabaseEntry;
 import com.sleepycat.je.DatabaseException;
 
-public class BitVectorDtoDaoBdbImpl extends BaseAutoKeyDaoImpl<BitVectorDto, Integer> implements BitVectorDtoDao {
+public class BitVectorDtoDaoBdbImpl extends BaseAutoKeyDaoImpl<BitVectorDto, Long> implements BitVectorDtoDao {
 
   private static final String VECTOR_DB = "vector.db";
   private static final String VECTOR_PK_SEQ = "vector.id";
@@ -53,18 +52,18 @@ public class BitVectorDtoDaoBdbImpl extends BaseAutoKeyDaoImpl<BitVectorDto, Int
   }
   
   @Override
-  protected Integer getKey(BitVectorDto value) {
+  protected Long getKey(BitVectorDto value) {
     return value.getId();
   }
 
   @Override
-  protected void setAutoKey(Integer key, BitVectorDto value) {
+  protected void setAutoKey(Long key, BitVectorDto value) {
     value.setId(key);
   }
 
   @Override
   synchronized protected StoredMap createStoredMap() {
-    EntryBinding keyBinding = TupleBinding.getPrimitiveBinding(Integer.class);
+    EntryBinding keyBinding = TupleBinding.getPrimitiveBinding(Long.class);
     EntityBinding valueBinding = new BitVectorDtoBinding();
     PrimaryKeyAssigner pk = new BitVectorPk();
     return new StoredMap(getVectorDb(), keyBinding, valueBinding, pk);
@@ -73,10 +72,7 @@ public class BitVectorDtoDaoBdbImpl extends BaseAutoKeyDaoImpl<BitVectorDto, Int
   class BitVectorPk implements PrimaryKeyAssigner {
     public void assignKey(DatabaseEntry entry) throws DatabaseException {
       long key = getContext().getSequence(VECTOR_PK_SEQ).get(getContext().getEnvironment().getThreadTransaction(), 1);
-      if(key > Integer.MAX_VALUE) {
-        throw new IllegalStateException("pk is larger than int");
-      }
-      IntegerBinding.intToEntry((int)key, entry);
+      LongBinding.longToEntry(key, entry);
     }
   }
 
@@ -88,7 +84,7 @@ public class BitVectorDtoDaoBdbImpl extends BaseAutoKeyDaoImpl<BitVectorDto, Int
     public Object entryToObject(DatabaseEntry key, DatabaseEntry entry) {
       ByteBuffer bb = BdbUtil.toByteBuffer(entry);
       BitVectorDto d = new BitVectorDto();
-      d.setId(IntegerBinding.entryToInt(key));
+      d.setId(LongBinding.entryToLong(key));
       d.setSize(bb.getInt());
       d.setBits(BdbUtil.readLongArray(bb));
       return d;
@@ -110,7 +106,7 @@ public class BitVectorDtoDaoBdbImpl extends BaseAutoKeyDaoImpl<BitVectorDto, Int
      */
     public void objectToKey(Object o, DatabaseEntry entry) {
       BitVectorDto d = (BitVectorDto)o;
-      IntegerBinding.intToEntry(d.getId(), entry);
+      LongBinding.longToEntry(d.getId(), entry);
     }
   }
 }

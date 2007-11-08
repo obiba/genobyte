@@ -67,9 +67,9 @@ class FieldUtil {
 
     List<FieldDto> values = fieldDtoDao.values();
     for (FieldDto dto : values) {
-      int bits[] = dto.getBitIndex();
+      long bits[] = dto.getBitIndex();
       for(int i = 0; i < bits.length; i++) {
-        int id = bits[i];
+        long id = bits[i];
         if(id != -1) {
           BitVector v = BitVectorUtil.toVector(bitVectorDtoDao.load(id));
           v.and(clearMask);
@@ -95,10 +95,10 @@ class FieldUtil {
     }
     Dictionary dict = store_.getDictionary(dto.getDictionaryName());
 
-    int bits[] = dto.getBitIndex();
+    long bits[] = dto.getBitIndex();
     BitVector vectors[] = new BitVector[bits.length]; 
     for(int i = 0; i < bits.length; i++) {
-      int bitIndex = bits[i];
+      long bitIndex = bits[i];
       if(bitIndex != -1) {
         vectors[i] = BitVectorUtil.toVector(bitVectorDtoDao.load(bitIndex));
         if(vectors[i].size() != dto.getSize()) {
@@ -129,7 +129,7 @@ class FieldUtil {
       throw new IllegalStateException("Cannot create field=["+name+"]: dictionary=["+dictName+"] does not exist.");
     }
     int bits = dict.dimension();
-    int bitIndexes[] = new int[bits];
+    long bitIndexes[] = new long[bits];
     Arrays.fill(bitIndexes, -1);
     FieldDto dto = new FieldDto();
     dto.setName(name);
@@ -160,6 +160,7 @@ class FieldUtil {
           BitVectorDto dto = BitVectorUtil.toDto(f.getDto().getBitIndex()[i], v);
           if(dto.getId() == -1) {
             bitVectorDtoDao.create(dto);
+            if(dto.getId() <= 0) throw new IllegalStateException("Invalid unique key returned after persisting bitvector ["+dto.getId()+"]");
             f.getDto().getBitIndex()[i] = dto.getId();
           } else {
             bitVectorDtoDao.save(dto);
@@ -176,7 +177,7 @@ class FieldUtil {
     FieldDtoDao fieldDtoDao = (FieldDtoDao)KeyedDaoManager.getInstance(store_.getDaoKey()).getDao(FieldDtoDao.class);
     FieldDto dto = fieldDtoDao.load(name);
     if(dto != null) {
-      for (int vectorIndex : dto.getBitIndex()) {
+      for (long vectorIndex : dto.getBitIndex()) {
         if(vectorIndex != -1) bitVectorDtoDao.delete(vectorIndex);
       }
       fieldDtoDao.delete(name);

@@ -50,8 +50,9 @@ public class BitVectorDtoDaoTest extends BaseBdbDaoTestCase {
     BitVectorDto d = BitVectorUtil.toDto(-1, v);
     dao.create(d);
     assertTrue(d.getId() > 0);
-    
+
     BitVectorDto d2 = dao.load(d.getId());
+    assertNotNull(d2);
     BitVector v2 = BitVectorUtil.toVector(d2);
 
     assertEquals(v, v2);
@@ -72,7 +73,6 @@ public class BitVectorDtoDaoTest extends BaseBdbDaoTestCase {
     BitVector v = new BitVector(10000);
     BitVectorDto d = BitVectorUtil.toDto(-1, v);
     dao.create(d);
-    dao.create(d);
     assertTrue(d.getId() > 0);
     assertNotNull(dao.load(d.getId()));
   }
@@ -81,7 +81,7 @@ public class BitVectorDtoDaoTest extends BaseBdbDaoTestCase {
     BitVector v = new BitVector(10000);
     BitVectorDto d = BitVectorUtil.toDto(-1, v);
     dao.create(d);
-    int id = d.getId();
+    long id = d.getId();
     assertTrue(id > 0);
     
     for(int i = 0; i < 10000; i+=2) {

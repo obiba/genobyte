@@ -23,5 +23,5 @@ import org.obiba.bitwise.dto.BitVectorDto;
 /**
  * DAO interface for persisting instances of <tt>BitVectorDto</tt>.
  */
-public interface BitVectorDtoDao extends CrudDao<BitVectorDto, Integer> {
+public interface BitVectorDtoDao extends CrudDao<BitVectorDto, Long> {
 }

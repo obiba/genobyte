@@ -30,7 +30,7 @@ public class FieldDto {
   /** Number of bits per bit vector */
   private int size_ = -1;
   /** Indexes of every bit vectors of this field. */
-  private int[] bitIndex_ = null;
+  private long[] bitIndex_ = null;
   /** The name of the field dictionary */
   private String dictionaryName_ = null;
 
@@ -41,7 +41,7 @@ public class FieldDto {
   /**
    * @return the bitIndex.
    */
-  public int[] getBitIndex() {
+  public long[] getBitIndex() {
     return bitIndex_;
   }
 
@@ -69,7 +69,7 @@ public class FieldDto {
   /**
    * @param bitIndex the bitIndex to set.
    */
-  public void setBitIndex(int[] bitIndex) {
+  public void setBitIndex(long[] bitIndex) {
     bitIndex_ = bitIndex;
   }
 

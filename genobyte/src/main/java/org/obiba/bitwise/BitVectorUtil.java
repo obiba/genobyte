@@ -36,7 +36,7 @@ public class BitVectorUtil {
    * @param v the <code>BitVector</code> from which data will be obtained.
    * @return a <code>BitVectorDto</code> based on the information (size, bits) found in the <code>BitVector</code> <b>v</b>.
    */
-  static public BitVectorDto toDto(int id, BitVector v) {
+  static public BitVectorDto toDto(long id, BitVector v) {
     BitVectorDto d = new BitVectorDto();
     d.setId(id);
     d.setSize(v.size());
