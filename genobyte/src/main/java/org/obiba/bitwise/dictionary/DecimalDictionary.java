@@ -48,8 +48,8 @@ public class DecimalDictionary extends AbstractStaticDictionary<Double> {
    * Sets the lower bound (minimum) for encoded values. Any value to encode to a <tt>BitVector</tt> must be higher or equal to this value.
    * @param pLower the lower bound 
    */
-  public void setLower(String pLower) {
-    lower_ = Double.parseDouble(pLower);
+  public void setLower(double pLower) {
+    lower_ = pLower;
     propsValidated = false;
   }
 
@@ -58,8 +58,8 @@ public class DecimalDictionary extends AbstractStaticDictionary<Double> {
    * Sets the upper bound (maximum) for encoded values. Any value to encode to a <tt>BitVector</tt> must be lower or equal to this value.
    * @param pUpper the upper bound 
    */
-  public void setUpper(String pUpper) {
-    upper_ = Double.parseDouble(pUpper);
+  public void setUpper(double pUpper) {
+    upper_ = pUpper;
     propsValidated = false;
   }
 
@@ -69,8 +69,8 @@ public class DecimalDictionary extends AbstractStaticDictionary<Double> {
    * will take the value of the closest higher increment.
    * @param pStep the step between each sampled value. 
    */
-  public void setStep(String pStep) {
-    step_ = Double.parseDouble(pStep);
+  public void setStep(double pStep) {
+    step_ = pStep;
     propsValidated = false;
   }
 
