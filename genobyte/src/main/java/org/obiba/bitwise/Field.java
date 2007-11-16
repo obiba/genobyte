@@ -42,6 +42,10 @@ public class Field extends AbstractField {
   }
 
 
+  /**
+   * Returns true if this field was modified since it was persisted.
+   * @return true if this field was modified since it was persisted.
+   */
   public boolean isDirty() {
     return dirty_;
   }
@@ -101,10 +105,15 @@ public class Field extends AbstractField {
     return super.data_.getName().hashCode();
   }
 
-
+  @Override
   public void copyValues(AbstractField pSource, QueryResult pQr) {
     super.copyValues(pSource, pQr);
     this.setDirty(true);
   }
 
+  @Override
+  public void copyValues(AbstractField source) {
+    super.copyValues(source);
+    this.setDirty(true);
+  }
 }
