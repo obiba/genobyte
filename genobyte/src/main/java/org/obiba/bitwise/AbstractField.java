@@ -40,7 +40,7 @@ public abstract class AbstractField {
   }
 
 
-  FieldDto getDto() {
+  final FieldDto getDto() {
     return data_;
   }
 
@@ -50,7 +50,7 @@ public abstract class AbstractField {
    * has a unique name that identifies it. 
    * @return the name of this <code>Field</code> instance.
    */
-  public String getName() {
+  final public String getName() {
     return data_.getName();
   }
 
@@ -59,7 +59,7 @@ public abstract class AbstractField {
    * Returns the number of records that can currently be holded in this <code>Field</code> object.
    * @return the maximum number of records that can currently be holded in this <code>Field</code>.
    */
-  public int getSize() {
+  final public int getSize() {
     return data_.getSize();
   }
   
@@ -296,19 +296,16 @@ public abstract class AbstractField {
     }
 
     // Quick nullness check.
-    if(nulls_ != null && nulls_.get(record)) {
+    if(internalGetNulls().get(record)) {
       return null;
     }
 
-    BitVector v = new BitVector(dictionary_.dimension());
+    BitVector v = new BitVector(vectors_.length);
     for (int i = 0; i < vectors_.length; i++) {
       BitVector vector = vectors_[i];
       if(vector != null && vector.get(record)) {
         v.set(i);
       }
-    }
-    if(v.count() == 0) {
-      return null;
     }
     return v;
   }
@@ -368,17 +365,25 @@ public abstract class AbstractField {
      .append("] vectors[").append(Arrays.toString(vectors_)).append("]");
     return b.toString();
   }
-  
-  
+
   public abstract boolean equals(Object o);
+
   public abstract int hashCode();
-  
-  
+
   /**
    * Initializes the dimension <code>d</code> of the field.
    * @param d the index of the bit vector to initialize
    */
   private void createDimension(int d) {
+    createDimension(d, new BitVector(data_.getSize()));
+  }
+
+  /**
+   * Initializes the dimension <code>d</code> of the field with the specified {@link BitVector}
+   * @param d the index of the bit vector to initialize
+   * @param v the new dimension's vector
+   */
+  private void createDimension(int d, BitVector v) {
     if(vectors_.length <= d) {
       BitVector tempVectors[] = new BitVector[d+1];
       System.arraycopy(vectors_, 0, tempVectors, 0, vectors_.length);
@@ -389,9 +394,10 @@ public abstract class AbstractField {
       System.arraycopy(data_.getBitIndex(), 0, tempIndex, 0, data_.getBitIndex().length);
       data_.setBitIndex(tempIndex);
     }
-    vectors_[d] = new BitVector(data_.getSize());
+    vectors_[d] = v;
   }
 
+  
   
   /**
    * Finds k such that f(k) != t(k) and f(i) == t(i) for every i > k
@@ -560,7 +566,7 @@ public abstract class AbstractField {
     // Return a copy of the internal null vector so that external objects may not modify our internal state.
     return new BitVector(internalGetNulls());
   }
-  
+
   /**
    * Internal method to lazily instantiate the null vector and return it.
    * @return the internal null vector
@@ -592,7 +598,6 @@ public abstract class AbstractField {
     return vectors_[i];
   }
 
-
   /**
    * Copies the values from the source field into this one. The values considered for copying
    * can be masked using a {@link QueryResult}: only the records with their index set in the mask
@@ -603,23 +608,32 @@ public abstract class AbstractField {
 
     BitVector mask = maskVector.bits();
 
-    for (int i=0; i<pSource.vectors_.length; i++) {
-      BitVector sourceVector = pSource.safeVector(i);
-      BitVector destVector = safeVector(i);
-      BitVector newVector = new BitVector(sourceVector);
-      
-      //If there was no original value in the destination vector, copy desired values from source vector and leave the rest null
-      if (destVector == EMPTY) {
-        this.vectors_[i] = newVector.and(mask);
+    if(getDictionary().equals(pSource.getDictionary()) == true) {
+      for (int i=0; i<pSource.vectors_.length; i++) {
+        BitVector sourceVector = pSource.safeVector(i);
+        BitVector destVector = safeVector(i);
+        BitVector newVector = new BitVector(sourceVector);
+  
+        //If there was no original value in the destination vector, copy desired values from source vector and leave the rest null
+        if (destVector == EMPTY) {
+          this.vectors_[i] = newVector.and(mask);
+        }
+        //If there were values in the destination vector, keep them when the source value is filtered.
+        else {
+          //If mask allows record copy, use source value. Otherwise, use existing value.
+          // destVector AND NOT mask : sets all destination bits to 0
+          // newVector AND mask : sets all undesired source bits to 0
+          // ORing the results will set the destination bits to 1 where all source bits are 1
+          destVector.andNot(mask).or(newVector.and(mask));
+          this.vectors_[i] = destVector;
+        }
       }
-      //If there were values in the destination vector, keep them when the source value is filtered.
-      else {
-        //If mask allows record copy, use source value. Otherwise, use existing value.
-        // destVector AND NOT mask : sets all destination bits to 0
-        // newVector AND mask : sets all undesired source bits to 0
-        // ORing the results will set the destination bits to 1 where all source bits are 1
-        destVector.andNot(mask).or(newVector.and(mask));
-        this.vectors_[i] = destVector;
+    } else {
+      Dictionary sourceDict = pSource.getDictionary();
+      Dictionary thisDict = getDictionary();
+      for(int i = maskVector.next(0); i != -1; i = maskVector.next(i+1)) {
+        Object value = sourceDict.reverseLookup(pSource.getValue(i));
+        setValue(i, thisDict.lookup(value));
       }
     }
 
@@ -627,6 +641,35 @@ public abstract class AbstractField {
     this.nulls_ = null;
   }
 
+  /**
+   * Copies the values from the source field into this one. This will overwrite all values in the current field 
+   * with the ones from the original field. A copy of the original values is made so the source field may be modified
+   * without affecting this one.
+   * @param pSource the field from which the values are copied from. 
+   */
+  public void copyValues(AbstractField pSource) {
+    validateSourceField(pSource);
+    if(getDictionary().equals(pSource.getDictionary()) == false) {
+      throw new IllegalArgumentException("Destination field's dictionary is not equivalent to source's dictionary. Cannot copy values from source field." );
+    }
+    for (int i = 0; i < pSource.vectors_.length; i++) {
+      BitVector sourceVector = pSource.safeVector(i);
+
+      if(i >= this.vectors_.length) 
+        createDimension(i, new BitVector(sourceVector));
+      else 
+        this.vectors_[i] = new BitVector(sourceVector);
+    }
+
+    if(pSource.vectors_.length < this.vectors_.length) {
+      for (int i = pSource.vectors_.length; i < this.vectors_.length; i++) {
+        this.vectors_[i] = new BitVector(getSize());
+      }      
+    }
+
+    // Clear the null vector instead of checking nullness
+    this.nulls_ = null;
+  }
 
   /**
    * Makes sure that it is possible to copy content from the source field to this field.
@@ -636,18 +679,10 @@ public abstract class AbstractField {
     if(pSource == null) {
       throw new IllegalArgumentException("The source field cannot be null.");
     }
-
-    //Make sure the two fields belong to the same store.
-    if (this.store_ != pSource.store_) {
-      throw new IllegalArgumentException("The source and destination fields must belong to the same store.");
-    }
-
     //Make sure they have the same capacity.
     if (this.getSize() != pSource.getSize()) {
       throw new IllegalArgumentException("The source and destination fields must have the same size.");
     }
-
-    //TODO: Implement a way to enforce the similarity of the two dictionaries. (Integer with Integer, String with String, etc.)    
   }
 
 }
