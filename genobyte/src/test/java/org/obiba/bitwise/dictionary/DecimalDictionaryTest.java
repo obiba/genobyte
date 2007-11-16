@@ -20,7 +20,6 @@ package org.obiba.bitwise.dictionary;
 
 import org.obiba.bitwise.BitVector;
 import org.obiba.bitwise.dao.BaseBdbDaoTestCase;
-import org.obiba.bitwise.dictionary.DecimalDictionary;
 import org.obiba.bitwise.util.BitUtil;
 
 
@@ -36,9 +35,9 @@ public class DecimalDictionaryTest extends BaseBdbDaoTestCase {
 
   public void testLookup() {
     DecimalDictionary d = new DecimalDictionary("testD");
-    d.setLower("-1000");
-    d.setUpper("1000");
-    d.setStep("0.1");
+    d.setLower(-1000);
+    d.setUpper(1000);
+    d.setStep(0.1);
     assertTrue(d.dimension() > 0);
     System.out.println(d.dimension());
     BitVector v = d.lookup(-1000d);
@@ -52,17 +51,17 @@ public class DecimalDictionaryTest extends BaseBdbDaoTestCase {
 
   public void testReverseLookup() {
     DecimalDictionary d = new DecimalDictionary("testD");
-    d.setLower("-1000");
-    d.setUpper("1000");
-    d.setStep("0.00001");
+    d.setLower(-1000);
+    d.setUpper(1000);
+    d.setStep(0.00001);
     BitVector v = d.lookup(0.00001);
   }
   
   public void testZero() {
     DecimalDictionary d = new DecimalDictionary("testD");
-    d.setLower(Integer.toString(Integer.MIN_VALUE));
-    d.setUpper(Integer.toString(Integer.MAX_VALUE));
-    d.setStep("0.000001d");
+    d.setLower(Integer.MIN_VALUE);
+    d.setUpper(Integer.MAX_VALUE);
+    d.setStep(0.000001d);
     BitVector v = d.lookup(0.0);
     assertNotNull(v);
     Double zero = d.reverseLookup(v);
