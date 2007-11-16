@@ -36,10 +36,8 @@ import org.obiba.bitwise.query.QueryResult;
 import org.obiba.genobyte.inconsistency.ComparableRecordProvider;
 import org.obiba.genobyte.inconsistency.MendelianRecordTrioProvider;
 import org.obiba.genobyte.model.TransposedValue;
-import org.obiba.genobyte.statistic.DefaultAssayStatsRunDefinition;
 import org.obiba.genobyte.statistic.StatsDigester;
 import org.obiba.genobyte.statistic.StatsPool;
-import org.obiba.genobyte.statistic.StatsRunDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,6 +66,8 @@ abstract public class GenotypingRecordStore<K, T, TK> {
   
   protected List<GenotypingFieldValueTransposer<K, TK>> fieldTransposers_ = new LinkedList<GenotypingFieldValueTransposer<K, TK>>();
 
+  protected BitwiseRecordManager<K, T> manager_ = null;
+
   private int transposeMemSize_ = 100 * 1024 * 1024;
   
   /** Default StatsPool for this record store (calculates all default stats for this <tt>GenotypingRecordStore</tt>). */
@@ -90,7 +90,6 @@ abstract public class GenotypingRecordStore<K, T, TK> {
 
 
   public void setStatsPool(StatsPool<K,TK> pPool) {
-    StatsRunDefinition runDef = new DefaultAssayStatsRunDefinition();
     mainStatsPool_ = pPool;
   }
 
@@ -148,36 +147,6 @@ abstract public class GenotypingRecordStore<K, T, TK> {
       fieldTransposers_.add(transposer);
     }
   }
-
-
-  /**
-   * Deletes all records in this store, and removes all fields holding genotyping data in this
-   * store and in its transposed store. For example, if a <b>sample</b> store is being emptied,
-   * all assays store fields that are holding data transposed from the sample store will be deleted. 
-   */
-  public void empty() {
-    //Let's remove all "Genotyping" fields in this store and in the transposed store.
-    for (GenotypingField gf : genotypingFields_.values()) {
-      //The fields to be removed are the creatable ones, the ones that can be recreated automatically to hold genotyping data.
-      if(gf.isCreatable()) {
-        FieldValueIterator<K> fvi = this.getRecordManager().keys();
-        //For each record in this store, delete connected fields.
-        while(fvi.hasNext()) {
-          FieldValueIterator<K>.FieldValue fv = fvi.next();
-          Field f = getGenotypingField(gf.getName(), fv.getValue(), false);
-          if(f != null) {
-            //If the field is a transposed field, it will be found in the transposed store (the one connected to this one by the GenotypingStore.
-            if(gf.isTransposed() == false) store_.deleteField(f.getName());
-            else this.transposedStore_.getStore().deleteField(f.getName());
-          }
-        }
-      }
-    }
-    
-    //Empty records data for the remaining fields
-    getRecordManager().deleteAll();
-  }
-
 
   /**
    * Returns the genotyping <tt>Field</tt> matching the given name and record, without creating fields if they do not yet
@@ -238,7 +207,6 @@ abstract public class GenotypingRecordStore<K, T, TK> {
    * @param values the list of tranposed values to set
    * @return the number of values overwriten (number of times a value was written over a non-null preivous value)
    */
-  //TODO: Finish Javadoc description for setTransposedValues.
   public int setTransposedValues(String field, K key, List<? extends TransposedValue<TK, ?>> values) {
     if(values == null || values.size() == 0) {
       return 0;
@@ -275,7 +243,7 @@ abstract public class GenotypingRecordStore<K, T, TK> {
    * transfered to the other store.
    * @param t a Set of records keys for which to transpose the common values.
    */
-  public void tranpose(Set<K> t) {
+  private void tranpose(Set<K> t) {
     //If there are no records to transpose
     if(t == null || t.size() == 0) {
       log.info("List of records to transpose was empty. Nothing to do.");
@@ -304,7 +272,7 @@ abstract public class GenotypingRecordStore<K, T, TK> {
       FieldValueIterator<K>.FieldValue fv = fvi.next();
       allKeys.add(fv.getValue());
     }
-    
+
     //Transpose values
     tranpose(allKeys);
   }
@@ -372,7 +340,14 @@ abstract public class GenotypingRecordStore<K, T, TK> {
    * Returns the <tt>BitwiseRecordManager</tt> mapped to the bitwise store in use in this object.
    * @return the <tt>BitwiseRecordManager</tt>.
    */
-  abstract public BitwiseRecordManager<K, T> getRecordManager();
+  final public BitwiseRecordManager<K, T> getRecordManager() {
+    if(manager_ == null) {
+      manager_ = createRecordManager(store_);
+    }
+    return manager_;
+  }
+  
+  abstract protected BitwiseRecordManager<K, T> createRecordManager(BitwiseStore store);
 
   abstract public ComparableRecordProvider getComparableRecordProvider();
 

@@ -45,8 +45,7 @@ public class MockGenotypingRecordStore extends GenotypingRecordStore {
 
 
   @Override
-  public BitwiseRecordManager getRecordManager() {
-    // TODO Auto-generated method stub
+  public BitwiseRecordManager createRecordManager(BitwiseStore store) {
     return brm_;
   }
   

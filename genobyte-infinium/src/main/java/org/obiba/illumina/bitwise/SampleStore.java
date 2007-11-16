@@ -41,16 +41,16 @@ import org.obiba.illumina.io.LocusXDnaReportFile;
 import org.obiba.illumina.io.LocusXDnaReportSampleDataEntry;
 import org.obiba.illumina.io.SampleSheetFile;
 import org.obiba.illumina.io.SampleSheetFileEntry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class SampleStore extends GenotypingRecordStore<String, Sample, Integer> {
 
-  private BitwiseRecordManager<String, Sample> manager_ = null;
+  private final Logger log = LoggerFactory.getLogger(SampleStore.class);
 
   public SampleStore(BitwiseStore store) {
     super(store);
-    BitwiseRecordManager<String, Sample> manager = AnnotationBasedRecord.createInstance(store, Sample.class);
-    manager_ = new KeyCache(manager);
   }
 
   @Override
@@ -64,8 +64,10 @@ public class SampleStore extends GenotypingRecordStore<String, Sample, Integer> 
   }
 
   @Override
-  public BitwiseRecordManager<String, Sample> getRecordManager() {
-    return manager_;
+  public BitwiseRecordManager<String, Sample> createRecordManager(BitwiseStore store) {
+    log.debug("Creating BitwiseRecordManager for store {}", store);
+    BitwiseRecordManager<String, Sample> manager = AnnotationBasedRecord.createInstance(store, Sample.class);
+    return new KeyCache(manager);
   }
 
   @Override

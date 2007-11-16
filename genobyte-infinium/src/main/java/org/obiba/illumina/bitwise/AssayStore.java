@@ -43,12 +43,8 @@ import org.obiba.illumina.io.ManifestFileAssayEntry;
 
 public class AssayStore extends GenotypingRecordStore<Integer, Assay, String> {
 
-  private BitwiseRecordManager<Integer, Assay> manager_ = null;
-
   public AssayStore(BitwiseStore store) {
     super(store);
-    BitwiseRecordManager<Integer, Assay> manager = AnnotationBasedRecord.createInstance(store, Assay.class);
-    manager_ = new KeyCache(manager);
   }
 
   @Override
@@ -62,8 +58,9 @@ public class AssayStore extends GenotypingRecordStore<Integer, Assay, String> {
   }
 
   @Override
-  public BitwiseRecordManager<Integer, Assay> getRecordManager() {
-    return manager_;
+  public BitwiseRecordManager<Integer, Assay> createRecordManager(BitwiseStore store) {
+    BitwiseRecordManager<Integer, Assay> manager = AnnotationBasedRecord.createInstance(store, Assay.class);
+    return new KeyCache(manager);
   }
 
   @Override
