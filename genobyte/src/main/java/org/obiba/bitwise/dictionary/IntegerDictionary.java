@@ -132,6 +132,14 @@ public class IntegerDictionary extends AbstractStaticDictionary<Integer> {
     return true;
   }
 
+  @Override
+  public boolean equals(Object obj) {
+    if(obj instanceof IntegerDictionary) {
+      IntegerDictionary id = (IntegerDictionary)obj;
+      return this.step_ == id.step_ && this.lower_ == id.lower_ && this.upper_ == id.upper_; 
+    }
+    return super.equals(obj);
+  }
 
   /**
    * Makes sure that the properties <code>lower</code>, <code>upper</code> and <code>step</code> are

@@ -132,6 +132,14 @@ public class ShortDictionary extends AbstractStaticDictionary<Short> {
     return true;
   }
 
+  @Override
+  public boolean equals(Object obj) {
+    if(obj instanceof ShortDictionary) {
+      ShortDictionary sd = (ShortDictionary)obj;
+      return this.step_ == sd.step_ && this.lower_ == sd.lower_ && this.upper_ == sd.upper_; 
+    }
+    return super.equals(obj);
+  }
 
   /**
    * Makes sure that the properties <code>lower</code>, <code>upper</code> and <code>step</code> are

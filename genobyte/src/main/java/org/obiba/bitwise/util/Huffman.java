@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.text.StringCharacterIterator;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -77,6 +78,14 @@ public class Huffman implements Serializable {
     seed(provider.getSeed());
   }
 
+  @Override
+  public boolean equals(Object obj) {
+    if(obj instanceof Huffman) {
+      Huffman h = (Huffman)obj;
+      return Arrays.equals(codes_, h.codes_) && endCode_.equals(h.endCode_);
+    }
+    return super.equals(obj);
+  }
 
   /**
    * Encodes the specified string into a series of unique codes

@@ -83,4 +83,10 @@ public class FloatDictionary extends AbstractStaticDictionary<Float> {
   public boolean isOrdered() {
     return true;
   }
+  
+  @Override
+  public boolean equals(Object obj) {
+    if(obj instanceof FloatDictionary) return true;
+    return super.equals(obj);
+  }
 }

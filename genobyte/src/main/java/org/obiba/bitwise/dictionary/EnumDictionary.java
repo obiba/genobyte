@@ -109,6 +109,13 @@ public class EnumDictionary<E extends Enum<E>> extends AbstractStaticDictionary<
     return true;
   }
 
+  @Override
+  public boolean equals(Object obj) {
+    if(obj instanceof EnumDictionary) {
+      return this.enumClass_.equals(((EnumDictionary<?>)obj).enumClass_);
+    }
+    return super.equals(obj);
+  }
 
   @Override
   public String toString() {

@@ -133,6 +133,14 @@ public class ByteDictionary extends AbstractStaticDictionary<Byte> {
     return true;
   }
 
+  @Override
+  public boolean equals(Object obj) {
+    if(obj instanceof ByteDictionary) {
+      ByteDictionary bd = (ByteDictionary)obj;
+      return this.step_ == bd.step_ && this.lower_ == bd.lower_ && this.upper_ == bd.upper_; 
+    }
+    return super.equals(obj);
+  }
 
   /**
    * Makes sure that the properties <code>lower</code>, <code>upper</code> and <code>step</code> are

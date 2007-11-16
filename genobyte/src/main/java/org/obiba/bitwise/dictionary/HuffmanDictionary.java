@@ -205,6 +205,15 @@ public class HuffmanDictionary implements WildcardDictionary<String> {
   public boolean isVariableLength() {
     return true;
   }
+  
+  @Override
+  public boolean equals(Object obj) {
+    if(obj instanceof HuffmanDictionary) {
+      HuffmanDictionary hd = (HuffmanDictionary)obj;
+      return hd.hm_.equals(hd.hm_);
+    }
+    return super.equals(obj);
+  }
 
 
   public void setRuntimeData(byte[] data) {

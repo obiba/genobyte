@@ -129,6 +129,14 @@ public class DecimalDictionary extends AbstractStaticDictionary<Double> {
     return true;
   }
 
+  @Override
+  public boolean equals(Object obj) {
+    if(obj instanceof DecimalDictionary) {
+      DecimalDictionary dd = (DecimalDictionary)obj;
+      return this.step_ == dd.step_ && this.lower_ == dd.lower_ && this.upper_ == dd.upper_;
+    }
+    return super.equals(obj);
+  }
 
   /**
    * Makes sure that the properties <code>lower</code>, <code>upper</code> and <code>step</code> are

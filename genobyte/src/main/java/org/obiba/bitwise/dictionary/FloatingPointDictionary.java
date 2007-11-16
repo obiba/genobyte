@@ -31,7 +31,6 @@ public class FloatingPointDictionary extends AbstractStaticDictionary<Double> {
   String name_ = null;
   int dimension_ = Double.SIZE + 1;     //Include an extra bit for null value
 
-  
   public FloatingPointDictionary(String pName) {
     super();
     name_ = pName;
@@ -81,6 +80,12 @@ public class FloatingPointDictionary extends AbstractStaticDictionary<Double> {
 
 
   public boolean isOrdered() {
-    return false;
+    return true;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if(obj instanceof FloatingPointDictionary) return true;
+    return super.equals(obj);
   }
 }

@@ -74,6 +74,13 @@ public class LongDictionary extends AbstractStaticDictionary<Long> {
     }
   }
 
+  @Override
+  public boolean equals(Object obj) {
+    if(obj instanceof LongDictionary) {
+      return true; 
+    }
+    return super.equals(obj);
+  }
 
   public int dimension() {
     return dimension_;

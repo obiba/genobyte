@@ -94,4 +94,10 @@ public class BooleanDictionary extends AbstractStaticDictionary<Boolean> {
   public boolean isOrdered() {
     return false;
   }
+  
+  @Override
+  public boolean equals(Object obj) {
+    if(obj instanceof BooleanDictionary) return true;
+    return super.equals(obj);
+  }
 }
