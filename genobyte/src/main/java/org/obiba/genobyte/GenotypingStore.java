@@ -68,7 +68,7 @@ abstract public class GenotypingStore<AK, AT, SK, ST> {
     for (DefaultGenotypingField field : DefaultGenotypingField.defaultAssayFields()) {
       assays_.registerGenotypingField(field);
     }
-    
+
     //Prepare the statistics digester for both stores.
     StatsPool<AK,SK> assayStatsPool = new StatsPool<AK,SK>(assays_, new DefaultAssayStatsRunDefinition());
     StatsPool<SK,AK> sampleStatsPool = new StatsPool<SK,AK>(samples_, new DefaultSampleStatsRunDefinition());
@@ -216,15 +216,6 @@ abstract public class GenotypingStore<AK, AT, SK, ST> {
     }
   }
 
-
-  /**
-   * Permanently deletes the sample and assay <tt>BitwiseStore</tt> instances.
-   * @see org.obiba.bitwise.BitwiseStoreUtil.delete()
-   */
-  public void delete() {
-    BitwiseStoreUtil.getInstance().delete(getSampleStore());
-    BitwiseStoreUtil.getInstance().delete(getAssayStore());
-  }
 
 
   public void reproDna() {
