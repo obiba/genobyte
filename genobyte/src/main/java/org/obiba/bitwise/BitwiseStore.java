@@ -31,6 +31,7 @@ import org.obiba.bitwise.dao.KeyedDaoManager;
 import org.obiba.bitwise.dto.BitwiseStoreDto;
 import org.obiba.bitwise.schema.DictionaryMetaData;
 import org.obiba.bitwise.schema.FieldMetaData;
+import org.obiba.bitwise.schema.StoreSchema;
 import org.obiba.bitwise.util.StringUtil;
 
 import com.ibatis.dao.client.DaoManager;
@@ -98,7 +99,6 @@ public class BitwiseStore {
     }
   }
 
-
   /**
    * Returns the name of this <code>BitwiseStore</code>.
    * @return the name that was given to this <code>BitwiseStore</code> instance.
@@ -128,6 +128,10 @@ public class BitwiseStore {
       return data_.getCapacity() - data_.getDeleted().count();
     }
   }
+  
+  public StoreSchema getSchema() {
+    return data_.getSchema();
+  }
 
 
   /**
@@ -138,6 +142,17 @@ public class BitwiseStore {
     synchronized(data_) {
       dirty_ = true;
       data_.getDeleted().set(record);
+    }
+  }
+
+  /**
+   * Removes a vector of records from the store.
+   * @param records a vector of records to delete
+   */
+  public void delete(BitVector records) {
+    synchronized(data_) {
+      dirty_ = true;
+      data_.getDeleted().or(records);
     }
   }
 
