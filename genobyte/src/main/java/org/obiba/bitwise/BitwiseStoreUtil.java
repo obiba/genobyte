@@ -22,7 +22,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.Set;
-import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.obiba.bitwise.dao.BitwiseStoreDtoDao;
 import org.obiba.bitwise.dao.DaoKey;
@@ -38,7 +41,6 @@ import com.ibatis.dao.client.DaoManager;
 /**
  * Offers various utility classes to manage all <tt>BitwiseStore</tt> instances.
  */
-
 public class BitwiseStoreUtil {
 
   private final Logger log = LoggerFactory.getLogger(BitwiseStoreUtil.class);
@@ -46,9 +48,11 @@ public class BitwiseStoreUtil {
   private static final BitwiseStoreUtil instance_ = new BitwiseStoreUtil();
 
   private static HashMap<String, BitwiseStoreRef> STORE_MAP = new HashMap<String, BitwiseStoreRef>();
-  private static Set<String> LOCKS = new TreeSet<String>();
-  private static Object MUTEX = new Object();
 
+  private ConcurrentMap<String, ReentrantLock> storeLocks = new ConcurrentHashMap<String, ReentrantLock>();
+  
+  private Object MUTEX = new Object();
+  
   private ConfigurationPropertiesProvider provider_ = new DefaultConfigurationPropertiesProvider();
 
   private BitwiseStoreUtil() {
@@ -119,6 +123,7 @@ public class BitwiseStoreUtil {
     if(schema == null) {
       throw new IllegalArgumentException("Store schema cannot be null");
     }
+
     synchronized(MUTEX) {
       DaoKey key = new DaoKey(name);
       log.debug("Creating store [{}]", key);
@@ -182,7 +187,8 @@ public class BitwiseStoreUtil {
    */
   public BitwiseStore open(String name) {
     synchronized(MUTEX) {
-      while(LOCKS.contains(name)) {
+      ReentrantLock storeLock = storeLocks.get(name);
+      while(storeLock != null && storeLock.isLocked()) {
         try {
           MUTEX.wait(10 * 1000);
         } catch(InterruptedException e) {
@@ -191,13 +197,13 @@ public class BitwiseStoreUtil {
       }
       DaoKey key = new DaoKey(name);
       log.debug("Opening store [{}]",key);
-      
-      //Get properties used by iBatis and by Bitwise Store
+
+      // Get configuration properties for the store
       Properties p = null;
       if (provider_ != null) {
         p = provider_.loadProperties(name);
       }
-      
+
       DaoManager daoManager = KeyedDaoManager.getInstance(key);
       if(daoManager == null) {
         KeyedDaoManager.createInstance(key, p);
@@ -286,23 +292,8 @@ public class BitwiseStoreUtil {
       if(ref != null) {
         KeyedDaoManager.destroyInstance(ref.key_);
       }
-      LOCKS.remove(name);
+      storeLocks.remove(name);
       MUTEX.notify();
-    }
-  }
-
-
-  /**
-   * Deletes permanently a bitwise store. For example, if the store was on disk, files will be deleted.
-   * If the store was an SQL table, it will be removed.
-   * @param store is the store to be deleted.
-   */
-  public void delete(BitwiseStore store) {
-    synchronized(MUTEX) {
-      DaoManager daoManager = KeyedDaoManager.getInstance(store.getDaoKey());
-      BitwiseStoreDtoDao dao = (BitwiseStoreDtoDao)daoManager.getDao(BitwiseStoreDtoDao.class);
-      dao.delete(store.getName());
-      close(store);
     }
   }
 
@@ -315,7 +306,12 @@ public class BitwiseStoreUtil {
   public void lock(String name, Runnable r) {
     synchronized(MUTEX) {
       BitwiseStoreRef ref = STORE_MAP.get(name);
-      while( (ref != null && ref.refCount_ > 0) || LOCKS.contains(name) ) {
+
+      storeLocks.putIfAbsent(name, new ReentrantLock());
+      ReentrantLock storeLock = storeLocks.get(name);
+      // Wait if lock is already held by another thread or if there are more ref counts that this thread accounts for.
+      while( (storeLock.isLocked() && storeLock.isHeldByCurrentThread() == false) || (ref != null && ref.isThreadExclusive() == false)) {
+        log.debug("Waiting for lock: isLocked [{}] isThreadExclusive [{}]", storeLock.isHeldByCurrentThread(), ref.isThreadExclusive());
         try {
           ref = null;
           // Some other thread is holding a reference to the store. Wait for it.
@@ -325,10 +321,10 @@ public class BitwiseStoreUtil {
         }
         ref = STORE_MAP.get(name);
       }
-      log.debug("Store [{}] has been locked by thread [{}]", name, Thread.currentThread().getId());
-
       // We've locked the whole BitwiseStoreUtil, make it fast...
-      LOCKS.add(name);
+      storeLock.lock();
+
+      log.debug("Thread [{}] is holding [{}] lock(s) on store [{}]", new Object[] {Thread.currentThread().getId(), storeLock.getHoldCount(), name});
     }
 
     // The Store "name" is locked: no thread may open it.
@@ -336,17 +332,17 @@ public class BitwiseStoreUtil {
     r.run();
 
     synchronized(MUTEX) {
-      LOCKS.remove(name);
+      storeLocks.get(name).unlock();
       MUTEX.notify();
     }
   }
-
 
   /**
    * Holds a reference to a specific <tt>BitwiseStore</tt> instance.
    */
   private class BitwiseStoreRef {
-    int refCount_ = 0;
+    AtomicInteger refCount_ = new AtomicInteger();
+    ThreadLocal<AtomicInteger> threadRefCount_ = new ThreadLocal<AtomicInteger>();
     private DaoKey key_ = null;
 
     BitwiseStoreRef(DaoKey dto) {
@@ -354,16 +350,30 @@ public class BitwiseStoreUtil {
       inc();
     }
 
+    boolean isThreadExclusive() {
+      return refCount_.get() == threadRefCount_.get().get(); 
+    }
+
     DaoKey inc() {
-      refCount_++;
-      log.debug("Store [{}] refCount if now [{}]", key_, refCount_);
+      int refCount = refCount_.incrementAndGet();
+      int threadRefCount = getThreadCount().incrementAndGet();
+      log.debug("Store [{}] refCount [{}] threadRefCount [{}]", new Object[] {key_, refCount, threadRefCount});
       return key_;
     }
 
     boolean dec() {
-      refCount_--;
-      log.debug("Store [{}] refCount if now [{}]", key_, refCount_);
-      return refCount_ == 0;
+      int refCount = refCount_.decrementAndGet();
+      int threadRefCount = getThreadCount().decrementAndGet();
+      log.debug("Store [{}] refCount [{}] threadRefCount [{}]", new Object[] {key_, refCount, threadRefCount});
+      return refCount == 0;
+    }
+    
+    AtomicInteger getThreadCount() {
+      AtomicInteger ai = threadRefCount_.get();
+      if(ai == null) {
+        threadRefCount_.set(ai = new AtomicInteger());
+      }
+      return ai;
     }
   }
 }
