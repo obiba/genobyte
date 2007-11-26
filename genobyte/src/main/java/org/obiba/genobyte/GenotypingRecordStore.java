@@ -21,7 +21,6 @@ package org.obiba.genobyte;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -31,7 +30,6 @@ import org.obiba.bitwise.BitwiseRecordManager;
 import org.obiba.bitwise.BitwiseStore;
 import org.obiba.bitwise.Dictionary;
 import org.obiba.bitwise.Field;
-import org.obiba.bitwise.FieldValueIterator;
 import org.obiba.bitwise.query.QueryResult;
 import org.obiba.genobyte.inconsistency.ComparableRecordProvider;
 import org.obiba.genobyte.inconsistency.MendelianRecordTrioProvider;
@@ -63,12 +61,10 @@ abstract public class GenotypingRecordStore<K, T, TK> {
 
   /** Map of all genotyping fields for this <tt>GenotypingRecordStore</tt>, organized by field name. */
   protected Map<String, GenotypingField> genotypingFields_ = new HashMap<String, GenotypingField>();
-  
-  protected List<GenotypingFieldValueTransposer<K, TK>> fieldTransposers_ = new LinkedList<GenotypingFieldValueTransposer<K, TK>>();
 
   protected BitwiseRecordManager<K, T> manager_ = null;
 
-  private int transposeMemSize_ = 100 * 1024 * 1024;
+  private long transposeMemSize_ = 100 * 1024 * 1024;
   
   /** Default StatsPool for this record store (calculates all default stats for this <tt>GenotypingRecordStore</tt>). */
   private StatsPool<K,TK> mainStatsPool_ = null;
@@ -79,7 +75,7 @@ abstract public class GenotypingRecordStore<K, T, TK> {
     String memSize = this.getStore().getConfigurationProperties().getProperty(TRANSPOSE_MEM_SIZE);
     if(memSize != null) {
       try {
-        transposeMemSize_ = Integer.parseInt(memSize);
+        transposeMemSize_ = Long.parseLong(memSize);
       } catch(NumberFormatException e) {
         throw new IllegalArgumentException("Configuration property ["+TRANSPOSE_MEM_SIZE+"] must be a number.");
       }
@@ -129,23 +125,18 @@ abstract public class GenotypingRecordStore<K, T, TK> {
   }
 
 
-  public int getTransposeMemSize() {
+  public long getTransposeMemSize() {
     return transposeMemSize_;
   }
 
 
-  public void setTransposeMemSize(int transposeMemSize) {
+  public void setTransposeMemSize(long transposeMemSize) {
     transposeMemSize_ = transposeMemSize;
   }
 
 
   public void registerGenotypingField(GenotypingField field) {
     genotypingFields_.put(field.getName(), field);
-    if(field.isTransposed()) {
-      GenotypingFieldValueTransposer<K, TK> transposer = new GenotypingFieldValueTransposer<K, TK>(field, this, this.transposedStore_);
-      transposer.setTransposeBlockSize(transposeMemSize_);
-      fieldTransposers_.add(transposer);
-    }
   }
 
   /**
@@ -234,47 +225,6 @@ abstract public class GenotypingRecordStore<K, T, TK> {
       bitwiseField.setValue(transposedIndex, dict.lookup(value.getValue()));
     }
     return overwriten;
-  }
-
-
-  /**
-   * Transposes the values for fields that are common between the two <tt>GenotypingRecordStore</tt> objects
-   * linked in a <tt>GenotypingStore</tt>. Those fields values are taken from this bitwise store and are
-   * transfered to the other store.
-   * @param t a Set of records keys for which to transpose the common values.
-   */
-  private void tranpose(Set<K> t) {
-    //If there are no records to transpose
-    if(t == null || t.size() == 0) {
-      log.info("List of records to transpose was empty. Nothing to do.");
-      return;
-    }
-
-    log.debug("Store {}: transposing values for [{}] records.", this.getStore().getName(), t.size());
-
-    for (GenotypingFieldValueTransposer<K, TK> transposer : fieldTransposers_) {
-      transposer.transposeValues(t);
-    }
-  }
-
-  /**
-   * Transposes the values for fields that are common between the two <tt>GenotypingRecordStore</tt> objects
-   * linked in a <tt>GenotypingStore</tt>. Those fields values are taken from this bitwise store and are
-   * transfered to the other store. This method transposes the values for all records in this store.
-   */
-  public void tranpose() {
-    //Iterate on all records in this store
-    FieldValueIterator<K> fvi = this.getRecordManager().keys();
-
-    //Collect the value of the "unique" key for each store record 
-    Set<K> allKeys = new TreeSet<K>();
-    while(fvi.hasNext()) {
-      FieldValueIterator<K>.FieldValue fv = fvi.next();
-      allKeys.add(fv.getValue());
-    }
-
-    //Transpose values
-    tranpose(allKeys);
   }
 
 

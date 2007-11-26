@@ -18,22 +18,22 @@
  *******************************************************************************/
 package org.obiba.genobyte;
 
+import junit.framework.TestCase;
+
 import org.obiba.bitwise.Field;
 import org.obiba.genobyte.model.SnpCall;
 import org.obiba.genobyte.statistic.MockBitwiseStore;
 import org.obiba.genobyte.statistic.MockGenotypingStore;
-
-import junit.framework.TestCase;
 
 public class GenotypingFieldTransposerTest extends TestCase {
 
   public void testMissingFirstSourceField() {
     
     // The GenotypingFieldValueTransposer used to NPE when the first calls field is missing. This reproduces the problem.
-    
+
     MockBitwiseStore samples = new MockBitwiseStore("samples");
     MockBitwiseStore assays = new MockBitwiseStore("assays");
-    
+
     // Create some genotypes for the second and third samples in the store (not for the first)... 
     for(int i = 0; i < assays.getSize(); i++) {
       samples.setCall(i, 1, SnpCall.A);
@@ -41,7 +41,9 @@ public class GenotypingFieldTransposerTest extends TestCase {
     }
     
     MockGenotypingStore store = new MockGenotypingStore(samples, assays);
-    store.getSampleRecordStore().tranpose();
+    GenotypingStoreTransposer transposer = new GenotypingStoreTransposer(store.getSampleRecordStore());
+    transposer.setDeleteDestinationStore(false);
+    transposer.transpose();
 
     for(int i = 0; i < assays.getSize(); i++) {
       Field calls = store.getAssayRecordStore().getGenotypingField("calls", new Integer(i));

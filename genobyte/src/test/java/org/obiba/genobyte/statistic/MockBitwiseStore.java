@@ -30,10 +30,10 @@ import org.obiba.bitwise.Field;
 import org.obiba.bitwise.MockField;
 import org.obiba.bitwise.VolatileField;
 import org.obiba.bitwise.dto.BitwiseStoreDto;
+import org.obiba.bitwise.schema.FieldMetaData;
+import org.obiba.bitwise.schema.StoreSchema;
 import org.obiba.bitwise.schema.defaultDict.DefaultDictionaryFactory;
 import org.obiba.genobyte.model.SnpCall;
-
-
 
 public class MockBitwiseStore extends BitwiseStore {
   public static final int DEFAULT_SIZE = 3;
@@ -110,5 +110,29 @@ public class MockBitwiseStore extends BitwiseStore {
     Field mf = new MockField(this, f);
     return mf;
   }
+  
+  @Override
+  public StoreSchema getSchema() {
+    StoreSchema ss = new StoreSchema();
+    for(VolatileField vf : dummyStore_.values()) {
+      FieldMetaData fmd = new FieldMetaData();
+      fmd.setName(vf.getName());
+      fmd.setDictionary(vf.getDictionary().getName());
+      fmd.setTemplate(false);
+      if(fmd.getName().startsWith("calls")) fmd.setTemplate(true);
+    }
+    return ss;
+  }
+  
+  @Override
+  public void startTransaction() {
+  }
+  
+  @Override
+  public void endTransaction() {
+  }
 
+  @Override
+  public void commitTransaction() {
+  }
 }

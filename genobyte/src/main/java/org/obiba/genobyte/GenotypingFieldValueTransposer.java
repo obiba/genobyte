@@ -20,10 +20,8 @@ package org.obiba.genobyte;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Set;
 
 import org.obiba.bitwise.BitVector;
-import org.obiba.bitwise.BitwiseRecordManager;
 import org.obiba.bitwise.Field;
 import org.obiba.bitwise.util.BitVectorQueryResult;
 import org.slf4j.Logger;
@@ -34,12 +32,12 @@ import org.slf4j.LoggerFactory;
  * Allows reading values from one <tt>GenotypingStore</tt> and transpose them into another <tt>GenotypingStore</tt>. 
  * Fields that may be transposed are the ones that are present in both stores (such as Calls).
  */
-public class GenotypingFieldValueTransposer<K, TK> {
+class GenotypingFieldValueTransposer<K, TK> {
 
   private final Logger log = LoggerFactory.getLogger(GenotypingFieldValueTransposer.class);
 
   // Size of one transpose block
-  private int transposeBlockSize_ = 100 * 1024 * 1024;
+  private long transposeBlockSize_ = 100 * 1024 * 1024;
 
   // The field being transposed from source to destination (ie: calls field)
   private GenotypingField field_ = null;
@@ -62,26 +60,26 @@ public class GenotypingFieldValueTransposer<K, TK> {
     field_ = field;
     source_ = source;
     destination_ = destination;
+    if(source.getTransposeMemSize() > 0) {
+      this.transposeBlockSize_ = source.getTransposeMemSize();
+    }
   }
-
 
   /**
    * Gets the size of the data block used to transport data from one store to the other.
    * @return the current block size.
    */
-  public int getTransposeBlockSize() {
+  public long getTransposeBlockSize() {
     return transposeBlockSize_;
   }
-
 
   /**
    * Sets the size of the data block used to transport data from one store to the other.
    * @param b the block size to set.
    */
-  public void setTransposeBlockSize(int b) {
+  public void setTransposeBlockSize(long b) {
     transposeBlockSize_ = b;
   }
-
 
   /**
    * Transposes the values of the specified source records into the destination store.
@@ -94,17 +92,16 @@ public class GenotypingFieldValueTransposer<K, TK> {
    * The larger the block size, the more RAM is required to do the work, but the less time it will take.
    * @param sourceKeys a List of records unique keys to be transposed
    */
-  public void transposeValues(Set<K> sourceKeys) {
-    //If there are no record keys, nothing to do
-    if(sourceKeys == null || sourceKeys.size() == 0) {
+  void transposeValues(ArrayList<K> sourceKeysList, int[] sourceIndexes) {
+    // If there are no record keys, nothing to do
+    if(sourceKeysList == null || sourceKeysList.size() == 0) {
       return;
     }
-    
+
     //Put in an array the index of all records that are to be transposed
-    log.debug("Transposing [{}] values for field [{}]", sourceKeys.size(), field_.getName());
+    log.debug("Transposing [{}] values for field [{}]", sourceKeysList.size(), field_.getName());
 
-    ArrayList<K> sourceKeysList = new ArrayList<K>(sourceKeys);
-
+    // Find an example source field to make some calculations
     Field sourceField = null;
     for (K key : sourceKeysList) {
       sourceField = this.source_.getGenotypingField(this.field_.getName(), key);
@@ -112,13 +109,16 @@ public class GenotypingFieldValueTransposer<K, TK> {
         break;
       }
     }
+
     if(sourceField == null) {
       // No data to transpose, do nothing.
       return;
     }
+
+    // Number of records in destination
     int targetColumns = this.source_.getStore().getSize();
 
-    // Number of bytes ONE target field requires. There is an overhead due to using objects to hold these bytes though...
+    // Number of bytes ONE target field requires when in memory. There is an overhead due to using objects to hold these bytes though...
     long targetFieldSize = ((targetColumns >> 6 ) + 1 ) * 8 * sourceField.getDictionary().dimension() + 2048;
 
     log.debug("Calculated target field size is [{}] bytes.", targetFieldSize);
@@ -130,21 +130,14 @@ public class GenotypingFieldValueTransposer<K, TK> {
 
     log.debug("Number of target fields per iteration is [{}]", nbTargetFieldsPerIteration);
 
-    int[] sourceIndexes = new int[sourceKeys.size()];
-    BitwiseRecordManager<K, ?> sourceManager_ = source_.getRecordManager();
-    int t = 0;
-    for(K sourceKey : sourceKeys) {
-      sourceIndexes[t++] = sourceManager_.getIndexFromKey(sourceKey);
-    }
-
     int nbTargets = this.destination_.getStore().getSize();
     int nbIterations = (int)Math.ceil(nbTargets / (double)nbTargetFieldsPerIteration);
     log.debug("Number of iterations is [{}]", nbIterations);
 
     TransposeIterationBlock block = new TransposeIterationBlock(nbTargetFieldsPerIteration);
-
-    block.sourceKeys = sourceKeysList;
+    block.sourceKeysList = sourceKeysList;
     block.sourceIndexes = sourceIndexes;
+
     if(field_.updateStats()) {
       block.targetIndexVector = new BitVector(destination_.getStore().getCapacity());
     }
@@ -172,7 +165,6 @@ public class GenotypingFieldValueTransposer<K, TK> {
     destination_.getStore().flush();
   }
 
-
   private void makeIterationBlock(int firstIndex, int fieldsPerIteration, TransposeIterationBlock block) {
     log.debug("creating block starting at record index [{}]", firstIndex);
     Arrays.fill(block.targetIndexes, -1);
@@ -193,13 +185,17 @@ public class GenotypingFieldValueTransposer<K, TK> {
     log.debug("block size is [{}]", block.targetCount);
   }
 
-  
+  /**
+   * Actually copies the source data into the destination for the specified iteration block.
+   *
+   * @param block the iteration block to process
+   */
   private void processBlock(TransposeIterationBlock block) {
     log.debug("processing block");
-    
+
     for(int i = 0; i < block.sourceIndexes.length; i++) {
       int sourceIndex = block.sourceIndexes[i];
-      K sourceKey = block.sourceKeys.get(i);
+      K sourceKey = block.sourceKeysList.get(i);
       Field sourceField = source_.getGenotypingField(field_.getName(), sourceKey);
       if(sourceField != null) {
         for(int target = 0; target < block.targetCount; target++) {
@@ -221,16 +217,19 @@ public class GenotypingFieldValueTransposer<K, TK> {
     }
   }
 
-
+  /**
+   * Utility class to hold the destination fields into which the source data is copied into during one of the
+   * possibly multiple iterations of the transposition process. 
+   */
   private class TransposeIterationBlock {
-    ArrayList<K> sourceKeys = null;
-    int[] sourceIndexes = null;
+    ArrayList<K> sourceKeysList;
+    int[] sourceIndexes;
 
     // The number of target records in this block.
     int targetCount = -1;
     // Array of target record index
     int[] targetIndexes;
-    // An optional BitVector of target record indexes
+    // An optional BitVector of target record indexes used for updating the statistics
     BitVector targetIndexVector;
     // Array of target fields
     Field[] targetFields;

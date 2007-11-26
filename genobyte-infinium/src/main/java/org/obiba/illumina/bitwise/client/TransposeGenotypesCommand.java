@@ -21,6 +21,7 @@ package org.obiba.illumina.bitwise.client;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.ParseException;
+import org.obiba.genobyte.GenotypingStoreTransposer;
 import org.obiba.genobyte.cli.CliCommand;
 import org.obiba.genobyte.cli.CliContext;
 
@@ -32,16 +33,11 @@ public class TransposeGenotypesCommand implements CliCommand {
   }
   
   public boolean execute(Option opt, CliContext context) throws ParseException {
-    try {
-      context.getStore().startTransaction();
-      long start = System.currentTimeMillis();
-      context.getStore().getSampleRecordStore().tranpose();
-      long end = System.currentTimeMillis();
-      context.getStore().commitTransaction();
-      context.getOutput().println("Took " + ((end - start) / 1000d) + "s");
-    } finally {
-      context.getStore().endTransaction();
-    }
+    GenotypingStoreTransposer transposer = new GenotypingStoreTransposer(context.getStore().getSampleRecordStore());
+    long start = System.currentTimeMillis();
+    transposer.transpose();
+    long end = System.currentTimeMillis();
+    context.getOutput().println("Took " + ((end - start) / 1000d) + "s");
     return false;
   }
 
