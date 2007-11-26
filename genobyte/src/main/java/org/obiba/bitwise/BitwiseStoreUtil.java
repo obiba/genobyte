@@ -329,11 +329,13 @@ public class BitwiseStoreUtil {
 
     // The Store "name" is locked: no thread may open it.
     // Execute the Runnable within this restriction
-    r.run();
-
-    synchronized(MUTEX) {
-      storeLocks.get(name).unlock();
-      MUTEX.notify();
+    try {
+      r.run();
+    } finally {
+      synchronized(MUTEX) {
+        storeLocks.get(name).unlock();
+        MUTEX.notify();
+      }
     }
   }
 
@@ -351,7 +353,7 @@ public class BitwiseStoreUtil {
     }
 
     boolean isThreadExclusive() {
-      return refCount_.get() == threadRefCount_.get().get(); 
+      return refCount_.get() == getThreadCount().intValue();
     }
 
     DaoKey inc() {
@@ -367,7 +369,7 @@ public class BitwiseStoreUtil {
       log.debug("Store [{}] refCount [{}] threadRefCount [{}]", new Object[] {key_, refCount, threadRefCount});
       return refCount == 0;
     }
-    
+
     AtomicInteger getThreadCount() {
       AtomicInteger ai = threadRefCount_.get();
       if(ai == null) {
