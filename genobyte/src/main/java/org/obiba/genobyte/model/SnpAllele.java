@@ -30,27 +30,20 @@ public enum SnpAllele {
   
   /** Allele Value could not be obtained (for example, because of a genotyping error). */
   U,
-  
-  //TODO: Explain N value
-  N,
-  
-  //TODO: Explain X value
-  X,
-  
-  //TODO: Explain Y value
-  Y,
-  
-  //TODO: Explain DEL value
-  DEL;
 
+  /** A deletion (often represented by '-') */
+  D,
   
+  /** An insertion. These can often be made up of multiple base pairs */
+  I;
+
   /**
    * Gets the <tt>Enum</tt> value corresponding to the given <tt>String</tt> allele code.
    * @param v the <tt>String</tt> allele code.
    * @return the corresponding <tt>Enum</tt> value.
    */
   static public SnpAllele parseAllele(String v) {
-    if(v.equals("-")) return DEL;
+    if(v.equals("-")) return D;
     return valueOf(v);
   }
 
@@ -62,7 +55,7 @@ public enum SnpAllele {
   @Override
   public String toString() {
     switch(this) {
-      case DEL: 
+      case D:
         return "-";
       default:
         return super.toString();
