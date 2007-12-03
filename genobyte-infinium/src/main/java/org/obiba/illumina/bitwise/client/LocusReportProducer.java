@@ -48,11 +48,11 @@ public class LocusReportProducer implements ReportProducer {
 
     AssayStore store = ((InfiniumGenotypingStore)context.getStore()).getAssayRecordStore();
     StatsPool<Integer,String> assayStatsPool = new StatsPool<Integer,String>(store, new DefaultAssayStatsRunDefinition());
-    QueryExecution qe = ReportProducerUtil.resolveAssayQuery(context, parameters, 0);
+    QueryExecution qe = ReportProducerUtil.findAssayQuery(context, parameters);
     if(qe != null) {
       assayStatsPool.setRecordMask(qe.getResult());
     }
-    qe = ReportProducerUtil.resolveSampleQuery(context, parameters, 1);
+    qe = ReportProducerUtil.findSampleQuery(context, parameters);
     if(qe != null) {
       assayStatsPool.setTransposedMask(qe.getResult());
     }

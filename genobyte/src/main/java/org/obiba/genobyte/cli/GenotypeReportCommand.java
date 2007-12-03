@@ -31,6 +31,7 @@ import org.apache.commons.cli.ParseException;
 import org.obiba.bitwise.query.QueryResult;
 import org.obiba.bitwise.util.BitVectorQueryResult;
 import org.obiba.genobyte.GenotypingRecordStore;
+import org.obiba.genobyte.cli.CliContext.QueryExecution;
 import org.obiba.genobyte.report.GenotypeReport;
 
 
@@ -80,16 +81,19 @@ public class GenotypeReportCommand implements CliCommand {
     Set<String> filenames = new TreeSet<String>();
     for(int i = 0; i < filesToOutput; i++) {
       String filename = r.getDefaultFileName(i);
-      // User specified filename
-      if(i < args.length - 1) {
-        filename = args[i+1];
+
+      // Find user specified filename
+      int found = 0;
+      for(int j = 1; j < args.length; j++) {
+        // Iterate on all arguments until we find a parameter that is not a query reference and that is the ith filename found.
+        if(context.getHistory().isQueryReference(args[j]) == false && i == found++) {
+          filename = args[j];
+        }
       }
 
+      // No filename specified by report nor by user: generate one
       if(filename == null) {
-        if(i < args.length - 1) {
-        } else {
-          filename = r.getReportType() + "-file"+i+".txt";
-        }
+        filename = r.getReportType() + "-file"+i+".txt";
       }
       if(filenames.add(filename) == false) {
         context.getOutput().println("The filename ["+filename+"] is already used as an output for this report. Please specify disctinct filenames for each output file.");
@@ -103,16 +107,21 @@ public class GenotypeReportCommand implements CliCommand {
       }
     }
 
-    GenotypingRecordStore assays = context.getStore().getAssayRecordStore();
-    GenotypingRecordStore samples = context.getStore().getSampleRecordStore();
-    
-    QueryResult assayMask = null;//context.getStoreLastResult(assays);
-    if(assayMask == null) {
-      assayMask = new BitVectorQueryResult(assays.getStore().all());
-    }
-    QueryResult sampleMask = null;//context.getStoreLastResult(samples);
-    if(sampleMask == null) {
-      sampleMask = new BitVectorQueryResult(samples.getStore().all());
+    GenotypingRecordStore<?, ?, ?> assays = context.getStore().getAssayRecordStore();
+    GenotypingRecordStore<?, ?, ?> samples = context.getStore().getSampleRecordStore();
+
+    QueryResult assayMask = new BitVectorQueryResult(assays.getStore().all());
+    QueryResult sampleMask = new BitVectorQueryResult(samples.getStore().all());
+    for(int i = 1; i < args.length; i++) {
+      String arg = args[i];
+      if(context.getHistory().isQueryReference(arg) == true) {
+        QueryExecution qe = context.getHistory().resolveQuery(arg);
+        if(qe != null && qe.getStore() == assays) {
+          assayMask = qe.getResult();
+        } else if(qe != null && qe.getStore() == samples) {
+          sampleMask = qe.getResult();
+        }
+      }
     }
 
     context.getOutput().println("Creating ["+r.getReportType()+"] report on "+sampleMask.count()+" samples and "+assayMask.count()+" assays. Outputing report to file(s) "+Arrays.toString(outputFiles));

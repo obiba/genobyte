@@ -49,11 +49,11 @@ public class DnaReportProducer implements ReportProducer {
     SampleStore store = ((InfiniumGenotypingStore)context.getStore()).getSampleRecordStore();
     StatsPool<String,Integer> sampleStatsPool = new StatsPool<String,Integer>(store, new DefaultSampleStatsRunDefinition());
 
-    QueryExecution qe = ReportProducerUtil.resolveSampleQuery(context, parameters, 0);
+    QueryExecution qe = ReportProducerUtil.findSampleQuery(context, parameters);
     if(qe != null) {
       sampleStatsPool.setRecordMask(qe.getResult());
     }
-    qe = ReportProducerUtil.resolveAssayQuery(context, parameters, 1);
+    qe = ReportProducerUtil.findAssayQuery(context, parameters);
     if(qe != null) {
       sampleStatsPool.setTransposedMask(qe.getResult());
     }

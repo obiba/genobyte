@@ -54,7 +54,7 @@ public class CaseControlReportProducer implements ReportProducer {
       help(context);
       return;
     }
-    
+
     QueryExecution casesQuery = ReportProducerUtil.resolveSampleQuery(context, parameters, 0);
     QueryExecution controlsQuery = ReportProducerUtil.resolveSampleQuery(context, parameters, 1);
     if(casesQuery == null) {
@@ -67,7 +67,7 @@ public class CaseControlReportProducer implements ReportProducer {
       help(context);
       return;
     }
-    
+
     QueryExecution assaysQuery = ReportProducerUtil.resolveAssayQuery(context, parameters, 2);
 
     AssayStore assays = ((InfiniumGenotypingStore)context.getStore()).getAssayRecordStore();
@@ -97,6 +97,6 @@ public class CaseControlReportProducer implements ReportProducer {
   }
   
   private void help(CliContext context) {
-    context.getOutput().println("You must provide at least two query references to produce the case-control report: one for each sub-population. ie: \"--report case-control out.csv q4 q8\" where q4 is the query reference for the cases population and q8 is the controls population. You may also specify another query reference to produce the report on a subset of SNPs.");
+    context.getOutput().println("You must provide at least two query references to produce the case-control report: one for each sub-population. ie: \"--report case-control out.csv q4 q8\" where q4 is the query reference for the cases population and q8 is the controls population. You may also specify a third query reference to produce the report on a subset of SNPs.");
   }
 }

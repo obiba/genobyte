@@ -18,6 +18,7 @@
  *******************************************************************************/
 package org.obiba.illumina.bitwise.client;
 
+import org.obiba.genobyte.GenotypingRecordStore;
 import org.obiba.genobyte.cli.CliContext;
 import org.obiba.genobyte.cli.CliContext.QueryExecution;
 
@@ -38,7 +39,27 @@ class ReportProducerUtil {
     }
     return qe;
   }
-  
+
+  static QueryExecution findSampleQuery(CliContext context, String[] parameters) {
+    return resolveParameter(context, parameters, context.getStore().getSampleRecordStore());
+  }
+
+  static QueryExecution findAssayQuery(CliContext context, String[] parameters) {
+    return resolveParameter(context, parameters, context.getStore().getAssayRecordStore());
+  }
+
+  static QueryExecution resolveParameter(CliContext context, String[] parameters, GenotypingRecordStore<?, ?, ?> genotypingRecordStore) {
+    if(parameters != null) {
+      for(int i = 0; i < parameters.length; i++) {
+        QueryExecution qe = resolveParameter(context, parameters, i);
+        if(qe != null && qe.getStore() == genotypingRecordStore) {
+          return qe;
+        }
+      }
+    }
+    return null;
+  }
+
   static QueryExecution resolveParameter(CliContext context, String[] parameters, int index) {
     if(parameters != null && index < parameters.length) {
       String reference = parameters[index];

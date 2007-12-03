@@ -109,6 +109,18 @@ public class CliContext {
       return null;
     }
 
+    public boolean isQueryReference(String reference) {
+      if(reference.length() < 2) return false;
+      String id = reference.substring(1);
+      try {
+        int index = Integer.parseInt(id) - 1;
+        // Matches a query reference format
+        return true;
+      } catch (NumberFormatException e) { 
+        return false;
+      }
+    }
+
     /**
      * Resolve a query reference into the QueryExecution that resulted.
      * @param reference the reference to a QueryExecution. Format is q# where # is the index (1-based) of the query in the history.
