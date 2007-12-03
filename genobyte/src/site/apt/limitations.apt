@@ -35,7 +35,7 @@ Capacity
 
   * Number of bit vectors
 
-    The unique ID of a single BitVector is an int. It follows that the total number of BitVectors that may be stored in a single BitwiseStore is 2^31 (2,147,483,648). Since BitVectors unique IDs are shared by all Fields, the number and dimension of all fields dictate the overall maximum number of fields in a single store. This limitation could easily be pushed-off since this unique ID is hidden from the external API.
+    The unique ID of a single BitVector is stored using a long. It follows that the total number of BitVectors that may be stored in a single BitwiseStore is 2^63 (9,223,372,036,854,775,808). Since BitVectors unique IDs are shared by all Fields, the number and dimension of all fields dictate the overall maximum number of fields in a single store.
 
   * Number of fields
 
@@ -47,4 +47,4 @@ Capacity
 
   * Number of values
 
-    The maximum number of values that may be stored depends on the maximum number of records (2^31) and the dimension of each Field in the store: the sum of the dimensions may not exceed 2^31. For example, a store with 2^31 records for which all fields have a dimension of 32, would be able to store 67,108,864 (2^26) fields. The total number of values in such a store would be 144,115,188,075,855,872 (2^57).
+    The maximum number of values that may be stored depends on the maximum number of records (2^31) and the dimension of each Field in the store: the sum of the dimensions may not exceed 2^63. For example, a store with 2^31 records for which all fields have a dimension of 32, would be able to store 288,230,376,151,711,744 (2^58) fields. The total number of values in such a store would be 618,970,019,642,690,137,449,562,112 (2^89).
