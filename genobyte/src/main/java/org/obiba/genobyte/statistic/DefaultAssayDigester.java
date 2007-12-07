@@ -25,7 +25,7 @@ public class DefaultAssayDigester extends DefaultFrequencyStatsDigester {
   public void digest(StatsPool<?,?> pPool) {
     super.digest(pPool);
     persistField(pPool, "hw", "hw", pPool.getRecordMask());
-    persistField(pPool, "heterozigosity", "heterozigosity", pPool.getRecordMask());
+    persistField(pPool, "heterozygosity", "heterozygosity", pPool.getRecordMask());
     persistField(pPool, "maf", "maf", pPool.getRecordMask());
   }
 }
