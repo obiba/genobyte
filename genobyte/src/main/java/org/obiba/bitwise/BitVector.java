@@ -387,37 +387,18 @@ public final class BitVector implements Comparable {
       throw new RuntimeException("Size of both BitVectors must be equal.");
     }
     
-    //For both BitVector, find the cell in the bits_ array of long which has the first non-zero value.
-    int thisHighestNonZero = -1;
-    int otherHighestNonZero = -1;
     int s = this.bits_.length;
     for(int i = s-1; i >= 0; i--) {
-      if(thisHighestNonZero == -1 && bits_[i] != 0) thisHighestNonZero = i;
-      if(otherHighestNonZero == -1 && rhs.bits_[i] != 0) otherHighestNonZero = i;
+      long v1 = bits_[i];
+      long v2 = rhs.bits_[i];
+      if(v1 != v2) {
+        if(v1 > v2) {
+          return 1;
+        } else if(v1 < v2) {
+          return -1;
+        }
 
-      //We found the highest index in both bits_ arrays, so we can stop.
-      if(thisHighestNonZero != -1 && otherHighestNonZero != -1) {
-        break;
       }
-    }
-    
-    //The bits_ array highest index is different, so we definitely have different values here.
-    if(thisHighestNonZero != otherHighestNonZero) {
-      return thisHighestNonZero - otherHighestNonZero;
-    }
-    
-    //Both BitVectors are filled with zeros.
-    if(thisHighestNonZero == -1 && otherHighestNonZero == -1) {
-      return 0;
-    }
-    
-    //Compare values of both vectors
-    long v1 = bits_[thisHighestNonZero];
-    long v2 = rhs.bits_[otherHighestNonZero];
-    if(v1 > v2) {
-      return 1;
-    } else if(v1 < v2) {
-      return -1;
     }
     return 0;
   }

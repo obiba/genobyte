@@ -78,4 +78,20 @@ public class FloatingPointDictionaryTest extends BaseBdbDaoTestCase {
     assertNotNull(zero);
     assertEquals(0, Double.compare(zero, 0));
   }
+  
+  public void testOrdered() {
+    BitVector v1 = dict_.lookup(0d);
+    BitVector v2 = dict_.lookup(0.0000001);
+    BitVector v3 = dict_.lookup(0.9999999);
+    BitVector v4 = dict_.lookup(1d);
+    
+    assertTrue(v1.compareTo(v1) == 0);
+    assertTrue(v1.compareTo(v2) < 0);
+    assertTrue(v2.compareTo(v3) < 0);
+    assertTrue(v3.compareTo(v4) < 0);
+    assertTrue(v4.compareTo(v3) > 0);
+    assertTrue(v3.compareTo(v2) > 0);
+    assertTrue(v2.compareTo(v1) > 0);
+
+  }
 }

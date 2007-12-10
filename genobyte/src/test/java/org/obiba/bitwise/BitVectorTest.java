@@ -235,9 +235,9 @@ public class BitVectorTest extends TestCase {
   }
   
   public void testCompareTo() {
-    BitVector v1 = BitUtil.vectorise(5897, 32);
-    BitVector v2 = BitUtil.vectorise(5898, 32);
-    BitVector v3 = BitUtil.vectorise(5899, 32);
+    BitVector v1 = BitUtil.vectorise(0x00FFEEDD, 32);
+    BitVector v2 = BitUtil.vectorise(0x00FFEEEE, 32);
+    BitVector v3 = BitUtil.vectorise(0x00FFEFFF, 32);
 
     assertTrue(v1.compareTo(v1) == 0);
     assertTrue(v1.compareTo(v2) < 0);
