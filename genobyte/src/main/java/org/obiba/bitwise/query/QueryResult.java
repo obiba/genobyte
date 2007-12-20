@@ -60,13 +60,17 @@ public interface QueryResult {
   public int next(int index);
 
   /**
-   * Returns the hit at index <code>index</code>. This is used to traverse the results in hit order (sorted).
-   * The index must be between 0 and <code>count()</code> (exclusive).
+   * Returns the index of the record which was at <code>qrPosition</code> position in this
+   * <code>QueryResult</code> instance. This is used to traverse the results in hit order (sorted).
+   * <code>qrPosition</code> must be a value between 0 and <code>count()-1</code> (inclusive).
+   * <br/><br/>
+   * Example: A query returned 10 results in a <code>QueryResult</code> instance named <code>qr</code>.
+   * Running <code>qr.hit(4)</code> would return the index of the fifth record matched by the query. 
    *
-   * @param index the index of the hit to return
+   * @param qrPosition the index of the hit to return
    * @return the hit at index <code>index</code>
    */
-  public int hit(int index);
+  public int hit(int qrPosition);
 
   /**
    * Returns true if the index is a hit
