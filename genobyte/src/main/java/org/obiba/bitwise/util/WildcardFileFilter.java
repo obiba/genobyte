@@ -50,6 +50,7 @@ public class WildcardFileFilter implements FileFilter {
     return (f.isDirectory() || f.getName().startsWith(".") == false) && pattern.matcher(f.getName()).matches();
   }
 
+  
   /**
    * Calls the WildcardFileFilter recursively to handle directories within the filename pattern.
    * 
@@ -58,14 +59,16 @@ public class WildcardFileFilter implements FileFilter {
    * @return an array of matching File instances
    */
   public static File[] listFiles(File cwd, String filter) {
-    int sep = filter.indexOf(File.separatorChar);
+    int sep = getIndexOfSeparator(filter);
     if(sep != -1) {
       Set<File> result = new TreeSet<File>();
-      if(sep == 0) {
+      
+      int absolutePathSep = getAbsolutePathNextIndex(filter);
+      if(absolutePathSep != -1) {
         // It's an absolute path...
         cwd = new File("/");
-        filter = filter.substring(1);
-        sep = filter.indexOf(File.separatorChar);
+        filter = filter.substring(absolutePathSep);
+        sep = getIndexOfSeparator(filter);
       }
 
       String dirPattern = filter.substring(0, sep);
@@ -98,6 +101,56 @@ public class WildcardFileFilter implements FileFilter {
       return cwd.listFiles(fileFilter);
     }
   }
+  
+  
+  /**
+   * Finds index of next directory separator. This method aims specifically at supporting the "/" character
+   * as a directory separator under Windows.
+   * @param filter the <tt>String</tt> in which directory separator should be identified
+   * @return the index of the separator, or -1 if no separator could be found.
+   */
+  private static int getIndexOfSeparator(String filter) {
+    int sep = filter.indexOf(File.separatorChar);
+    
+    if (System.getProperty("os.name").contains("Windows")) {
+      int slashSep = filter.indexOf("/");
+      //If there is a slash separator occuring before an os-relative separator
+      if ((slashSep < sep) || (slashSep != -1 && sep == -1)) {
+        sep = slashSep;
+      }
+    }
+    return sep;
+  }
+  
+  
+  /**
+   * Finds index of the first character following the absolute path.
+   * @param path the path in which to find index
+   * @return index of the first character, or -1 if the path is not an absolute path.
+   */
+  private static int getAbsolutePathNextIndex(String path) {
+    if (System.getProperty("os.name").contains("Windows")) {
+      //In Windows, the path is absolute when the drive separation character ":" is used in the path.
+      int driveSep = path.indexOf(":");
+      if (driveSep != -1) {
+        return driveSep+2;
+      }
+      else {
+        return -1;
+      }
+    }
+    else {
+      //In *nix, we know the path is absolute when the directory separator is put at the beginning of the path.
+      int sep = getIndexOfSeparator(path);
+      if (sep == 0) {
+        return sep+1;
+      }
+      else {
+        return -1;
+      }
+    }
+  }
+  
 
   /**
    * Converts a DOS/Unix filename pattern into a Java regular expression
