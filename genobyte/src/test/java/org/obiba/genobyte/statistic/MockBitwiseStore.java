@@ -103,6 +103,18 @@ public class MockBitwiseStore extends BitwiseStore {
     }
     return null;
   }
+  
+  /**
+   * Allows to create any kind of <tt>Field</tt> by providing a data type.
+   * @param name the name of the field to be created
+   * @param dataType the data type, to create the appropriate <tt>Dictionary</tt>
+   * @return the newly created <tt>Field</tt>
+   */
+  public Field createField(String name, Class<?> dataType) {
+    Dictionary dict = ddf_.getInstance(dataType, name + "Dict");
+    dummyStore_.put(name, new VolatileField(name, this, dict));
+    return getField(name);
+  }
 
   public Field getField(String pFieldName) {
     VolatileField f = dummyStore_.get(pFieldName);

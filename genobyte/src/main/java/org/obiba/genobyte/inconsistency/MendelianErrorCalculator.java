@@ -46,7 +46,7 @@ public class MendelianErrorCalculator<K> {
   private MendelianRecordTrioProvider provider_ = null;
   
   /**
-   * Constructs a calculator using the specified store (from which {@link DefaultGenotypingField#CALLS} will be obtained.
+   * Constructs a calculator using the specified store (from which {@link DefaultGenotypingField#CALLS} will be obtained.)
    * @param store the store used to obtain the calls
    */
   public MendelianErrorCalculator(GenotypingRecordStore<K, ?, ?> store) {
@@ -83,14 +83,17 @@ public class MendelianErrorCalculator<K> {
     }
 
     BitwiseRecordManager<K, ?> sampleManager = samples_.getRecordManager();
+    
+    //For each sample which is a child, fetch parents
     for(int childIndex = children.next(0); childIndex != -1; childIndex = children.next(childIndex + 1)) {
       K childKey = sampleManager.getKey(childIndex);
 
+      //Fetch all parent records. There might be many father/mother records for a given child, because of replicates.
       QueryResult motherRecords = provider_.getMotherRecords(childIndex);
       QueryResult fatherRecords = provider_.getFatherRecords(childIndex);
 
+      // If child has no parents, skip to next child
       if(motherRecords == null && fatherRecords == null) {
-        // No comparable records
         continue;
       }
 
@@ -98,14 +101,24 @@ public class MendelianErrorCalculator<K> {
       BitVector countedMothers = new BitVector(samples_.getStore().getCapacity());
       BitVector countedFathers = new BitVector(samples_.getStore().getCapacity());
 
+      //Tests will be done in this order:
+      //  For each trio with a genotype call field for father, mother, child:
+      //    Check for "trio" mendelian errors for all assays where genotypes exist for everybody
+      //    Check for "duo" mendelian errors between father and child for assays where mother's call was null
+      //    Check for "duo" mendelian errors between mother and child for assays where father's call was null
       for(int motherIndex = motherRecords.next(0); motherIndex != -1; motherIndex = motherRecords.next(motherIndex+1)) {
         K motherKey = sampleManager.getKey(motherIndex);
         for(int fatherIndex = fatherRecords.next(0); fatherIndex != -1; fatherIndex = fatherRecords.next(fatherIndex+1)) {
           K fatherKey = sampleManager.getKey(fatherIndex);
-          MendelianErrors<K> errors = mendelErrors(childKey, motherKey, fatherKey);
-          if(errors != null) {
+          MendelErrorsResult errorsStructure = mendelErrors(childKey, motherKey, fatherKey, null);
+          
+          if(errorsStructure != null) {
+            MendelianErrors<K> errors = errorsStructure.getMendelianErrors();
+            
+            //Some assays were already tested for theses parents. Remove from the list of parents to recheck completely as duos.
             countedMothers.set(motherIndex);
             countedFathers.set(fatherIndex);
+            
             errors.setChildIndex(childIndex);
             errors.setChildKey(childKey);
             errors.setMotherIndex(motherIndex);
@@ -113,18 +126,50 @@ public class MendelianErrorCalculator<K> {
             errors.setFatherIndex(fatherIndex);
             errors.setFatherKey(fatherKey);
             errorCountingStrategy_.countInconsistencies(errors);
+            
+            //If there are remaining untested genotypes, test them here.
+            QueryResult fatherChildAsDuo = errorsStructure.getUnapplicableMotherGenotypes().copy().andNot(errorsStructure.getUnapplicableFatherGenotypes());
+            QueryResult motherChildAsDuo = errorsStructure.getUnapplicableFatherGenotypes().copy().andNot(errorsStructure.getUnapplicableMotherGenotypes());
+            //Test the null mother genotype as a duo between child and father          .
+            if (fatherChildAsDuo.count() > 0) {
+              MendelErrorsResult errorsStructureFatherDuo = mendelErrors(childKey, fatherKey, null, fatherChildAsDuo);
+              
+              if(errorsStructureFatherDuo != null) {
+                MendelianErrors<K> errorsFatherDuo = errorsStructureFatherDuo.getMendelianErrors();
+                errorsFatherDuo.setChildIndex(childIndex);
+                errorsFatherDuo.setChildKey(childKey);
+                errorsFatherDuo.setFatherIndex(fatherIndex);
+                errorsFatherDuo.setFatherKey(fatherKey);
+                errorCountingStrategy_.countInconsistencies(errorsFatherDuo);
+              }
+            }
+            //Test the null father genotype as a duo between child and mother.
+            if (motherChildAsDuo.count() > 0) {
+              MendelErrorsResult errorsStructureMotherDuo = mendelErrors(childKey, motherKey, null, motherChildAsDuo);
+              
+              if(errorsStructureMotherDuo != null) {
+                MendelianErrors<K> errorsMotherDuo = errorsStructureMotherDuo.getMendelianErrors();
+                errorsMotherDuo.setChildIndex(childIndex);
+                errorsMotherDuo.setChildKey(childKey);
+                errorsMotherDuo.setMotherIndex(motherIndex);
+                errorsMotherDuo.setMotherKey(motherKey);
+                errorCountingStrategy_.countInconsistencies(errorsMotherDuo);
+              }
+            }
           }
         }
       }
-
+      
+      //Remove from the list of mother records the ones for which we found trio errors already
       BitVectorQueryResult filter = new BitVectorQueryResult(countedMothers);
       motherRecords.andNot(filter);
 
       // Create mendelian errors on remaining child-mother relationships
       for(int motherIndex = motherRecords.next(0); motherIndex != -1; motherIndex = motherRecords.next(motherIndex+1)) {
         K motherKey = sampleManager.getKey(motherIndex);
-        MendelianErrors<K> errors = mendelErrors(childKey, motherKey, null);
-        if(errors != null) {
+        MendelErrorsResult errorsStructure = mendelErrors(childKey, motherKey, null, null);
+        if(errorsStructure != null) {
+          MendelianErrors<K> errors = errorsStructure.getMendelianErrors();
           errors.setChildIndex(childIndex);
           errors.setChildKey(childKey);
           errors.setMotherIndex(motherIndex);
@@ -133,14 +178,16 @@ public class MendelianErrorCalculator<K> {
         }
       }
 
+      //Remove from the list of father records the ones for which we found trio errors already
       filter = new BitVectorQueryResult(countedFathers);
       fatherRecords.andNot(filter);
 
       // Create mendelian errors on remaining child-father relationships
       for(int fatherIndex = fatherRecords.next(0); fatherIndex != -1; fatherIndex = fatherRecords.next(fatherIndex+1)) {
         K fatherKey = sampleManager.getKey(fatherIndex);
-        MendelianErrors<K> errors = mendelErrors(childKey, fatherKey, null);
-        if(errors != null) {
+        MendelErrorsResult errorsStructure = mendelErrors(childKey, fatherKey, null, null);
+        if(errorsStructure != null) {
+          MendelianErrors<K> errors = errorsStructure.getMendelianErrors();
           errors.setChildIndex(childIndex);
           errors.setChildKey(childKey);
           errors.setFatherIndex(fatherIndex);
@@ -148,8 +195,36 @@ public class MendelianErrorCalculator<K> {
           errorCountingStrategy_.countInconsistencies(errors);
         }
       }
+      
+    } //End of "for each record that is a child"
+  }
+  
+  
+  protected class MendelErrorsResult {
+    MendelianErrors<K> errors = null;
+    QueryResult unapplicableFatherGenotypes = null;
+    QueryResult unapplicableMotherGenotypes = null;
+    
+    public MendelErrorsResult(MendelianErrors<K> pErrors, QueryResult pUnapplicableFatherGenotypes, QueryResult pUnapplicableMotherGenotypes) {
+      errors = pErrors;
+      unapplicableFatherGenotypes = pUnapplicableFatherGenotypes;
+      unapplicableMotherGenotypes = pUnapplicableMotherGenotypes;
+    }
+    
+    public MendelianErrors<K> getMendelianErrors() {
+      return errors;
+    }
+    
+    public QueryResult getUnapplicableFatherGenotypes() {
+      return unapplicableFatherGenotypes;
+    }
+    
+    public QueryResult getUnapplicableMotherGenotypes() {
+      return unapplicableMotherGenotypes;
     }
   }
+  
+  
 
   /**
    * Identifies all mendelian errors in the specified trio.
@@ -157,9 +232,10 @@ public class MendelianErrorCalculator<K> {
    * @param childId the child record's key
    * @param motherId the mother record's key
    * @param fatherId the father record's key
+   * @param mask the genotypes to be ignored in this error check
    * @return an instance of {@link MendelianErrors} that holds all identified errors. Null is returned if either the child, the mother or the father has no calls.
    */
-  protected MendelianErrors<K> mendelErrors(K childId, K motherId, K fatherId) {
+  protected MendelErrorsResult mendelErrors(K childId, K motherId, K fatherId, QueryResult mask) {
     Field child = samples_.getGenotypingField(DefaultGenotypingField.COMPARABLE_CALLS.getName(), childId);
     if(child == null) child = samples_.getGenotypingField(DefaultGenotypingField.CALLS.getName(), childId);
     if(child == null) {
@@ -167,28 +243,34 @@ public class MendelianErrorCalculator<K> {
     }
 
     Field mother = null;
+    QueryResult motherNullCalls = null;
     if(motherId != null) {
       mother = samples_.getGenotypingField(DefaultGenotypingField.COMPARABLE_CALLS.getName(), motherId);
       if(mother == null) mother = samples_.getGenotypingField(DefaultGenotypingField.CALLS.getName(), motherId);
       if(mother == null) {
         return null;
       }
+      motherNullCalls = new BitVectorQueryResult(mother.getNulls());
     }
 
     Field father = null;
+    QueryResult fatherNullCalls = null;
     if(fatherId != null) {
       father = samples_.getGenotypingField(DefaultGenotypingField.COMPARABLE_CALLS.getName(), fatherId);
       if(father == null) father = samples_.getGenotypingField(DefaultGenotypingField.CALLS.getName(), fatherId);
       if(father == null) {
         return null;
       }
+      fatherNullCalls = new BitVectorQueryResult(father.getNulls());
     }
 
+    //Error accumulator from all tests
     QueryResult mendelErrors = null;
     QueryResult mendelTests = null;
 
     QueryResult motherErrors = mendel(child, mother);
     QueryResult motherTests = tests(child, mother);
+    //If errors were found between mother and child
     if(motherErrors != null) {
       mendelErrors = motherErrors;
       mendelTests = motherTests;
@@ -196,6 +278,7 @@ public class MendelianErrorCalculator<K> {
 
     QueryResult fatherErrors = mendel(child, father);
     QueryResult fatherTests = tests(child, father);
+    //If errors were found between father and child
     if(fatherErrors != null) {
       if(mendelErrors != null) {
         mendelErrors.or(fatherErrors);
@@ -206,7 +289,9 @@ public class MendelianErrorCalculator<K> {
       }
     }
 
+    
     if(mother != null && father != null) {
+      //Testing specifically for Child=H, Parents=A and Child=H, Parents=B errors
       Dictionary<SnpCall> d = child.getDictionary();
       BitVector a = d.lookup(SnpCall.A);
       BitVector b = d.lookup(SnpCall.B);
@@ -228,15 +313,31 @@ public class MendelianErrorCalculator<K> {
       } else {
         mendelErrors = trioErrors;
       }
+      
+      //We should remove the nulls from both parents to test later as duos
+      mendelErrors.andNot(fatherNullCalls);
+      mendelErrors.andNot(motherNullCalls);
+      mendelTests.andNot(fatherNullCalls);
+      mendelTests.andNot(motherNullCalls);
     }
-
+    
+    if (mask != null) {
+      mendelErrors.and(mask);
+      mendelTests.and(mask);
+    }
+      
     if(mendelErrors == null) return null;
 
+    //All tests are finished. Prepare error structure.
     MendelianErrors<K> errors = new MendelianErrors<K>();
     errors.setInconsistencies(mendelErrors);
     errors.setTests(mendelTests);
-    return errors;
+//    return errors;
+    
+    MendelErrorsResult errorStructure = new MendelErrorsResult(errors, fatherNullCalls, motherNullCalls);
+    return errorStructure;
   }
+
 
   /**
    * Identifies all mendelian errors in the specified duo.
