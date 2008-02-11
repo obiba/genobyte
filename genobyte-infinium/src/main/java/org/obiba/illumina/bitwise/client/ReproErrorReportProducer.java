@@ -21,13 +21,16 @@ package org.obiba.illumina.bitwise.client;
 import java.io.PrintStream;
 
 import org.obiba.bitwise.Field;
+import org.obiba.bitwise.query.QueryResult;
 import org.obiba.genobyte.GenotypingRecordStore;
 import org.obiba.genobyte.cli.CliContext;
+import org.obiba.genobyte.cli.CliContext.QueryExecution;
 import org.obiba.genobyte.cli.ReportCommand.ReportProducer;
 import org.obiba.genobyte.inconsistency.ComparableRecordProvider;
 import org.obiba.genobyte.inconsistency.ReproducibilityErrorCalculator;
 import org.obiba.genobyte.inconsistency.ReproducibilityErrorCountingStrategy;
 import org.obiba.genobyte.inconsistency.ReproducibilityErrors;
+import org.obiba.genobyte.inconsistency.util.MaskedComparableRecordProvider;
 
 
 public class ReproErrorReportProducer implements ReportProducer {
@@ -56,27 +59,44 @@ public class ReproErrorReportProducer implements ReportProducer {
   }
 
   public void generateReport(CliContext context, String[] parameters, PrintStream output) {
-    GenotypingRecordStore store = null;
-    ReproducibilityErrorCountingStrategy report = null;
+    GenotypingRecordStore<?, ?, ?> store = null;
+    ReproErrorReportingStrategy<?> report = null;
+
+    QueryExecution sampleQuery = ReportProducerUtil.findSampleQuery(context, parameters);
+    QueryExecution assayQuery = ReportProducerUtil.findAssayQuery(context, parameters);
+
+    ComparableRecordProvider provider;
     switch(reproType) {
-      case DNA: 
+      case DNA:
         store = context.getStore().getSampleRecordStore();
+        provider = store.getComparableRecordProvider();
         report = new ReproDnaErrorReportingStrategy(output, store);
+        if(sampleQuery != null) {
+          provider = new MaskedComparableRecordProvider(provider, sampleQuery.getResult());
+        }
+        if(assayQuery != null) {
+          report.setMask(assayQuery.getResult());
+        }
         break;
       case ASSAY: 
         store = context.getStore().getAssayRecordStore();
+        provider = store.getComparableRecordProvider();
         report = new ReproAssayErrorReportingStrategy(output, store);
+        if(assayQuery != null) {
+          provider = new MaskedComparableRecordProvider(provider, assayQuery.getResult());
+        }
+        if(sampleQuery != null) {
+          report.setMask(sampleQuery.getResult());
+        }
         break;
       default:
         throw new IllegalStateException("unknown ReproType ["+this.reproType+"]");
     }
-    
+
     try {
       context.getStore().startTransaction();
       ReproducibilityErrorCalculator calc = new ReproducibilityErrorCalculator(store);
-      ComparableRecordProvider c = store.getComparableRecordProvider();
-      c.getComparableReferenceRecords();
-      calc.setComparableRecordProvider(c);
+      calc.setComparableRecordProvider(provider);
       calc.setCountingStrategy(report);
       calc.calculate();
       context.getStore().commitTransaction();
@@ -87,17 +107,27 @@ public class ReproErrorReportProducer implements ReportProducer {
 
   private static abstract class ReproErrorReportingStrategy<K> implements ReproducibilityErrorCountingStrategy<K> {
     protected PrintStream output;
-    protected GenotypingRecordStore store;
+    protected GenotypingRecordStore<?, ?, ?> store;
     protected Field nameField;
-    
-    ReproErrorReportingStrategy(PrintStream output, GenotypingRecordStore store, String nameFieldName) {
+
+    protected QueryResult mask;
+
+    ReproErrorReportingStrategy(PrintStream output, GenotypingRecordStore<?, ?, ?> store, String nameFieldName) {
       this.output = output;
       this.store = store;
       this.nameField = store.getStore().getField(nameFieldName);
       printLine("Reference,Replicate,Errors,Tests");
     }
 
+    public void setMask(QueryResult mask) {
+      this.mask = mask;
+    }
+
     public void countInconsistencies(ReproducibilityErrors<K> errors) {
+      if(mask != null) {
+        errors.getInconsistencies().and(mask);
+        errors.getTests().and(mask);
+      }
       printLine(getName(errors.getReferenceIndex()), getName(errors.getReplicateIndex()), errors.getInconsistencies().count(), errors.getTests().count());
     }
 
@@ -119,15 +149,17 @@ public class ReproErrorReportProducer implements ReportProducer {
 
   private static class ReproDnaErrorReportingStrategy extends ReproErrorReportingStrategy<String> {
 
-    public ReproDnaErrorReportingStrategy(PrintStream output, GenotypingRecordStore store) {
+    public ReproDnaErrorReportingStrategy(PrintStream output, GenotypingRecordStore<?, ?, ?> store) {
       super(output, store, "id");
     }
+
   }
 
   private static class ReproAssayErrorReportingStrategy extends ReproErrorReportingStrategy<Integer> {
 
-    public ReproAssayErrorReportingStrategy(PrintStream output, GenotypingRecordStore store) {
+    public ReproAssayErrorReportingStrategy(PrintStream output, GenotypingRecordStore<?, ?, ?> store) {
       super(output, store, "ilmnId");
     }
+
   }
 }

@@ -21,12 +21,16 @@ package org.obiba.illumina.bitwise.client;
 import java.io.PrintStream;
 
 import org.obiba.bitwise.Field;
+import org.obiba.bitwise.query.QueryResult;
 import org.obiba.genobyte.GenotypingRecordStore;
 import org.obiba.genobyte.cli.CliContext;
+import org.obiba.genobyte.cli.CliContext.QueryExecution;
 import org.obiba.genobyte.cli.ReportCommand.ReportProducer;
 import org.obiba.genobyte.inconsistency.MendelianErrorCalculator;
 import org.obiba.genobyte.inconsistency.MendelianErrorCountingStrategy;
 import org.obiba.genobyte.inconsistency.MendelianErrors;
+import org.obiba.genobyte.inconsistency.MendelianRecordTrioProvider;
+import org.obiba.genobyte.inconsistency.util.MaskedRecordTrioProvider;
 import org.obiba.illumina.bitwise.InfiniumGenotypingStore;
 import org.obiba.illumina.bitwise.SampleStore;
 
@@ -47,22 +51,35 @@ public class MendelianErrorReportProducer implements ReportProducer {
     SampleStore samples = ((InfiniumGenotypingStore)context.getStore()).getSampleRecordStore();
 
     try {
+      QueryExecution sampleQuery = ReportProducerUtil.findSampleQuery(context, parameters);
+      QueryExecution assayQuery = ReportProducerUtil.findAssayQuery(context, parameters);
+      MendelianErrorReportingStrategy strategy = new MendelianErrorReportingStrategy(output, samples);
+      if(assayQuery != null) {
+        strategy.setAssayFilter(assayQuery.getResult());
+      }
+
       context.getStore().startTransaction();
       MendelianErrorCalculator<String> mendelCalculator = new MendelianErrorCalculator<String>(samples);
-      mendelCalculator.setRecordProvider(samples.getMendelianRecordTrioProvider());
-      mendelCalculator.setCountingStrategy(new MendelianErrorReportingStrategy(output, samples));
+
+      MendelianRecordTrioProvider provider = samples.getMendelianRecordTrioProvider();
+      if(sampleQuery != null) {
+        provider = new MaskedRecordTrioProvider(provider, sampleQuery.getResult());
+      }
+      mendelCalculator.setRecordProvider(provider);
+      mendelCalculator.setCountingStrategy(strategy);
       mendelCalculator.calculate();
       context.getStore().commitTransaction();
     } finally {
       context.getStore().endTransaction();
     }
   }
-  
 
   private static class MendelianErrorReportingStrategy implements MendelianErrorCountingStrategy<String> {
-    protected PrintStream output;
-    protected GenotypingRecordStore store;
-    protected Field nameField;
+    private PrintStream output;
+    private GenotypingRecordStore store;
+    private Field nameField;
+
+    private QueryResult assayFilter;
 
     MendelianErrorReportingStrategy(PrintStream output, GenotypingRecordStore store) {
       this.output = output;
@@ -72,6 +89,12 @@ public class MendelianErrorReportProducer implements ReportProducer {
     }
 
     public void countInconsistencies(MendelianErrors<String> errors) {
+      QueryResult inconsistencies = errors.getInconsistencies();
+      QueryResult tests = errors.getInconsistencies();
+      if(assayFilter != null) {
+        inconsistencies.and(assayFilter);
+        tests.and(assayFilter);
+      }
       printLine(getName(errors.getChildIndex()), getName(errors.getMotherIndex()), getName(errors.getFatherIndex()), errors.getInconsistencies().count(), errors.getTests().count());
     }
 
@@ -87,8 +110,16 @@ public class MendelianErrorReportProducer implements ReportProducer {
     }
 
     protected Object getName(int recordIndex) {
-      return this.nameField.getDictionary().reverseLookup(this.nameField.getValue(recordIndex));
+      if(recordIndex != -1) {
+        return this.nameField.getDictionary().reverseLookup(this.nameField.getValue(recordIndex));
+      }
+      return "";
     }
+    
+    public void setAssayFilter(QueryResult assayFilter) {
+      this.assayFilter = assayFilter;
+    }
+
   }
 
 }
