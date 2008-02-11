@@ -354,14 +354,15 @@
             <li><a href="$relativePath/roadmap.html">Roadmap</a></li>
             <li><a href="$relativePath/license.html">Project License</a></li>
           </ul>
-          
+
           <h3>Documentation</h3>
           <ul class="arrowList">
           	<li><a href="$relativePath/docs/quickstart.html">Quick Start Manual</a></li>
+            <li><a href="$relativePath/docs/querySyntax.html">Query Syntax</a></li>
           	<li><a href="$relativePath/docs/td.html">Technical Documentation</a></li>
           	<li><a href="$relativePath/faq.html">FAQ</a></li>
           </ul>
-          
+
           <h3>Code</h3>
           <ul class="arrowList">
           	<li><a href="$relativePath/download.html">Download</a></li>
@@ -384,7 +385,7 @@
 	  </div>
 	  
 	  <div id="pageFooter">
-	    <p>&copy; 2007 Obiba.<br /></p>
+	    <p>&copy; 2007, 2008 Obiba.<br /></p>
 	  </div>
 	</div>
 	</body>

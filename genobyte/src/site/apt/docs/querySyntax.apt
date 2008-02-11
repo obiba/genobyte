@@ -1,0 +1,58 @@
+ ------
+GenoByte 1.4 Query Syntax
+ ------
+ ------
+February 2008
+ ------
+
+Query Syntax
+
+*  Basic Field Queries
+
+    Query value "v1" for field "f1":
+
+    <<f1:v1>>
+
+*  Range Query
+
+    Query values from 1 to 10 (inclusive) for field "f1":
+    
+    <<f1:[1,10]>>
+
+*  Boolean operators
+
+    You may use boolean operators to combine several field queries. You may also use parentheses to create complex queries. These operators are AND, OR, XOR, NOT. Here's an example:
+    
+    <<NOT(f1:v1 AND (f2:v2 OR f3:[-20,90]))>>
+
+    The NOT operator can be used to make a range query exclusive:
+    
+    <<f1:[1,10] AND NOT f1:10>>
+
+    The NOT operator may be written using !
+    
+    <<!f1:v1>>
+
+    The XOR operator may be written using ~ 
+
+   <<f1 ~ f2>>
+
+    The XOR operator returns a vector with bits activated where the values between two fields are different. This requires that the two fields use the same dictionary. It is a very useful operator for comparing genotypes.
+
+*  Wildcards
+
+    You can use the wildcard (or truncation) operator to query on substrings:
+    
+    <<f1:foo* OR f1:*bar OR f1:foo*bar>>
+
+    <Note: only supported by the HuffmanDictionary which is the default dictionary used for storing Strings.>
+
+*  Ordering
+
+    You may order results by using the ORDER BY operator:
+    
+    <<f1:v1 ORDER BY f2,f3>>
+
+    You may specify a descending order clause by appending DESC or ASC to the ordered field name (by default ASC is used): 
+    
+    <<ORDER BY f2 DESC,f3 ASC>>
