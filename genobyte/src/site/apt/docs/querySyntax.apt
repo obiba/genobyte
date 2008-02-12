@@ -9,35 +9,41 @@ Query Syntax
 
 *  Basic Field Queries
 
-    Query value "v1" for field "f1":
+    The basic search expression consists of specifying a field that must be queried, followed by a colon, followed by the desired search value. For example,
+    to search for a specific value "v1" on the field "f1":
 
     <<f1:v1>>
 
 *  Range Query
 
-    Query values from 1 to 10 (inclusive) for field "f1":
+    It is possible to search on value ranges when on fields holding numeric values. For example,
+    to query values from 1 to 10 (inclusive) for the field "f1":
     
     <<f1:[1,10]>>
 
 *  Boolean operators
 
-    You may use boolean operators to combine several field queries. You may also use parentheses to create complex queries. These operators are AND, OR, XOR, NOT. Here's an example:
+    You may use boolean operators to combine several field queries. You may also use parentheses to create complex queries.
+    These operators are AND, OR, XOR, NOT. The following example illustrates the use of many boolean operators.
     
     <<NOT(f1:v1 AND (f2:v2 OR f3:[-20,90]))>>
 
-    The NOT operator can be used to make a range query exclusive:
+    There is no range operator that allow to specify an exclusive bound. However, the NOT operator can be used to make a bound exclusive in a range query.
+    This can be useful when searching on fields holding floating point values. In the following example, we specify that the upper bound should not be included
+    in the search results:
     
     <<f1:[1,10] AND NOT f1:10>>
 
-    The NOT operator may be written using !
+    The NOT operator may also be written using the sign !, as follow:
     
     <<!f1:v1>>
 
-    The XOR operator may be written using ~ 
+    The XOR operator may be written using the sign ~, as follow: 
 
    <<f1 ~ f2>>
 
-    The XOR operator returns a vector with bits activated where the values between two fields are different. This requires that the two fields use the same dictionary. It is a very useful operator for comparing genotypes.
+    The XOR operator returns records where the values between two fields are different. To be able to do this kind of comparison, both fields shoud use the same dictionary.
+    XOR is a very useful operator for comparing genotypes.
 
 *  Wildcards
 
@@ -45,14 +51,15 @@ Query Syntax
     
     <<f1:foo* OR f1:*bar OR f1:foo*bar>>
 
-    <Note: only supported by the HuffmanDictionary which is the default dictionary used for storing Strings.>
+    <Note: Wildcards searches are only supported on fields using the HuffmanDictionary, the default dictionary used for storing Strings.>
 
 *  Ordering
 
-    You may order results by using the ORDER BY operator:
+    You may order results by using the ORDER BY operator, this way:
     
     <<f1:v1 ORDER BY f2,f3>>
 
-    You may specify a descending order clause by appending DESC or ASC to the ordered field name (by default ASC is used): 
+    You can also specify a sort direction by appending DESC for a desceding order, or ASC for an ascending order, to the ordered field name.
+    By default, fields are always sorted in ascending order.  
     
     <<ORDER BY f2 DESC,f3 ASC>>
