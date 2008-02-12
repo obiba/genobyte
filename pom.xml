@@ -373,11 +373,16 @@
 
     </distributionManagement>
 
-    <!-- Not live yet -->
-    <!--issueManagement>
+    <scm>
+        <connection>http://svn.obiba.org/genobyte/</connection>
+        <developerConnection>https://svn.obiba.org/genobyte</developerConnection>
+        <tag>trunk</tag>
+    </scm>
+
+    <issueManagement>
         <system>JIRA</system>
-        <url>http://www.obiba.org/jira</url>
-    </issueManagement-->
+        <url>http://jira.obiba.org/</url>
+    </issueManagement>
 
     <!-- Not live yet -->
     <ciManagement/>

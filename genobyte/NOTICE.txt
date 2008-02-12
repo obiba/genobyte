@@ -1,5 +1,5 @@
 GenoByte
-Copyright 2007 Génome Québec
+Copyright 2007, 2008 Obiba
 
 This product depends on and is distributed with the following open source libraries:
 
