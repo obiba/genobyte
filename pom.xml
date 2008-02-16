@@ -63,7 +63,7 @@
 <!--=============================================================================================-->
     <groupId>org.obiba.genobyte</groupId>
     <artifactId>genobyte-parent</artifactId>
-    <version>1.4.2</version>  
+    <version>1.4.3-SNAPSHOT</version>  
 
     <modules>
         <module>genobyte</module>
@@ -378,9 +378,8 @@
     </distributionManagement>
 
     <scm>
-        <connection>scm:svn:http://svn.obiba.org/genobyte/1.4.2</connection>
-        <developerConnection>scm:svn:https://svn.obiba.org/genobyte/tags/releases/1.4.2</developerConnection>
-        <tag>trunk</tag>
+        <connection>scm:svn:http://svn.obiba.org/genobyte/</connection>
+        <developerConnection>scm:svn:https://svn.obiba.org/genobyte</developerConnection>
     </scm>
 
     <issueManagement>
