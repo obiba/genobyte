@@ -14,7 +14,7 @@
         <li><div class="step">
             Unzip or untar the package at the location of your choice. You should obtain the following directory structure:
                 <ul>
-                    <li>genobyte-1.4.1
+                    <li>genobyte-1.4.2
                         <ul>
                             <li>licences/
                                 <ul>
@@ -30,7 +30,7 @@
                                     <li>all GenoByte third-party dependencies (also includes optional dependencies)</li>
                                 </ul>
                             </li>
-                            <li>genobyte-1.4.1.jar</li>
+                            <li>genobyte-1.4.2.jar</li>
                             <li>LICENSE.txt</li>
                             <li>READEME.txt</li>
                             <li>NOTICE.txt</li>
@@ -62,7 +62,7 @@
                                           <li>source files for the example application</li>
                                       </ul>
                                   </li>
-                                  <li>genobyte-infinium-1.4.1.jar</li>
+                                  <li>genobyte-infinium-1.4.2.jar</li>
                                 </ul>
                             </li>
                         </ul>

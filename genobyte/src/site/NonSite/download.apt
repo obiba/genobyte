@@ -1,26 +1,26 @@
  ------
-Download GenoByte 1.4.1
+Download GenoByte 1.4.2
  ------
  ------
 November 2007
  ------
 
-{Download} GenoByte 1.4.1
+{Download} GenoByte 1.4.2
 
   GenoByte is distributed in several formats for your convenience. All packages also include an example application that uses the GenoByte API.
 
-  GenoByte 1.4.1 is distributed under the {{{http://www.gnu.org/licenses/gpl-3.0.html} GPL License, version 3.0}}.
+  GenoByte 1.4.2 is distributed under the {{{http://www.gnu.org/licenses/gpl-3.0.html} GPL License, version 3.0}}.
 
 *------------------------------+---------+---------+
 |                              | Size    | Package
 *------------------------------+---------+---------+
-| GenoByte 1.4.1 (tar.gz)        | 9.3 MB  |{{{http://www.obiba.org/genobyte/downloads/genobyte-1.4.1-bin.tar.gz} genobyte-1.4.1-bin.tar.gz}}
+| GenoByte 1.4.2 (tar.gz)        | 9.3 MB  |{{{http://www.obiba.org/genobyte/downloads/genobyte-1.4.2-bin.tar.gz} genobyte-1.4.2-bin.tar.gz}}
 *------------------------------+---------+---------+
-| GenoByte 1.4.1 (zip)           | 9.3 MB  |{{{http://www.obiba.org/genobyte/downloads/genobyte-1.4.1-bin.zip} genobyte-1.4.1-bin.zip}}
+| GenoByte 1.4.2 (zip)           | 9.3 MB  |{{{http://www.obiba.org/genobyte/downloads/genobyte-1.4.2-bin.zip} genobyte-1.4.2-bin.zip}}
 *------------------------------+---------+---------+
-| GenoByte 1.4.1 Source (tar.gz)        | 157.6 KB  |{{{http://www.obiba.org/genobyte/downloads/genobyte-1.4.1-src.tar.gz} genobyte-1.4.1-src.tar.gz}}
+| GenoByte 1.4.2 Source (tar.gz)        | 157.6 KB  |{{{http://www.obiba.org/genobyte/downloads/genobyte-1.4.2-src.tar.gz} genobyte-1.4.2-src.tar.gz}}
 *------------------------------+---------+---------+
-| GenoByte 1.4.1 Source (zip)           | 345.2 KB  |{{{http://www.obiba.org/genobyte/downloads/genobyte-1.4.1-src.zip} genobyte-1.4.1-src.zip}}
+| GenoByte 1.4.2 Source (zip)           | 345.2 KB  |{{{http://www.obiba.org/genobyte/downloads/genobyte-1.4.2-src.zip} genobyte-1.4.2-src.zip}}
 *------------------------------+---------+---------+
 
 * Previous Releases
