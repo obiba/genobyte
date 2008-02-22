@@ -90,7 +90,7 @@ public class MendelianErrorReportProducer implements ReportProducer {
 
     public void countInconsistencies(MendelianErrors<String> errors) {
       QueryResult inconsistencies = errors.getInconsistencies();
-      QueryResult tests = errors.getInconsistencies();
+      QueryResult tests = errors.getTests();
       if(assayFilter != null) {
         inconsistencies.and(assayFilter);
         tests.and(assayFilter);
