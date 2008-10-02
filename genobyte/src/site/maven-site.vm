@@ -352,7 +352,7 @@
             <li><a href="$relativePath/benchmark.html">Benchmark</a></li>
             <li><a href="$relativePath/limitations.html">Limitations</a></li>
             <li><a href="$relativePath/roadmap.html">Roadmap</a></li>
-            <li><a href="$relativePath/license.html">Project License</a></li>
+            <li><a href="$relativePath/license.html">License</a></li>
           </ul>
 
           <h3>Documentation</h3>
