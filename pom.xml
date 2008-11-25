@@ -22,7 +22,7 @@
             <name>Vincent Ferretti</name>
             <id>vferretti</id>
             <email />
-            <organization>Gï¿½nome Quï¿½bec</organization>
+            <organization>Génome Québec</organization>
             <roles>
                 <role>Project Manager</role>
             </roles>
@@ -31,7 +31,7 @@
             <name>Philippe Laflamme</name>
             <id>plaflamm</id>
             <email />
-            <organization>Gï¿½nome Quï¿½bec</organization>
+            <organization>Génome Québec</organization>
             <roles>
                 <role>Java Developer</role>
             </roles>
@@ -40,7 +40,7 @@
             <name>David Bujold</name>
             <id>dbujold</id>
             <email />
-            <organization>Gï¿½nome Quï¿½bec</organization>
+            <organization>Génome Québec</organization>
             <roles>
                 <role>Java Developer</role>
             </roles>
@@ -50,12 +50,12 @@
     <contributors>
         <contributor>
             <name>Guillaume Barreau</name>
-            <organization>Gï¿½nome Quï¿½bec</organization>
+            <organization>Génome Québec</organization>
         </contributor>
     </contributors>
 
     <organization>
-        <name>Gï¿½nome Quï¿½bec</name>
+        <name>Génome Québec</name>
         <url>http://www.genomequebec.com</url>
     </organization>
 
@@ -64,7 +64,7 @@
 <!--=============================================================================================-->
     <groupId>org.obiba.genobyte</groupId>
     <artifactId>genobyte-parent</artifactId>
-    <version>1.4.3</version>  
+    <version>1.4.3-SNAPSHOT</version>  
 
     <modules>
         <module>genobyte</module>
@@ -379,8 +379,8 @@
     </distributionManagement>
 
     <scm>
-        <connection>scm:svn:http://svn.obiba.org/genobyte/1.4.3</connection>
-        <developerConnection>scm:svn:https://svn.obiba.org/genobyte/tags/releases/1.4.3</developerConnection>
+        <connection>scm:svn:http://svn.obiba.org/genobyte/</connection>
+        <developerConnection>scm:svn:https://svn.obiba.org/genobyte</developerConnection>
     </scm>
 
     <issueManagement>
