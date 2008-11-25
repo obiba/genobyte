@@ -22,10 +22,10 @@ import org.obiba.bitwise.AbstractField;
 import org.obiba.bitwise.BitVector;
 import org.obiba.bitwise.VolatileField;
 import org.obiba.bitwise.dao.BaseBdbDaoTestCase;
+import org.obiba.bitwise.mock.MockBitwiseStore;
 import org.obiba.bitwise.util.BitVectorQueryResult;
+import org.obiba.genobyte.mock.MockGenotypingStore;
 import org.obiba.genobyte.model.SnpCall;
-import org.obiba.genobyte.statistic.MockBitwiseStore;
-import org.obiba.genobyte.statistic.MockGenotypingStore;
 import org.obiba.genobyte.statistic.StatsPool;
 import org.obiba.genobyte.statistic.StatsRunDefinition;
 

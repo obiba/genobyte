@@ -24,6 +24,10 @@ import org.obiba.bitwise.Field;
 import org.obiba.bitwise.VolatileField;
 import org.obiba.bitwise.dto.FieldDto;
 
+/**
+ * Mock implementation of <link>Field</link>. Used for unit testing. This class must be in the same 
+ * package as the <code>Field</code> class in order to access package private methods.
+ */
 public class MockField extends Field {
   
   private VolatileField field_;

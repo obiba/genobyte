@@ -18,12 +18,8 @@
  *******************************************************************************/
 package org.obiba.bitwise;
 
-import org.obiba.bitwise.BitVector;
-import org.obiba.bitwise.Field;
-import org.obiba.bitwise.FieldValueIterator;
 import org.obiba.bitwise.dao.BaseBdbDaoTestCase;
 import org.obiba.bitwise.dictionary.IntegerDictionary;
-import org.obiba.bitwise.mock.MockBitwiseStore;
 import org.obiba.bitwise.util.BitVectorQueryResult;
 
 
@@ -34,7 +30,7 @@ public class FieldValueIteratorTest extends BaseBdbDaoTestCase {
 
   IntegerDictionary id = null;
 
-  MockBitwiseStore store_ = null;
+  BitwiseStoreTestingHelper store_ = null;
 
   public FieldValueIteratorTest() {
     super();

@@ -16,10 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
  *******************************************************************************/
-package org.obiba.genobyte.statistic;
+package org.obiba.genobyte.mock;
 
 import org.obiba.bitwise.BitwiseRecordManager;
 import org.obiba.bitwise.BitwiseStore;
+import org.obiba.bitwise.mock.MockBitwiseRecordManager;
 import org.obiba.genobyte.GenotypingField;
 import org.obiba.genobyte.GenotypingRecordStore;
 import org.obiba.genobyte.ReversableCallProvider;

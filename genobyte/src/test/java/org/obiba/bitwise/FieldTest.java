@@ -39,7 +39,7 @@ public class FieldTest extends BaseBdbDaoTestCase {
   private static final String FIELD_2 = "testField2";
   private static final String FIELD_3 = "testBoundedField";
 
-  MockBitwiseStore store_ = null;
+  BitwiseStoreTestingHelper store_ = null;
   
   public FieldTest() {
     super();

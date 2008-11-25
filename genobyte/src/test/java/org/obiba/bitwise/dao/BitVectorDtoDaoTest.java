@@ -22,13 +22,13 @@ import java.util.Arrays;
 
 import org.obiba.bitwise.BitVector;
 import org.obiba.bitwise.BitVectorUtil;
+import org.obiba.bitwise.BitwiseStoreTestingHelper;
 import org.obiba.bitwise.dto.BitVectorDto;
-import org.obiba.bitwise.mock.MockBitwiseStore;
 
 public class BitVectorDtoDaoTest extends BaseBdbDaoTestCase {
   BitVectorDtoDao dao = null;
 
-  MockBitwiseStore store_ = null;
+  BitwiseStoreTestingHelper store_ = null;
   
   public BitVectorDtoDaoTest() {
     super();

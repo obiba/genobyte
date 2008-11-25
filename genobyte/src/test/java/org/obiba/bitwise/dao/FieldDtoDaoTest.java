@@ -18,15 +18,15 @@
  *******************************************************************************/
 package org.obiba.bitwise.dao;
 
+import org.obiba.bitwise.BitwiseStoreTestingHelper;
 import org.obiba.bitwise.dto.FieldDto;
-import org.obiba.bitwise.mock.MockBitwiseStore;
 
 
 public class FieldDtoDaoTest extends BaseBdbDaoTestCase {
 
   FieldDtoDao dao = null;
 
-  MockBitwiseStore store_ = null;
+  BitwiseStoreTestingHelper store_ = null;
   
   public FieldDtoDaoTest() {
     super();

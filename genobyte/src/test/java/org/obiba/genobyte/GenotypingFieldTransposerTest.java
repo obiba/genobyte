@@ -21,9 +21,9 @@ package org.obiba.genobyte;
 import junit.framework.TestCase;
 
 import org.obiba.bitwise.Field;
+import org.obiba.bitwise.mock.MockBitwiseStore;
+import org.obiba.genobyte.mock.MockGenotypingStore;
 import org.obiba.genobyte.model.SnpCall;
-import org.obiba.genobyte.statistic.MockBitwiseStore;
-import org.obiba.genobyte.statistic.MockGenotypingStore;
 
 public class GenotypingFieldTransposerTest extends TestCase {
 

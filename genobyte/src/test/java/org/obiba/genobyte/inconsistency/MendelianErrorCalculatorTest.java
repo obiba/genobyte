@@ -22,11 +22,11 @@ import junit.framework.TestCase;
 
 import org.obiba.bitwise.Dictionary;
 import org.obiba.bitwise.Field;
+import org.obiba.bitwise.mock.MockBitwiseStore;
 import org.obiba.bitwise.query.QueryResult;
 import org.obiba.genobyte.GenotypingRecordStore;
+import org.obiba.genobyte.mock.MockGenotypingStore;
 import org.obiba.genobyte.model.SnpCall;
-import org.obiba.genobyte.statistic.MockBitwiseStore;
-import org.obiba.genobyte.statistic.MockGenotypingStore;
 import org.obiba.genobyte.statistic.StatsRunDefinition;
 import org.obiba.genobyte.statistic.util.CallRate;
 import org.obiba.genobyte.statistic.util.Frequencies;

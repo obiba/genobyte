@@ -20,6 +20,9 @@ package org.obiba.genobyte.statistic;
 
 import junit.framework.TestCase;
 
+import org.obiba.bitwise.mock.MockBitwiseStore;
+import org.obiba.genobyte.mock.MockGenotypingStore;
+
 public class StatsPoolDigestorTest extends TestCase {
 
   public void testDigestEmptyPool() {

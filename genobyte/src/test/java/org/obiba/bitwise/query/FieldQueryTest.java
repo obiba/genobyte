@@ -18,20 +18,16 @@
  *******************************************************************************/
 package org.obiba.bitwise.query;
 
+import org.obiba.bitwise.BitwiseStoreTestingHelper;
 import org.obiba.bitwise.Dictionary;
 import org.obiba.bitwise.Field;
 import org.obiba.bitwise.dao.BaseBdbDaoTestCase;
 import org.obiba.bitwise.dictionary.IntegerDictionary;
-import org.obiba.bitwise.mock.MockBitwiseStore;
-import org.obiba.bitwise.query.ParseException;
-import org.obiba.bitwise.query.Query;
-import org.obiba.bitwise.query.QueryParser;
-import org.obiba.bitwise.query.QueryResult;
 
 
 public class FieldQueryTest extends BaseBdbDaoTestCase {
 
-  MockBitwiseStore store_ = null;
+  BitwiseStoreTestingHelper store_ = null;
 
   @Override
   protected void setUp() throws Exception {
