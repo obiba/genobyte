@@ -311,7 +311,10 @@ public class BitwiseStoreUtil {
       ReentrantLock storeLock = storeLocks.get(name);
       // Wait if lock is already held by another thread or if there are more ref counts that this thread accounts for.
       while( (storeLock.isLocked() && storeLock.isHeldByCurrentThread() == false) || (ref != null && ref.isThreadExclusive() == false)) {
-        log.debug("Waiting for lock: isLocked [{}] isThreadExclusive [{}]", storeLock.isHeldByCurrentThread(), ref.isThreadExclusive());
+        if(log.isDebugEnabled()) {
+          Object args[] = new Object[] {storeLock.isLocked(), storeLock.isHeldByCurrentThread(), ref != null, ref.isThreadExclusive()};
+          log.debug("Waiting for lock: (isLocked [{}] && isHeldByCurrentThread() [{}]) or (ref != null [{}] && isThreadExclusive [{}])", args);
+        }
         try {
           ref = null;
           // Some other thread is holding a reference to the store. Wait for it.
