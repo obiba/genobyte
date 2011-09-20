@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
+ * Copyright 2007(c) Gï¿½nome Quï¿½bec. All rights reserved.
  * 
  * This file is part of GenoByte.
  * 
@@ -36,9 +36,10 @@ import org.obiba.bitwise.util.BitwiseDiskUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GenotypingStoreTransposer<K, TK> {
+public class GenotypingStoreTransposer<K, TK> implements StoreTransposer {
 
   private final Logger log = LoggerFactory.getLogger(GenotypingStoreTransposer.class);
+  private TransposeProgressIndicator transposeProgressIndicator = null;
 
   private GenotypingRecordStore<K, ?, TK> sourceStore;
 
@@ -62,10 +63,15 @@ public class GenotypingStoreTransposer<K, TK> {
     this.deleteDestinationStore = deleteDestinationStore;
   }
 
+  @Override
+  public void setTransposeProgressIndicator(TransposeProgressIndicator transposeProgressIndicator) {
+    this.transposeProgressIndicator = transposeProgressIndicator;
+  }
+
   public void transpose() {
     final BitwiseStore bitwiseSource = sourceStore.getStore();
     final String sourceName = bitwiseSource.getName();
-
+    
     if(deleteDestinationStore) {
       log.debug("Locking store [{}]", sourceName);
       BitwiseStoreUtil.getInstance().lock(sourceName, new Runnable() {
@@ -129,11 +135,21 @@ public class GenotypingStoreTransposer<K, TK> {
       sourceIndexes[sourceKeys.size()] = fv.getIndex();
       sourceKeys.add(fv.getValue());
     }
-
-    log.debug("Transposing store...");
+    
+    long processedFields = 0;
+    
+    log.debug("Transposing store... (" + (long) fieldTransposers_.size() + " fields to process)");
+    
+    if (transposeProgressIndicator != null) {
+      transposeProgressIndicator.setTotalItemsToTranspose((long) fieldTransposers_.size());
+      transposeProgressIndicator.setProcessedItems(0);
+    }
+    
     for(GenotypingFieldValueTransposer<K, TK> t : fieldTransposers_) {
       t.transposeValues(sourceKeys, sourceIndexes);
+      if (transposeProgressIndicator != null) {
+      	transposeProgressIndicator.setProcessedItems(processedFields++);
+      }  
     }
   }
-
 }

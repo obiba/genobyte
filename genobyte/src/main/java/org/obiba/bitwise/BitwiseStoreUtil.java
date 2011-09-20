@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
+ * Copyright 2007(c) Gï¿½nome Quï¿½bec. All rights reserved.
  * 
  * This file is part of GenoByte.
  * 
@@ -221,7 +221,7 @@ public class BitwiseStoreUtil {
         }
         daoManager.commitTransaction();
       } catch(RuntimeException e) {
-        log.error("Fatal error opening store [{}]: {}", key, e.getMessage());
+        log.error("Fatal error opening store ["+key+"]", e);
         store = null;
         throw e;
       } finally {
@@ -229,7 +229,11 @@ public class BitwiseStoreUtil {
         if(store == null) {
           // If we weren't able to open the store and no other reference exists, then we destroy the DaoManager
           if(STORE_MAP.containsKey(name) == false) {
-            KeyedDaoManager.destroyInstance(key);
+            try {
+              KeyedDaoManager.destroyInstance(key);
+            } catch(RuntimeException e) {
+              log.error("Fatal error destroying instance", e);
+            }
           }
         } else {
           // RefCount the store

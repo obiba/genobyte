@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
+ * Copyright 2007(c) Gï¿½nome Quï¿½bec. All rights reserved.
  * 
  * This file is part of GenoByte.
  * 
@@ -231,7 +231,7 @@ class BitwiseAnnotationManager {
       }
     }
     
-    Class sc = c.getSuperclass();
+    Class<?> sc = c.getSuperclass();
     if (sc != null) {
       extractDictionaryDef(sc);
     }
@@ -254,7 +254,7 @@ class BitwiseAnnotationManager {
       }
     }
     
-    Class sc = c.getSuperclass();
+    Class<?> sc = c.getSuperclass();
     if (sc != null) {
       extractTemplates(sc);
     }
@@ -262,17 +262,17 @@ class BitwiseAnnotationManager {
   
   
   /**
-   * Looks recursively in a class and all of its superclasses for a field with a given name.
+   * Looks recursively in a class and all of its super classes for a field with a given name.
    * @param c is the class from where we will start looking.
    * @param pName is the name of the field to look for.
    * @return The field with the name given in parameter.
    */
-  private java.lang.reflect.Field extractPropertyField(Class c, String pName) {
+  private java.lang.reflect.Field extractPropertyField(Class<?> c, String pName) {
     try {
       return c.getDeclaredField(pName);
     }
     catch (NoSuchFieldException e) {
-      Class sc = c.getSuperclass();
+      Class<?> sc = c.getSuperclass();
       if (sc != null) {
         return extractPropertyField(sc, pName);
       }

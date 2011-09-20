@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
+ * Copyright 2007(c) Gï¿½nome Quï¿½bec. All rights reserved.
  * 
  * This file is part of GenoByte.
  * 
@@ -35,7 +35,7 @@ import org.obiba.bitwise.util.Property;
  * Using Java Annotations, builds a new <tt>StoreSchema</tt> from a user-defined class to be transformed into a store.
  */
 public class AnnotationStoreSchemaBuilder {
-  HashMap<Class, String> defaultDicts_ = null;
+  HashMap<Class<?>, String> defaultDicts_ = null;
   StoreSchema schema_ = null;
   DictionaryFactory dictFactory_ = null;
   
@@ -61,8 +61,8 @@ public class AnnotationStoreSchemaBuilder {
    * @param pClass the record class where the annotation will be found.
    * @return the <tt>StoreSchema</tt> created with the help of the Java bitwise annotations.
    */
-  public StoreSchema createSchema(Class pClass) {
-    defaultDicts_ = new HashMap<Class, String>();
+  public StoreSchema createSchema(Class<?> pClass) {
+    defaultDicts_ = new HashMap<Class<?>, String>();
     schema_ = new StoreSchema();
     
     BitwiseAnnotationManager ba = new BitwiseAnnotationManager(pClass);
@@ -112,7 +112,7 @@ public class AnnotationStoreSchemaBuilder {
    * @param pClass is the class of the current field for which we need a default dictionary.
    * @return The name of the default dictionary to use in this case.
    */
-  private String getDefaultDictionary(Class pClass) {
+  private String getDefaultDictionary(Class<?> pClass) {
     //If a default dictionary has already been generated for this field type
     if (defaultDicts_.get(pClass) != null) {
       return defaultDicts_.get(pClass);
@@ -139,7 +139,7 @@ public class AnnotationStoreSchemaBuilder {
    * @param pClass
    * @return
    */
-  private String createDictionaryNameFromClass (Class pClass) {
+  private String createDictionaryNameFromClass (Class<?> pClass) {
     StringBuilder autoName = new StringBuilder("Default_").append(pClass.getName()); 
     while (schema_.getDictionary(autoName.toString()) != null) {
       autoName.append("_");
@@ -157,7 +157,7 @@ public class AnnotationStoreSchemaBuilder {
     DictionaryMetaData newDict = new DictionaryMetaData();
     newDict.setName(pDictionary.name());
     
-    Class dictClass = pDictionary.dictionaryClass();
+    Class<?> dictClass = pDictionary.dictionaryClass();
     String dictClassName = pDictionary.dictionaryClassName(); 
     
     if (dictClass != void.class) {

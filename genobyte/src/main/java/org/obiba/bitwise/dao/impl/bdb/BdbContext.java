@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
+ * Copyright 2007(c) Gï¿½nome Quï¿½bec. All rights reserved.
  * 
  * This file is part of GenoByte.
  * 
@@ -92,7 +92,7 @@ public class BdbContext implements KeyedDaoManagerDestroyListener {
 
     String root = null;
     Properties localProps = new Properties();
-    for (Enumeration e = props.propertyNames(); e.hasMoreElements() ;) {
+    for (Enumeration<?> e = props.propertyNames(); e.hasMoreElements() ;) {
       String propName = (String)e.nextElement();
       if(DefaultConfigurationPropertiesProvider.ROOT_DIR_PROPERTY.equals(propName)) {
         root = props.getProperty(propName);
@@ -188,7 +188,7 @@ public class BdbContext implements KeyedDaoManagerDestroyListener {
     return secDbMap_.get(name);
   }
 
-  synchronized Sequence getSequence(String name) throws DatabaseException {
+  synchronized Sequence getSequence(String name) {
     if(seqMap_.containsKey(name) == false) {
       Database seqDb = getDatabase(SEQUENCE_DATABASE);
   
@@ -196,7 +196,7 @@ public class BdbContext implements KeyedDaoManagerDestroyListener {
       try {
         sequenceEntry = new DatabaseEntry(name.getBytes("UTF-8"));
       } catch (UnsupportedEncodingException e) {
-        throw new DatabaseException(e);
+        throw new RuntimeException("Couldn't create DatabaseEntry", e);
       }
       SequenceConfig seqCfg = new SequenceConfig();
       seqCfg.setAutoCommitNoSync(true);
@@ -238,7 +238,6 @@ public class BdbContext implements KeyedDaoManagerDestroyListener {
     }
   }
 
-  @SuppressWarnings("unchecked")
   private void truncate() {
     try {
       List<String> dbNames_ = getEnvironment().getDatabaseNames();

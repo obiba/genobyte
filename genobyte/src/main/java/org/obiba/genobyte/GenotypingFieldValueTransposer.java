@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
+ * Copyright 2007(c) Gï¿½nome Quï¿½bec. All rights reserved.
  * 
  * This file is part of GenoByte.
  * 
@@ -26,7 +26,6 @@ import org.obiba.bitwise.Field;
 import org.obiba.bitwise.util.BitVectorQueryResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  * Allows reading values from one <tt>GenotypingStore</tt> and transpose them into another <tt>GenotypingStore</tt>. 
@@ -163,6 +162,7 @@ class GenotypingFieldValueTransposer<K, TK> {
     }
 
     destination_.getStore().flush();
+    log.debug("Transposed [{}] keys for field [{}]", sourceKeysList.size(), field_.getName());
   }
 
   private void makeIterationBlock(int firstIndex, int fieldsPerIteration, TransposeIterationBlock block) {
@@ -239,5 +239,5 @@ class GenotypingFieldValueTransposer<K, TK> {
       targetFields = new Field[size];
     }
   }
-
+  
 }

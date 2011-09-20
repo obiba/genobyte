@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
+ * Copyright 2007(c) Gï¿½nome Quï¿½bec. All rights reserved.
  * 
  * This file is part of GenoByte.
  * 
@@ -30,13 +30,13 @@ import org.obiba.bitwise.util.Property;
  * Creates instances of dictionaries that will encode/decode data from/to BitVectors.
  */
 public class DictionaryInstantiator {
-  public static Dictionary createInstance(String pName, String pClazz) {
+  public static Dictionary<?> createInstance(String pName, String pClazz) {
     try {
-      Class clazz = Class.forName(pClazz);
+      Class<?> clazz = Class.forName(pClazz);
       if(Dictionary.class.isAssignableFrom(clazz) == false) {
         throw new IllegalStateException("Class " + pClazz + " does not implement the Dictionary interface.");
       }
-      return (Dictionary)ConstructorUtils.invokeConstructor(clazz, pName);
+      return (Dictionary<?>)ConstructorUtils.invokeConstructor(clazz, pName);
     } catch (ClassNotFoundException e) {
       throw new RuntimeException(e);
     } catch (InstantiationException e) {
@@ -50,7 +50,7 @@ public class DictionaryInstantiator {
     }
   }
 
-  public static void setProperties(Dictionary d, List<Property> properties) {
+  public static void setProperties(Dictionary<?> d, List<Property> properties) {
     if(properties == null) {
       return;
     }

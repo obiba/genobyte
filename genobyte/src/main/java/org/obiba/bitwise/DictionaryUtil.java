@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
+ * Copyright 2007(c) Gï¿½nome Quï¿½bec. All rights reserved.
  * 
  * This file is part of GenoByte.
  * 
@@ -49,12 +49,12 @@ class DictionaryUtil {
     return dao.keys();
   }
 
-  Dictionary createDictionary(String name, String clazz, List<Property> properties) {
+  Dictionary<?> createDictionary(String name, String clazz, List<Property> properties) {
     DictionaryDto data = new DictionaryDto(name, clazz, properties);
     DictionaryDtoDao dao = (DictionaryDtoDao)KeyedDaoManager.getInstance(store_.getDaoKey()).getDao(DictionaryDtoDao.class);
     dao.create(data);
 
-    Dictionary d = DictionaryInstantiator.createInstance(data.getName(), data.getClazz());
+    Dictionary<?> d = DictionaryInstantiator.createInstance(data.getName(), data.getClazz());
     if(d == null) {
       throw new IllegalArgumentException("Dictonary meta data is invalid: " + data);
     }
@@ -62,11 +62,11 @@ class DictionaryUtil {
     return d;
   }
 
-  Dictionary openDictionary(String name) {
+  Dictionary<?> openDictionary(String name) {
     DictionaryDtoDao dao = (DictionaryDtoDao)KeyedDaoManager.getInstance(store_.getDaoKey()).getDao(DictionaryDtoDao.class);
     DictionaryDto data = dao.load(name);
 
-    Dictionary d = DictionaryInstantiator.createInstance(data.getName(), data.getClazz());
+    Dictionary<?> d = DictionaryInstantiator.createInstance(data.getName(), data.getClazz());
     if(d == null) {
       throw new IllegalArgumentException("Dictonary meta data is invalid: " + data);
     }
@@ -80,7 +80,7 @@ class DictionaryUtil {
    * Saves a dictionary instance into disk.
    * @param d the dictionary to be saved.
    */
-  void saveDictionary(Dictionary d) {
+  void saveDictionary(Dictionary<?> d) {
     DictionaryDtoDao dao = (DictionaryDtoDao)KeyedDaoManager.getInstance(store_.getDaoKey()).getDao(DictionaryDtoDao.class);
     DictionaryDto data = dao.load(d.getName());
     if(Arrays.equals(data.getRuntimeData(), d.getRuntimeData()) == false) {

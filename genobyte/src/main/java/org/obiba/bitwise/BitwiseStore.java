@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
+ * Copyright 2007(c) Gï¿½nome Quï¿½bec. All rights reserved.
  * 
  * This file is part of GenoByte.
  * 
@@ -48,7 +48,7 @@ public class BitwiseStore {
 
   private DaoKey key = null;
   private BitwiseStoreDto data_ = null;
-  private Map<String, Dictionary> dictionaries_ = new HashMap<String, Dictionary>();
+  private Map<String, Dictionary<?>> dictionaries_ = new HashMap<String, Dictionary<?>>();
   private FieldUtil fieldUtil_ = null;
   private DictionaryUtil dictUtil_ = null;
   private boolean dirty_ = false;
@@ -243,7 +243,7 @@ public class BitwiseStore {
    * @param name the name of the <code>Dictionary</code> to look for.
    * @return the <code>Dictionary</code> object, or <tt>null</tt> if there is no <code>Dictionary</code> with the provided name in this store.
    */
-  public Dictionary getDictionary(String name) {
+  public Dictionary<?> getDictionary(String name) {
     return dictionaries_.get(name);
   }
 
@@ -373,7 +373,7 @@ public class BitwiseStore {
   public void flush() {
     synchronized(data_) {
       // Flush the dictionaries
-      for (Dictionary d : getDictionaries().values()) {
+      for (Dictionary<?> d : getDictionaries().values()) {
         getDictUtil().saveDictionary(d); 
       }
 
@@ -446,14 +446,14 @@ public class BitwiseStore {
   }
 
 
-  Map<String, Dictionary> getDictionaries() {
+  Map<String, Dictionary<?>> getDictionaries() {
     return dictionaries_;
   }
 
 
   void open(Properties config) {
     for (String dictName : getDictUtil().list()) {
-      Dictionary d = getDictUtil().openDictionary(dictName);
+      Dictionary<?> d = getDictUtil().openDictionary(dictName);
       if(d == null) {
         throw new IllegalStateException("Cannot open dictionary name=["+dictName+"]");
       }
@@ -465,7 +465,7 @@ public class BitwiseStore {
 
   void create(Properties config) {
     for (DictionaryMetaData meta : data_.getSchema().getDictionaries()) {
-      Dictionary d = getDictUtil().createDictionary(meta.getName(), meta.getClazz(), meta.getProperties());
+      Dictionary<?> d = getDictUtil().createDictionary(meta.getName(), meta.getClazz(), meta.getProperties());
       getDictionaries().put(d.getName(), d);
     }
 
@@ -537,15 +537,14 @@ public class BitwiseStore {
   /**
    * An LRU cache (Least Recently Used) to speed up access to recently used elements in the store.
    */
-  @SuppressWarnings("serial")
   private class FieldCache extends LinkedHashMap<String, Field> {
+    private static final long serialVersionUID = -2108100556369387698L;
 
     private FieldCache() {
       super(cacheSize_, 0.75f, true);
     }
 
     @Override
-    @SuppressWarnings("unused")
     protected boolean removeEldestEntry(Entry<String, Field> e) {
       if(size() > cacheSize_) {
         return true;

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
+ * Copyright 2007(c) Gï¿½nome Quï¿½bec. All rights reserved.
  * 
  * This file is part of GenoByte.
  * 
@@ -42,7 +42,7 @@ public @interface DictionaryDef {
    * Java class that defines the mechanics of a dictionary. Dictionary definition can be a class or a class name,
    * but not both at the same time. Therefore, the elements dictionaryClass and dictionaryClassName are mutually exclusive. 
    */
-  Class dictionaryClass() default void.class;
+  Class<?> dictionaryClass() default void.class;
 
 
   /**
