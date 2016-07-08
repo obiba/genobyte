@@ -4,7 +4,7 @@
 <!--=============================================================================================-->
 <!-- Project Information                                                                         -->
 <!--=============================================================================================-->
-    <name>Obiba Genobyte</name>
+    <name>Obiba Genobyte Core</name>
     <description>An API for storing and manipulating high throughput genotype data</description>
 
 <!--=============================================================================================-->
@@ -12,13 +12,13 @@
 <!--=============================================================================================-->
     <parent>
         <groupId>org.obiba.genobyte</groupId>
-        <artifactId>genobyte-parent</artifactId>
-        <version>1.4-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
+        <artifactId>genobyte</artifactId>
+        <version>2.0-SNAPSHOT</version>
+        <relativePath>../</relativePath>
     </parent>
 
     <groupId>org.obiba.genobyte</groupId>
-    <artifactId>genobyte</artifactId>
+    <artifactId>genobyte-core</artifactId>
 
     <dependencies>
 
