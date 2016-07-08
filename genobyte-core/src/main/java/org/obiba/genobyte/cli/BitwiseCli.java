@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.genobyte.cli;
 
@@ -41,7 +41,6 @@ import org.obiba.bitwise.query.QueryResult;
 import org.obiba.bitwise.util.StringUtil;
 import org.obiba.genobyte.GenotypingStore;
 
-
 /**
  * Command Line Interface for manipulating {@link GenotypingStore}s.
  * <p/>
@@ -53,10 +52,15 @@ import org.obiba.genobyte.GenotypingStore;
 public class BitwiseCli {
 
   PrintStream output = System.out;
+
   InputStream input = System.in;
+
   HelpCommand help = new HelpCommand();
+
   Map<String, CliCommand> commandMap = new HashMap<String, CliCommand>();
+
   Options options = new Options();
+
   Options noStoreOptions = new Options();
 
   public BitwiseCli() {
@@ -91,13 +95,15 @@ public class BitwiseCli {
   public void registerCommand(CliCommand command) {
     Option o = command.getOption();
     if(commandMap.containsKey(o.getLongOpt())) {
-      throw new IllegalArgumentException("A command with key ["+o.getLongOpt()+"] is already registered.");
+      throw new IllegalArgumentException("A command with key [" + o.getLongOpt() + "] is already registered.");
     }
     if(o.getOpt() != null) {
-      for (CliCommand c : commandMap.values()) {
+      for(CliCommand c : commandMap.values()) {
         Option commandOption = c.getOption();
         if(commandOption.getOpt() != null && commandOption.getOpt().equals(o.getOpt())) {
-          throw new IllegalArgumentException("Illegal option ["+o.getLongOpt()+"] conflicts with existing option ["+commandOption.getLongOpt()+"].");
+          throw new IllegalArgumentException(
+              "Illegal option [" + o.getLongOpt() + "] conflicts with existing option [" + commandOption.getLongOpt() +
+                  "].");
         }
       }
     }
@@ -123,7 +129,7 @@ public class BitwiseCli {
 
   /**
    * Starts the CLI shell.
-   * 
+   *
    * @throws IOException when an error occurs while reading user input.
    */
   public void execute() throws IOException {
@@ -142,7 +148,7 @@ public class BitwiseCli {
         } else {
           cl = bp.parse(options, str.split(" "));
         }
-      } catch (ParseException e) {
+      } catch(ParseException e) {
         quit = help.execute(null, context);
       }
 
@@ -153,11 +159,11 @@ public class BitwiseCli {
           Option o = commands.next();
           CliCommand c = commandMap.get(o.getLongOpt());
           if(c == null) {
-            throw new IllegalStateException("No CliCommand associated with option ["+o.getOpt()+"]");
+            throw new IllegalStateException("No CliCommand associated with option [" + o.getOpt() + "]");
           } else {
             try {
               quit = c.execute(o, context);
-            } catch (ParseException e) {
+            } catch(ParseException e) {
               quit = help.execute(null, context);
             } catch(Exception e) {
               output.println("An unexpected error occurred while executing the command: " + e.getMessage());
@@ -175,17 +181,19 @@ public class BitwiseCli {
               Query q = parser.parse(queryString);
               QueryResult qr = q.execute(context.getActiveRecordStore().getStore());
               String reference = context.addQuery(queryString, qr);
-              long end = System.currentTimeMillis(); 
+              long end = System.currentTimeMillis();
               output.println(reference + ": " + qr.count() + " results in " + (end - start) + " milliseconds.");
             }
-          } catch (org.obiba.bitwise.query.UnknownFieldException e) {
+          } catch(org.obiba.bitwise.query.UnknownFieldException e) {
             output.println(e.getMessage());
-          } catch (org.obiba.bitwise.query.ParseException e) {
-            output.println("The query ["+queryString+"] is invalid. Please refer to the query syntax for more information.");
+          } catch(org.obiba.bitwise.query.ParseException e) {
+            output.println(
+                "The query [" + queryString + "] is invalid. Please refer to the query syntax for more information.");
           } catch(Exception e) {
-            output.println("An unexpected error occurred while executing the query. The following data may be helpful to debug the problem.");
+            output.println(
+                "An unexpected error occurred while executing the query. The following data may be helpful to debug the problem.");
             e.printStackTrace(output);
-          } 
+          }
         }
       }
       if(quit) break;
@@ -195,7 +203,7 @@ public class BitwiseCli {
   public class HelpCommand implements CliCommand {
 
     private HelpFormatter hf = new HelpFormatter();
-    
+
     public boolean requiresOpenStore() {
       return false;
     }

@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.genobyte.statistic.casecontrol;
 
@@ -23,7 +23,7 @@ package org.obiba.genobyte.statistic.casecontrol;
  * <em>From Genotypes to Genes: Doubling the Sample Size</em>
  * Peter D. Sasieni<br/>
  * Biometrics, Vol. 53, No. 4. (Dec., 1997), pp. 1253-1261.)<br/>
- * 
+ *
  * <table>
  *   <tr>
  *     <td/>
@@ -58,6 +58,7 @@ package org.obiba.genobyte.statistic.casecontrol;
 final public class CaseControlGenotypeFrequency {
 
   private GenotypeFrequency caseFreq = null;
+
   private GenotypeFrequency controlFreq = null;
 
   private int asArray_[] = null;
@@ -74,7 +75,7 @@ final public class CaseControlGenotypeFrequency {
   final public int getS(int index) {
     return controlFreq.get(index);
   }
-  
+
   final public int[] getSValues() {
     return controlFreq.toArray();
   }
@@ -86,7 +87,7 @@ final public class CaseControlGenotypeFrequency {
   final public int getR(int index) {
     return caseFreq.get(index);
   }
-  
+
   final public int[] getRValues() {
     return caseFreq.toArray();
   }
@@ -100,7 +101,7 @@ final public class CaseControlGenotypeFrequency {
   }
 
   final public int[] getNValues() {
-    if (asArray_ == null) {
+    if(asArray_ == null) {
       asArray_ = new int[] { getN(0), getN(1), getN(2) };
     }
     return asArray_;

@@ -4,7 +4,7 @@ import org.obiba.bitwise.query.QueryResult;
 import org.obiba.genobyte.inconsistency.MendelianRecordTrioProvider;
 
 /**
- * An implementation of {@link MendelianRecordTrioProvider} that delegates to another 
+ * An implementation of {@link MendelianRecordTrioProvider} that delegates to another
  * implementation and applies a mask to the resulting vectors.
  */
 public class MaskedRecordTrioProvider implements MendelianRecordTrioProvider {

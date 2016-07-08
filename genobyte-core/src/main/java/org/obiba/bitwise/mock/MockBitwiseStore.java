@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.bitwise.mock;
 
@@ -38,9 +38,12 @@ import org.obiba.genobyte.model.SnpCall;
 
 public class MockBitwiseStore extends BitwiseStore {
   public static final int DEFAULT_SIZE = 3;
+
   private DefaultDictionaryFactory ddf_ = new DefaultDictionaryFactory();
+
   private Map<String, Dictionary> dictionaries_ = new HashMap<String, Dictionary>();
-  Map<String,VolatileField> dummyStore_ = new HashMap<String,VolatileField>();
+
+  Map<String, VolatileField> dummyStore_ = new HashMap<String, VolatileField>();
 
   public MockBitwiseStore(String name) {
     this(name, DEFAULT_SIZE);
@@ -56,7 +59,7 @@ public class MockBitwiseStore extends BitwiseStore {
   public Properties getConfigurationProperties() {
     return new Properties();
   }
-  
+
   public DaoKey getDaoKey() {
     return super.getDaoKey();
   }
@@ -64,16 +67,16 @@ public class MockBitwiseStore extends BitwiseStore {
   @Override
   public void ensureCapacity(int capacity) {
     super.ensureCapacity(capacity);
-    for (VolatileField f : dummyStore_.values()) {
+    for(VolatileField f : dummyStore_.values()) {
       f.grow(capacity);
     }
   }
-  
+
   public void setSize(int size) {
     this.ensureCapacity(size);
     Dictionary<Integer> integerDict = ddf_.getInstance(Integer.class, "integerdict");
     VolatileField f = dummyStore_.get("id");
-    for (int i=0; i < getCapacity(); i++) {
+    for(int i = 0; i < getCapacity(); i++) {
       f.setValue(i, integerDict.lookup(i));
       getDto().getDeleted().clear(i);
     }
@@ -82,11 +85,11 @@ public class MockBitwiseStore extends BitwiseStore {
   private void createDummyStore() {
     Dictionary<Integer> integerDict = ddf_.getInstance(Integer.class, "integerdict");
     Dictionary<SnpCall> callDict = ddf_.getInstance(SnpCall.class, "callDict");
-    
+
     // Filling dummy store with bogus records
     dummyStore_.put("id", new VolatileField("id", this, integerDict));
     VolatileField f = dummyStore_.get("id");
-    for (int i=0; i < getCapacity(); i++) {
+    for(int i = 0; i < getCapacity(); i++) {
       f.setValue(i, integerDict.lookup(i));
       getDto().getDeleted().clear(i);
     }
@@ -109,7 +112,7 @@ public class MockBitwiseStore extends BitwiseStore {
     }
     return super.createField(name);
   }
-  
+
   /**
    * Allows to create any kind of <tt>Field</tt> by providing a data type.
    * @param name the name of the field to be created
@@ -128,12 +131,12 @@ public class MockBitwiseStore extends BitwiseStore {
     Field mf = new MockField(this, f);
     return mf;
   }
-  
+
   public Field createField(String name, Dictionary dictionary) {
     dummyStore_.put(name, new VolatileField(name, this, dictionary));
     return getField(name);
   }
-  
+
   @Override
   public StoreSchema getSchema() {
     StoreSchema ss = new StoreSchema();
@@ -146,11 +149,11 @@ public class MockBitwiseStore extends BitwiseStore {
     }
     return ss;
   }
-  
+
   @Override
   public void startTransaction() {
   }
-  
+
   @Override
   public void endTransaction() {
   }

@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.genobyte.report;
 
@@ -35,7 +35,6 @@ import org.obiba.genobyte.model.DefaultGenotypingField;
 import org.obiba.genobyte.model.SnpAllele;
 import org.obiba.genobyte.model.SnpCall;
 
-
 /**
  * Base class for "Ped file" report formats. The format is described here http://pngu.mgh.harvard.edu/~purcell/plink/data.shtml.
  * <p/>
@@ -54,7 +53,7 @@ public abstract class AbstractPedFileReport implements GenotypeReport {
 
     /** When true, the column must absolutely be linked to a field in the bitwise store, otherwise the report cannot be generated */
     private boolean linkRequired;
-    
+
     /** When the value is missing for the column, this value will be used instead */
     private String missingValueToken = "0";
 
@@ -74,14 +73,14 @@ public abstract class AbstractPedFileReport implements GenotypeReport {
     public boolean isLinkRequired() {
       return linkRequired;
     }
-    
+
     public String getMissingValueToken() {
       return missingValueToken;
     }
   }
 
   private Map<Column, String> fieldNameMap_ = new HashMap<Column, String>();
-  
+
   public int getNumberOfOutputFiles() {
     return 1;
   }
@@ -112,41 +111,43 @@ public abstract class AbstractPedFileReport implements GenotypeReport {
     fieldNameMap_.put(c, fieldName);
   }
 
-  public void generateReport(GenotypingStore gs, QueryResult sampleMask, QueryResult assayMask, File ... outputFiles) {
-    
+  public void generateReport(GenotypingStore gs, QueryResult sampleMask, QueryResult assayMask, File... outputFiles) {
+
     if(outputFiles == null || outputFiles.length != 1) {
       return;
     }
-    
-    for (Column column : Column.values()) {
+
+    for(Column column : Column.values()) {
       if(column.isLinkRequired() == true && this.fieldNameMap_.get(column) == null) {
-        throw new IllegalStateException("The report column ["+column+"] must be linked to a field name. Make sure the method linkColumnToField is called when setting up the report object.");
+        throw new IllegalStateException("The report column [" + column +
+            "] must be linked to a field name. Make sure the method linkColumnToField is called when setting up the report object.");
       }
     }
-    
+
     PrintStream ps;
     try {
       ps = new PrintStream(new FileOutputStream(outputFiles[0]));
-    } catch (FileNotFoundException e) {
+    } catch(FileNotFoundException e) {
       throw new RuntimeException(e);
     }
 
     GenotypingRecordStore assays = gs.getAssayRecordStore();
 
     SnpAllele[][] assayAlleles = new SnpAllele[gs.getAssayCount()][];
-    for (int i = 0; i < assayAlleles.length; i++) {
+    for(int i = 0; i < assayAlleles.length; i++) {
       assayAlleles[i] = getAssayAlleles(assays, i);
     }
 
     GenotypingRecordStore samples = gs.getSampleRecordStore();
     StringBuilder sb = new StringBuilder();
-    for(int s = sampleMask.next(0); s != -1; s = sampleMask.next(s+1)) {
-      Field sampleCalls = samples.getGenotypingField(DefaultGenotypingField.CALLS.getName(), samples.getRecordManager().getKey(s));
+    for(int s = sampleMask.next(0); s != -1; s = sampleMask.next(s + 1)) {
+      Field sampleCalls = samples
+          .getGenotypingField(DefaultGenotypingField.CALLS.getName(), samples.getRecordManager().getKey(s));
       if(sampleCalls == null) {
         continue;
       }
 
-      for (Column column : Column.values()) {
+      for(Column column : Column.values()) {
         Object value = getColumnValue(column, gs.getSampleRecordStore().getStore(), s);
         sb.append(value).append(" ");
       }
@@ -165,20 +166,23 @@ public abstract class AbstractPedFileReport implements GenotypeReport {
     ps.close();
   }
 
-  /** 
+  /**
    * Converts the column value into the appropriate format/value for the PedFile report.
    * For example, the Gender column's allowed values are "1", "2", "Unknown" and "0".
    */
   protected abstract Object convertColumnValue(Column c, Object value);
 
   protected abstract SnpAllele[] getAssayAlleles(GenotypingRecordStore assays, int assayIndex);
-  
+
   private String convertCall(SnpCall call, SnpAllele[] alleles) {
     if(call != null) {
       switch(call) {
-        case A: return alleles[0].toString() + " " + alleles[0].toString();
-        case B: return alleles[1].toString() + " " + alleles[1].toString();
-        case H: return alleles[0].toString() + " " + alleles[1].toString();
+        case A:
+          return alleles[0].toString() + " " + alleles[0].toString();
+        case B:
+          return alleles[1].toString() + " " + alleles[1].toString();
+        case H:
+          return alleles[0].toString() + " " + alleles[1].toString();
         default:
       }
     }
@@ -187,7 +191,7 @@ public abstract class AbstractPedFileReport implements GenotypeReport {
 
   /**
    * Utility method to get a field's value for the specified record index
-   *  
+   *
    * @param c the column for which to get the value
    * @param bs the store from which to get the linked field (if any)
    * @param index the record's index
@@ -204,7 +208,9 @@ public abstract class AbstractPedFileReport implements GenotypeReport {
           try {
             value = convertColumnValue(c, value);
           } catch(RuntimeException e) {
-            System.out.println("Cannot convert value ["+value+"] of type ["+value.getClass().getName()+"] for column ["+c+"]");
+            System.out.println(
+                "Cannot convert value [" + value + "] of type [" + value.getClass().getName() + "] for column [" + c +
+                    "]");
             throw e;
           }
         }

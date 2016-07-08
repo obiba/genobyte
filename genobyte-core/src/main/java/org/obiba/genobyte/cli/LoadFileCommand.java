@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.genobyte.cli;
 
@@ -27,7 +27,6 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.ParseException;
 import org.obiba.bitwise.util.WildcardFileFilter;
-
 
 /**
  * Helps create commands that require loading a single file from disk.
@@ -60,7 +59,8 @@ public class LoadFileCommand implements CliCommand {
   public boolean execute(Option opt, CliContext context) throws ParseException {
     String args[] = opt.getValues();
     if(args == null || args.length != 2) {
-      context.getOutput().println("Missing argument to load command. Please specify the type of file and the filename to load.");
+      context.getOutput()
+          .println("Missing argument to load command. Please specify the type of file and the filename to load.");
       return false;
     }
     String type = args[0];
@@ -68,45 +68,47 @@ public class LoadFileCommand implements CliCommand {
 
     FileTypeLoader l = null;
     for(FileTypeLoader loader : loaders_) {
-      if(loader.getFileType().equalsIgnoreCase(type) || (type.length() == 1 && loader.getShortFileType() == type.charAt(0))) {
+      if(loader.getFileType().equalsIgnoreCase(type) ||
+          (type.length() == 1 && loader.getShortFileType() == type.charAt(0))) {
         l = loader;
         break;
       }
     }
-    
+
     if(l == null) {
-      context.getOutput().println("There is no loader registered for the file type ["+type+"] specified.");
+      context.getOutput().println("There is no loader registered for the file type [" + type + "] specified.");
       return false;
     }
-    
+
     if(l.requiresOpenStore() && context.getStore() == null) {
-      context.getOutput().println("Open a store before loading a file of type ["+l.getFileType()+"]");
+      context.getOutput().println("Open a store before loading a file of type [" + l.getFileType() + "]");
       return false;
     }
 
     File files[] = WildcardFileFilter.listFiles(new File("."), filename);
     if(files == null || files.length == 0) {
-      context.getOutput().println("No match for filename ["+filename+"].");
+      context.getOutput().println("No match for filename [" + filename + "].");
       return false;
     }
-    
-    for (int i = 0; i < files.length; i++) {
+
+    for(int i = 0; i < files.length; i++) {
       File f = files[i];
       if(f.canRead() == false) {
-        context.getOutput().println("The file ["+f.getName()+"] cannot be read.");
+        context.getOutput().println("The file [" + f.getName() + "] cannot be read.");
         return false;
       }
     }
 
     if(files.length > 1 && l.allowsMultipleFile() == false) {
-      context.getOutput().println("Cannot load multiple files of type ["+l.getFileType()+"]. Please specify only one file to load.");
+      context.getOutput().println(
+          "Cannot load multiple files of type [" + l.getFileType() + "]. Please specify only one file to load.");
       return false;
     }
 
     if(files.length > 1) {
-      context.getOutput().println("Loading files "+Arrays.toString(files));
+      context.getOutput().println("Loading files " + Arrays.toString(files));
     } else {
-      context.getOutput().println("Loading file ["+files[0].getName()+"]");
+      context.getOutput().println("Loading file [" + files[0].getName() + "]");
     }
     l.loadFiles(context, files);
 
@@ -119,23 +121,24 @@ public class LoadFileCommand implements CliCommand {
       if(sb.length() > 0) sb.append(", ");
       sb.append(loader.getFileType()).append(" (").append(loader.getShortFileType()).append(")");
     }
-    return OptionBuilder.withDescription("loads a file. Available types are ["+sb.toString()+"]").withLongOpt("load").hasArgs(2).withArgName("type> <file").create('l');
+    return OptionBuilder.withDescription("loads a file. Available types are [" + sb.toString() + "]")
+        .withLongOpt("load").hasArgs(2).withArgName("type> <file").create('l');
   }
- 
+
   /**
    * Adds an instance of {@link FileTypeLoader} that will may load a certain file type.
-   * 
+   *
    * @param loader the instance to be registered
    */
   public void addFileTypeLoader(FileTypeLoader loader) {
     loaders_.add(loader);
   }
-  
+
   /**
    * Returns true is the command has an instance of {@link FileTypeLoader} that uses the specified short name as its file type.
    * <p/>
    * If any registered loader's method {@link FileTypeLoader#getShortFileType()} returns <tt>s</tt>, this method returns true. Otherwise, false is returned. 
-   * 
+   *
    * @param s the short name to check.
    * @return true if a registered loader instance uses the <tt>s</tt> as its short name. 
    */
@@ -168,32 +171,32 @@ public class LoadFileCommand implements CliCommand {
      * <p/>
      * The character returned by this method will allow the user to invoke the loader
      * in exactly the same way the longer version would.
-     * 
+     *
      * @return the short version of the file type name
      */
     public char getShortFileType();
 
     /**
      * Executes the actual loading of a file.
-     * 
+     *
      * @param context the context of the CLI
      * @param files the file(s) to be loaded
      */
-    public void loadFiles(CliContext context, File ... files);
+    public void loadFiles(CliContext context, File... files);
 
     /**
      * Returns true if the loader requires that a store is opened before processing the file(s).
      * @return true if a store is required
      */
     public boolean requiresOpenStore();
-    
+
     /**
      * Returns true if the loader is able to process multiple files of the same type in one run.
-     * 
+     *
      * @return true if the loader may load multiple files in one execution.
      */
     public boolean allowsMultipleFile();
 
   }
-  
+
 }

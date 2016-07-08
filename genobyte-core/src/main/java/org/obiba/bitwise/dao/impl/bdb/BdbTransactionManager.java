@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.bitwise.dao.impl.bdb;
 
@@ -22,7 +22,6 @@ import java.util.Properties;
 
 import org.obiba.bitwise.dao.DaoKey;
 import org.obiba.bitwise.dao.KeyedDaoManager;
-
 
 import com.ibatis.dao.client.DaoTransaction;
 import com.ibatis.dao.engine.transaction.DaoTransactionManager;
@@ -34,7 +33,9 @@ import com.sleepycat.je.TransactionConfig;
 public class BdbTransactionManager implements DaoTransactionManager {
 
   private DaoKey key_ = null;
+
   private boolean isTransactional_ = false;
+
   private TransactionConfig txnCfg_ = null;
 
   public BdbTransactionManager() {
@@ -43,7 +44,7 @@ public class BdbTransactionManager implements DaoTransactionManager {
 
   public void configure(Properties props) {
     try {
-      key_ = new DaoKey((String)props.get(KeyedDaoManager.DAO_MANAGER_KEY));
+      key_ = new DaoKey((String) props.get(KeyedDaoManager.DAO_MANAGER_KEY));
       BdbContext.createInstance(key_, props);
       isTransactional_ = BdbContext.getInstance(key_).getEnvironment().getConfig().getTransactional();
       if(isTransactional_) {
@@ -52,7 +53,7 @@ public class BdbTransactionManager implements DaoTransactionManager {
         txnCfg_.setSync(false);
         txnCfg_.setWriteNoSync(true);
       }
-    } catch (DatabaseException e) {
+    } catch(DatabaseException e) {
       throw new RuntimeException(e);
     }
   }
@@ -65,7 +66,7 @@ public class BdbTransactionManager implements DaoTransactionManager {
         CurrentTransaction ct = CurrentTransaction.getInstance(bdbEnv.getEnvironment());
         Transaction t = ct.beginTransaction(txnCfg_);
         return new DaoTransactionBdbImpl(ct);
-      } catch (DatabaseException e) {
+      } catch(DatabaseException e) {
         throw new RuntimeException(e);
       }
     }
@@ -79,7 +80,7 @@ public class BdbTransactionManager implements DaoTransactionManager {
       try {
         CurrentTransaction ct = CurrentTransaction.getInstance(bdbEnv.getEnvironment());
         ct.commitTransaction();
-      } catch (DatabaseException e) {
+      } catch(DatabaseException e) {
         throw new RuntimeException(e);
       } finally {
       }
@@ -92,7 +93,7 @@ public class BdbTransactionManager implements DaoTransactionManager {
       try {
         CurrentTransaction ct = CurrentTransaction.getInstance(bdbEnv.getEnvironment());
         ct.abortTransaction();
-      } catch (DatabaseException e) {
+      } catch(DatabaseException e) {
         throw new RuntimeException(e);
       } finally {
       }
@@ -104,12 +105,12 @@ public class BdbTransactionManager implements DaoTransactionManager {
     // This is due to a bug in JE: http://forums.oracle.com/forums/thread.jspa?threadID=553351&tstart=0
     // This prevents the GC from collecting the CurrentTransaction instance.
     private CurrentTransaction tr_ = null;
+
     DaoTransactionBdbImpl(CurrentTransaction t) {
       tr_ = t;
     }
   }
 
-  static private class DaoTransactionNotTransactionalImpl implements DaoTransaction {
-  }
+  static private class DaoTransactionNotTransactionalImpl implements DaoTransaction {}
 
 }

@@ -9,7 +9,7 @@ import org.obiba.bitwise.schema.FieldMetaData;
 import org.obiba.bitwise.schema.StoreSchema;
 
 /**
- * A unit testing fixture class that helps create tests on actual BitwiseStore instances. 
+ * A unit testing fixture class that helps create tests on actual BitwiseStore instances.
  * This class does not mock the underlying store, but helps create a store in a more dynamic fashion.
  */
 public class BitwiseStoreTestingHelper extends BitwiseStore {
@@ -40,7 +40,7 @@ public class BitwiseStoreTestingHelper extends BitwiseStore {
   public Dictionary getDictionary(String name) {
     return dictionaries_.get(name);
   }
-	  
+
   public void addDictionary(Dictionary d) {
     dictionaries_.put(d.getName(), d);
   }

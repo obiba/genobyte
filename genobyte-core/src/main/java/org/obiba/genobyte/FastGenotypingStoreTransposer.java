@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) G�nome Qu�bec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.genobyte;
 
@@ -45,13 +45,19 @@ public class FastGenotypingStoreTransposer<K, TK> implements StoreTransposer {
   private final Logger log = LoggerFactory.getLogger(FastGenotypingStoreTransposer.class);
 
   private final ThreadGroup transposerThreadGroup;
+
   private final int corePoolSize;
+
   private final int maximumPoolSize;
+
   private final long keepAliveTime;
+
   private final TimeUnit unit;
+
   private TransposeProgressIndicator transposeProgressIndicator = null;
 
   private GenotypingRecordStore<K, ?, TK> sourceStore;
+
   /**
    * Flag that indicates whether or not to delete the destination store before transposing. It has been shown that
    * transpo.
@@ -62,7 +68,8 @@ public class FastGenotypingStoreTransposer<K, TK> implements StoreTransposer {
     this(source, 1, 1, 1, TimeUnit.MILLISECONDS);
   }
 
-  public FastGenotypingStoreTransposer(GenotypingRecordStore<K, ?, TK> source, int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit) {
+  public FastGenotypingStoreTransposer(GenotypingRecordStore<K, ?, TK> source, int corePoolSize, int maximumPoolSize,
+      long keepAliveTime, TimeUnit unit) {
     this.sourceStore = source;
     this.corePoolSize = corePoolSize;
     this.maximumPoolSize = maximumPoolSize;
@@ -90,27 +97,28 @@ public class FastGenotypingStoreTransposer<K, TK> implements StoreTransposer {
     BitwiseStore bitwiseSource = sourceStore.getStore();
 
     BlockingQueue<Runnable> fieldTransposerQueue = new LinkedBlockingQueue<Runnable>();
-    ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, unit, fieldTransposerQueue,
-        new FastGenotypingStoreTransposerThreadFactory());
+    ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, unit,
+        fieldTransposerQueue, new FastGenotypingStoreTransposerThreadFactory());
 
-    if (deleteDestinationStore) {
+    if(deleteDestinationStore) {
       deleteDestinationStore(bitwiseSource);
     }
 
     List<GenotypingField> genotypingFieldsToTranspose = new ArrayList<GenotypingField>();
-    for (GenotypingField field : sourceStore.genotypingFields_.values()) {
-      if (field.isTransposed()) {
+    for(GenotypingField field : sourceStore.genotypingFields_.values()) {
+      if(field.isTransposed()) {
         genotypingFieldsToTranspose.add(field);
       }
     }
 
-    if (transposeProgressIndicator != null) {
-      transposeProgressIndicator.setTotalItemsToTranspose((long) genotypingFieldsToTranspose.size() * (long) sourceStore.getTransposedStore().getStore().getSize());
+    if(transposeProgressIndicator != null) {
+      transposeProgressIndicator.setTotalItemsToTranspose(
+          (long) genotypingFieldsToTranspose.size() * (long) sourceStore.getTransposedStore().getStore().getSize());
       transposeProgressIndicator.setProcessedItems(0);
     }
     long processedFields = 0;
-    for (GenotypingField field : genotypingFieldsToTranspose) {
-      if (log.isDebugEnabled()) {
+    for(GenotypingField field : genotypingFieldsToTranspose) {
+      if(log.isDebugEnabled()) {
         log.debug("Transposing field: {}...started", field.getName());
         log.debug("Memory used begining of field: {}", (PrintGC.printGC() / 1024l / 1024l));
       }
@@ -120,7 +128,7 @@ public class FastGenotypingStoreTransposer<K, TK> implements StoreTransposer {
       Field[] sourceFields = new Field[sourceStore.getStore().getSize()];
       log.debug("Loading source keys ...");
       FieldValueIterator<K> fvi = sourceStore.getRecordManager().keys();
-      while (fvi.hasNext()) {
+      while(fvi.hasNext()) {
         FieldValueIterator<K>.FieldValue fv = fvi.next();
 
         K key = fv.getValue();
@@ -134,37 +142,37 @@ public class FastGenotypingStoreTransposer<K, TK> implements StoreTransposer {
       log.debug("Loading source keys ... done");
       FieldValueIterator<TK> tfvi = sourceStore.getTransposedStore().getRecordManager().keys();
       long itemsToProcess = 0;
-      while (tfvi.hasNext()) {
+      while(tfvi.hasNext()) {
         FieldValueIterator<TK>.FieldValue fv = tfvi.next();
         Field destField = sourceStore.getTransposedStore().getGenotypingField(field.getName(), fv.getValue(), true);
-        FastGenotypingFieldValueTransposer<K> fgfvt = new FastGenotypingFieldValueTransposer<K>(destField, fv.getIndex(), sourceIndexes, sourceFields,
-            sourceKeys);
+        FastGenotypingFieldValueTransposer<K> fgfvt = new FastGenotypingFieldValueTransposer<K>(destField,
+            fv.getIndex(), sourceIndexes, sourceFields, sourceKeys);
         threadPoolExecutor.execute(fgfvt);
         itemsToProcess++;
       }
       log.debug("Field [{}] - Items that will be process : {}", field.getName(), itemsToProcess);
-      log.debug("Current state of threadPool - Queue size: [{}] - Active Count: [{}]", threadPoolExecutor.getQueue().size(),
-          threadPoolExecutor.getActiveCount());
+      log.debug("Current state of threadPool - Queue size: [{}] - Active Count: [{}]",
+          threadPoolExecutor.getQueue().size(), threadPoolExecutor.getActiveCount());
 
-      while (threadPoolExecutor.getQueue().size() != 0 || threadPoolExecutor.getActiveCount() != 0) {
+      while(threadPoolExecutor.getQueue().size() != 0 || threadPoolExecutor.getActiveCount() != 0) {
         try {
           Thread.sleep(10000);
-          if (transposeProgressIndicator != null) {
-            transposeProgressIndicator.setProcessedItems((itemsToProcess - threadPoolExecutor.getQueue().size())
-                + (processedFields * sourceStore.getTransposedStore().getStore().getSize()));
+          if(transposeProgressIndicator != null) {
+            transposeProgressIndicator.setProcessedItems((itemsToProcess - threadPoolExecutor.getQueue().size()) +
+                (processedFields * sourceStore.getTransposedStore().getStore().getSize()));
           }
           // log.debug("Current state of threadPool - Queue size: [{}] - Active Count: [{}]",
           // threadPoolExecutor.getQueue().size(), threadPoolExecutor.getActiveCount());
-        } catch (InterruptedException e) {
+        } catch(InterruptedException e) {
           log.error("Store Transposer was interrupted", e);
         }
       }
-      if (transposeProgressIndicator != null) {
-        transposeProgressIndicator.setProcessedItems(itemsToProcess - threadPoolExecutor.getQueue().size()
-            + (processedFields * sourceStore.getTransposedStore().getStore().getSize()));
+      if(transposeProgressIndicator != null) {
+        transposeProgressIndicator.setProcessedItems(itemsToProcess - threadPoolExecutor.getQueue().size() +
+            (processedFields * sourceStore.getTransposedStore().getStore().getSize()));
       }
 
-      if (log.isDebugEnabled()) {
+      if(log.isDebugEnabled()) {
         log.debug("Memory used end of field: {}", (PrintGC.printGC() / 1024l / 1024l));
       }
 
@@ -195,11 +203,12 @@ public class FastGenotypingStoreTransposer<K, TK> implements StoreTransposer {
 
         Map<String, VolatileField> copy = new HashMap<String, VolatileField>();
         StoreSchema ss = bitwiseSource.getSchema();
-        for (FieldMetaData fmd : ss.getFields()) {
-          if (fmd.isTemplate() == false) {
+        for(FieldMetaData fmd : ss.getFields()) {
+          if(fmd.isTemplate() == false) {
             log.debug("Copying field [{}]", fmd.getName());
             Field sourceField = bitwiseSource.getField(fmd.getName());
-            VolatileField destinationField = new VolatileField(fmd.getName(), bitwiseSource, sourceField.getDictionary());
+            VolatileField destinationField = new VolatileField(fmd.getName(), bitwiseSource,
+                sourceField.getDictionary());
             copy.put(fmd.getName(), destinationField);
             destinationField.copyValues(sourceField);
           }
@@ -209,23 +218,24 @@ public class FastGenotypingStoreTransposer<K, TK> implements StoreTransposer {
         BitVector deleted = bitwiseSource.getDeleted();
         try {
           bitwiseSource.endTransaction();
-        } catch (RuntimeException e) {
+        } catch(RuntimeException e) {
           // ignore
         } finally {
           try {
             bitwiseSource.close();
-          } catch (RuntimeException e) {
+          } catch(RuntimeException e) {
             // ignore
           }
         }
         BitwiseDiskUtil.deleteStore(sourceName);
 
         log.debug("Re-creating source store [{}]", sourceName);
-        BitwiseStore bitwiseDestination = BitwiseStoreUtil.getInstance().create(sourceName, ss, bitwiseSource.getCapacity());
+        BitwiseStore bitwiseDestination = BitwiseStoreUtil.getInstance()
+            .create(sourceName, ss, bitwiseSource.getCapacity());
         bitwiseDestination.undeleteAll();
         bitwiseDestination.delete(deleted);
 
-        for (VolatileField copied : copy.values()) {
+        for(VolatileField copied : copy.values()) {
           log.debug("Copying field [{}]", copied.getName());
           Field sourceField = bitwiseDestination.getField(copied.getName());
           sourceField.copyValues(copied);

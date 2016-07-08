@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.bitwise.util;
 
@@ -23,7 +23,6 @@ import org.obiba.bitwise.Dictionary;
 import org.obiba.bitwise.Field;
 import org.obiba.bitwise.FieldValueIterator;
 import org.obiba.bitwise.query.QueryResult;
-
 
 /**
  * Offers utility methods to manipulate fields that store integers.
@@ -45,17 +44,15 @@ public class IntegerFieldHelper {
     }
   }
 
-
   /**
    * Adds 1 to a field value for all records in a {@link QueryResult}.
-   * 
+   *
    * @param f the integer field that must be incremented.
    * @param indexes the records which field must be incremented.
    */
   static public void increment(Field f, QueryResult indexes) {
     add(f, indexes, 1);
   }
-
 
   /**
    * Adds an integer value to a field value for all records in a {@link QueryResult}.
@@ -66,15 +63,14 @@ public class IntegerFieldHelper {
   static public void add(Field f, QueryResult indexes, int value) {
     if(f == null) return;
     Dictionary<Integer> d = f.getDictionary();
-    for(int i = indexes.next(0); i != -1; i = indexes.next(i+1)) {
+    for(int i = indexes.next(0); i != -1; i = indexes.next(i + 1)) {
       Integer v = d.reverseLookup(f.getValue(i));
       if(v == null) {
         v = 0;
       }
-      f.setValue(i, d.lookup(v+value));
+      f.setValue(i, d.lookup(v + value));
     }
   }
-
 
   /**
    * Adds an integer value to a field for one record.
@@ -89,9 +85,8 @@ public class IntegerFieldHelper {
     if(v == null) {
       v = 0;
     }
-    f.setValue(index, d.lookup(v+value));
+    f.setValue(index, d.lookup(v + value));
   }
-
 
   /**
    * Computes the sum of a field value for all records in a {@link QueryResult}. Result can be no higher than <tt>Long.MAX_VALUE</tt>.
@@ -104,13 +99,12 @@ public class IntegerFieldHelper {
     if(f == null) return 0;
     Dictionary<Integer> d = f.getDictionary();
     long sum = 0;
-    for(int i = indexes.next(0); i != -1; i = indexes.next(i+1)) {
+    for(int i = indexes.next(0); i != -1; i = indexes.next(i + 1)) {
       Integer v = d.reverseLookup(f.getValue(i));
       if(v != null) sum += v;
     }
     return sum;
   }
-
 
   /**
    * Computes the sum of a field value for all records. Result can be no higher than <tt>Long.MAX_VALUE</tt>.

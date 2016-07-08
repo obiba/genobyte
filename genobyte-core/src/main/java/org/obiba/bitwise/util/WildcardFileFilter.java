@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.bitwise.util;
 
@@ -29,9 +29,9 @@ import java.util.regex.Pattern;
 /**
  * Utility class to decode a filename pattern into an array of matching files.
  * <p/>
- * This class may be used to find files within a directory by using a filename pattern "à la" DOS and Unix.
+ * This class may be used to find files within a directory by using a filename pattern "ï¿½ la" DOS and Unix.
  * An example pattern is "*.*" which would result in all files that contain a "dot" within its name. To handle
- * directory names within a pattern (such as "data/2007??/*.csv"), the static method {@link WildcardFileFilter#listFiles(File, String)} 
+ * directory names within a pattern (such as "data/2007??/*.csv"), the static method {@link WildcardFileFilter#listFiles(File, String)}
  * may be used to call the filter recursively.
  */
 public class WildcardFileFilter implements FileFilter {
@@ -43,17 +43,16 @@ public class WildcardFileFilter implements FileFilter {
     String regex = replaceWildcards(filter);
     this.pattern = Pattern.compile(regex);
   }
-  
+
   public boolean accept(File f) {
     // Filter out "dot files" (files that start with a "."), but not directories
     // Accept (all directories OR files that don't start with ".") AND that match the specified pattern
     return (f.isDirectory() || f.getName().startsWith(".") == false) && pattern.matcher(f.getName()).matches();
   }
 
-  
   /**
    * Calls the WildcardFileFilter recursively to handle directories within the filename pattern.
-   * 
+   *
    * @param cwd the root of the recursive scan
    * @param filter the pattern
    * @return an array of matching File instances
@@ -62,7 +61,7 @@ public class WildcardFileFilter implements FileFilter {
     int sep = getIndexOfSeparator(filter);
     if(sep != -1) {
       Set<File> result = new TreeSet<File>();
-      
+
       int absolutePathSep = getAbsolutePathNextIndex(filter);
       if(absolutePathSep != -1) {
         // It's an absolute path...
@@ -72,7 +71,7 @@ public class WildcardFileFilter implements FileFilter {
       }
 
       String dirPattern = filter.substring(0, sep);
-      String subFilter = filter.substring(sep+1, filter.length());
+      String subFilter = filter.substring(sep + 1, filter.length());
 
       if(dirPattern.equals(".") || dirPattern.equals("..")) {
         try {
@@ -82,13 +81,13 @@ public class WildcardFileFilter implements FileFilter {
           if(subFiles != null && subFiles.length > 0) {
             result.addAll(Arrays.asList(subFiles));
           }
-        } catch (IOException e) {
+        } catch(IOException e) {
           throw new RuntimeException(e);
         }
       } else {
         WildcardFileFilter wff = new WildcardFileFilter(dirPattern);
         File[] subDirs = cwd.listFiles(wff);
-        for (File subdir : subDirs) {
+        for(File subdir : subDirs) {
           File[] subFiles = listFiles(subdir, subFilter);
           if(subFiles != null && subFiles.length > 0) {
             result.addAll(Arrays.asList(subFiles));
@@ -101,8 +100,7 @@ public class WildcardFileFilter implements FileFilter {
       return cwd.listFiles(fileFilter);
     }
   }
-  
-  
+
   /**
    * Finds index of next directory separator. This method aims specifically at supporting the "/" character
    * as a directory separator under Windows.
@@ -111,50 +109,45 @@ public class WildcardFileFilter implements FileFilter {
    */
   private static int getIndexOfSeparator(String filter) {
     int sep = filter.indexOf(File.separatorChar);
-    
-    if (System.getProperty("os.name").contains("Windows")) {
+
+    if(System.getProperty("os.name").contains("Windows")) {
       int slashSep = filter.indexOf("/");
       //If there is a slash separator occuring before an os-relative separator
-      if ((slashSep < sep) || (slashSep != -1 && sep == -1)) {
+      if((slashSep < sep) || (slashSep != -1 && sep == -1)) {
         sep = slashSep;
       }
     }
     return sep;
   }
-  
-  
+
   /**
    * Finds index of the first character following the absolute path.
    * @param path the path in which to find index
    * @return index of the first character, or -1 if the path is not an absolute path.
    */
   private static int getAbsolutePathNextIndex(String path) {
-    if (System.getProperty("os.name").contains("Windows")) {
+    if(System.getProperty("os.name").contains("Windows")) {
       //In Windows, the path is absolute when the drive separation character ":" is used in the path.
       int driveSep = path.indexOf(":");
-      if (driveSep != -1) {
-        return driveSep+2;
-      }
-      else {
+      if(driveSep != -1) {
+        return driveSep + 2;
+      } else {
         return -1;
       }
-    }
-    else {
+    } else {
       //In *nix, we know the path is absolute when the directory separator is put at the beginning of the path.
       int sep = getIndexOfSeparator(path);
-      if (sep == 0) {
-        return sep+1;
-      }
-      else {
+      if(sep == 0) {
+        return sep + 1;
+      } else {
         return -1;
       }
     }
   }
-  
 
   /**
    * Converts a DOS/Unix filename pattern into a Java regular expression
-   * 
+   *
    * @param wild the pattern to convert
    * @return a Java regex equivalent to the filename pattern
    */
@@ -163,15 +156,11 @@ public class WildcardFileFilter implements FileFilter {
 
     char[] chars = wild.toCharArray();
 
-    for (int i = 0; i < chars.length; ++i) {
-      if (chars[i] == '*')
-        buffer.append(".*");
-      else if (chars[i] == '?')
-        buffer.append(".");
-      else if ("+()^$.{}[]|\\".indexOf(chars[i]) != -1)
-        buffer.append('\\').append(chars[i]);
-      else
-        buffer.append(chars[i]);
+    for(int i = 0; i < chars.length; ++i) {
+      if(chars[i] == '*') buffer.append(".*");
+      else if(chars[i] == '?') buffer.append(".");
+      else if("+()^$.{}[]|\\".indexOf(chars[i]) != -1) buffer.append('\\').append(chars[i]);
+      else buffer.append(chars[i]);
     }
 
     return buffer.toString();

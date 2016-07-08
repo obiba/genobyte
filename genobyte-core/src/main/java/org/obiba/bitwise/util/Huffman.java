@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.bitwise.util;
 
@@ -31,7 +31,6 @@ import java.util.TreeSet;
 
 import org.obiba.bitwise.BitVector;
 
-
 /**
  * Implementation of an Huffman encoder.
  * <br/>
@@ -46,8 +45,8 @@ public class Huffman implements Serializable {
   private Node root_ = null;
 
   transient private BitVector[] codes_ = new BitVector[Character.MAX_VALUE];
-  transient private BitVector endCode_ = null;
 
+  transient private BitVector endCode_ = null;
 
   /**
    * Builds an Huffman codec instance with the specified file as a seed. File is expected to have
@@ -58,13 +57,11 @@ public class Huffman implements Serializable {
     seed(new FileLineIterator(file));
   }
 
-
-  public Huffman(List<String> seed) { 
+  public Huffman(List<String> seed) {
     super();
     seed(seed.iterator());
   }
 
-  
   public Huffman(String seed) {
     this(Collections.singletonList(seed));
   }
@@ -81,7 +78,7 @@ public class Huffman implements Serializable {
   @Override
   public boolean equals(Object obj) {
     if(obj instanceof Huffman) {
-      Huffman h = (Huffman)obj;
+      Huffman h = (Huffman) obj;
       return Arrays.equals(codes_, h.codes_) && endCode_.equals(h.endCode_);
     }
     return super.equals(obj);
@@ -96,7 +93,6 @@ public class Huffman implements Serializable {
     BitVector v = this.encode(key, true);
     return v;
   }
-
 
   /**
    * Encodes the specified string into a series of unique codes.
@@ -120,12 +116,11 @@ public class Huffman implements Serializable {
       append(v, codePart);
       c = sci.next();
     }
-    if (addEOS) {
+    if(addEOS) {
       append(v, endCode_);
     }
-    return v; 
+    return v;
   }
-
 
   /**
    * Decodes the specified code into its original value.
@@ -157,7 +152,6 @@ public class Huffman implements Serializable {
     return null;
   }
 
-
   /**
    * Deserializes the object. Overriden to restore codes from the serialized tree.
    * @param in
@@ -173,13 +167,12 @@ public class Huffman implements Serializable {
     makeCodes();
   }
 
-
   /**
    * Seeds this Huffman codec.
    * In other words, from a list of strings, counting the occurences of each character in the text.
    * The frequency for each character will be used by the Huffman code generator to decide which
    * character goes where in the tree.
-   * 
+   *
    * @param seed strings used to seed the tree
    */
   private void seed(Iterator<String> seed) {
@@ -196,26 +189,25 @@ public class Huffman implements Serializable {
     }
 
     TreeSet<Node> nodes = new TreeSet<Node>();
-    for (int i = 0; i < freq.length; i++) {
+    for(int i = 0; i < freq.length; i++) {
       long l = freq[i];
       if(l > 0) {
-        nodes.add(new Node((char)i, l));
+        nodes.add(new Node((char) i, l));
       }
     }
 
-    while (nodes.size() > 1) {
+    while(nodes.size() > 1) {
       Iterator<Node> i = nodes.iterator();
       Node n1 = i.next();
       i.remove();
       Node n2 = i.next();
       i.remove();
-      nodes.add(new Node(n1,n2));
+      nodes.add(new Node(n1, n2));
     }
     root_ = nodes.first();
     createEndOfStringCode();
     makeCodes();
   }
-
 
   /**
    * Splits the left-most leaf (only composed of zeros) to add an End Of String character. This
@@ -225,7 +217,7 @@ public class Huffman implements Serializable {
     Node parent = null;
     Node node = root_;
     // Go left until we hit the leaf
-    while(node.isLeaf()==false) {
+    while(node.isLeaf() == false) {
       parent = node;
       node = node.left;
     }
@@ -242,7 +234,6 @@ public class Huffman implements Serializable {
     parent.left = merged;
   }
 
-
   /**
    * Gets the <tt>BitVector</tt> that contains the End Of String character code in this Huffman code.
    * @return the End Of String code.
@@ -250,7 +241,6 @@ public class Huffman implements Serializable {
   public BitVector getEndOfStringCode() {
     return endCode_;
   }
-
 
   /**
    * Generates Huffman codes, from the character frequency previously obtained
@@ -260,7 +250,6 @@ public class Huffman implements Serializable {
     BitVector code = new BitVector(0);
     code(node, code, 0);
   }
-
 
   /**
    * Generates codes in a recursive way.
@@ -278,20 +267,19 @@ public class Huffman implements Serializable {
       }
       return;
     }
-    code.grow(i+1);
+    code.grow(i + 1);
     if(n.left != null) {
       // Going left: encode a zero at i (no need since original vector is all zeroes)
       // code.clear(i);
-      code(n.left, code, i+1);
+      code(n.left, code, i + 1);
     }
 
     if(n.right != null) {
       // Going right: encode a 1 at i
       code.set(i);
-      code(n.right, code, i+1);
+      code(n.right, code, i + 1);
     }
   }
-
 
   /**
    * Appends vector <code>v2</code> to <code>v</code>. This effectively grows vector <code>v</code> of <code>v2.size()</code> 
@@ -302,22 +290,24 @@ public class Huffman implements Serializable {
   private void append(BitVector v, BitVector v2) {
     int offset = v.size();
     v.grow(v.size() + v2.size());
-    for(int i = v2.nextSetBit(0); i != -1; i = v2.nextSetBit(i+1)) {
+    for(int i = v2.nextSetBit(0); i != -1; i = v2.nextSetBit(i + 1)) {
       v.set(offset + i);
     }
   }
 
-
   /**
    * A node in the binary Huffman code tree.
    */
-  private class Node implements Comparable<Node>, Serializable  {
+  private class Node implements Comparable<Node>, Serializable {
 
     private static final long serialVersionUID = -1145824693521402867L;
 
     private long weight = 0;
+
     private char c = StringCharacterIterator.DONE;
+
     private Node left = null;
+
     private Node right = null;
 
     public Node(char c, long w) {
@@ -336,10 +326,9 @@ public class Huffman implements Serializable {
     }
 
     public int compareTo(Node other) {
-      if (this.weight == other.weight)
-        return -1;
+      if(this.weight == other.weight) return -1;
 
-      return (int)(this.weight-other.weight);
+      return (int) (this.weight - other.weight);
     }
   }
 

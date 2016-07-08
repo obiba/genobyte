@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.bitwise.dao.impl.bdb;
 
@@ -32,7 +32,6 @@ import org.obiba.bitwise.dao.BitwiseStoreDtoDao;
 import org.obiba.bitwise.dto.BitVectorDto;
 import org.obiba.bitwise.dto.BitwiseStoreDto;
 import org.obiba.bitwise.schema.StoreSchema;
-
 
 import com.ibatis.dao.client.DaoManager;
 import com.sleepycat.bind.EntityBinding;
@@ -57,7 +56,7 @@ public class BitwiseStoreDtoDaoBdbImpl extends BaseCrudDaoImpl<BitwiseStoreDto, 
   @Override
   public void delete(String name) {
     super.delete(name);
-    
+
     // Truncate the BDB Environment before closing. This will effectively delete everything in the store.
     getContext().setTruncateOnClose(true);
   }
@@ -80,7 +79,7 @@ public class BitwiseStoreDtoDaoBdbImpl extends BaseCrudDaoImpl<BitwiseStoreDto, 
   private Database getBitwiseStoreDb() {
     try {
       return getContext().getDatabase(BITWISE_DB);
-    } catch (DatabaseException e) {
+    } catch(DatabaseException e) {
       throw new RuntimeException(e);
     }
   }
@@ -91,7 +90,7 @@ public class BitwiseStoreDtoDaoBdbImpl extends BaseCrudDaoImpl<BitwiseStoreDto, 
      * @see com.sleepycat.bind.EntityBinding#entryToObject(com.sleepycat.je.DatabaseEntry, com.sleepycat.je.DatabaseEntry)
      */
     public Object entryToObject(DatabaseEntry key, DatabaseEntry entry) {
-      
+
       ByteArrayInputStream input = new ByteArrayInputStream(entry.getData());
       BitwiseStoreDto d = new BitwiseStoreDto();
       try {
@@ -102,11 +101,11 @@ public class BitwiseStoreDtoDaoBdbImpl extends BaseCrudDaoImpl<BitwiseStoreDto, 
         d.setCleared(readBitVector(d.getCapacity(), dis));
 
         ObjectInputStream ois = new ObjectInputStream(dis);
-        StoreSchema ss = (StoreSchema)ois.readObject();
+        StoreSchema ss = (StoreSchema) ois.readObject();
         d.setSchema(ss);
-      } catch (IOException e) {
+      } catch(IOException e) {
         throw new RuntimeException(e);
-      } catch (ClassNotFoundException e) {
+      } catch(ClassNotFoundException e) {
         throw new RuntimeException(e);
       }
       return d;
@@ -116,7 +115,7 @@ public class BitwiseStoreDtoDaoBdbImpl extends BaseCrudDaoImpl<BitwiseStoreDto, 
      * @see com.sleepycat.bind.EntityBinding#objectToData(java.lang.Object, com.sleepycat.je.DatabaseEntry)
      */
     public void objectToData(Object o, DatabaseEntry entry) {
-      BitwiseStoreDto d = (BitwiseStoreDto)o;
+      BitwiseStoreDto d = (BitwiseStoreDto) o;
 
       ByteArrayOutputStream output = new ByteArrayOutputStream(1024);
       try {
@@ -131,7 +130,7 @@ public class BitwiseStoreDtoDaoBdbImpl extends BaseCrudDaoImpl<BitwiseStoreDto, 
         oos.close();
 
         entry.setData(output.toByteArray());
-      } catch (IOException e) {
+      } catch(IOException e) {
         throw new RuntimeException(e);
       }
     }
@@ -140,7 +139,7 @@ public class BitwiseStoreDtoDaoBdbImpl extends BaseCrudDaoImpl<BitwiseStoreDto, 
      * @see com.sleepycat.bind.EntityBinding#objectToKey(java.lang.Object, com.sleepycat.je.DatabaseEntry)
      */
     public void objectToKey(Object o, DatabaseEntry entry) {
-      BitwiseStoreDto d = (BitwiseStoreDto)o;
+      BitwiseStoreDto d = (BitwiseStoreDto) o;
       StringBinding.stringToEntry(d.getName(), entry);
     }
 
@@ -157,7 +156,7 @@ public class BitwiseStoreDtoDaoBdbImpl extends BaseCrudDaoImpl<BitwiseStoreDto, 
       dos.writeInt(bits.length);
       for(int i = 0; i < bits.length; i++) dos.writeLong(bits[i]);
     }
-    
+
     private BitVector readBitVector(int capacity, DataInputStream dis) throws IOException {
       int size = dis.readInt();
       long bits[] = new long[size];

@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) G�nome Qu�bec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.bitwise;
 
@@ -22,8 +22,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Map.Entry;
+import java.util.Properties;
 
 import org.obiba.bitwise.dao.BitwiseStoreDtoDao;
 import org.obiba.bitwise.dao.DaoKey;
@@ -43,16 +43,23 @@ import com.ibatis.dao.client.DaoManager;
 public class BitwiseStore {
 
   private int cacheSize_ = 1000;
+
   private FieldCache lruCache_ = new FieldCache();
+
   private Map<String, Field> writeCache_ = new HashMap<String, Field>();
 
   private DaoKey key = null;
+
   private BitwiseStoreDto data_ = null;
+
   private Map<String, Dictionary<?>> dictionaries_ = new HashMap<String, Dictionary<?>>();
+
   private FieldUtil fieldUtil_ = null;
+
   private DictionaryUtil dictUtil_ = null;
+
   private boolean dirty_ = false;
-  
+
   private Properties configProperties_ = null;
 
   protected BitwiseStore(BitwiseStoreDto data) {
@@ -63,7 +70,6 @@ public class BitwiseStore {
     dictUtil_ = new DictionaryUtil(this);
   }
 
-
   /**
    * Marks the beginning of a transaction in the store. It is defined by the traditional definition of a
    * transaction in the database world. If this method isn't called, all DAO methods will use the "autocommit" semantics.
@@ -71,7 +77,6 @@ public class BitwiseStore {
   public void startTransaction() {
     KeyedDaoManager.getInstance(key).startTransaction();
   }
-
 
   /**
    * Finishes the transaction and saves in the store all actions done within that transaction. 
@@ -83,7 +88,6 @@ public class BitwiseStore {
       KeyedDaoManager.getInstance(key).commitTransaction();
     }
   }
-
 
   /**
    * Clears the transaction cache, and rollbacks uncommited transactions.
@@ -107,7 +111,6 @@ public class BitwiseStore {
     return data_.getName();
   }
 
-
   /**
    * Returns the maximum number of records that this <code>BitwiseStore</code> can currently hold.
    * @return the number of records that was set for this store.
@@ -118,7 +121,6 @@ public class BitwiseStore {
     }
   }
 
-
   /**
    * Returns the current number of existing records within this store.
    * @return the number of records found.
@@ -128,11 +130,10 @@ public class BitwiseStore {
       return data_.getCapacity() - data_.getDeleted().count();
     }
   }
-  
+
   public StoreSchema getSchema() {
     return data_.getSchema();
   }
-
 
   /**
    * Removes a record from the store.
@@ -156,7 +157,6 @@ public class BitwiseStore {
     }
   }
 
-
   /**
    * Sets all records in the store to an existing, undeleted state. All available record slots that
    * haven't previously been assigned to a value will become existing null records. Therefore, using this
@@ -170,7 +170,6 @@ public class BitwiseStore {
     }
   }
 
-
   /**
    * Deletes all records in the store, making them available to hold new data. 
    */
@@ -181,7 +180,6 @@ public class BitwiseStore {
     }
   }
 
-
   /**
    * Returns a vector identifying all recods that have been deleted. The deleted records will be identified
    * by a "one" in the <code>BitVector</code>.
@@ -191,7 +189,6 @@ public class BitwiseStore {
     return new BitVector(data_.getDeleted());
   }
 
-  
   /**
    * Returns a vector identifying all records (that are not deleted). Valid records' index is set in the 
    * returned vector. 
@@ -200,7 +197,6 @@ public class BitwiseStore {
   public BitVector all() {
     return getDeleted().not();
   }
-
 
   /**
    * Returns the index of the next used record, starting from the provided index (inclusive).
@@ -212,7 +208,6 @@ public class BitwiseStore {
       return data_.getDeleted().nextClearBit(index);
     }
   }
-
 
   /**
    * Returns the index of the next available space to store a record or -1 if no more space is available. Use
@@ -237,7 +232,6 @@ public class BitwiseStore {
     }
   }
 
-
   /**
    * Returns the <code>Dictionary</code> in this store identified by the provided name. 
    * @param name the name of the <code>Dictionary</code> to look for.
@@ -246,7 +240,6 @@ public class BitwiseStore {
   public Dictionary<?> getDictionary(String name) {
     return dictionaries_.get(name);
   }
-
 
   /**
    * Makes sure that there is at least a certain number of record slots in the <tt>BitwiseStore</tt>. If there is less record slots
@@ -268,12 +261,12 @@ public class BitwiseStore {
           deleted.set(i);
           cleared.set(i);
         }
-        for (Field f : lruCache_.values()) {
+        for(Field f : lruCache_.values()) {
           if(f.getSize() < getCapacity()) {
             f.grow(getCapacity());
           }
         }
-        for (Field f : writeCache_.values()) {
+        for(Field f : writeCache_.values()) {
           if(f.getSize() < getCapacity()) {
             f.grow(getCapacity());
           }
@@ -281,7 +274,6 @@ public class BitwiseStore {
       }
     }
   }
-
 
   /**
    * Creates a new <tt>Field</tt> object as described in the <tt>StoreSchema</tt>.
@@ -303,7 +295,6 @@ public class BitwiseStore {
     }
   }
 
-
   /**
    * Removes a <tt>Field</tt> object completely from this store.
    * @param name the name of the field to be deleted.
@@ -316,7 +307,6 @@ public class BitwiseStore {
     }
   }
 
-  
   /**
    * Returns the <tt>Field</tt> object with the name provided in parameter.
    * @param name the name of the <tt>Field</tt> to return.
@@ -343,7 +333,6 @@ public class BitwiseStore {
     }
   }
 
-
   /**
    * Removes a field from the read and the write cache.
    * @param field the <tt>Field</tt> to detach.
@@ -355,7 +344,6 @@ public class BitwiseStore {
     }
   }
 
-
   /**
    * Closes the <tt>BitwiseStore</tt>. A <tt>BitwiseStore</tt> must be closed after use to gracefully finish operations in internal data
    * structure.
@@ -365,7 +353,6 @@ public class BitwiseStore {
     BitwiseStoreUtil.getInstance().close(this);
   }
 
-
   /**
    * Transfers field new content from the cache to the persistance mechanism (such as a database), and saves
    * dictionaries and bitwise store information to that mechanism.
@@ -373,13 +360,13 @@ public class BitwiseStore {
   public void flush() {
     synchronized(data_) {
       // Flush the dictionaries
-      for (Dictionary<?> d : getDictionaries().values()) {
-        getDictUtil().saveDictionary(d); 
+      for(Dictionary<?> d : getDictionaries().values()) {
+        getDictUtil().saveDictionary(d);
       }
 
       if(writeCache_ != null) {
         // Flush the Field write cache
-        for (Field field : writeCache_.values()) {
+        for(Field field : writeCache_.values()) {
           fieldUtil_.save(field);
         }
         writeCache_.clear();
@@ -390,7 +377,6 @@ public class BitwiseStore {
     }
   }
 
-
   /**
    * Returns the size of the field cache for this store.
    * @return the field cache size.
@@ -398,7 +384,6 @@ public class BitwiseStore {
   public int getCacheSize() {
     return cacheSize_;
   }
-
 
   /**
    * Get a list of all field names in the bitwise store.
@@ -408,21 +393,18 @@ public class BitwiseStore {
     return fieldUtil_.list();
   }
 
-
   /**
    * Returns a String object representing this BitwiseStore. More exactly, what will be produced
    * is a string following this model: <code>BitwiseStore[_name_of_store_]</code>.
    */
   @Override
   public String toString() {
-    return "BitwiseStore["+getName()+"]";
+    return "BitwiseStore[" + getName() + "]";
   }
-
 
   public Properties getConfigurationProperties() {
     return this.configProperties_;
   }
-
 
   void flushField(Field field) {
     synchronized(data_) {
@@ -430,53 +412,46 @@ public class BitwiseStore {
     }
   }
 
-
   protected DaoKey getDaoKey() {
     return key;
   }
-
 
   DictionaryUtil getDictUtil() {
     return dictUtil_;
   }
 
-
   FieldUtil getFieldUtil() {
     return fieldUtil_;
   }
-
 
   Map<String, Dictionary<?>> getDictionaries() {
     return dictionaries_;
   }
 
-
   void open(Properties config) {
-    for (String dictName : getDictUtil().list()) {
+    for(String dictName : getDictUtil().list()) {
       Dictionary<?> d = getDictUtil().openDictionary(dictName);
       if(d == null) {
-        throw new IllegalStateException("Cannot open dictionary name=["+dictName+"]");
+        throw new IllegalStateException("Cannot open dictionary name=[" + dictName + "]");
       }
       getDictionaries().put(d.getName(), d);
     }
     configure(config);
   }
 
-
   void create(Properties config) {
-    for (DictionaryMetaData meta : data_.getSchema().getDictionaries()) {
+    for(DictionaryMetaData meta : data_.getSchema().getDictionaries()) {
       Dictionary<?> d = getDictUtil().createDictionary(meta.getName(), meta.getClazz(), meta.getProperties());
       getDictionaries().put(d.getName(), d);
     }
 
-    for (FieldMetaData meta : data_.getSchema().getFields()) {
+    for(FieldMetaData meta : data_.getSchema().getFields()) {
       if(meta.isTemplate() == false) {
         getFieldUtil().create(meta.getName(), meta.getDictionary(), data_.getCapacity());
       }
     }
     configure(config);
   }
-
 
   /**
    * Returns the Data Transfert Object in used for this store.
@@ -485,7 +460,6 @@ public class BitwiseStore {
   protected BitwiseStoreDto getDto() {
     return data_;
   }
-
 
   /**
    * Clear values from every field for all records that are marked deleted but not marked cleared 
@@ -508,18 +482,16 @@ public class BitwiseStore {
     }
   }
 
-
   private void save() {
     if(dirty_) {
       synchronized(data_) {
         dirty_ = false;
         DaoManager daoManager = KeyedDaoManager.getInstance(key);
-        BitwiseStoreDtoDao dao = (BitwiseStoreDtoDao)daoManager.getDao(BitwiseStoreDtoDao.class);
+        BitwiseStoreDtoDao dao = (BitwiseStoreDtoDao) daoManager.getDao(BitwiseStoreDtoDao.class);
         dao.save(data_);
       }
     }
   }
-
 
   private void configure(Properties config) {
     configProperties_ = config;
@@ -527,12 +499,11 @@ public class BitwiseStore {
     if(StringUtil.isEmptyString(cacheSize) == false) {
       try {
         cacheSize_ = Integer.parseInt(cacheSize);
-      } catch (NumberFormatException e) {
+      } catch(NumberFormatException e) {
         throw new IllegalArgumentException("Value for property \"bitwise.store.fieldCacheSize\" is invalid.");
       }
     }
   }
-
 
   /**
    * An LRU cache (Least Recently Used) to speed up access to recently used elements in the store.

@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.bitwise.client;
 
@@ -33,10 +33,9 @@ import java.util.zip.GZIPInputStream;
 
 import org.obiba.bitwise.util.StringUtil;
 
-
 /**
  * Utility class to help parse a separated value file (ie: csv, tsv, etc.)
- * 
+ *
  * @author plaflamm
  *
  * <pre>
@@ -46,17 +45,24 @@ import org.obiba.bitwise.util.StringUtil;
  */
 public class SeparatedValuesParser {
 
-  public static final String COMMA = ","; 
-  public static final String TAB = "\t"; 
+  public static final String COMMA = ",";
+
+  public static final String TAB = "\t";
+
   public static final String SPACE = " ";
 
   private String separator_ = null;
+
   private File file_ = null;
+
   private String enclosedBy_ = null;
 
   private int currentLineIndex_ = 0;
+
   private String currentLine_ = null;
+
   private String[] currentRowValues_ = null;
+
   private LineNumberReader lnr_ = null;
 
   private SeparatedValuesRow row_ = new SeparatedValuesRowImpl();
@@ -91,7 +97,7 @@ public class SeparatedValuesParser {
     if(lnr_ != null) {
       lnr_.close();
     }
-    
+
     lnr_ = new LineNumberReader(new InputStreamReader(getInputStream(file_)));
   }
 
@@ -123,11 +129,11 @@ public class SeparatedValuesParser {
     if(enclosedBy_ == null) {
       return rowValues;
     }
-    
+
     List values = new ArrayList();
     StringBuffer buffer = null;
 
-    for (int i = 0; i < rowValues.length; i++) {
+    for(int i = 0; i < rowValues.length; i++) {
       String token = rowValues[i];
 
       int firstIndex = token.indexOf(enclosedBy_);
@@ -152,7 +158,7 @@ public class SeparatedValuesParser {
           values.add(buffer.toString().replaceAll(enclosedBy_, ""));
           buffer = null;
         }
-      } else if (firstIndex != lastIndex) {
+      } else if(firstIndex != lastIndex) {
         if(buffer != null) {
           // We cannot have two enclosing characters in one token when an unterminated token is being processed. 
           throw new IOException("Error on line " + lnr_.getLineNumber() + ": unterminated enclosing string.");
@@ -166,7 +172,7 @@ public class SeparatedValuesParser {
       throw new IOException("Error on line " + lnr_.getLineNumber() + ": unterminated enclosing string.");
     }
 
-    String[] valueArray = (String[])values.toArray(new String[0]);
+    String[] valueArray = (String[]) values.toArray(new String[0]);
     values.clear();
     values = null;
     return valueArray;
@@ -199,7 +205,7 @@ public class SeparatedValuesParser {
     public int getIndex() {
       return currentLineIndex_;
     }
-    
+
     /*
      * @see ca.mcgill.genome.io.SeparatedValuesRow#getColumnCount()
      */
@@ -213,7 +219,7 @@ public class SeparatedValuesParser {
     public <T> T getColumnValue(int index, Class<T> type) throws IllegalArgumentException {
 
       if(index < 0 || index >= currentRowValues_.length) {
-        throw new IllegalArgumentException("Column index=["+index+"] does not exist.");
+        throw new IllegalArgumentException("Column index=[" + index + "] does not exist.");
       }
 
       String value = currentRowValues_[index];
@@ -223,21 +229,21 @@ public class SeparatedValuesParser {
 
       if(String.class == type) {
         // Make a copy of value, otherwise the VM may keep a reference to the currentRowValues_ array
-        return (T)String.copyValueOf(value.toCharArray());
+        return (T) String.copyValueOf(value.toCharArray());
       }
 
       try {
-        Class parameterTypes[] = new Class[] {String.class};
+        Class parameterTypes[] = new Class[] { String.class };
         Constructor ctor = type.getConstructor(parameterTypes);
         if(ctor != null) {
-          Object param[] = new Object[] {value};
+          Object param[] = new Object[] { value };
           return (T) ctor.newInstance(param);
         }
-      } catch (Exception e) {
+      } catch(Exception e) {
         throw new IllegalArgumentException(e);
       }
 
-      throw new IllegalArgumentException("Cannot create an object of type=["+type.getName()+"].");
+      throw new IllegalArgumentException("Cannot create an object of type=[" + type.getName() + "].");
     }
   }
 }

@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.bitwise.schema;
 
@@ -34,16 +34,18 @@ public class StoreSchema implements Serializable {
   private static final long serialVersionUID = 6299436323378565183L;
 
   private String name_ = null;
-  private String version_ = null;
-  private Map<String, DictionaryMetaData> dictionaries_ = new HashMap<String, DictionaryMetaData>();
-  private Map<String, FieldMetaData> fields_ = new HashMap<String, FieldMetaData>();
-  private List<FieldMetaData> templates_ = new LinkedList<FieldMetaData>();
 
+  private String version_ = null;
+
+  private Map<String, DictionaryMetaData> dictionaries_ = new HashMap<String, DictionaryMetaData>();
+
+  private Map<String, FieldMetaData> fields_ = new HashMap<String, FieldMetaData>();
+
+  private List<FieldMetaData> templates_ = new LinkedList<FieldMetaData>();
 
   public StoreSchema() {
     super();
   }
-
 
   /**
    * Sets the name of this store schema.
@@ -53,7 +55,6 @@ public class StoreSchema implements Serializable {
     name_ = name;
   }
 
-
   /**
    * Sets the version of this store schema.
    * @param version the version of the schema.
@@ -61,7 +62,6 @@ public class StoreSchema implements Serializable {
   public void setVersion(String version) {
     version_ = version;
   }
-
 
   /**
    * Gets the name of this store schema.
@@ -71,7 +71,6 @@ public class StoreSchema implements Serializable {
     return name_;
   }
 
-
   /**
    * Gets the version of this store schema.
    * @return the name of this schema.
@@ -79,7 +78,6 @@ public class StoreSchema implements Serializable {
   public String getVersion() {
     return version_;
   }
-
 
   /**
    * Get the dictionary with given name.
@@ -91,7 +89,6 @@ public class StoreSchema implements Serializable {
     return dictionaries_.get(name);
   }
 
-
   /**
    * Gets contextual information for all dictionaries in use in the store.
    * @return a <tt>Collection</tt> holding dictionaries contextual information.
@@ -99,7 +96,6 @@ public class StoreSchema implements Serializable {
   public Collection<DictionaryMetaData> getDictionaries() {
     return dictionaries_.values();
   }
-
 
   /**
    * Adds a dictionary to this store context.
@@ -109,7 +105,6 @@ public class StoreSchema implements Serializable {
     dictionaries_.put(d.getName(), d);
   }
 
-
   /**
    * Gets contextual information for field that exists in the store.
    * @param name the name of the field.
@@ -118,7 +113,7 @@ public class StoreSchema implements Serializable {
   public FieldMetaData getField(String name) {
     FieldMetaData meta = fields_.get(name);
     if(meta == null) {
-      for (FieldMetaData template : templates_) {
+      for(FieldMetaData template : templates_) {
         if(name.startsWith(template.getName())) {
           meta = new FieldMetaData();
           meta.setName(name);
@@ -131,7 +126,6 @@ public class StoreSchema implements Serializable {
     return meta;
   }
 
-
   /**
    * Gets contextual information for all fields found in the store.
    * @return a <tt>Collection</tt> holding fields contextual information.
@@ -139,7 +133,6 @@ public class StoreSchema implements Serializable {
   public Collection<FieldMetaData> getFields() {
     return fields_.values();
   }
-
 
   /**
    * Adds a field to this store context.

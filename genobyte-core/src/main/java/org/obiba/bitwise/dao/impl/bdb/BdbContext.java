@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) G�nome Qu�bec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.bitwise.dao.impl.bdb;
 
@@ -60,13 +60,17 @@ public class BdbContext implements KeyedDaoManagerDestroyListener {
 
   /** The Properties used to created the JE Environment*/
   private Properties envProps_ = null;
+
   /** The directory where the Environment points to */
   private File envDir_ = null;
 
   /** The JE Environment (one per store). Lazily instantiated: see {@link BdbContext#getEnvironment()} */
   private Environment env_ = null;
+
   private Map<String, Database> dbMap_ = new HashMap<String, Database>();
+
   private Map<String, SecondaryDatabase> secDbMap_ = new HashMap<String, SecondaryDatabase>();
+
   private Map<String, Sequence> seqMap_ = new HashMap<String, Sequence>();
 
   private boolean truncateOnClose_ = false;
@@ -75,7 +79,7 @@ public class BdbContext implements KeyedDaoManagerDestroyListener {
     super();
     key_ = key;
   }
-  
+
   public void setTruncateOnClose(boolean truncate) {
     truncateOnClose_ = truncate;
   }
@@ -92,8 +96,8 @@ public class BdbContext implements KeyedDaoManagerDestroyListener {
 
     String root = null;
     Properties localProps = new Properties();
-    for (Enumeration<?> e = props.propertyNames(); e.hasMoreElements() ;) {
-      String propName = (String)e.nextElement();
+    for(Enumeration<?> e = props.propertyNames(); e.hasMoreElements(); ) {
+      String propName = (String) e.nextElement();
       if(DefaultConfigurationPropertiesProvider.ROOT_DIR_PROPERTY.equals(propName)) {
         root = props.getProperty(propName);
       } else {
@@ -106,13 +110,14 @@ public class BdbContext implements KeyedDaoManagerDestroyListener {
     instance.envProps_ = localProps;
 
     if(root == null) {
-      throw new IllegalStateException("Configuration property ["+DefaultConfigurationPropertiesProvider.ROOT_DIR_PROPERTY+"] is missing.");
+      throw new IllegalStateException(
+          "Configuration property [" + DefaultConfigurationPropertiesProvider.ROOT_DIR_PROPERTY + "] is missing.");
     }
     File rootDir = new File(root);
     if(rootDir.exists() == false) {
       if(rootDir.mkdirs() == false) {
         log.error("Cannot create bitwise root directory [{}].", rootDir);
-        throw new RuntimeException("Cannot mkdir ["+rootDir+"]");
+        throw new RuntimeException("Cannot mkdir [" + rootDir + "]");
       }
     }
 
@@ -120,7 +125,7 @@ public class BdbContext implements KeyedDaoManagerDestroyListener {
     if(envDir.exists() == false) {
       if(envDir.mkdirs() == false) {
         log.error("Cannot create environment directory [{}]", envDir);
-        throw new RuntimeException("Cannot mkdir ["+envDir+"]");
+        throw new RuntimeException("Cannot mkdir [" + envDir + "]");
       }
     }
     instance.envDir_ = envDir;
@@ -132,10 +137,10 @@ public class BdbContext implements KeyedDaoManagerDestroyListener {
   static BdbContext getInstance(DaoKey key) {
     return instanceMap_.get(key);
   }
-  
+
   @Override
   public String toString() {
-    return "BdbContext{"+key_+"}";
+    return "BdbContext{" + key_ + "}";
   }
 
   public void destroying() {
@@ -148,7 +153,7 @@ public class BdbContext implements KeyedDaoManagerDestroyListener {
     }
     return env_;
   }
-  
+
   synchronized void initEnvironment() throws DatabaseException {
     // Test to avoid race condition
     if(env_ == null) {
@@ -176,7 +181,8 @@ public class BdbContext implements KeyedDaoManagerDestroyListener {
     return dbMap_.get(name);
   }
 
-  synchronized SecondaryDatabase getSecondaryDatabase(String name, Database db, SecondaryKeyCreator creator) throws DatabaseException {
+  synchronized SecondaryDatabase getSecondaryDatabase(String name, Database db, SecondaryKeyCreator creator)
+      throws DatabaseException {
     if(secDbMap_.containsKey(name) == false) {
       SecondaryConfig dbCfg = new SecondaryConfig();
       dbCfg.setTransactional(getEnvironment().getConfig().getTransactional());
@@ -191,11 +197,11 @@ public class BdbContext implements KeyedDaoManagerDestroyListener {
   synchronized Sequence getSequence(String name) {
     if(seqMap_.containsKey(name) == false) {
       Database seqDb = getDatabase(SEQUENCE_DATABASE);
-  
+
       DatabaseEntry sequenceEntry;
       try {
         sequenceEntry = new DatabaseEntry(name.getBytes("UTF-8"));
-      } catch (UnsupportedEncodingException e) {
+      } catch(UnsupportedEncodingException e) {
         throw new RuntimeException("Couldn't create DatabaseEntry", e);
       }
       SequenceConfig seqCfg = new SequenceConfig();
@@ -212,15 +218,15 @@ public class BdbContext implements KeyedDaoManagerDestroyListener {
     try {
       if(env_ != null) env_.sync();
 
-      for (Sequence sequence : seqMap_.values()) {
+      for(Sequence sequence : seqMap_.values()) {
         sequence.close();
       }
       seqMap_.clear();
-      for (Database db : secDbMap_.values()) {
+      for(Database db : secDbMap_.values()) {
         db.close();
       }
       secDbMap_.clear();
-      for (Database db : dbMap_.values()) {
+      for(Database db : dbMap_.values()) {
         db.close();
       }
       dbMap_.clear();
@@ -233,7 +239,7 @@ public class BdbContext implements KeyedDaoManagerDestroyListener {
         env_.close();
         env_ = null;
       }
-    } catch (DatabaseException e) {
+    } catch(DatabaseException e) {
       throw new RuntimeException(e);
     }
   }
@@ -241,14 +247,14 @@ public class BdbContext implements KeyedDaoManagerDestroyListener {
   private void truncate() {
     try {
       List<String> dbNames_ = getEnvironment().getDatabaseNames();
-      for (String dbName : dbNames_) {
+      for(String dbName : dbNames_) {
         getEnvironment().removeDatabase(null, dbName);
       }
-    } catch (DatabaseException e) {
+    } catch(DatabaseException e) {
       throw new RuntimeException(e);
     }
   }
-  
+
   static public void dumpStats() {
     dumpStats(false);
   }
@@ -259,7 +265,7 @@ public class BdbContext implements KeyedDaoManagerDestroyListener {
     for(BdbContext ctx : instanceMap_.values()) {
       EnvironmentStats o;
       try {
-        System.err.println("--- Stats for ["+ctx.getEnvironment().getHome().getName()+"] ---");
+        System.err.println("--- Stats for [" + ctx.getEnvironment().getHome().getName() + "] ---");
         o = ctx.env_.getStats(cfg);
         System.err.println(o);
       } catch(DatabaseException e) {

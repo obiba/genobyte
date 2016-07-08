@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.genobyte.statistic.util;
 
@@ -26,7 +26,6 @@ import org.obiba.genobyte.model.SnpCall;
 import org.obiba.genobyte.statistic.AbstractStatistic;
 import org.obiba.genobyte.statistic.RecordStatistic;
 import org.obiba.genobyte.statistic.StatsPool;
-
 
 /**
  * Implements assay frequency statistics. This includes allele frequencies, MAF (Minor Allele Frequency),
@@ -43,21 +42,20 @@ public class Frequencies extends AbstractStatistic implements RecordStatistic {
     outputParams_.add("freqU");
   }
 
-
   //@see org.obiba.bitwise.genotyping.statistic.Statistic.calculate()
-  public void calculate(StatsPool<?,?> pPool, Map<String, Object> pFields, QueryResult pFilter, int pIndex) {
+  public void calculate(StatsPool<?, ?> pPool, Map<String, Object> pFields, QueryResult pFilter, int pIndex) {
     SnpCall alleleA = SnpCall.A;
     SnpCall alleleB = SnpCall.B;
     SnpCall alleleH = SnpCall.H;
     SnpCall alleleU = SnpCall.U;
-    Field calls = (Field)pFields.get("calls");
-   
+    Field calls = (Field) pFields.get("calls");
+
     //Frequency of each allele
     int freqA = calls.query(calls.getDictionary().lookup(alleleA)).and(pFilter).count();
     int freqB = calls.query(calls.getDictionary().lookup(alleleB)).and(pFilter).count();
     int freqH = calls.query(calls.getDictionary().lookup(alleleH)).and(pFilter).count();
     int freqU = calls.query(calls.getDictionary().lookup(alleleU)).and(pFilter).count();
-    
+
     //Put results in the proper structure
     pPool.setPoolResult("freqA", pIndex, freqA);
     pPool.setPoolResult("freqB", pIndex, freqB);

@@ -1,25 +1,35 @@
 <body>
-	A set of classes to compute genotype inconsistencies: reproducibility and mendelian errors.
-	<p/>
-	<h3>Reproducibility errors</h3>
-	<b>Description:</b> two genotypes that should be identical but are not. For example, when genotyping
-	the same sample on the same set of markers will generally produce a certain amount of errors.
-	<p/>
-	To compute reproducibility errors, it is necessary to provide which records are comparable, this
-	is done by implementing the {@link org.obiba.bitwise.genotyping.inconsistency.ComparableRecordProvider} interface.
-	Using the <tt>ComparableRecordProvider</tt> instance, the {@link org.obiba.bitwise.genotyping.inconsistency.ReproducibilityErrorCalculator}
-	is capable of identifying reproducibility errors. For each executed comparision that has identified at least one error, an instance of {@link org.obiba.bitwise.genotyping.inconsistency.ReproducibilityErrors} 
-	is created which holds all identified errors. The instance of <tt>ReproducibilityErrors</tt> is then fed to an instance of {@link org.obiba.bitwise.genotyping.inconsistency.ReproducibilityErrorCountingStrategy} 
-	which may handle the errors as necessary.
-	<p/>
-	<h3>Mendelian errors</h3>
-	<b>Description:</b> based on parental relationships (mother-child, father-child) a mendelian error is a combination of genotypes that is impossible
-	based on what the child may inherit from its parents. For example, a child may not have the opposite homozygote genotype (AA vs. BB) than either of its parents.
-	<p/>
-	To compute mendelian errors, it is necessary to provide which records are related (mother, father, child relationships). This is done by implementing the
-	{@link org.obiba.bitwise.genotyping.inconsistency.MendelianRecordTrioProvider} interface. Using the <tt>MendelianRecordTrioProvider</tt> instance, 
-	the {@link org.obiba.bitwise.genotyping.inconsistency.MendelianErrorCalculator} is capable of identifying mendelian errors. For each executed comparision that 
-	has identified at least one error, an instance of {@link org.obiba.bitwise.genotyping.inconsistency.MendelianErrors} is created which holds all identified 
-	errors. The instance of <tt>MendelianErrors</tt> is then fed to an instance of {@link org.obiba.bitwise.genotyping.inconsistency.MendelianErrorCountingStrategy} 
-	which may handle the errors as necessary.
+A set of classes to compute genotype inconsistencies: reproducibility and mendelian errors.
+<p/>
+<h3>Reproducibility errors</h3>
+<b>Description:</b> two genotypes that should be identical but are not. For example, when genotyping
+the same sample on the same set of markers will generally produce a certain amount of errors.
+<p/>
+To compute reproducibility errors, it is necessary to provide which records are comparable, this
+is done by implementing the {@link org.obiba.bitwise.genotyping.inconsistency.ComparableRecordProvider} interface.
+Using the <tt>ComparableRecordProvider</tt> instance, the {@link
+org.obiba.bitwise.genotyping.inconsistency.ReproducibilityErrorCalculator}
+is capable of identifying reproducibility errors. For each executed comparision that has identified at least one error,
+an instance of {@link org.obiba.bitwise.genotyping.inconsistency.ReproducibilityErrors}
+is created which holds all identified errors. The instance of <tt>ReproducibilityErrors</tt> is then fed to an instance
+of {@link org.obiba.bitwise.genotyping.inconsistency.ReproducibilityErrorCountingStrategy}
+which may handle the errors as necessary.
+<p/>
+<h3>Mendelian errors</h3>
+<b>Description:</b> based on parental relationships (mother-child, father-child) a mendelian error is a combination of
+genotypes that is impossible
+based on what the child may inherit from its parents. For example, a child may not have the opposite homozygote genotype
+(AA vs. BB) than either of its parents.
+<p/>
+To compute mendelian errors, it is necessary to provide which records are related (mother, father, child relationships).
+This is done by implementing the
+{@link org.obiba.bitwise.genotyping.inconsistency.MendelianRecordTrioProvider} interface. Using the <tt>MendelianRecordTrioProvider</tt>
+instance,
+the {@link org.obiba.bitwise.genotyping.inconsistency.MendelianErrorCalculator} is capable of identifying mendelian
+errors. For each executed comparision that
+has identified at least one error, an instance of {@link org.obiba.bitwise.genotyping.inconsistency.MendelianErrors} is
+created which holds all identified
+errors. The instance of <tt>MendelianErrors</tt> is then fed to an instance of {@link
+org.obiba.bitwise.genotyping.inconsistency.MendelianErrorCountingStrategy}
+which may handle the errors as necessary.
 </body>	

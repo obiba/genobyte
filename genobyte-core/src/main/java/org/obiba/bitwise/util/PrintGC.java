@@ -9,13 +9,13 @@ public final class PrintGC {
   private static void runGC() {
     // It helps to call Runtime.gc()
     // using several method calls:
-    for (int r = 0; r < 4; ++r)
+    for(int r = 0; r < 4; ++r)
       _runGC();
   }
 
   private static void _runGC() {
     long usedMem1 = usedMemory(), usedMem2 = Long.MAX_VALUE;
-    for (int i = 0; (usedMem1 < usedMem2) && (i < 500); ++i) {
+    for(int i = 0; (usedMem1 < usedMem2) && (i < 500); ++i) {
       s_runtime.runFinalization();
       s_runtime.gc();
       Thread.yield();

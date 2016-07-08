@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) G�nome Qu�bec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.genobyte;
 
@@ -40,12 +40,15 @@ class GenotypingFieldValueTransposer<K, TK> {
 
   // The field being transposed from source to destination (ie: calls field)
   private GenotypingField field_ = null;
+
   // The source of the transposed values
   private GenotypingRecordStore<K, ?, TK> source_ = null;
+
   // The destination of the transposed values
   private GenotypingRecordStore<TK, ?, K> destination_ = null;
 
-  public GenotypingFieldValueTransposer(GenotypingField field, GenotypingRecordStore<K, ?, TK> source, GenotypingRecordStore<TK, ?, K> destination) {
+  public GenotypingFieldValueTransposer(GenotypingField field, GenotypingRecordStore<K, ?, TK> source,
+      GenotypingRecordStore<TK, ?, K> destination) {
     if(field == null) {
       throw new NullPointerException("field argument");
     }
@@ -102,7 +105,7 @@ class GenotypingFieldValueTransposer<K, TK> {
 
     // Find an example source field to make some calculations
     Field sourceField = null;
-    for (K key : sourceKeysList) {
+    for(K key : sourceKeysList) {
       sourceField = this.source_.getGenotypingField(this.field_.getName(), key);
       if(sourceField != null) {
         break;
@@ -118,19 +121,18 @@ class GenotypingFieldValueTransposer<K, TK> {
     int targetColumns = this.source_.getStore().getSize();
 
     // Number of bytes ONE target field requires when in memory. There is an overhead due to using objects to hold these bytes though...
-    long targetFieldSize = ((targetColumns >> 6 ) + 1 ) * 8 * sourceField.getDictionary().dimension() + 2048;
+    long targetFieldSize = ((targetColumns >> 6) + 1) * 8 * sourceField.getDictionary().dimension() + 2048;
 
     log.debug("Calculated target field size is [{}] bytes.", targetFieldSize);
 
     // Number of target fields to populate in one iteration 
-    int nbTargetFieldsPerIteration = (int)(this.transposeBlockSize_ / targetFieldSize);
-    if(nbTargetFieldsPerIteration == 0)
-      nbTargetFieldsPerIteration = 1;
+    int nbTargetFieldsPerIteration = (int) (this.transposeBlockSize_ / targetFieldSize);
+    if(nbTargetFieldsPerIteration == 0) nbTargetFieldsPerIteration = 1;
 
     log.debug("Number of target fields per iteration is [{}]", nbTargetFieldsPerIteration);
 
     int nbTargets = this.destination_.getStore().getSize();
-    int nbIterations = (int)Math.ceil(nbTargets / (double)nbTargetFieldsPerIteration);
+    int nbIterations = (int) Math.ceil(nbTargets / (double) nbTargetFieldsPerIteration);
     log.debug("Number of iterations is [{}]", nbIterations);
 
     TransposeIterationBlock block = new TransposeIterationBlock(nbTargetFieldsPerIteration);
@@ -142,7 +144,7 @@ class GenotypingFieldValueTransposer<K, TK> {
     }
 
     for(int i = 0; i < nbIterations; i++) {
-      log.debug("iteration [{}]", (i+1));
+      log.debug("iteration [{}]", (i + 1));
 
       // Determine the first targetIndex for this block. It should be the previous' last targetIndex + 1 or 0 if this is the first block.
       int firstTargetIndex = 0;
@@ -174,7 +176,7 @@ class GenotypingFieldValueTransposer<K, TK> {
     for(int i = 0; i < fieldsPerIteration; i++) {
       int targetIndex = destination_.getStore().nextRecord(nextIndex);
       if(targetIndex == -1) break;
-      nextIndex = targetIndex+1;
+      nextIndex = targetIndex + 1;
 
       TK targetKey = this.destination_.getRecordManager().getKey(targetIndex);
       block.targetCount++;
@@ -223,14 +225,18 @@ class GenotypingFieldValueTransposer<K, TK> {
    */
   private class TransposeIterationBlock {
     ArrayList<K> sourceKeysList;
+
     int[] sourceIndexes;
 
     // The number of target records in this block.
     int targetCount = -1;
+
     // Array of target record index
     int[] targetIndexes;
+
     // An optional BitVector of target record indexes used for updating the statistics
     BitVector targetIndexVector;
+
     // Array of target fields
     Field[] targetFields;
 
@@ -239,5 +245,5 @@ class GenotypingFieldValueTransposer<K, TK> {
       targetFields = new Field[size];
     }
   }
-  
+
 }

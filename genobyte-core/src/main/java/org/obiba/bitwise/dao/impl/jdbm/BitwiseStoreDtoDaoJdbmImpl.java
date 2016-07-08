@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.bitwise.dao.impl.jdbm;
 
@@ -27,9 +27,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Comparator;
 
-import jdbm.helper.Serializer;
-import jdbm.helper.StringComparator;
-
 import org.obiba.bitwise.BitVector;
 import org.obiba.bitwise.BitVectorUtil;
 import org.obiba.bitwise.dao.BitwiseStoreDtoDao;
@@ -39,7 +36,11 @@ import org.obiba.bitwise.schema.StoreSchema;
 
 import com.ibatis.dao.client.DaoManager;
 
-public class BitwiseStoreDtoDaoJdbmImpl extends BaseBTreeJdbmDaoImpl<BitwiseStoreDto, String> implements BitwiseStoreDtoDao {
+import jdbm.helper.Serializer;
+import jdbm.helper.StringComparator;
+
+public class BitwiseStoreDtoDaoJdbmImpl extends BaseBTreeJdbmDaoImpl<BitwiseStoreDto, String>
+    implements BitwiseStoreDtoDao {
 
   private static final String BITWISE_DB = "bitwise";
 
@@ -66,12 +67,12 @@ public class BitwiseStoreDtoDaoJdbmImpl extends BaseBTreeJdbmDaoImpl<BitwiseStor
   protected Comparator<?> getKeyComparator() {
     return new StringComparator();
   }
-  
+
   @Override
   protected Serializer getKeySerializer() {
     return new StringSerializer();
   }
-  
+
   @Override
   protected Serializer getValueSerializer() {
     return new BitwiseStoreDtoBinding();
@@ -92,18 +93,18 @@ public class BitwiseStoreDtoDaoJdbmImpl extends BaseBTreeJdbmDaoImpl<BitwiseStor
         d.setCleared(readBitVector(d.getCapacity(), dis));
 
         ObjectInputStream ois = new ObjectInputStream(dis);
-        StoreSchema ss = (StoreSchema)ois.readObject();
+        StoreSchema ss = (StoreSchema) ois.readObject();
         d.setSchema(ss);
-      } catch (IOException e) {
+      } catch(IOException e) {
         throw new RuntimeException(e);
-      } catch (ClassNotFoundException e) {
+      } catch(ClassNotFoundException e) {
         throw new RuntimeException(e);
       }
       return d;
     }
-    
+
     public byte[] serialize(Object o) throws IOException {
-      BitwiseStoreDto d = (BitwiseStoreDto)o;
+      BitwiseStoreDto d = (BitwiseStoreDto) o;
 
       ByteArrayOutputStream output = new ByteArrayOutputStream(1024);
       try {
@@ -119,11 +120,11 @@ public class BitwiseStoreDtoDaoJdbmImpl extends BaseBTreeJdbmDaoImpl<BitwiseStor
         oos.close();
 
         return output.toByteArray();
-      } catch (IOException e) {
+      } catch(IOException e) {
         throw new RuntimeException(e);
       }
     }
-    
+
     /**
      * Writes a {@link BitVector} instance to the specified stream
      * @param dos the stream to write to

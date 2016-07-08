@@ -1,26 +1,25 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.bitwise.util;
 
 import org.obiba.bitwise.BitVector;
 import org.obiba.bitwise.query.QueryResult;
-
 
 /**
  * {@link QueryResult} implementation using a {@link BitVector} instance. This 
@@ -44,20 +43,20 @@ public class BitVectorQueryResult implements QueryResult {
   public BitVector bits() {
     return result_;
   }
-  
+
   public BitVector getFilter() {
     // Return an empty vector
     return new BitVector(result_.size());
   }
 
   public QueryResult copy() {
-    return new BitVectorQueryResult(new BitVector(result_)); 
+    return new BitVectorQueryResult(new BitVector(result_));
   }
 
   public int hit(int index) {
     int h = -1;
     while(index-- >= 0) {
-      h = next(h+1);
+      h = next(h + 1);
     }
     return h;
   }

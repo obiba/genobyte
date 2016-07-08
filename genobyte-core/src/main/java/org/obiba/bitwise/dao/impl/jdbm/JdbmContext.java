@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.bitwise.dao.impl.jdbm;
 
@@ -24,10 +24,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import jdbm.RecordManager;
-import jdbm.RecordManagerOptions;
-import jdbm.recman.Provider;
-
 import org.obiba.bitwise.dao.DaoKey;
 import org.obiba.bitwise.dao.KeyedDaoManager;
 import org.obiba.bitwise.dao.KeyedDaoManagerDestroyListener;
@@ -35,16 +31,20 @@ import org.obiba.bitwise.util.DefaultConfigurationPropertiesProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import jdbm.RecordManager;
+import jdbm.RecordManagerOptions;
+import jdbm.recman.Provider;
+
 public class JdbmContext implements KeyedDaoManagerDestroyListener {
-  
+
   static final Logger log = LoggerFactory.getLogger(JdbmContext.class);
 
   static private Map<DaoKey, JdbmContext> instanceMap_ = new HashMap<DaoKey, JdbmContext>();
 
   private DaoKey key_ = null;
-  
+
   private BitwiseRecordManagerProvider provider;
-  
+
   private Map<String, RecordManager> managers = new HashMap<String, RecordManager>();
 
   private JdbmContext(DaoKey key) {
@@ -68,14 +68,14 @@ public class JdbmContext implements KeyedDaoManagerDestroyListener {
     if(rootDir.exists() == false) {
       if(rootDir.mkdirs() == false) {
         log.error("Cannot create root directory [{}].", rootDir);
-        throw new RuntimeException("Cannot mkdir ["+rootDir+"]");
+        throw new RuntimeException("Cannot mkdir [" + rootDir + "]");
       }
     }
     File envDir = new File(root, key.toString());
     if(envDir.exists() == false) {
       if(envDir.mkdirs() == false) {
         log.error("Cannot create environment directory [{}]", envDir);
-        throw new RuntimeException("Cannot mkdir ["+envDir+"]");
+        throw new RuntimeException("Cannot mkdir [" + envDir + "]");
       }
     }
     log.debug("Creating environment in [{}] with properties {}", envDir, props);
@@ -87,11 +87,11 @@ public class JdbmContext implements KeyedDaoManagerDestroyListener {
   static JdbmContext getInstance(DaoKey key) {
     return instanceMap_.get(key);
   }
-  
+
   boolean managerExists(String name) {
     return this.provider.managerExists(name);
   }
-  
+
   RecordManager getManager(String name) {
     RecordManager m = managers.get(name);
     if(m == null) {
@@ -101,7 +101,7 @@ public class JdbmContext implements KeyedDaoManagerDestroyListener {
         if(m == null) {
           try {
             m = provider.createRecordManager(name);
-          } catch (IOException e) {
+          } catch(IOException e) {
             throw new JdbmRuntimeException(e);
           }
           managers.put(name, m);
@@ -113,18 +113,18 @@ public class JdbmContext implements KeyedDaoManagerDestroyListener {
 
   @Override
   public String toString() {
-    return "JdbmContext{"+key_+"}";
+    return "JdbmContext{" + key_ + "}";
   }
 
   public void destroying() {
     destroyInstance(key_);
   }
-  
+
   synchronized void commit() {
     for(RecordManager m : managers.values()) {
       try {
         m.commit();
-      } catch (IOException e) {
+      } catch(IOException e) {
         log.error("Error commiting manager [{}]: {}", m, e.getMessage());
       }
     }
@@ -134,7 +134,7 @@ public class JdbmContext implements KeyedDaoManagerDestroyListener {
     for(RecordManager m : managers.values()) {
       try {
         m.rollback();
-      } catch (IOException e) {
+      } catch(IOException e) {
         log.error("Error commiting manager [{}]: {}", m, e.getMessage());
       }
     }
@@ -144,7 +144,7 @@ public class JdbmContext implements KeyedDaoManagerDestroyListener {
     for(RecordManager m : managers.values()) {
       try {
         m.close();
-      } catch (IOException e) {
+      } catch(IOException e) {
         log.error("Error closing manager [{}]: {}", m, e.getMessage());
       }
     }
@@ -152,7 +152,9 @@ public class JdbmContext implements KeyedDaoManagerDestroyListener {
 
   private static class BitwiseRecordManagerProvider {
     Provider p = new Provider();
+
     Properties props;
+
     File root;
 
     BitwiseRecordManagerProvider(File root, Properties props) {

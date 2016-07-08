@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.bitwise;
 
@@ -23,7 +23,6 @@ import java.util.NoSuchElementException;
 
 import org.obiba.bitwise.query.QueryResult;
 
-
 /**
  * Can be used to iterate on <code>Field</code> values. This class will effectively
  * skip any deleted record and provide values for each valid record in the field's store.
@@ -31,12 +30,15 @@ import org.obiba.bitwise.query.QueryResult;
 public class FieldValueIterator<T> implements Iterator<FieldValueIterator<T>.FieldValue> {
 
   Field field_ = null;
+
   BitwiseStore store_ = null;
+
   int nextIndex_ = -1;
+
   Dictionary<T> dict_ = null;
+
   QueryResult mask_ = null;
 
-  
   /**
    * Initializes an iterator on a <tt>Field</tt> instance.
    * @param f the <tt>Field</tt> on which the iterator will be based.
@@ -58,7 +60,6 @@ public class FieldValueIterator<T> implements Iterator<FieldValueIterator<T>.Fie
     nextIndex_ = getNextIndex(0);
   }
 
-
   /**
    * Returns the next valid index that is a record and part of the mask (if any);
    * @param current
@@ -77,7 +78,6 @@ public class FieldValueIterator<T> implements Iterator<FieldValueIterator<T>.Fie
    */
   protected FieldValueIterator() {}
 
-  
   /**
    * Returns true if the <tt>Field</tt> iteration has more elements.
    * @return <tt>true</tt> if the iterator has more elements.
@@ -86,20 +86,18 @@ public class FieldValueIterator<T> implements Iterator<FieldValueIterator<T>.Fie
     return nextIndex_ != -1;
   }
 
-
   /**
    * Returns the next element in the iteration.
    * @return the next element in the iteration.
    */
   public FieldValue next() {
     if(nextIndex_ == -1) {
-      throw new NoSuchElementException("no more elements while iterating values from field ["+field_.getName()+"]");
+      throw new NoSuchElementException("no more elements while iterating values from field [" + field_.getName() + "]");
     }
     int currentIndex = nextIndex_;
-    nextIndex_ = getNextIndex(nextIndex_+1);
+    nextIndex_ = getNextIndex(nextIndex_ + 1);
     return new FieldValue(currentIndex);
   }
-
 
   /**
    * This method is not supported, as the record removal for a single <tt>Field</tt> of a bitwise store is not allowed. Do not use.
@@ -109,16 +107,19 @@ public class FieldValueIterator<T> implements Iterator<FieldValueIterator<T>.Fie
     throw new UnsupportedOperationException();
   }
 
-
   /**
    * Provides access to a field's value at a given record index. This is used by <tt>FieldValueIterator</tt> to return
    * the value at the current position for the field on which we are iterating.
    */
   public class FieldValue {
     int index_ = -1;
+
     BitVector value_ = null;
+
     boolean valueFetched_ = false;
+
     T realValue_ = null;
+
     boolean realValueFetched_ = false;
 
     FieldValue(int index) {
@@ -132,7 +133,7 @@ public class FieldValueIterator<T> implements Iterator<FieldValueIterator<T>.Fie
     public int getIndex() {
       return index_;
     }
-    
+
     /**
      * Returns the current record iteration <tt>Field</tt> value, expressed in the bitwise store native format, <tt>BitVector</tt>.
      * @return the <tt>BitVector</tt> value at <tt>index</tt>.

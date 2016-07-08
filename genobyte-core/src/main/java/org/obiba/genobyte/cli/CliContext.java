@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.genobyte.cli;
 
@@ -25,7 +25,6 @@ import org.obiba.bitwise.query.QueryResult;
 import org.obiba.genobyte.GenotypingRecordStore;
 import org.obiba.genobyte.GenotypingStore;
 
-
 /**
  * Each instance of {@link BitwiseCli} has a <tt>CliContext</tt> associated that describes the
  * current execution state. A <tt>CliContext</tt> instance should be used to pass values between commands instead of linking two commands together.
@@ -34,8 +33,10 @@ public class CliContext {
 
   /** The stream to which any user output should be printed to */
   private PrintStream output_ = null;
+
   /** The current opened store (may be null) */
   private GenotypingStore<?, ?, ?, ?> store_ = null;
+
   /** The record store being queried (may be null) */
   private GenotypingRecordStore<?, ?, ?> activeRecordStore_ = null;
 
@@ -74,7 +75,7 @@ public class CliContext {
   public String addQuery(String query, QueryResult result) {
     return history.pushQuery(query, result);
   }
-  
+
   public QueryHistory getHistory() {
     return history;
   }
@@ -82,7 +83,7 @@ public class CliContext {
   public class QueryHistory {
 
     private ArrayList<QueryExecution> queries = new ArrayList<QueryExecution>(100);
-    
+
     /** The QueryResult with the most results in the history. Used for padding the count column */
     private int maxCount = -1;
 
@@ -92,7 +93,7 @@ public class CliContext {
         maxCount = result.count();
       }
       return "q" + queries.size();
-   }
+    }
 
     public QueryExecution getLast() {
       return queries.get(queries.size() - 1);
@@ -116,7 +117,7 @@ public class CliContext {
         int index = Integer.parseInt(id) - 1;
         // Matches a query reference format
         return true;
-      } catch (NumberFormatException e) { 
+      } catch(NumberFormatException e) {
         return false;
       }
     }
@@ -128,16 +129,19 @@ public class CliContext {
      * @throws IllegalArgumentException when reference is not a valid query reference.
      */
     public QueryExecution resolveQuery(String reference) {
-      if(queries.size() == 0) throw new IllegalArgumentException(reference + " is not a valid query reference. No queries in history: execute at least one query to be able to reference them later.");
-      if(reference.length() < 2) throw new IllegalArgumentException(reference + " is not a valid query reference. Expected format is \"q#\".");
+      if(queries.size() == 0) throw new IllegalArgumentException(reference +
+          " is not a valid query reference. No queries in history: execute at least one query to be able to reference them later.");
+      if(reference.length() < 2)
+        throw new IllegalArgumentException(reference + " is not a valid query reference. Expected format is \"q#\".");
       String id = reference.substring(1);
       try {
         int index = Integer.parseInt(id) - 1;
         if(index < 0 || index >= queries.size()) {
-          throw new IllegalArgumentException(reference + " is not a valid query reference. The index should be between 1 and "+queries.size()+".");
-        } 
+          throw new IllegalArgumentException(
+              reference + " is not a valid query reference. The index should be between 1 and " + queries.size() + ".");
+        }
         return get(index);
-      } catch (NumberFormatException e) { 
+      } catch(NumberFormatException e) {
         throw new IllegalArgumentException(reference + " is not a valid query reference. Expected format is \"q#\".");
       }
     }
@@ -150,11 +154,11 @@ public class CliContext {
       queries.clear();
       maxCount = -1;
     }
-    
+
     public int size() {
       return queries.size();
     }
-    
+
     public int getMaxCount() {
       return maxCount;
     }
@@ -164,7 +168,9 @@ public class CliContext {
   public class QueryExecution {
 
     private GenotypingRecordStore<?, ?, ?> store;
+
     private String query;
+
     private QueryResult result;
 
     QueryExecution(String q, QueryResult qr) {

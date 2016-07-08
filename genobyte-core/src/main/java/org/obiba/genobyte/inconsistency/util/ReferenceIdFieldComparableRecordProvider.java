@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.genobyte.inconsistency.util;
 
@@ -31,7 +31,6 @@ import org.obiba.bitwise.util.BitVectorQueryResult;
 import org.obiba.genobyte.GenotypingRecordStore;
 import org.obiba.genobyte.inconsistency.ComparableRecordProvider;
 
-
 /**
  * Implements {@link ComparableRecordProvider} based on two fields: 
  * <ul>
@@ -45,26 +44,29 @@ import org.obiba.genobyte.inconsistency.ComparableRecordProvider;
 public class ReferenceIdFieldComparableRecordProvider implements ComparableRecordProvider {
 
   private GenotypingRecordStore store_;
+
   private Field referenceIdField_;
+
   private Field idField_;
 
-  public ReferenceIdFieldComparableRecordProvider(GenotypingRecordStore store, String idField, String referenceIdField) {
+  public ReferenceIdFieldComparableRecordProvider(GenotypingRecordStore store, String idField,
+      String referenceIdField) {
     store_ = store;
     BitwiseStore bs = store_.getStore();
     referenceIdField_ = bs.getField(referenceIdField);
     if(referenceIdField_ == null) {
-      throw new IllegalArgumentException("Field ["+referenceIdField+"] does not exist.");
+      throw new IllegalArgumentException("Field [" + referenceIdField + "] does not exist.");
     }
     idField_ = bs.getField(idField);
     if(idField_ == null) {
-      throw new IllegalArgumentException("Field ["+idField+"] does not exist.");
+      throw new IllegalArgumentException("Field [" + idField + "] does not exist.");
     }
   }
 
   public QueryResult getComparableRecords(int reference) {
     // Get the unique ID of the reference record
     BitVector referenceId = idField_.getValue(reference);
-    
+
     // Find all records that have referenceId as the value
     return referenceIdField_.query(referenceId);
   }
@@ -75,7 +77,8 @@ public class ReferenceIdFieldComparableRecordProvider implements ComparableRecor
     boolean lookupValues = true;
     Dictionary referenceIdDictionary = referenceIdField_.getDictionary();
     Dictionary idDictionary = idField_.getDictionary();
-    if(referenceIdDictionary.isOrdered() && idDictionary.isOrdered() && referenceIdDictionary.getName().equals(idDictionary.getName())) {
+    if(referenceIdDictionary.isOrdered() && idDictionary.isOrdered() &&
+        referenceIdDictionary.getName().equals(idDictionary.getName())) {
       lookupValues = false;
     }
 
@@ -86,7 +89,8 @@ public class ReferenceIdFieldComparableRecordProvider implements ComparableRecor
     Set<Object> referenceSampleIds = new TreeSet<Object>();
 
     // Add all values to the set of reference IDs
-    FieldValueIterator fvi = new FieldValueIterator<String>(referenceIdField_, new BitVectorQueryResult(recordsWithReference));
+    FieldValueIterator fvi = new FieldValueIterator<String>(referenceIdField_,
+        new BitVectorQueryResult(recordsWithReference));
     while(fvi.hasNext()) {
       FieldValueIterator.FieldValue fv = fvi.next();
 
@@ -105,12 +109,12 @@ public class ReferenceIdFieldComparableRecordProvider implements ComparableRecor
 
     // For every unique referenceId, find the reference record and build vector out of them
     QueryResult references = null;
-    for (Object referenceId : referenceSampleIds) {
+    for(Object referenceId : referenceSampleIds) {
       BitVector value = null;
       if(lookupValues == true) {
         value = idField_.getDictionary().lookup(referenceId);
       } else {
-        value = (BitVector)referenceId;
+        value = (BitVector) referenceId;
       }
       QueryResult reference = idField_.query(value);
       if(references == null) {

@@ -1,28 +1,25 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.bitwise.dao.impl.jdbm;
 
 import java.io.IOException;
 import java.util.Comparator;
-
-import jdbm.btree.BTree;
-import jdbm.helper.Serializer;
 
 import org.obiba.bitwise.dao.DaoKey;
 import org.obiba.bitwise.dao.impl.util.Timer;
@@ -30,6 +27,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ibatis.dao.client.DaoManager;
+
+import jdbm.btree.BTree;
+import jdbm.helper.Serializer;
 
 abstract class BaseBTreeJdbmDaoImpl<T, K> extends BaseRecordManagerDaoImpl<T> {
 
@@ -54,7 +54,7 @@ abstract class BaseBTreeJdbmDaoImpl<T, K> extends BaseRecordManagerDaoImpl<T> {
     K key = getKey(value);
     try {
       getBtree().insert(key, value, false);
-    } catch (IOException e) {
+    } catch(IOException e) {
       throw new JdbmRuntimeException(e);
     }
     if(enableTiming_) timer_.end();
@@ -64,7 +64,7 @@ abstract class BaseBTreeJdbmDaoImpl<T, K> extends BaseRecordManagerDaoImpl<T> {
     if(enableTiming_) timer_.start();
     try {
       getBtree().remove(name);
-    } catch (IOException e) {
+    } catch(IOException e) {
       throw new JdbmRuntimeException(e);
     }
     if(enableTiming_) timer_.end();
@@ -75,8 +75,8 @@ abstract class BaseBTreeJdbmDaoImpl<T, K> extends BaseRecordManagerDaoImpl<T> {
     if(enableTiming_) timer_.start();
     T t;
     try {
-      t = (T)getBtree().find(key);
-    } catch (IOException e) {
+      t = (T) getBtree().find(key);
+    } catch(IOException e) {
       throw new JdbmRuntimeException(e);
     }
     if(enableTiming_) timer_.end();
@@ -88,7 +88,7 @@ abstract class BaseBTreeJdbmDaoImpl<T, K> extends BaseRecordManagerDaoImpl<T> {
     K key = getKey(value);
     try {
       getBtree().insert(key, value, true);
-    } catch (IOException e) {
+    } catch(IOException e) {
       throw new JdbmRuntimeException(e);
     }
     if(enableTiming_) timer_.end();
@@ -113,7 +113,7 @@ abstract class BaseBTreeJdbmDaoImpl<T, K> extends BaseRecordManagerDaoImpl<T> {
             }
           }
           return btree;
-        } catch (IOException e) {
+        } catch(IOException e) {
           throw new JdbmRuntimeException(e);
         }
       }

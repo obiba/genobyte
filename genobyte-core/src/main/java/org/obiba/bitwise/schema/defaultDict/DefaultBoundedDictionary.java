@@ -1,26 +1,24 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.bitwise.schema.defaultDict;
 
-import org.obiba.bitwise.Dictionary;
 import org.obiba.bitwise.schema.DictionaryMetaData;
-
 
 /**
  * Bounded dictionaries are dictionaries dealing with numeric data, and designed to be compressed when a value transformed
@@ -30,14 +28,14 @@ import org.obiba.bitwise.schema.DictionaryMetaData;
  */
 public abstract class DefaultBoundedDictionary<T> extends DefaultDictionary {
   T lower_;
-  T upper_;
-  T step_;
 
+  T upper_;
+
+  T step_;
 
   public DefaultBoundedDictionary() {
     super();
   }
-
 
   /**
    * Add the Bounded type essential parameters before invoking the superclass DictionaryMetaData constructor.
@@ -47,14 +45,12 @@ public abstract class DefaultBoundedDictionary<T> extends DefaultDictionary {
     DictionaryMetaData dict = super.getDict();
     return dict;
   }
-  
-  
+
   /**
    * Gets the lower bound for the dictionary.
    * @return the lower bound.
    */
   public T getLower() { return lower_; }
-
 
   /**
    * Sets the lower bound for the dictionary.
@@ -65,13 +61,11 @@ public abstract class DefaultBoundedDictionary<T> extends DefaultDictionary {
     lower_ = pLower;
   }
 
-
   /**
    * Gets the upper bound for the dictionary.
    * @return the upper bound.
    */
   public T getUpper() { return upper_; }
-
 
   /**
    * Sets the upper bound for the dictionary.
@@ -82,13 +76,11 @@ public abstract class DefaultBoundedDictionary<T> extends DefaultDictionary {
     upper_ = pUpper;
   }
 
-
   /**
    * Gets the step value for the dictionary.
    * @return the step value.
    */
   public T getStep() { return step_; }
-
 
   /**
    * Sets the step value for the dictionary.

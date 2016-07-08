@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.genobyte.cli;
 
@@ -30,7 +30,6 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.ParseException;
 import org.obiba.genobyte.cli.LoadFileCommand.FileTypeLoader;
 
-
 /**
  * Helps create commands that produces a single report from store data.
  * <p/>
@@ -38,7 +37,7 @@ import org.obiba.genobyte.cli.LoadFileCommand.FileTypeLoader;
  * produced, an implementation of {@link ReportProducer} should be added to the <tt>ReportCommand</tt>
  * instance using
  * {@link ReportCommand#addReportProducer(org.obiba.genobyte.cli.ReportCommand.ReportProducer)}.
- * 
+ *
  * {@link ReportProducer} instances are identified using a keyword. 
  * <p/>
  * The command format is "<tt>report &lt;report_name&gt; &lt;output_filename&gt; &lt;report_parameters&gt;</tt>" where 
@@ -79,9 +78,9 @@ public class ReportCommand implements CliCommand {
     }
     String[] parameters = null;
     if(args.length > 2) {
-      parameters = new String[args.length - 2]; 
+      parameters = new String[args.length - 2];
       for(int i = 2; i < args.length; i++) {
-        parameters[i-2] = args[i];
+        parameters[i - 2] = args[i];
       }
     }
 
@@ -92,16 +91,16 @@ public class ReportCommand implements CliCommand {
         break;
       }
     }
-    
+
     // Error if no report with such name exists
     if(r == null) {
-      context.getOutput().println("There is no producer registered for the report type ["+reportType+"].");
+      context.getOutput().println("There is no producer registered for the report type [" + reportType + "].");
       return false;
     }
-    
+
     // Error if store is not opened yet but is required (we could want to generate report on non store-related information)
     if(r.requiresOpenStore() && context.getStore() == null) {
-      context.getOutput().println("Open a store before loading a file of type ["+r.getReportType()+"]");
+      context.getOutput().println("Open a store before loading a file of type [" + r.getReportType() + "]");
       return false;
     }
 
@@ -111,15 +110,16 @@ public class ReportCommand implements CliCommand {
       try {
         output = new PrintStream(new FileOutputStream(reportFilename));
         closeStream = true;
-      } catch (IOException e) {
-        context.getOutput().println("Cannot output to file ["+reportFilename+"]: " + e.getMessage());
+      } catch(IOException e) {
+        context.getOutput().println("Cannot output to file [" + reportFilename + "]: " + e.getMessage());
         return false;
       }
     } else {
       reportFilename = "console output";
     }
 
-    context.getOutput().println("Producing report type ["+r.getReportType()+"]. Outputing report to ["+reportFilename+"].");
+    context.getOutput()
+        .println("Producing report type [" + r.getReportType() + "]. Outputing report to [" + reportFilename + "].");
     try {
       r.generateReport(context, parameters, output);
     } catch(Exception e) {
@@ -137,27 +137,26 @@ public class ReportCommand implements CliCommand {
     return false;
   }
 
-
   public Option getOption() {
     StringBuilder sb = new StringBuilder();
     for(ReportProducer report : reports_) {
       if(sb.length() > 0) sb.append(", ");
       sb.append(report.getReportType());
     }
-    return OptionBuilder.withDescription("generates a report of type <type> and output to <filename> (use - for console output). Report parameters depend on its type. Available types are ["+sb.toString()+"]").withLongOpt("report").hasArgs().withArgName("type> <filename> <parameters").create();
+    return OptionBuilder.withDescription(
+        "generates a report of type <type> and output to <filename> (use - for console output). Report parameters depend on its type. Available types are [" +
+            sb.toString() + "]").withLongOpt("report").hasArgs().withArgName("type> <filename> <parameters").create();
   }
-
 
   /**
    * Adds an instance of {@link FileTypeLoader} that will may load a certain file type.
-   * 
+   *
    * @param loader the instance to be registered
    */
   public void addReport(ReportProducer report) {
     reports_.add(report);
   }
 
-  
   /**
    * Generates a type of reports for a <tt>GenotypingStore</tt>. Implementations of this interface should
    * provide a unique name.
@@ -173,14 +172,12 @@ public class ReportCommand implements CliCommand {
      */
     public String getReportType();
 
-
     /**
      * Launches the report generation.
      * @param context the context of the CLI.
      * @param files the name of the output file, or <tt>null</tt> if result is outputed to client shell.
      */
     public void generateReport(CliContext context, String[] parameters, PrintStream output);
-
 
     /**
      * Returns true if the report generator requires that a store is opened before processing the file(s).

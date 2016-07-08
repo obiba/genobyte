@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.bitwise.query;
 
@@ -32,11 +32,11 @@ public class BooleanQuery extends Query {
     AND, OR, XOR
   }
 
-
   private Operator op_ = null;
-  private Query left_ = null;
-  private Query right_ = null;
 
+  private Query left_ = null;
+
+  private Query right_ = null;
 
   public BooleanQuery(Operator op, Query left, Query right) {
     super();
@@ -55,17 +55,16 @@ public class BooleanQuery extends Query {
       case XOR:
         return left_.execute(store).xor(right_.execute(store));
     }
-    throw new QueryExecutionException("Invalid operator=["+op_+"]");
+    throw new QueryExecutionException("Invalid operator=[" + op_ + "]");
   }
 
   @Override
   public String explain(BitwiseStore store) throws QueryExecutionException {
     StringBuffer sb = new StringBuffer();
-    sb.append("(").append(left_.explain(store))
-      .append(" ").append(op_).append(" ").append(right_.explain(store)).append(")").append("{").append(execute(store).count()).append("}");
+    sb.append("(").append(left_.explain(store)).append(" ").append(op_).append(" ").append(right_.explain(store))
+        .append(")").append("{").append(execute(store).count()).append("}");
     return sb.toString();
   }
-
 
   /**
    * Creates a <tt>String</tt> representation of this query.

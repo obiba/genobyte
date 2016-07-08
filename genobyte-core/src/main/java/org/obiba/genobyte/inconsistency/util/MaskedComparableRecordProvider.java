@@ -15,6 +15,7 @@ public class MaskedComparableRecordProvider implements ComparableRecordProvider 
   /**
    * Builds a MaskedComparableRecordProvider instance that delegates the interface to <code>delegate</code> and
    * applies <code>mask</code> to the result.
+   *
    * @param delegate the {@link ComparableRecordProvider} implemementation to delegate to
    * @param mask the {@link QueryResult} used a as mask
    */

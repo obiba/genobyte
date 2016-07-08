@@ -5,38 +5,38 @@
     "http://www.ibatis.com/dtd/dao-2.dtd">
 <daoConfig>
 
-    <context id="bdb">
+  <context id="bdb">
 
-        <transactionManager type="org.obiba.bitwise.dao.impl.bdb.BdbTransactionManager"/>
+    <transactionManager type="org.obiba.bitwise.dao.impl.bdb.BdbTransactionManager"/>
 
-        <dao interface="org.obiba.bitwise.dao.BitVectorDtoDao" 
-             implementation="org.obiba.bitwise.dao.impl.bdb.BitVectorDtoDaoBdbImpl"/>
+    <dao interface="org.obiba.bitwise.dao.BitVectorDtoDao"
+        implementation="org.obiba.bitwise.dao.impl.bdb.BitVectorDtoDaoBdbImpl"/>
 
-        <dao interface="org.obiba.bitwise.dao.FieldDtoDao" 
-             implementation="org.obiba.bitwise.dao.impl.bdb.FieldDtoDaoBdbImpl"/>
+    <dao interface="org.obiba.bitwise.dao.FieldDtoDao"
+        implementation="org.obiba.bitwise.dao.impl.bdb.FieldDtoDaoBdbImpl"/>
 
-        <dao interface="org.obiba.bitwise.dao.DictionaryDtoDao" 
-             implementation="org.obiba.bitwise.dao.impl.bdb.DictionaryDtoDaoBdbImpl"/>
+    <dao interface="org.obiba.bitwise.dao.DictionaryDtoDao"
+        implementation="org.obiba.bitwise.dao.impl.bdb.DictionaryDtoDaoBdbImpl"/>
 
-        <dao interface="org.obiba.bitwise.dao.BitwiseStoreDtoDao" 
-             implementation="org.obiba.bitwise.dao.impl.bdb.BitwiseStoreDtoDaoBdbImpl"/>
-    </context>
+    <dao interface="org.obiba.bitwise.dao.BitwiseStoreDtoDao"
+        implementation="org.obiba.bitwise.dao.impl.bdb.BitwiseStoreDtoDaoBdbImpl"/>
+  </context>
 
-    <context id="jdbm">
+  <context id="jdbm">
 
-        <transactionManager type="org.obiba.bitwise.dao.impl.jdbm.JdbmTransactionManager"/>
+    <transactionManager type="org.obiba.bitwise.dao.impl.jdbm.JdbmTransactionManager"/>
 
-        <dao interface="org.obiba.bitwise.dao.BitVectorDtoDao" 
-             implementation="org.obiba.bitwise.dao.impl.jdbm.BitVectorDtoDaoJdbmImpl"/>
+    <dao interface="org.obiba.bitwise.dao.BitVectorDtoDao"
+        implementation="org.obiba.bitwise.dao.impl.jdbm.BitVectorDtoDaoJdbmImpl"/>
 
-        <dao interface="org.obiba.bitwise.dao.FieldDtoDao" 
-             implementation="org.obiba.bitwise.dao.impl.jdbm.FieldDtoDaoJdbmImpl"/>
+    <dao interface="org.obiba.bitwise.dao.FieldDtoDao"
+        implementation="org.obiba.bitwise.dao.impl.jdbm.FieldDtoDaoJdbmImpl"/>
 
-        <dao interface="org.obiba.bitwise.dao.DictionaryDtoDao" 
-             implementation="org.obiba.bitwise.dao.impl.jdbm.DictionaryDtoDaoJdbmImpl"/>
+    <dao interface="org.obiba.bitwise.dao.DictionaryDtoDao"
+        implementation="org.obiba.bitwise.dao.impl.jdbm.DictionaryDtoDaoJdbmImpl"/>
 
-        <dao interface="org.obiba.bitwise.dao.BitwiseStoreDtoDao" 
-             implementation="org.obiba.bitwise.dao.impl.jdbm.BitwiseStoreDtoDaoJdbmImpl"/>
-    </context>
+    <dao interface="org.obiba.bitwise.dao.BitwiseStoreDtoDao"
+        implementation="org.obiba.bitwise.dao.impl.jdbm.BitwiseStoreDtoDaoJdbmImpl"/>
+  </context>
 
 </daoConfig>

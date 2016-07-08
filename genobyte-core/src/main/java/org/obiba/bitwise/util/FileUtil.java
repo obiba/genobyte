@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.bitwise.util;
 
@@ -26,7 +26,7 @@ import java.io.IOException;
  * A collection of static methods to manage files and directories.
  */
 public final class FileUtil {
-  
+
   /**
    * Delete a directory and its sub-files
    * @param directory the directory to delete
@@ -36,7 +36,6 @@ public final class FileUtil {
     deltree(new File(directory));
   }
 
-
   /**
    * Delete a directory and its sub-files
    * @param dir the directory to delete
@@ -44,33 +43,33 @@ public final class FileUtil {
    * @throws FileNotFoundException if  any
    */
   public static void deltree(final File dir) throws IOException {
-    if (dir == null) {
+    if(dir == null) {
       return;
     }
 
-    if (!dir.exists()) {
+    if(!dir.exists()) {
       throw new FileNotFoundException("The dir=[" + dir + "] doesnt exist");
     }
 
-    if (!dir.isDirectory()) {
+    if(!dir.isDirectory()) {
       return;
     }
 
     File[] allFiles = dir.listFiles();
 
-    for (int i = 0; i < allFiles.length; i++) {
+    for(int i = 0; i < allFiles.length; i++) {
       File currentFile = allFiles[i];
 
-      if (currentFile.isDirectory()) {
+      if(currentFile.isDirectory()) {
         deltree(currentFile);
       } else {
-        if (!currentFile.delete()) {
+        if(!currentFile.delete()) {
           System.err.println("Cant delete the file=[" + currentFile.getAbsolutePath() + "]");
         }
       }
     }
 
-    if (!dir.delete()) {
+    if(!dir.delete()) {
       System.err.println("Cant delete the dir=[" + dir.getAbsolutePath() + "]");
     }
   }

@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.genobyte.cli;
 
@@ -26,7 +26,6 @@ import org.obiba.bitwise.BitwiseStoreUtil;
 import org.obiba.bitwise.util.BitwiseDiskUtil;
 import org.obiba.genobyte.GenotypingStore;
 
-
 /**
  * Base class for opening a GenotypingStore, extending classes should implement the {@link OpenCommand#openStore} method.
  */
@@ -35,7 +34,7 @@ public abstract class OpenCommand implements CliCommand {
   public boolean requiresOpenStore() {
     return false;
   }
-  
+
   public boolean execute(Option opt, CliContext context) throws ParseException {
     String storeName = opt.getValue();
     if(context.getStore() != null) {
@@ -44,10 +43,10 @@ public abstract class OpenCommand implements CliCommand {
     }
 
     context.clear();
-    context.getOutput().println("Opening store "+storeName+".");
+    context.getOutput().println("Opening store " + storeName + ".");
     GenotypingStore<?, ?, ?, ?> store = open(storeName);
     if(store == null) {
-      context.getOutput().println("Store "+storeName+" does not exist");
+      context.getOutput().println("Store " + storeName + " does not exist");
       return false;
     }
     context.setStore(store);
@@ -57,7 +56,8 @@ public abstract class OpenCommand implements CliCommand {
   }
 
   public Option getOption() {
-    return OptionBuilder.withDescription("open the store <name>").withLongOpt("open").hasArg().withArgName("name").create('o');
+    return OptionBuilder.withDescription("open the store <name>").withLongOpt("open").hasArg().withArgName("name")
+        .create('o');
   }
 
   /**
@@ -78,12 +78,12 @@ public abstract class OpenCommand implements CliCommand {
   protected GenotypingStore<?, ?, ?, ?> open(String name) {
     BitwiseStore sampleStore = null;
     BitwiseStore assayStore = null;
-    String samplesName = name+"_samples";
-    String assaysName = name+"_assays";
+    String samplesName = name + "_samples";
+    String assaysName = name + "_assays";
     if(BitwiseStoreUtil.getInstance().exists(samplesName)) {
       sampleStore = BitwiseStoreUtil.getInstance().open(samplesName);
       if(sampleStore == null) {
-        throw new IllegalArgumentException("Cannot open store ["+samplesName+"]");
+        throw new IllegalArgumentException("Cannot open store [" + samplesName + "]");
       }
     } else {
       // TODO: When a call to "exists" is made, the underlying directory is created. This will delete it.
@@ -93,14 +93,14 @@ public abstract class OpenCommand implements CliCommand {
     if(BitwiseStoreUtil.getInstance().exists(assaysName)) {
       assayStore = BitwiseStoreUtil.getInstance().open(assaysName);
       if(assayStore == null) {
-        throw new IllegalArgumentException("Cannot open store ["+assaysName+"]");
+        throw new IllegalArgumentException("Cannot open store [" + assaysName + "]");
       }
     } else {
       BitwiseDiskUtil.deleteStore(assaysName);
       return null;
     }
-    
-    return openStore(sampleStore, assayStore); 
+
+    return openStore(sampleStore, assayStore);
 
   }
 }

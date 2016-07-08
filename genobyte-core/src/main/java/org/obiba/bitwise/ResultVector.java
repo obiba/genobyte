@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.bitwise;
 
@@ -23,13 +23,15 @@ import org.obiba.bitwise.query.QueryResult;
 class ResultVector implements QueryResult {
 
   BitVector result_ = null;
-  
+
   BitVector filter_ = null;
+
   boolean filtered_ = false;    //Have we already removed filtered records from result_ vector?
-  
+
   BitVector deleted_ = null;
+
   boolean deletedClean_ = false;  //Have we already removed deleted records from result_ vector?
-  
+
   int[] hits_ = null;
 
   ResultVector(BitVector result, BitVector filter, BitVector deleted) {
@@ -43,7 +45,7 @@ class ResultVector implements QueryResult {
     result_ = result;
     filter_ = template.filter_;
     filtered_ = template.filtered_;
-    deleted_  = template.deleted_;
+    deleted_ = template.deleted_;
     deletedClean_ = template.deletedClean_;
   }
 
@@ -60,13 +62,13 @@ class ResultVector implements QueryResult {
     filter();
     return result_;
   }
-  
+
   public BitVector getFilter() {
     return filter_;
   }
 
   public QueryResult copy() {
-    return new ResultVector(this); 
+    return new ResultVector(this);
   }
 
   public int hit(int index) {
@@ -101,7 +103,7 @@ class ResultVector implements QueryResult {
     filter();
     filtered_ = false;
     deletedClean_ = false;
-    
+
     //Filter is true in one of the following cases:
     //  1-One operand is true and the other is filtered
     //  2-Both operands are filtered    
@@ -112,7 +114,7 @@ class ResultVector implements QueryResult {
     BitVector part2 = new BitVector(result_).and(r.getFilter());    //R1 AND F2
     part1.or(part2);
     filter_ = part1;
-    
+
     result_.and(r.bits());
     return this;
   }
@@ -121,20 +123,20 @@ class ResultVector implements QueryResult {
     filter();
     filtered_ = false;
     deletedClean_ = false;
-    
+
     //AndNot operator results differ depending on which vector is applied to the left or right of
     //the operator. There are two situations where we can have any filter bits set to one and have a
     //result filter that is not set to one:
     //1-The left operand is false.
     //2-The right operand is true.
     //Note: In both cases, the result bit will be a zero.
-    
+
     //newFilter = (F1 OR F2) AND (F1 OR R1) AND NOT(R2)
     //can be simplified to
     //newFilter = F1 OR (F2 AND R1) AND NOT(R2)
     BitVector newFilter = new BitVector(r.getFilter()).and(result_).or(filter_).andNot(r.bits());
     filter_ = newFilter;
-    
+
     result_.andNot(r.bits());
     return this;
   }
@@ -146,7 +148,7 @@ class ResultVector implements QueryResult {
 
     //Let's merge the results first, as we can use the OR result in the filter construction.
     result_.or(r.bits());
-    
+
     //As soon as one operand is true, the result will be true.
     //For all other cases involving at least one filtered operand, result will be filtered.
     //newFilter = (F1 OR F2) AND NOT(R1 OR R2)
@@ -158,9 +160,9 @@ class ResultVector implements QueryResult {
     filter();
     filtered_ = false;
     deletedClean_ = false;
-    
+
     result_.xor(r.bits());
-    
+
     //As soon as one operand is filtered, the result will be filtered.
     //(We must known both sides of the operation to know the result.)
     //newFilter = (F1 OR F2)
@@ -174,14 +176,14 @@ class ResultVector implements QueryResult {
       result_.andNot(filter_);
     }
   }
-  
+
   protected void cleanDeleted() {
     if(deletedClean_ == false) {
       deletedClean_ = true;
       result_.andNot(deleted_);
     }
   }
-  
+
   /**
    * Creates the hits_ member variable 
    */
@@ -190,7 +192,7 @@ class ResultVector implements QueryResult {
     filter();
     hits_ = new int[result_.count()];
     int hitIndex = 0;
-    for(int i = next(0); i != -1 ; i = next(i+1)) {
+    for(int i = next(0); i != -1; i = next(i + 1)) {
       hits_[hitIndex++] = i;
     }
   }

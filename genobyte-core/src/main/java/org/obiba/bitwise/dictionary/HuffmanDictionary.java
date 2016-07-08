@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.bitwise.dictionary;
 
@@ -31,7 +31,6 @@ import org.obiba.bitwise.util.FileLineIterator;
 import org.obiba.bitwise.util.Huffman;
 import org.obiba.bitwise.util.HuffmanSeedProvider;
 
-
 /**
  * Provides encoding/decoding capabilities between a <tt>String</tt> of variable size value and a <tt>BitVector</tt>.
  * This implementation uses Huffman coding to transform characters into bits. An instance of this dictionary must have
@@ -42,15 +41,15 @@ import org.obiba.bitwise.util.HuffmanSeedProvider;
 public class HuffmanDictionary implements WildcardDictionary<String> {
 
   private String name_ = null;
-  private Huffman hm_ = null;
-  private int dimension_ = 0;
 
+  private Huffman hm_ = null;
+
+  private int dimension_ = 0;
 
   public HuffmanDictionary(String name) {
     super();
     name_ = name;
   }
-
 
   /**
    * Sets the Huffman coding seed of this dictionary by providing the path to a text file.
@@ -61,12 +60,11 @@ public class HuffmanDictionary implements WildcardDictionary<String> {
     if(hm_ == null) {
       try {
         hm_ = new Huffman(new FileLineIterator(filename));
-      } catch (IOException e) {
+      } catch(IOException e) {
         throw new RuntimeException(e);
       }
     }
   }
-
 
   /**
    * Sets the Huffman coding seed of this dictionary by providing a <tt>String</tt>.
@@ -79,7 +77,6 @@ public class HuffmanDictionary implements WildcardDictionary<String> {
     }
   }
 
-
   /**
    * Sets the Huffman coding seed of this dictionary by providing a <tt>List</tt> of <tt>Strings</tt>.
    * All the <tt>Strings</tt> in the <tt>List</tt> will be used as this dictionary seed.
@@ -91,7 +88,6 @@ public class HuffmanDictionary implements WildcardDictionary<String> {
     }
   }
 
-
   /**
    * Sets the Huffman coding seed of this dictionary by providing an <tt>Object</tt> implementing the <tt>HuffmanSeedProvider</tt> interface.
    * The object will act as a provider for the characters to be used in this dictionary's Huffman coding.
@@ -102,20 +98,20 @@ public class HuffmanDictionary implements WildcardDictionary<String> {
       try {
         Class providerClass = Class.forName(className);
         if(HuffmanSeedProvider.class.isAssignableFrom(providerClass) == false) {
-          throw new RuntimeException("Seed provider class ["+className+"] does not implement "+HuffmanSeedProvider.class.getSimpleName());
+          throw new RuntimeException("Seed provider class [" + className + "] does not implement " +
+              HuffmanSeedProvider.class.getSimpleName());
         }
-        hm_ = new Huffman((HuffmanSeedProvider)providerClass.newInstance());
+        hm_ = new Huffman((HuffmanSeedProvider) providerClass.newInstance());
         return;
-      } catch (ClassNotFoundException e) {
-        throw new RuntimeException("Seed provider class ["+className+"] not found");
-      } catch (InstantiationException e) {
-        throw new RuntimeException("Seed provider class ["+className+"] cannot be instantiated.", e );
-      } catch (IllegalAccessException e) {
-        throw new RuntimeException("Seed provider class ["+className+"] cannot be instantiated.", e);
+      } catch(ClassNotFoundException e) {
+        throw new RuntimeException("Seed provider class [" + className + "] not found");
+      } catch(InstantiationException e) {
+        throw new RuntimeException("Seed provider class [" + className + "] cannot be instantiated.", e);
+      } catch(IllegalAccessException e) {
+        throw new RuntimeException("Seed provider class [" + className + "] cannot be instantiated.", e);
       }
     }
   }
-
 
   /*
    * @see org.obiba.bitwise.Dictionary#convert(java.lang.String)
@@ -124,14 +120,12 @@ public class HuffmanDictionary implements WildcardDictionary<String> {
     return value;
   }
 
-
   /*
    * @see org.obiba.bitwise.Dictionary#dimension()
    */
   public int dimension() {
     return dimension_;
   }
-
 
   /*
    * @see org.obiba.bitwise.Dictionary#getName()
@@ -140,14 +134,12 @@ public class HuffmanDictionary implements WildcardDictionary<String> {
     return name_;
   }
 
-
   /*
    * @see org.obiba.bitwise.Dictionary#isOrdered()
    */
   public boolean isOrdered() {
     return false;
   }
-
 
   /*
    * @see org.obiba.bitwise.Dictionary#lookup(T)
@@ -166,7 +158,6 @@ public class HuffmanDictionary implements WildcardDictionary<String> {
     return v;
   }
 
-
   /*
    * @see org.obiba.bitwise.dictionary.WildcardDictionary#partialLookupLeft(T)
    */
@@ -177,7 +168,6 @@ public class HuffmanDictionary implements WildcardDictionary<String> {
     BitVector v = hm_.encode(key, false);
     return v;
   }
-
 
   /*
    * @see org.obiba.bitwise.dictionary.WildcardDictionary#partialLookupRight(T)
@@ -190,7 +180,6 @@ public class HuffmanDictionary implements WildcardDictionary<String> {
     return v;
   }
 
-
   /*
    * @see org.obiba.bitwise.Dictionary#reverseLookup(org.obiba.bitwise.BitVector)
    */
@@ -201,20 +190,18 @@ public class HuffmanDictionary implements WildcardDictionary<String> {
     return hm_.decode(v);
   }
 
-
   public boolean isVariableLength() {
     return true;
   }
-  
+
   @Override
   public boolean equals(Object obj) {
     if(obj instanceof HuffmanDictionary) {
-      HuffmanDictionary hd = (HuffmanDictionary)obj;
+      HuffmanDictionary hd = (HuffmanDictionary) obj;
       return hd.hm_.equals(hd.hm_);
     }
     return super.equals(obj);
   }
-
 
   public void setRuntimeData(byte[] data) {
     if(data == null) {
@@ -223,16 +210,15 @@ public class HuffmanDictionary implements WildcardDictionary<String> {
     try {
       ByteArrayInputStream bais = new ByteArrayInputStream(data);
       ObjectInputStream ois = new ObjectInputStream(bais);
-      hm_ = (Huffman)ois.readObject();
+      hm_ = (Huffman) ois.readObject();
       dimension_ = ois.readInt();
       ois.close();
-    } catch (IOException e) {
+    } catch(IOException e) {
       throw new RuntimeException(e);
-    } catch (ClassNotFoundException e) {
+    } catch(ClassNotFoundException e) {
       throw new RuntimeException(e);
     }
   }
-
 
   public byte[] getRuntimeData() {
     try {
@@ -243,7 +229,7 @@ public class HuffmanDictionary implements WildcardDictionary<String> {
       oos.close();
       byte[] ret = baos.toByteArray();
       return ret;
-    } catch (IOException e) {
+    } catch(IOException e) {
       throw new RuntimeException(e);
     }
   }

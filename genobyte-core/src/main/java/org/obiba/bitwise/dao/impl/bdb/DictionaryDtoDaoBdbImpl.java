@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.bitwise.dao.impl.bdb;
 
@@ -30,7 +30,6 @@ import java.util.List;
 import org.obiba.bitwise.dao.DictionaryDtoDao;
 import org.obiba.bitwise.dto.DictionaryDto;
 import org.obiba.bitwise.util.Property;
-
 
 import com.ibatis.dao.client.DaoManager;
 import com.sleepycat.bind.EntityBinding;
@@ -56,11 +55,11 @@ public class DictionaryDtoDaoBdbImpl extends BaseCrudDaoImpl<DictionaryDto, Stri
   private Database getDictionaryDb() {
     try {
       return getContext().getDatabase(DICTIONARY_DB);
-    } catch (DatabaseException e) {
+    } catch(DatabaseException e) {
       throw new RuntimeException(e);
     }
   }
-  
+
   @Override
   protected String getKey(DictionaryDto value) {
     return value.getName();
@@ -109,7 +108,7 @@ public class DictionaryDtoDaoBdbImpl extends BaseCrudDaoImpl<DictionaryDto, Stri
 
         dis.close();
         return new DictionaryDto(name, className, props, runtime);
-      } catch (IOException e) {
+      } catch(IOException e) {
         throw new RuntimeException(e);
       }
     }
@@ -118,7 +117,7 @@ public class DictionaryDtoDaoBdbImpl extends BaseCrudDaoImpl<DictionaryDto, Stri
      * @see com.sleepycat.bind.EntityBinding#objectToData(java.lang.Object, com.sleepycat.je.DatabaseEntry)
      */
     public void objectToData(Object o, DatabaseEntry entry) {
-      DictionaryDto d = (DictionaryDto)o;
+      DictionaryDto d = (DictionaryDto) o;
       List<Property> props = d.getProperties();
 
       int size = props != null ? props.size() : 0;
@@ -129,7 +128,7 @@ public class DictionaryDtoDaoBdbImpl extends BaseCrudDaoImpl<DictionaryDto, Stri
         dos.writeUTF(d.getClazz());
         dos.writeInt(size);
         if(props != null) {
-          for (Property property : props) {
+          for(Property property : props) {
             dos.writeUTF(property.getName());
             dos.writeUTF(property.getValue());
           }
@@ -143,7 +142,7 @@ public class DictionaryDtoDaoBdbImpl extends BaseCrudDaoImpl<DictionaryDto, Stri
         }
         dos.flush();
         entry.setData(baos.toByteArray());
-      } catch (IOException e) {
+      } catch(IOException e) {
         throw new RuntimeException(e);
       }
     }
@@ -152,7 +151,7 @@ public class DictionaryDtoDaoBdbImpl extends BaseCrudDaoImpl<DictionaryDto, Stri
      * @see com.sleepycat.bind.EntityBinding#objectToKey(java.lang.Object, com.sleepycat.je.DatabaseEntry)
      */
     public void objectToKey(Object o, DatabaseEntry entry) {
-      DictionaryDto d = (DictionaryDto)o;
+      DictionaryDto d = (DictionaryDto) o;
       StringBinding.stringToEntry(d.getName(), entry);
     }
   }

@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.bitwise.query;
 
@@ -22,28 +22,27 @@ import org.obiba.bitwise.BitVector;
 
 /**
  * Holds the result of a <code>Query</code>.
- * 
+ *
  * @author plaflamm
  */
 public interface QueryResult {
 
   /**
    * Returns the bit representation of the results.
-   * 
+   *
    * @return a <link>BitVector</link> containing the results.
    */
   public BitVector bits();
-  
+
   /**
    * Get the filter vector.
    * @return A BitVector of the filter.
    */
   public BitVector getFilter();
-  
 
   /**
    * Creates a copy of this <code>QueryResult</code> and returns it.
-   * 
+   *
    * @return a copy of this <code>QueryResult</code>
    */
   public QueryResult copy();
@@ -74,7 +73,7 @@ public interface QueryResult {
 
   /**
    * Returns true if the index is a hit
-   * 
+   *
    * @param index the index to test
    * @return true if <code>index</code> is a hit
    */
@@ -82,21 +81,21 @@ public interface QueryResult {
 
   /**
    * Returns the number of hits
-   * 
+   *
    * @return the number of hits
    */
   public int count();
 
   /**
    * Reverses the hits.
-   * 
+   *
    * @return <code>this</code>
    */
   public QueryResult not();
 
   /**
    * Applies the AND operator to <code>this</code> and returns <code>this</code>.
-   * 
+   *
    * @param r the vector to operate with
    * @return <code>this</code>
    */
@@ -104,7 +103,7 @@ public interface QueryResult {
 
   /**
    * Applies the AND NOT operator to <code>this</code> and returns <code>this</code>.
-   * 
+   *
    * @param r the vector to operate with
    * @return <code>this</code>
    */
@@ -112,7 +111,7 @@ public interface QueryResult {
 
   /**
    * Applies the OR operator to <code>this</code> and returns <code>this</code>.
-   * 
+   *
    * @param r the vector to operate with
    * @return <code>this</code>
    */
@@ -120,7 +119,7 @@ public interface QueryResult {
 
   /**
    * Applies the XOR operator to <code>this</code> and returns <code>this</code>.
-   * 
+   *
    * @param r the vector to operate with
    * @return <code>this</code>
    */

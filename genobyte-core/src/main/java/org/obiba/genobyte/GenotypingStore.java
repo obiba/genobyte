@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.genobyte;
 
@@ -34,7 +34,6 @@ import org.obiba.genobyte.statistic.DefaultFrequencyStatsDigester;
 import org.obiba.genobyte.statistic.DefaultSampleStatsRunDefinition;
 import org.obiba.genobyte.statistic.StatsPool;
 
-
 /**
  * Store to hold genotypes for any given assay and sample. A <tt>GenotypingStore</tt> is composed of two <tt>BitwiseStore</tt> objects,
  * one for the assays and one for the samples. This allows for stats to be computed efficiently per assay and per sample.
@@ -51,6 +50,7 @@ abstract public class GenotypingStore<AK, AT, SK, ST> {
 
   /** The store that contains the genotype data, organized by sample. */
   protected GenotypingRecordStore<SK, ST, AK> samples_ = null;
+
   /** The store that contains the genotype data, organized by assay. */
   protected GenotypingRecordStore<AK, AT, SK> assays_ = null;
 
@@ -61,17 +61,17 @@ abstract public class GenotypingStore<AK, AT, SK, ST> {
     samples_.setTransposedStore(assays);
     assays_.setTransposedStore(samples);
 
-    for (DefaultGenotypingField field : DefaultGenotypingField.defaultSampleFields()) {
+    for(DefaultGenotypingField field : DefaultGenotypingField.defaultSampleFields()) {
       samples_.registerGenotypingField(field);
     }
 
-    for (DefaultGenotypingField field : DefaultGenotypingField.defaultAssayFields()) {
+    for(DefaultGenotypingField field : DefaultGenotypingField.defaultAssayFields()) {
       assays_.registerGenotypingField(field);
     }
 
     //Prepare the statistics digester for both stores.
-    StatsPool<AK,SK> assayStatsPool = new StatsPool<AK,SK>(assays_, new DefaultAssayStatsRunDefinition());
-    StatsPool<SK,AK> sampleStatsPool = new StatsPool<SK,AK>(samples_, new DefaultSampleStatsRunDefinition());
+    StatsPool<AK, SK> assayStatsPool = new StatsPool<AK, SK>(assays_, new DefaultAssayStatsRunDefinition());
+    StatsPool<SK, AK> sampleStatsPool = new StatsPool<SK, AK>(samples_, new DefaultSampleStatsRunDefinition());
     assays_.setStatsPool(assayStatsPool);
     samples_.setStatsPool(sampleStatsPool);
     assays_.setStatsDigester(new DefaultAssayDigester());
@@ -103,7 +103,6 @@ abstract public class GenotypingStore<AK, AT, SK, ST> {
     getAssayStore().startTransaction();
   }
 
-
   /**
    * Transfers <tt>BitwiseStore</tt> modifications to the persistant medium for both sample and assay stores.
    */
@@ -111,7 +110,6 @@ abstract public class GenotypingStore<AK, AT, SK, ST> {
     getSampleStore().flush();
     getAssayStore().flush();
   }
-
 
   /**
    * Commits the ongoing transaction in the two bitwise stores <b>sample</b> and <b>assay</b>.
@@ -122,7 +120,6 @@ abstract public class GenotypingStore<AK, AT, SK, ST> {
     getAssayStore().commitTransaction();
   }
 
-
   /**
    * Rollbacks ongoing transactions on the two bitwise stores <b>sample</b> and <b>assay</b>, and clear their transaction cache.
    * @see org.obiba.bitwise.BitwiseStore.endTransaction()
@@ -131,7 +128,6 @@ abstract public class GenotypingStore<AK, AT, SK, ST> {
     getSampleStore().endTransaction();
     getAssayStore().endTransaction();
   }
-
 
   /**
    * Gets the number of samples in this store.
@@ -142,7 +138,6 @@ abstract public class GenotypingStore<AK, AT, SK, ST> {
     return getSampleStore().getSize();
   }
 
-
   /**
    * Gets the number of assays in this store.
    * @see org.obiba.bitwise.BitwiseStore.getSize()
@@ -151,7 +146,6 @@ abstract public class GenotypingStore<AK, AT, SK, ST> {
   public int getAssayCount() {
     return getAssayStore().getSize();
   }
-
 
   /**
    * Gets the current maximum number of samples that can be put in this store.
@@ -162,7 +156,6 @@ abstract public class GenotypingStore<AK, AT, SK, ST> {
     return getSampleStore().getCapacity();
   }
 
-
   /**
    * Guarantees that at least a certain number of samples can be put in this store.
    * @see org.obiba.bitwise.BitwiseStore.ensureCapacity()
@@ -172,7 +165,6 @@ abstract public class GenotypingStore<AK, AT, SK, ST> {
     getSampleStore().ensureCapacity(capacity);
   }
 
-
   /**
    * Guarantees that at least a certain number of samples can be put in this store.
    * @see org.obiba.bitwise.BitwiseStore.ensureCapacity()
@@ -181,7 +173,6 @@ abstract public class GenotypingStore<AK, AT, SK, ST> {
   public void ensureAssayCapacity(int capacity) {
     getAssayStore().ensureCapacity(capacity);
   }
-
 
   /**
    * Computes a set of basic statistics on the genotypes of this <tt>GenotypingStore</tt>.
@@ -199,7 +190,6 @@ abstract public class GenotypingStore<AK, AT, SK, ST> {
     samples_.updateStats();
   }
 
-
   /**
    * Closes the two <tt>BitwiseStore</tt> instances for assays and samples.i
    * @see org.obiba.bitwise.BitwiseStore.startTransaction()
@@ -216,12 +206,10 @@ abstract public class GenotypingStore<AK, AT, SK, ST> {
     }
   }
 
-
-
   public void reproDna() {
-    reproDna(new DefaultReproducibilityErrorCountingStrategy<SK, AK>(DefaultGenotypingField.REPRO_DNA, DefaultGenotypingField.REPRO_DNA_TESTS, samples_, assays_));
+    reproDna(new DefaultReproducibilityErrorCountingStrategy<SK, AK>(DefaultGenotypingField.REPRO_DNA,
+        DefaultGenotypingField.REPRO_DNA_TESTS, samples_, assays_));
   }
-
 
   public void reproDna(ReproducibilityErrorCountingStrategy<SK> strategy) {
     ReproducibilityErrorCalculator<SK> calculator = new ReproducibilityErrorCalculator<SK>(samples_);
@@ -230,11 +218,10 @@ abstract public class GenotypingStore<AK, AT, SK, ST> {
     calculator.calculate();
   }
 
-
   public void reproAssay() {
-    reproAssay(new DefaultReproducibilityErrorCountingStrategy<AK, SK>(DefaultGenotypingField.REPRO_ASSAY, DefaultGenotypingField.REPRO_ASSAY_TESTS, assays_, samples_));
+    reproAssay(new DefaultReproducibilityErrorCountingStrategy<AK, SK>(DefaultGenotypingField.REPRO_ASSAY,
+        DefaultGenotypingField.REPRO_ASSAY_TESTS, assays_, samples_));
   }
-
 
   public void reproAssay(ReproducibilityErrorCountingStrategy<AK> strategy) {
     ReproducibilityErrorCalculator<AK> calculator = new ReproducibilityErrorCalculator<AK>(assays_);
@@ -242,7 +229,6 @@ abstract public class GenotypingStore<AK, AT, SK, ST> {
     calculator.setCountingStrategy(strategy);
     calculator.calculate();
   }
-
 
   /**
    * Computes mendelian errors found in the genotypes. This is the general method to invoke when the
@@ -252,7 +238,6 @@ abstract public class GenotypingStore<AK, AT, SK, ST> {
     mendel(new DefaultMendelianErrorCountingStrategy<SK>(samples_, assays_));
   }
 
-
   public void mendel(MendelianErrorCountingStrategy<SK> strategy) {
     MendelianErrorCalculator<SK> calculator = new MendelianErrorCalculator<SK>(samples_);
     calculator.setCountingStrategy(strategy);
@@ -260,21 +245,19 @@ abstract public class GenotypingStore<AK, AT, SK, ST> {
     calculator.calculate();
   }
 
-
   public void reverseCalls() {
     ReversableCallExecutor<AK> executor = new ReversableCallExecutor<AK>(assays_);
     executor.reverse();
   }
-
 
   /**
    * Gets the <tt>BitwiseStore</tt> instance used to store samples in this <tt>GenotypingStore</tt>.
    * @return the <tt>BitwiseStore</tt>.
    */
   protected BitwiseStore getSampleStore() {
-    return  samples_.getStore();
+    return samples_.getStore();
   }
-  
+
   /**
    * Gets the <tt>BitwiseStore</tt> instance used to store assays in this <tt>GenotypingStore</tt>.
    * @return the <tt>BitwiseStore</tt>.

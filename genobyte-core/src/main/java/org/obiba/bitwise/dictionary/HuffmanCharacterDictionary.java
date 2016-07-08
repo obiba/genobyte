@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.bitwise.dictionary;
 
@@ -32,7 +32,6 @@ import org.obiba.bitwise.util.FileLineIterator;
 import org.obiba.bitwise.util.Huffman;
 import org.obiba.bitwise.util.HuffmanSeedProvider;
 
-
 /**
  * Provides encoding/decoding capabilities between a <tt>Character</tt> value and a <tt>BitVector</tt>. This implementation uses
  * Huffman coding to transform characters into bits. An instance of this dictionary must have a list of all possible
@@ -42,15 +41,15 @@ import org.obiba.bitwise.util.HuffmanSeedProvider;
 public class HuffmanCharacterDictionary implements Dictionary<Character> {
 
   private String name_ = null;
-  private Huffman hm_ = null;
-  private int dimension_ = 0;
 
+  private Huffman hm_ = null;
+
+  private int dimension_ = 0;
 
   public HuffmanCharacterDictionary(String name) {
     super();
     name_ = name;
   }
-
 
   /**
    * Sets the Huffman coding seed of this dictionary by providing the path to a text file.
@@ -61,12 +60,11 @@ public class HuffmanCharacterDictionary implements Dictionary<Character> {
     if(hm_ == null) {
       try {
         hm_ = new Huffman(new FileLineIterator(filename));
-      } catch (IOException e) {
+      } catch(IOException e) {
         throw new RuntimeException(e);
       }
     }
   }
-
 
   /**
    * Sets the Huffman coding seed of this dictionary by providing a <tt>String</tt>.
@@ -79,7 +77,6 @@ public class HuffmanCharacterDictionary implements Dictionary<Character> {
     }
   }
 
-
   /**
    * Sets the Huffman coding seed of this dictionary by providing a <tt>List</tt> of <tt>Strings</tt>.
    * All the <tt>Strings</tt> in the <tt>List</tt> will be used as this dictionary seed.
@@ -91,7 +88,6 @@ public class HuffmanCharacterDictionary implements Dictionary<Character> {
     }
   }
 
-
   /**
    * Sets the Huffman coding seed of this dictionary by providing an <tt>Object</tt> implementing the <tt>HuffmanSeedProvider</tt> interface.
    * The object will act as a provider for the characters to be used in this dictionary's Huffman coding.
@@ -102,20 +98,20 @@ public class HuffmanCharacterDictionary implements Dictionary<Character> {
       try {
         Class providerClass = Class.forName(className);
         if(HuffmanSeedProvider.class.isAssignableFrom(providerClass) == false) {
-          throw new RuntimeException("Seed provider class ["+className+"] does not implement "+HuffmanSeedProvider.class.getSimpleName());
+          throw new RuntimeException("Seed provider class [" + className + "] does not implement " +
+              HuffmanSeedProvider.class.getSimpleName());
         }
-        hm_ = new Huffman((HuffmanSeedProvider)providerClass.newInstance());
+        hm_ = new Huffman((HuffmanSeedProvider) providerClass.newInstance());
         return;
-      } catch (ClassNotFoundException e) {
-        throw new RuntimeException("Seed provider class ["+className+"] not found");
-      } catch (InstantiationException e) {
-        throw new RuntimeException("Seed provider class ["+className+"] cannot be instantiated.", e );
-      } catch (IllegalAccessException e) {
-        throw new RuntimeException("Seed provider class ["+className+"] cannot be instantiated.", e);
+      } catch(ClassNotFoundException e) {
+        throw new RuntimeException("Seed provider class [" + className + "] not found");
+      } catch(InstantiationException e) {
+        throw new RuntimeException("Seed provider class [" + className + "] cannot be instantiated.", e);
+      } catch(IllegalAccessException e) {
+        throw new RuntimeException("Seed provider class [" + className + "] cannot be instantiated.", e);
       }
     }
   }
-
 
   /*
    * @see org.obiba.bitwise.Dictionary#convert(java.lang.String)
@@ -124,14 +120,12 @@ public class HuffmanCharacterDictionary implements Dictionary<Character> {
     return value.charAt(0);
   }
 
-
   /*
    * @see org.obiba.bitwise.Dictionary#dimension()
    */
   public int dimension() {
     return dimension_;
   }
-
 
   /*
    * @see org.obiba.bitwise.Dictionary#getName()
@@ -140,14 +134,12 @@ public class HuffmanCharacterDictionary implements Dictionary<Character> {
     return name_;
   }
 
-
   /*
    * @see org.obiba.bitwise.Dictionary#isOrdered()
    */
   public boolean isOrdered() {
     return false;
   }
-
 
   /*
    * @see org.obiba.bitwise.Dictionary#lookup(T)
@@ -166,7 +158,6 @@ public class HuffmanCharacterDictionary implements Dictionary<Character> {
     return v;
   }
 
-
   /*
    * @see org.obiba.bitwise.Dictionary#reverseLookup(org.obiba.bitwise.BitVector)
    */
@@ -177,11 +168,9 @@ public class HuffmanCharacterDictionary implements Dictionary<Character> {
     return hm_.decode(v).charAt(0);
   }
 
-
   public boolean isVariableLength() {
     return false;   //Fields using this dictionary always contain a single character.
   }
-
 
   public void setRuntimeData(byte[] data) {
     if(data == null) {
@@ -190,16 +179,15 @@ public class HuffmanCharacterDictionary implements Dictionary<Character> {
     try {
       ByteArrayInputStream bais = new ByteArrayInputStream(data);
       ObjectInputStream ois = new ObjectInputStream(bais);
-      hm_ = (Huffman)ois.readObject();
+      hm_ = (Huffman) ois.readObject();
       dimension_ = ois.readInt();
       ois.close();
-    } catch (IOException e) {
+    } catch(IOException e) {
       throw new RuntimeException(e);
-    } catch (ClassNotFoundException e) {
+    } catch(ClassNotFoundException e) {
       throw new RuntimeException(e);
     }
   }
-
 
   public byte[] getRuntimeData() {
     try {
@@ -210,7 +198,7 @@ public class HuffmanCharacterDictionary implements Dictionary<Character> {
       oos.close();
       byte[] ret = baos.toByteArray();
       return ret;
-    } catch (IOException e) {
+    } catch(IOException e) {
       throw new RuntimeException(e);
     }
   }

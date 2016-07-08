@@ -1,33 +1,33 @@
 <?xml version="1.0"?>
 <store-schema name="test-schema" version="1.0">
 
-    <dictionaries>
-        <dictionary name="test_dict_1" class="org.obiba.bitwise.dictionary.IntegerDictionary">
-          <property name="lower" value="0"/>
-          <property name="upper" value="2147483647"/>
-          <property name="step" value="1"/>
-        </dictionary>
+  <dictionaries>
+    <dictionary name="test_dict_1" class="org.obiba.bitwise.dictionary.IntegerDictionary">
+      <property name="lower" value="0"/>
+      <property name="upper" value="2147483647"/>
+      <property name="step" value="1"/>
+    </dictionary>
 
-        <dictionary name="test_dict_2" type="static" class="org.obiba.bitwise.dictionary.HuffmanDictionary">
-          <property name="provider" value="org.obiba.bitwise.client.GenericNameProvider"></property>
-        </dictionary>
+    <dictionary name="test_dict_2" type="static" class="org.obiba.bitwise.dictionary.HuffmanDictionary">
+      <property name="provider" value="org.obiba.bitwise.client.GenericNameProvider"></property>
+    </dictionary>
 
-        <dictionary name="test_dict_3" class="org.obiba.bitwise.dictionary.IntegerDictionary">
-            <property name="lower" value="0"/>
-            <property name="upper" value="9223372036854775807"/>
-            <property name="step" value="1"/>
-        </dictionary>
+    <dictionary name="test_dict_3" class="org.obiba.bitwise.dictionary.IntegerDictionary">
+      <property name="lower" value="0"/>
+      <property name="upper" value="9223372036854775807"/>
+      <property name="step" value="1"/>
+    </dictionary>
 
-        <dictionary name="test_dict_4" type="static" class="org.obiba.bitwise.dictionary.BooleanDictionary"/>
+    <dictionary name="test_dict_4" type="static" class="org.obiba.bitwise.dictionary.BooleanDictionary"/>
 
-    </dictionaries>
+  </dictionaries>
 
-    <fields>
-        <field name="sample_name" dictionary="test_dict_2"/>
-        <field name="sample_id" dictionary="test_dict_1"/>
-        <field name="timestamp" dictionary="test_dict_3"/>
+  <fields>
+    <field name="sample_name" dictionary="test_dict_2"/>
+    <field name="sample_id" dictionary="test_dict_1"/>
+    <field name="timestamp" dictionary="test_dict_3"/>
 
-        <field name="snp_state_.*" dictionary="test_dict" template="true"/>
-    </fields>
+    <field name="snp_state_.*" dictionary="test_dict" template="true"/>
+  </fields>
 
 </store-schema>

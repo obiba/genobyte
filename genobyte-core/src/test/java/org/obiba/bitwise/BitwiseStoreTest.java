@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.bitwise;
 
@@ -22,7 +22,6 @@ import org.obiba.bitwise.dao.BaseBdbDaoTestCase;
 import org.obiba.bitwise.schema.DictionaryMetaData;
 import org.obiba.bitwise.schema.FieldMetaData;
 import org.obiba.bitwise.schema.StoreSchema;
-
 
 public class BitwiseStoreTest extends BaseBdbDaoTestCase {
 
@@ -35,7 +34,7 @@ public class BitwiseStoreTest extends BaseBdbDaoTestCase {
     dmd.setName("d");
     dmd.setClass("org.obiba.bitwise.dictionary.BooleanDictionary");
     testSchema.addDictionary(dmd);
-    
+
     FieldMetaData fmd = new FieldMetaData();
     fmd.setName("f");
     fmd.setDictionary("d");
@@ -70,7 +69,7 @@ public class BitwiseStoreTest extends BaseBdbDaoTestCase {
     assertEquals(0, bs.getSize());
     assertNull(bs.getField("f").getValue(recordIndex));
   }
- 
+
   public void testZeroCapacity() {
     BitwiseStore bs = BitwiseStoreUtil.getInstance().create("zero", testSchema, 0);
     bs.close();
@@ -78,11 +77,11 @@ public class BitwiseStoreTest extends BaseBdbDaoTestCase {
     assertNotNull(bs);
     bs.close();
   }
-  
+
   public void testDeleted() {
     BitwiseStore bs = BitwiseStoreUtil.getInstance().create("test", testSchema, 3);
     int index;
-    assertTrue((index = bs.nextIndex()) >= 0) ;
+    assertTrue((index = bs.nextIndex()) >= 0);
     bs.close();
     bs = BitwiseStoreUtil.getInstance().open("test");
     assertNotNull(bs);
@@ -93,7 +92,6 @@ public class BitwiseStoreTest extends BaseBdbDaoTestCase {
     assertNotNull(bs);
     assertTrue(bs.getDeleted().get(index));
   }
-  
 
   public void testFieldPersistence() {
     BitwiseStore bs = BitwiseStoreUtil.getInstance().create("fieldPersistence", testSchema, 10);
@@ -109,5 +107,5 @@ public class BitwiseStoreTest extends BaseBdbDaoTestCase {
     assertEquals(Boolean.TRUE, f.getDictionary().reverseLookup(f.getValue(record)));
     bs.close();
   }
-  
+
 }

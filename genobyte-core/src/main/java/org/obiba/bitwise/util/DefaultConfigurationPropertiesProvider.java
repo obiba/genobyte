@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.bitwise.util;
 
@@ -79,7 +79,8 @@ public class DefaultConfigurationPropertiesProvider implements ConfigurationProp
         os = new FileOutputStream(props);
         prop.store(os, null);
       } catch(IOException e) {
-        throw new RuntimeException("An error occured while saving the bitwise properties for store "+storeName+": " + e.getMessage(), e);
+        throw new RuntimeException(
+            "An error occured while saving the bitwise properties for store " + storeName + ": " + e.getMessage(), e);
       } finally {
         try {
           if(os != null) os.close();
@@ -92,7 +93,7 @@ public class DefaultConfigurationPropertiesProvider implements ConfigurationProp
 
   private void loadBitwiseDefaultProperties() {
     InputStream is = DefaultConfigurationPropertiesProvider.class.getResourceAsStream("/bitwise.properties");
-    if (is == null) {
+    if(is == null) {
       throw new RuntimeException("Factory Default Properties File cannot be found.");
     }
     defaultProperties_ = new Properties();
@@ -108,7 +109,8 @@ public class DefaultConfigurationPropertiesProvider implements ConfigurationProp
   }
 
   public static void setAsProvider(String customPropsFile) {
-    BitwiseStoreUtil.getInstance().setConfigurationPropertiesProvider(new DefaultConfigurationPropertiesProvider(customPropsFile));
+    BitwiseStoreUtil.getInstance()
+        .setConfigurationPropertiesProvider(new DefaultConfigurationPropertiesProvider(customPropsFile));
   }
 
   public static void setRoot(String rootDir) {
@@ -118,42 +120,44 @@ public class DefaultConfigurationPropertiesProvider implements ConfigurationProp
   }
 
   public static String getRoot() {
-    return BitwiseStoreUtil.getInstance().getConfigurationPropertiesProvider().getDefaultProperties().getProperty(ROOT_DIR_PROPERTY);
+    return BitwiseStoreUtil.getInstance().getConfigurationPropertiesProvider().getDefaultProperties()
+        .getProperty(ROOT_DIR_PROPERTY);
   }
 
   private File getStoreDir(String storeName) {
     return new File(defaultProperties_.getProperty(ROOT_DIR_PROPERTY), storeName);
   }
-  
+
   private Properties loadPropertiesFile(Properties defaults, String propsFile, boolean mustExist) {
     return loadPropertiesFile(defaults, new File(propsFile), mustExist);
-  }  
+  }
 
   private Properties loadPropertiesFile(Properties defaults, File propsFile, boolean mustExist) {
     Properties props = new Properties(defaults);
     if(propsFile.exists() == false) {
       if(mustExist == true) {
-        throw new RuntimeException("Tried to load the properties file ["+propsFile.getAbsolutePath()+"] but it does not exist.");
+        throw new RuntimeException(
+            "Tried to load the properties file [" + propsFile.getAbsolutePath() + "] but it does not exist.");
       }
       return props;
     }
     try {
       loadPropertiesStream(props, new FileInputStream(propsFile));
       return props;
-    } catch (FileNotFoundException e) {
+    } catch(FileNotFoundException e) {
       throw new RuntimeException("An error occured while loading the bitwise properties: " + e.getMessage(), e);
     }
   }
-  
+
   private void loadPropertiesStream(Properties props, InputStream is) {
     try {
       props.load(is);
-    } catch (IOException e) {
+    } catch(IOException e) {
       throw new RuntimeException("An error occured while loading the bitwise properties: " + e.getMessage(), e);
     } finally {
       try {
         if(is != null) is.close();
-      } catch (IOException e) { 
+      } catch(IOException e) {
         // ignore
       }
     }

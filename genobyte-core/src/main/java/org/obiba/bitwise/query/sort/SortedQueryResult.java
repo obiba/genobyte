@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.bitwise.query.sort;
 
@@ -28,19 +28,20 @@ import org.obiba.bitwise.Field;
 import org.obiba.bitwise.query.QueryResult;
 import org.obiba.bitwise.query.UnknownFieldException;
 
-
 /**
  * Query resultset that is sorted following provided criteria.
  */
 public class SortedQueryResult implements QueryResult {
 
   BitwiseStore store_ = null;
+
   Sort sort_ = null;
+
   QueryResult result_ = null;
+
   int[] sorted_ = null;
 
   private SortField[] sortFields_ = null;
-
 
   public SortedQueryResult(BitwiseStore store, Sort sort, QueryResult result) {
     store_ = store;
@@ -69,7 +70,7 @@ public class SortedQueryResult implements QueryResult {
   public BitVector bits() {
     return result_.bits();
   }
-  
+
   /*
    * @see org.obiba.bitwise.query.QueryResult#getFilter()
    */
@@ -142,7 +143,7 @@ public class SortedQueryResult implements QueryResult {
    */
   private void sort() {
     PriorityQueue<SortNode> sorted = new PriorityQueue<SortNode>(result_.count());
-    for(int i = result_.next(0); i != -1; i = result_.next(i+1)) {
+    for(int i = result_.next(0); i != -1; i = result_.next(i + 1)) {
       SortNode node = new SortNode(i);
       // PriorityQueue sorts on insert
       sorted.add(node);
@@ -162,7 +163,7 @@ public class SortedQueryResult implements QueryResult {
    * @param index the index of the record for which we need the <link>Comparable</link> instance.
    * @param sortField the <link>SortField</link> instance the <link>Comparable</link> should represent.
    * @return a <link>Comparable</link> instance for the specified record on the specified field
-   * 
+   *
    * @throws UnknownFieldException when the specified sort field does not exist.
    */
   @SuppressWarnings("unchecked")
@@ -176,7 +177,7 @@ public class SortedQueryResult implements QueryResult {
     if(field.getDictionary().isOrdered()) {
       return value;
     }
-    return (Comparable<Object>)field.getDictionary().reverseLookup(value);
+    return (Comparable<Object>) field.getDictionary().reverseLookup(value);
   }
 
   /**
@@ -194,8 +195,10 @@ public class SortedQueryResult implements QueryResult {
    */
   private class SortNode implements Comparable {
     int recordIndex_ = -1;
+
     // We can't use an Array of Comparables because we can't mix Object Classes in an Array of interfaces
     List<Comparable<Object>> comparables_ = null;
+
     boolean[] initialized_ = null;
 
     SortNode(int index) {
@@ -207,7 +210,7 @@ public class SortedQueryResult implements QueryResult {
 
     @Override
     public boolean equals(Object o) {
-      return recordIndex_ == ((SortNode)o).recordIndex_;
+      return recordIndex_ == ((SortNode) o).recordIndex_;
     }
 
     @Override
@@ -216,8 +219,8 @@ public class SortedQueryResult implements QueryResult {
     }
 
     public int compareTo(Object o) {
-      SortNode other = (SortNode)o;
-      for (int i = 0; i < comparables_.size(); i++) {
+      SortNode other = (SortNode) o;
+      for(int i = 0; i < comparables_.size(); i++) {
         Comparable<Object> l = comparable(i);
         Comparable<Object> r = other.comparable(i);
         if(l == null) return -1;
@@ -232,7 +235,7 @@ public class SortedQueryResult implements QueryResult {
     }
 
     private Comparable<Object> comparable(int i) {
-      Comparable<Object> c = comparables_.get(i); 
+      Comparable<Object> c = comparables_.get(i);
       if(initialized_[i] == false) {
         c = getOrder(recordIndex_, sortFields_[i]);
         comparables_.set(i, c);

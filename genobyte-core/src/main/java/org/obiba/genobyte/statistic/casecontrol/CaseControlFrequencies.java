@@ -1,20 +1,20 @@
 /*******************************************************************************
- * Copyright 2007(c) Génome Québec. All rights reserved.
- * 
+ * Copyright 2007(c) Genome Quebec. All rights reserved.
+ * <p>
  * This file is part of GenoByte.
- * 
+ * <p>
  * GenoByte is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
- * 
+ * <p>
  * GenoByte is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ * <p>
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
 package org.obiba.genobyte.statistic.casecontrol;
 
@@ -29,51 +29,65 @@ import org.obiba.genobyte.statistic.RecordStatistic;
 import org.obiba.genobyte.statistic.StatsPool;
 
 public class CaseControlFrequencies extends AbstractStatistic implements RecordStatistic {
-  
+
   public static final String CASES_MASK_PARAMETER = "casesMask";
+
   public static final String CONTROLS_MASK_PARAMETER = "controlsMask";
 
   public static final String CASE_FREQ_A = "caseFreqA";
+
   public static final String CASE_FREQ_B = "caseFreqB";
+
   public static final String CASE_FREQ_H = "caseFreqH";
+
   public static final String CASE_FREQ_U = "caseFreqU";
+
   public static final String CASE_TOTAL_CALL = "caseTotalCall";
+
   public static final String CASE_CALL_RATE = "caseCallRate";
+
   public static final String CASE_MAF = "caseMaf";
+
   public static final String CASE_HW = "caseHw";
+
   public static final String CASE_HET = "caseHet";
 
   public static final String CONTROL_FREQ_A = "controlFreqA";
+
   public static final String CONTROL_FREQ_B = "controlFreqB";
+
   public static final String CONTROL_FREQ_H = "controlFreqH";
+
   public static final String CONTROL_FREQ_U = "controlFreqU";
+
   public static final String CONTROL_TOTAL_CALL = "controlTotalCall";
+
   public static final String CONTROL_CALL_RATE = "controlCallRate";
+
   public static final String CONTROL_MAF = "controlMaf";
+
   public static final String CONTROL_HW = "controlHw";
+
   public static final String CONTROL_HET = "controlHet";
 
-  public static final String[] PARAMETERS = { CASE_FREQ_A, CASE_FREQ_B,
-      CASE_FREQ_H, CASE_FREQ_U, CASE_TOTAL_CALL, CASE_CALL_RATE, CASE_MAF,
-      CASE_HW, CASE_HET, CONTROL_FREQ_A, CONTROL_FREQ_B, CONTROL_FREQ_H,
-      CONTROL_FREQ_U, CONTROL_TOTAL_CALL, CONTROL_CALL_RATE, CONTROL_MAF,
-      CONTROL_HW, CONTROL_HET };
+  public static final String[] PARAMETERS = { CASE_FREQ_A, CASE_FREQ_B, CASE_FREQ_H, CASE_FREQ_U, CASE_TOTAL_CALL,
+      CASE_CALL_RATE, CASE_MAF, CASE_HW, CASE_HET, CONTROL_FREQ_A, CONTROL_FREQ_B, CONTROL_FREQ_H, CONTROL_FREQ_U,
+      CONTROL_TOTAL_CALL, CONTROL_CALL_RATE, CONTROL_MAF, CONTROL_HW, CONTROL_HET };
 
   public CaseControlFrequencies() {
     super();
 
     super.inputFields_.add("calls");
 
-    for (String param : PARAMETERS) {
+    for(String param : PARAMETERS) {
       super.outputParams_.add(param);
     }
   }
 
-  public void calculate(StatsPool<?, ?> pPool, Map<String, Object> pFields,
-      QueryResult pFilter, int pIndex) {
+  public void calculate(StatsPool<?, ?> pPool, Map<String, Object> pFields, QueryResult pFilter, int pIndex) {
     Field calls = (Field) pFields.get("calls");
 
-    if (calls != null) {
+    if(calls != null) {
       BitVector alleleA = calls.getDictionary().lookup(SnpCall.A);
       BitVector alleleB = calls.getDictionary().lookup(SnpCall.B);
       BitVector alleleH = calls.getDictionary().lookup(SnpCall.H);
@@ -85,7 +99,7 @@ public class CaseControlFrequencies extends AbstractStatistic implements RecordS
       QueryResult[] filters = { cases, controls };
       String[] prefixes = { "case", "control" };
 
-      for (int i = 0; i < filters.length; i++) {
+      for(int i = 0; i < filters.length; i++) {
         QueryResult filter = filters[i];
         String paramPrefix = prefixes[i];
 
@@ -115,7 +129,7 @@ public class CaseControlFrequencies extends AbstractStatistic implements RecordS
 
         // Hardy-Weinberg Equilibrium
         double hw = 0.0;
-        if (Double.compare(maf, 0.0) != 0) {
+        if(Double.compare(maf, 0.0) != 0) {
           double p = (2d * freqA + freqH) / (2d * totalCalls);
           double q = 1d - p;
 
@@ -123,15 +137,14 @@ public class CaseControlFrequencies extends AbstractStatistic implements RecordS
           double e_bb = totalCalls * q * q;
           double e_ab = 2 * totalCalls * p * q;
 
-          hw = ((freqA - e_aa) * (freqA - e_aa)) / e_aa
-              + ((freqB - e_bb) * (freqB - e_bb)) / e_bb
-              + ((freqH - e_ab) * (freqH - e_ab)) / e_ab;
+          hw = ((freqA - e_aa) * (freqA - e_aa)) / e_aa + ((freqB - e_bb) * (freqB - e_bb)) / e_bb +
+              ((freqH - e_ab) * (freqH - e_ab)) / e_ab;
           hw = Double.isNaN(hw) ? 0.0 : hw;
         }
 
         // Heterozygosity
         double heterozygosity = 0.0;
-        if (totalCalls != 0) {
+        if(totalCalls != 0) {
           heterozygosity = freqH / (double) totalCalls;
         }
 
