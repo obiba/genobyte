@@ -1,2 +1,0 @@
-@ECHO OFF
-set JARS=%JARS%;%1
