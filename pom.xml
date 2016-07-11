@@ -68,6 +68,7 @@
 
     <modules>
         <module>genobyte-core</module>
+        <module>genobyte-cli</module>
     </modules>
 
     <properties>
@@ -91,16 +92,9 @@
       <dependencies>
         <dependency>
           <groupId>org.obiba.genobyte</groupId>
-          <artifactId>genobyte</artifactId>
+          <artifactId>genobyte-core</artifactId>
           <version>${project.version}</version>
-          <type>jar</type>
-        </dependency>
-
-        <dependency>
-          <groupId>org.obiba.genobyte</groupId>
-          <artifactId>genobyte-infinium</artifactId>
-          <version>${project.version}</version>
-          <type>jar</type>
+            <type>jar</type>
         </dependency>
 
         <dependency>

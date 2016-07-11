@@ -51,6 +51,6 @@ public interface CliCommand {
    * @return true if the shell should exit once the command has been executed.
    * @throws ParseException when an error occurs while parsing arguments.
    */
-  public boolean execute(Option opt, CliContext context) throws ParseException;
+  public boolean execute(Option opt, org.obiba.genobyte.cli.CliContext context) throws ParseException;
 
 }

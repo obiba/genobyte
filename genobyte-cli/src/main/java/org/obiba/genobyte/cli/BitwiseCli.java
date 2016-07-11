@@ -66,14 +66,14 @@ public class BitwiseCli {
   public BitwiseCli() {
     registerCommand(help);
     registerCommand(new QuitCommand());
-    registerCommand(new PrintCommand());
-    registerCommand(new SwitchCommand());
-    registerCommand(new PrintRecordCommand());
-    registerCommand(new CloseCommand());
-    registerCommand(new DropCommand());
-    registerCommand(new StatsCommand());
-    registerCommand(new InconsistenciesCommand());
-    registerCommand(new PrintHistoryCommand());
+    registerCommand(new org.obiba.genobyte.cli.PrintCommand());
+    registerCommand(new org.obiba.genobyte.cli.SwitchCommand());
+    registerCommand(new org.obiba.genobyte.cli.PrintRecordCommand());
+    registerCommand(new org.obiba.genobyte.cli.CloseCommand());
+    registerCommand(new org.obiba.genobyte.cli.DropCommand());
+    registerCommand(new org.obiba.genobyte.cli.StatsCommand());
+    registerCommand(new org.obiba.genobyte.cli.InconsistenciesCommand());
+    registerCommand(new org.obiba.genobyte.cli.PrintHistoryCommand());
   }
 
   public BitwiseCli(PrintStream output) {
@@ -118,7 +118,7 @@ public class BitwiseCli {
    * Used to prompt the user for input.
    * @param context the current context of the CLI execution.
    */
-  private void prompt(CliContext context) {
+  private void prompt(org.obiba.genobyte.cli.CliContext context) {
     StringBuilder sb = new StringBuilder();
     if(context.getActiveRecordStore() != null) {
       sb.append(context.getActiveRecordStore().getStore().getName());
@@ -133,7 +133,7 @@ public class BitwiseCli {
    * @throws IOException when an error occurs while reading user input.
    */
   public void execute() throws IOException {
-    CliContext context = new CliContext(this.output);
+    org.obiba.genobyte.cli.CliContext context = new org.obiba.genobyte.cli.CliContext(this.output);
     BufferedReader br = new BufferedReader(new InputStreamReader(input));
     BasicParser bp = new BasicParser();
     output.println("Type '-h' for help, '-q' to quit.");
@@ -208,7 +208,7 @@ public class BitwiseCli {
       return false;
     }
 
-    public boolean execute(Option opt, CliContext context) {
+    public boolean execute(Option opt, org.obiba.genobyte.cli.CliContext context) {
       PrintWriter pw = new PrintWriter(context.getOutput());
       if(context.getStore() != null) {
         hf.printOptions(pw, 100, options, 1, 4);
@@ -230,7 +230,7 @@ public class BitwiseCli {
       return false;
     }
 
-    public boolean execute(Option opt, CliContext context) {
+    public boolean execute(Option opt, org.obiba.genobyte.cli.CliContext context) {
       if(context.getStore() != null) {
         context.getStore().close();
       }
