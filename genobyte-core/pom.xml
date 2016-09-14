@@ -59,6 +59,11 @@
       <groupId>jdbm</groupId>
       <artifactId>jdbm</artifactId>
     </dependency>
+
+    <dependency>
+      <groupId>org.deephacks.lmdbjni</groupId>
+      <artifactId>lmdbjni-linux64</artifactId>
+    </dependency>
   </dependencies>
 
 

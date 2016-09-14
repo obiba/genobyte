@@ -175,6 +175,12 @@
             <version>${jdbm.version}</version>
         </dependency>
 
+          <dependency>
+              <groupId>org.deephacks.lmdbjni</groupId>
+              <artifactId>lmdbjni-linux64</artifactId>
+              <version>0.4.6</version>
+          </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

@@ -30,21 +30,20 @@ public interface ConfigurationPropertiesProvider {
    * Returns the default Bitwise configuration properties 
    * @return the default configuration properties
    */
-  public Properties getDefaultProperties();
+  Properties getDefaultProperties();
 
   /**
    * Store the custom properties provided to a store.
    * @param storeName is the name of the store to which to custom properties apply.
    * @param pProp are the default properties merged with custom properties for this store.
-   * @param pSpecificProp are the properties specific to this store, the ones needing to be saved.
    */
-  public void saveSpecificProperties(String storeName, Properties pProp);
+  void saveSpecificProperties(String storeName, Properties pProp);
 
   /**
    * Load the default properties, the ones that apply to all stores.
    * @param storeName is the name of a store for which we will use the default properties.
    * @return The default properties that apply to all stores.
    */
-  public Properties loadProperties(String storeName);
+  Properties loadProperties(String storeName);
 
 }

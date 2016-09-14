@@ -39,4 +39,10 @@
         implementation="org.obiba.bitwise.dao.impl.jdbm.BitwiseStoreDtoDaoJdbmImpl"/>
   </context>
 
+  <context id="lmdb">
+
+    <transactionManager type="org.obiba.bitwise.dao.impl.lmdb.LmdbTransactionManager"/>
+
+  </context>
+
 </daoConfig>
