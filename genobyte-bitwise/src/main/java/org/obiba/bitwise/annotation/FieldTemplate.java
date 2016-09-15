@@ -24,10 +24,14 @@ package org.obiba.bitwise.annotation;
  */
 public @interface FieldTemplate {
 
-  /** The field's name prefix */
+  /**
+   * The field's name prefix
+   */
   String prefix();
 
-  /** The dictionary name */
+  /**
+   * The dictionary name
+   */
   String dictionary();
 
 }

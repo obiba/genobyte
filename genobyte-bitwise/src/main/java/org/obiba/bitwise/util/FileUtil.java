@@ -29,6 +29,7 @@ public final class FileUtil {
 
   /**
    * Delete a directory and its sub-files
+   *
    * @param directory the directory to delete
    * @throws IOException if  any
    */
@@ -38,38 +39,39 @@ public final class FileUtil {
 
   /**
    * Delete a directory and its sub-files
+   *
    * @param dir the directory to delete
-   * @throws IOException if  any
+   * @throws IOException           if  any
    * @throws FileNotFoundException if  any
    */
   public static void deltree(final File dir) throws IOException {
-    if(dir == null) {
+    if (dir == null) {
       return;
     }
 
-    if(!dir.exists()) {
+    if (!dir.exists()) {
       throw new FileNotFoundException("The dir=[" + dir + "] doesnt exist");
     }
 
-    if(!dir.isDirectory()) {
+    if (!dir.isDirectory()) {
       return;
     }
 
     File[] allFiles = dir.listFiles();
 
-    for(int i = 0; i < allFiles.length; i++) {
+    for (int i = 0; i < allFiles.length; i++) {
       File currentFile = allFiles[i];
 
-      if(currentFile.isDirectory()) {
+      if (currentFile.isDirectory()) {
         deltree(currentFile);
       } else {
-        if(!currentFile.delete()) {
+        if (!currentFile.delete()) {
           System.err.println("Cant delete the file=[" + currentFile.getAbsolutePath() + "]");
         }
       }
     }
 
-    if(!dir.delete()) {
+    if (!dir.delete()) {
       System.err.println("Cant delete the dir=[" + dir.getAbsolutePath() + "]");
     }
   }

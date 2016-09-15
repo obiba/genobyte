@@ -56,7 +56,7 @@ public class FieldDtoDaoBdbImpl extends BaseCrudDaoImpl<FieldDto, String> implem
   private Database getFieldDb() {
     try {
       return getContext().getDatabase(FIELD_DB);
-    } catch(DatabaseException e) {
+    } catch (DatabaseException e) {
       throw new RuntimeException(e);
     }
   }

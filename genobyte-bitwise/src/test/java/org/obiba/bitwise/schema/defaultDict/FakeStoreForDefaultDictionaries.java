@@ -52,48 +52,92 @@ public class FakeStoreForDefaultDictionaries {
     super();
   }
 
-  public byte getA() { return a; }
+  public byte getA() {
+    return a;
+  }
 
-  public void setA(byte p) { a = p; }
+  public void setA(byte p) {
+    a = p;
+  }
 
-  public short getB() { return b; }
+  public short getB() {
+    return b;
+  }
 
-  public void setB(short p) { b = p; }
+  public void setB(short p) {
+    b = p;
+  }
 
-  public int getC() { return c; }
+  public int getC() {
+    return c;
+  }
 
-  public void setC(int p) { c = p; }
+  public void setC(int p) {
+    c = p;
+  }
 
-  public long getD() { return d; }
+  public long getD() {
+    return d;
+  }
 
-  public void setD(long p) { d = p; }
+  public void setD(long p) {
+    d = p;
+  }
 
-  public float getE() { return e; }
+  public float getE() {
+    return e;
+  }
 
-  public void sete(float p) { e = p; }
+  public void sete(float p) {
+    e = p;
+  }
 
-  public double getF() { return f; }
+  public double getF() {
+    return f;
+  }
 
-  public void setF(double p) { f = p; }
+  public void setF(double p) {
+    f = p;
+  }
 
-  public boolean getG() { return g; }
+  public boolean getG() {
+    return g;
+  }
 
-  public void setG(boolean p) { g = p; }
+  public void setG(boolean p) {
+    g = p;
+  }
 
-  public char getH() { return h; }
+  public char getH() {
+    return h;
+  }
 
-  public void setH(char p) { h = p; }
+  public void setH(char p) {
+    h = p;
+  }
 
-  public Integer getI() { return i; }
+  public Integer getI() {
+    return i;
+  }
 
-  public void setI(Integer p) { i = p; }
+  public void setI(Integer p) {
+    i = p;
+  }
 
-  public Double getJ() { return j; }
+  public Double getJ() {
+    return j;
+  }
 
-  public void setJ(Double p) { j = p; }
+  public void setJ(Double p) {
+    j = p;
+  }
 
-  public String getK() { return k; }
+  public String getK() {
+    return k;
+  }
 
-  public void setK(String p) { k = p; }
+  public void setK(String p) {
+    k = p;
+  }
 
 }

@@ -31,8 +31,9 @@ public class BitVectorUtil {
 
   /**
    * Creates a new <code>BitVectorDto</code> object that posesses the same characteristics as a given <code>BitVector</code>.
+   *
    * @param id the internal id to give to this BitVectorDto object.
-   * @param v the <code>BitVector</code> from which data will be obtained.
+   * @param v  the <code>BitVector</code> from which data will be obtained.
    * @return a <code>BitVectorDto</code> based on the information (size, bits) found in the <code>BitVector</code> <b>v</b>.
    */
   static public BitVectorDto toDto(long id, BitVector v) {
@@ -45,11 +46,12 @@ public class BitVectorUtil {
 
   /**
    * Creates a new <code>BitVector</code> object that posesses the same characteristics as a given <code>BitVectorDto</code>.
+   *
    * @param d the <code>BitVectorDto</code> from which data will be obtained.
    * @return a <code>BitVector</code> based on the information (size, bits) found in the <code>BitVectorDto</code> <b>d</b>.
    */
   static public BitVector toVector(BitVectorDto d) {
-    if(d == null) {
+    if (d == null) {
       throw new NullPointerException("dto cannot be null");
     }
     return new BitVector(d.getSize(), d.getBits());

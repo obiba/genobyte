@@ -27,7 +27,7 @@ public class DefaultStringDictionary extends DefaultDictionary {
 
   static {
     StringBuilder sb = new StringBuilder();
-    for(char c = 1; c < 256; c++) {
+    for (char c = 1; c < 256; c++) {
       sb.append(c);
     }
     SEED_STRING = sb.toString();

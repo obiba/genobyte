@@ -19,7 +19,7 @@
 package org.obiba.bitwise.query;
 
 /**
- * When a given field does not exist in the bitwise store being queried, this exception will be thrown. 
+ * When a given field does not exist in the bitwise store being queried, this exception will be thrown.
  */
 public class UnknownFieldException extends QueryExecutionException {
 

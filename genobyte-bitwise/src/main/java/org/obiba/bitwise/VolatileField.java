@@ -39,11 +39,12 @@ public class VolatileField extends AbstractField {
 
   /**
    * Compares this <code>Field</code> with the specified Object for equality.
+   *
    * @param o <code>Object</code> to which this Field is to be compared.
    * @return true if the name of both <code>Field</code> objects is the same.
    */
   public boolean equals(Object o) {
-    if(o instanceof VolatileField == false) {
+    if (o instanceof VolatileField == false) {
       return false;
     }
     VolatileField d = (VolatileField) o;
@@ -52,6 +53,7 @@ public class VolatileField extends AbstractField {
 
   /**
    * Returns a hash code for this Field.
+   *
    * @return a hash code value for this object.
    */
   public int hashCode() {

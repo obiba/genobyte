@@ -9,23 +9,17 @@
  */
 package org.obiba.genobyte.mock;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-
-import org.obiba.bitwise.AbstractField;
-import org.obiba.bitwise.BitVector;
-import org.obiba.bitwise.BitwiseStore;
-import org.obiba.bitwise.Dictionary;
-import org.obiba.bitwise.Field;
-import org.obiba.bitwise.MockField;
-import org.obiba.bitwise.VolatileField;
+import org.obiba.bitwise.*;
 import org.obiba.bitwise.dao.DaoKey;
 import org.obiba.bitwise.dto.BitwiseStoreDto;
 import org.obiba.bitwise.schema.FieldMetaData;
 import org.obiba.bitwise.schema.StoreSchema;
 import org.obiba.bitwise.schema.defaultDict.DefaultDictionaryFactory;
 import org.obiba.genobyte.model.SnpCall;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 public class MockBitwiseStore extends BitwiseStore {
   public static final int DEFAULT_SIZE = 3;
@@ -58,7 +52,7 @@ public class MockBitwiseStore extends BitwiseStore {
   @Override
   public void ensureCapacity(int capacity) {
     super.ensureCapacity(capacity);
-    for(VolatileField f : dummyStore_.values()) {
+    for (VolatileField f : dummyStore_.values()) {
       f.grow(capacity);
     }
   }
@@ -67,7 +61,7 @@ public class MockBitwiseStore extends BitwiseStore {
     this.ensureCapacity(size);
     Dictionary<Integer> integerDict = ddf_.getInstance(Integer.class, "integerdict");
     VolatileField f = dummyStore_.get("id");
-    for(int i = 0; i < getCapacity(); i++) {
+    for (int i = 0; i < getCapacity(); i++) {
       f.setValue(i, integerDict.lookup(i));
       getDto().getDeleted().clear(i);
     }
@@ -80,7 +74,7 @@ public class MockBitwiseStore extends BitwiseStore {
     // Filling dummy store with bogus records
     dummyStore_.put("id", new VolatileField("id", this, integerDict));
     VolatileField f = dummyStore_.get("id");
-    for(int i = 0; i < getCapacity(); i++) {
+    for (int i = 0; i < getCapacity(); i++) {
       f.setValue(i, integerDict.lookup(i));
       getDto().getDeleted().clear(i);
     }
@@ -88,7 +82,7 @@ public class MockBitwiseStore extends BitwiseStore {
 
   public void setCall(int pTransposedIndex, int pIndex, SnpCall pValue) {
     AbstractField f = dummyStore_.get("calls_" + pTransposedIndex);
-    if(f == null) {
+    if (f == null) {
       f = createField("calls_" + pTransposedIndex);
     }
     f.setValue(pIndex, f.getDictionary().lookup(pValue));
@@ -96,7 +90,7 @@ public class MockBitwiseStore extends BitwiseStore {
 
   @Override
   public Field createField(String name) {
-    if(name.startsWith("calls")) {
+    if (name.startsWith("calls")) {
       Dictionary<SnpCall> callDict = ddf_.getInstance(SnpCall.class, "callDict");
       dummyStore_.put(name, new VolatileField(name, this, callDict));
       return getField(name);
@@ -106,7 +100,8 @@ public class MockBitwiseStore extends BitwiseStore {
 
   /**
    * Allows to create any kind of <tt>Field</tt> by providing a data type.
-   * @param name the name of the field to be created
+   *
+   * @param name     the name of the field to be created
    * @param dataType the data type, to create the appropriate <tt>Dictionary</tt>
    * @return the newly created <tt>Field</tt>
    */
@@ -118,7 +113,7 @@ public class MockBitwiseStore extends BitwiseStore {
 
   public Field getField(String pFieldName) {
     VolatileField f = dummyStore_.get(pFieldName);
-    if(f == null) return null;
+    if (f == null) return null;
     Field mf = new MockField(this, f);
     return mf;
   }
@@ -131,12 +126,12 @@ public class MockBitwiseStore extends BitwiseStore {
   @Override
   public StoreSchema getSchema() {
     StoreSchema ss = new StoreSchema();
-    for(VolatileField vf : dummyStore_.values()) {
+    for (VolatileField vf : dummyStore_.values()) {
       FieldMetaData fmd = new FieldMetaData();
       fmd.setName(vf.getName());
       fmd.setDictionary(vf.getDictionary().getName());
       fmd.setTemplate(false);
-      if(fmd.getName().startsWith("calls")) fmd.setTemplate(true);
+      if (fmd.getName().startsWith("calls")) fmd.setTemplate(true);
     }
     return ss;
   }

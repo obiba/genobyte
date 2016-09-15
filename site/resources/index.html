@@ -1,154 +1,158 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-
-
-
-
-
-
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
 <html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <title>OBiBa Genobyte - Overview</title>
-    <style type="text/css" media="all">
-      @import url("./../css/style.css");
-    </style>
-    <link rel="stylesheet" href="./../css/print.css" type="text/css" media="print" />
-        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-      </head>
-  <body>
+<head>
+  <title>OBiBa Genobyte - Overview</title>
+  <style type="text/css" media="all">
+    @import url("./../css/style.css");
+  </style>
+  <link rel="stylesheet" href="./../css/print.css" type="text/css" media="print"/>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+</head>
+<body>
 
-  <!-- Google Analytics -->
-  <script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
-  </script>
-  <script type="text/javascript">
+<!-- Google Analytics -->
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
   _uacct = "UA-2438205-3";
   urchinTracker();
-  </script>
-  
-  
-  <div id="pageWrapper">
-    <div id="pageHeader">
-    </div>
-    <div id="menuBar">
-      <ul>
-        <li><a href="/index.html">OBiBa</a></li>
-	    <li><a href="http://www.p3gobservatory.org/">P3G Observatory</a></li>
-      </ul>
-    </div>
-    
-    <div id="contentWrapper">
-      <div id="leftColumn">
-        <!--          <ul class="arrowList">
-          </ul>
-          <h3>Project Documentation</h3>
-        <ul class="arrowList">
-              
-                
-              
-      
-            
-      
-            
-      
-            
-      
-            
-      
-            
-      
-            
-      
-            
-      
-              
-            <li class="">
-          <a href="project-info.html">Project Information</a>
-          </li>
-              
-                
-              
-      
-            
-      
-            
-      
-            
-      
-            
-      
-            
-      
-            
-      
-            
-      
-            
-      
-              
-            <li class="">
-          <a href="project-reports.html">Project Reports</a>
-          </li>
-          </ul>
-  -->
-        <h3>GenoByte</h3>
-	      <ul class="arrowList">
-            <li><a href="./index.html">Overview</a></li>
+</script>
 
-            <li><a href="./team-list.html">Team</a></li>
-            <li><a href="./mail-lists.html">Mailing Lists</a></li>
-            <li><a href="./features.html">Features</a></li>
-            <li><a href="./benchmark.html">Benchmark</a></li>
-            <li><a href="./limitations.html">Limitations</a></li>
-            <li><a href="./roadmap.html">Roadmap</a></li>
 
-            <li><a href="./license.html">License</a></li>
-          </ul>
-          
-          <h3>Documentation</h3>
-          <ul class="arrowList">
-            <li><a href="./docs/quickstart.html">Quick Start Manual</a></li>
-            <li><a href="./docs/querySyntax.html">Query Syntax</a></li>
-          	<li><a href="./docs/td.html">Technical Documentation</a></li>
-          	<li><a href="./faq.html">FAQ</a></li>
-
-          </ul>
-          
-          <h3>Code</h3>
-          <ul class="arrowList">
-          	<li><a href="./download.html">Download</a></li>
-          	<li><a href="http://svn.obiba.org/">SVN</a></li>
-          	<li><a href="http://jira.obiba.org/">Issue Tracking</a></li>
-          	<li><a href="./apidocs/index.html" target="_blank">Javadoc</a></li>
-          	<li><a href="./xref/index.html" target="_blank">Browse Source Code</a></li>
-          	<li><a href="./dependencies.html">Dependencies</a></li>
-
-          	<li><a href="./surefire-report.html">Surefire Report</a></li>
-          </ul>
-          
-      </div>
-      <div id="centerColumn">
-        <h1>GenoByte Overview</h1>
-        <p>GenoByte is a Java API for storing and querying data resulting from the aggregation of high-throughput genotyping experiments across many subjects.</p>
-        <p>The volume of such data is huge. Today's genotyping experiments can report 1,000,000 SNPs for every sample on a chip. Since studies often compare genotypes of thousands of individuals, we end up with a matrix with something in the order of a 10<sup>10</sup> elements.</p>
-        <p>Holding this data in a way that allows efficient querying and statistical analysis is the challenge which GenoByte addresses.</p>
-        <p>GenoByte was developed at the <a href="http://www.genomequebecplatforms.com/mcgill/centre/about.aspx?l=e">McGill University and Génome Québec Innovation Center</a> to accomodate the needs of the <a href="http://www.genomequebecplatforms.com/mcgill/services/genotyping/index.aspx?l=e">Genotyping Platform</a> which handles such volumes of data routinely for its customers. Existing approaches for handling this data were becoming too slow. By introducing GenoByte in the in-house system substantial performance gains were achieved.</p>
-        <h3></h3>
-        <table>
-          <tr>
-            <td><a href="http://www.p3gconsortium.org"><img src="/images/p3g.jpg" alt="P3G" border="0" /></a></td>
-            <td style="padding-left:15px;"><a href="http://www.genomequebec.com"><img src="/images/genome-quebec.gif" alt="Génome Québec" border="0" /></a></td>
-          </tr>
-        </table>
-      </div>
-      <div id="spacer"></div>
-    </div>
-    
-    <div id="pageFooter">
-      <p>&copy; 2007, 2008 OBiBa.<br /></p>
-    </div>
+<div id="pageWrapper">
+  <div id="pageHeader">
   </div>
-  </body>
+  <div id="menuBar">
+    <ul>
+      <li><a href="/index.html">OBiBa</a></li>
+      <li><a href="http://www.p3gobservatory.org/">P3G Observatory</a></li>
+    </ul>
+  </div>
+
+  <div id="contentWrapper">
+    <div id="leftColumn">
+      <!--          <ul class="arrowList">
+        </ul>
+        <h3>Project Documentation</h3>
+      <ul class="arrowList">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <li class="">
+        <a href="project-info.html">Project Information</a>
+        </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <li class="">
+        <a href="project-reports.html">Project Reports</a>
+        </li>
+        </ul>
+-->
+      <h3>GenoByte</h3>
+      <ul class="arrowList">
+        <li><a href="./index.html">Overview</a></li>
+
+        <li><a href="./team-list.html">Team</a></li>
+        <li><a href="./mail-lists.html">Mailing Lists</a></li>
+        <li><a href="./features.html">Features</a></li>
+        <li><a href="./benchmark.html">Benchmark</a></li>
+        <li><a href="./limitations.html">Limitations</a></li>
+        <li><a href="./roadmap.html">Roadmap</a></li>
+
+        <li><a href="./license.html">License</a></li>
+      </ul>
+
+      <h3>Documentation</h3>
+      <ul class="arrowList">
+        <li><a href="./docs/quickstart.html">Quick Start Manual</a></li>
+        <li><a href="./docs/querySyntax.html">Query Syntax</a></li>
+        <li><a href="./docs/td.html">Technical Documentation</a></li>
+        <li><a href="./faq.html">FAQ</a></li>
+
+      </ul>
+
+      <h3>Code</h3>
+      <ul class="arrowList">
+        <li><a href="./download.html">Download</a></li>
+        <li><a href="http://svn.obiba.org/">SVN</a></li>
+        <li><a href="http://jira.obiba.org/">Issue Tracking</a></li>
+        <li><a href="./apidocs/index.html" target="_blank">Javadoc</a></li>
+        <li><a href="./xref/index.html" target="_blank">Browse Source Code</a></li>
+        <li><a href="./dependencies.html">Dependencies</a></li>
+
+        <li><a href="./surefire-report.html">Surefire Report</a></li>
+      </ul>
+
+    </div>
+    <div id="centerColumn">
+      <h1>GenoByte Overview</h1>
+      <p>GenoByte is a Java API for storing and querying data resulting from the aggregation of high-throughput
+        genotyping experiments across many subjects.</p>
+      <p>The volume of such data is huge. Today's genotyping experiments can report 1,000,000 SNPs for every sample on a
+        chip. Since studies often compare genotypes of thousands of individuals, we end up with a matrix with something
+        in the order of a 10<sup>10</sup> elements.</p>
+      <p>Holding this data in a way that allows efficient querying and statistical analysis is the challenge which
+        GenoByte addresses.</p>
+      <p>GenoByte was developed at the <a href="http://www.genomequebecplatforms.com/mcgill/centre/about.aspx?l=e">McGill
+        University and Génome Québec Innovation Center</a> to accomodate the needs of the <a
+          href="http://www.genomequebecplatforms.com/mcgill/services/genotyping/index.aspx?l=e">Genotyping Platform</a>
+        which handles such volumes of data routinely for its customers. Existing approaches for handling this data were
+        becoming too slow. By introducing GenoByte in the in-house system substantial performance gains were achieved.
+      </p>
+      <h3></h3>
+      <table>
+        <tr>
+          <td><a href="http://www.p3gconsortium.org"><img src="/images/p3g.jpg" alt="P3G" border="0"/></a></td>
+          <td style="padding-left:15px;"><a href="http://www.genomequebec.com"><img src="/images/genome-quebec.gif"
+                                                                                    alt="Génome Québec" border="0"/></a>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div id="spacer"></div>
+  </div>
+
+  <div id="pageFooter">
+    <p>&copy; 2007, 2008 OBiBa.<br/></p>
+  </div>
+</div>
+</body>
 </html>

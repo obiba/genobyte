@@ -46,26 +46,26 @@ public class BdbTransactionManager implements DaoTransactionManager {
       key_ = new DaoKey((String) props.get(KeyedDaoManager.DAO_MANAGER_KEY));
       BdbContext.createInstance(key_, props);
       isTransactional_ = BdbContext.getInstance(key_).getEnvironment().getConfig().getTransactional();
-      if(isTransactional_) {
+      if (isTransactional_) {
         txnCfg_ = new TransactionConfig();
         txnCfg_.setNoSync(true);
         txnCfg_.setSync(false);
         txnCfg_.setWriteNoSync(true);
       }
-    } catch(DatabaseException e) {
+    } catch (DatabaseException e) {
       throw new RuntimeException(e);
     }
   }
 
   public DaoTransaction startTransaction() {
-    if(isTransactional_) {
+    if (isTransactional_) {
       BdbContext bdbEnv = BdbContext.getInstance(key_);
       try {
         bdbEnv.getEnvironment().checkpoint(null);
         CurrentTransaction ct = CurrentTransaction.getInstance(bdbEnv.getEnvironment());
         Transaction t = ct.beginTransaction(txnCfg_);
         return new DaoTransactionBdbImpl(ct);
-      } catch(DatabaseException e) {
+      } catch (DatabaseException e) {
         throw new RuntimeException(e);
       }
     }
@@ -74,12 +74,12 @@ public class BdbTransactionManager implements DaoTransactionManager {
   }
 
   public void commitTransaction(DaoTransaction transaction) {
-    if(isTransactional_) {
+    if (isTransactional_) {
       BdbContext bdbEnv = BdbContext.getInstance(key_);
       try {
         CurrentTransaction ct = CurrentTransaction.getInstance(bdbEnv.getEnvironment());
         ct.commitTransaction();
-      } catch(DatabaseException e) {
+      } catch (DatabaseException e) {
         throw new RuntimeException(e);
       } finally {
       }
@@ -87,12 +87,12 @@ public class BdbTransactionManager implements DaoTransactionManager {
   }
 
   public void rollbackTransaction(DaoTransaction transaction) {
-    if(isTransactional_) {
+    if (isTransactional_) {
       BdbContext bdbEnv = BdbContext.getInstance(key_);
       try {
         CurrentTransaction ct = CurrentTransaction.getInstance(bdbEnv.getEnvironment());
         ct.abortTransaction();
-      } catch(DatabaseException e) {
+      } catch (DatabaseException e) {
         throw new RuntimeException(e);
       } finally {
       }
@@ -110,6 +110,7 @@ public class BdbTransactionManager implements DaoTransactionManager {
     }
   }
 
-  static private class DaoTransactionNotTransactionalImpl implements DaoTransaction {}
+  static private class DaoTransactionNotTransactionalImpl implements DaoTransaction {
+  }
 
 }

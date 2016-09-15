@@ -47,7 +47,8 @@ public class ByteDictionary extends AbstractStaticDictionary<Byte> {
 
   /**
    * Sets the lower bound (minimum) for encoded values. Any value to encode to a <tt>BitVector</tt> must be higher or equal to this value.
-   * @param pLower the lower bound 
+   *
+   * @param pLower the lower bound
    */
   public void setLower(String pLower) {
     lower_ = Byte.parseByte(pLower);
@@ -56,7 +57,8 @@ public class ByteDictionary extends AbstractStaticDictionary<Byte> {
 
   /**
    * Sets the upper bound (maximum) for encoded values. Any value to encode to a <tt>BitVector</tt> must be lower or equal to this value.
-   * @param pUpper the upper bound 
+   *
+   * @param pUpper the upper bound
    */
   public void setUpper(String pUpper) {
     upper_ = Byte.parseByte(pUpper);
@@ -66,7 +68,8 @@ public class ByteDictionary extends AbstractStaticDictionary<Byte> {
   /**
    * Sets the value sampling increment for encoded values. Values that fall between two increment values in this this dictionary
    * will take the value of the closest higher increment.
-   * @param pStep the step between each sampled value. 
+   *
+   * @param pStep the step between each sampled value.
    */
   public void setStep(String pStep) {
     step_ = Byte.parseByte(pStep);
@@ -79,11 +82,11 @@ public class ByteDictionary extends AbstractStaticDictionary<Byte> {
 
   public Byte convert(String value) {
     validateProperties();
-    if(value == null) {
+    if (value == null) {
       return null;
     }
     byte b = Byte.parseByte(value);
-    if(b > upper_ || b < lower_) {
+    if (b > upper_ || b < lower_) {
       return null;
     }
     return b;
@@ -91,14 +94,14 @@ public class ByteDictionary extends AbstractStaticDictionary<Byte> {
 
   public BitVector lookup(Byte key) {
     validateProperties();
-    if(key == null) {
+    if (key == null) {
       return null;
     }
     int d = key.byteValue();
-    if(lower_ > d) {
+    if (lower_ > d) {
       return null;
     }
-    if(upper_ < d) {
+    if (upper_ < d) {
       return null;
     }
     long ord = ((long) (d - lower_) / step_) + 1;
@@ -107,7 +110,7 @@ public class ByteDictionary extends AbstractStaticDictionary<Byte> {
 
   public Byte reverseLookup(BitVector v) {
     validateProperties();
-    if(v == null) {
+    if (v == null) {
       return null;
     }
 
@@ -116,7 +119,7 @@ public class ByteDictionary extends AbstractStaticDictionary<Byte> {
 
   public int dimension() {
     validateProperties();
-    if(dimension_ == -1) {
+    if (dimension_ == -1) {
       dimension_ = BitUtil.dimension(((short) upper_ - (short) lower_) / (short) step_ + 1);
     }
     return dimension_;
@@ -128,7 +131,7 @@ public class ByteDictionary extends AbstractStaticDictionary<Byte> {
 
   @Override
   public boolean equals(Object obj) {
-    if(obj instanceof ByteDictionary) {
+    if (obj instanceof ByteDictionary) {
       ByteDictionary bd = (ByteDictionary) obj;
       return this.step_ == bd.step_ && this.lower_ == bd.lower_ && this.upper_ == bd.upper_;
     }
@@ -141,13 +144,13 @@ public class ByteDictionary extends AbstractStaticDictionary<Byte> {
    * is no way to know in which order they have been defined.
    */
   private void validateProperties() {
-    if(propsValidated) {
+    if (propsValidated) {
       return;
     }
-    if(step_ == 0) {
+    if (step_ == 0) {
       throw new IllegalArgumentException("Argument step cannot be zero.");
     }
-    if(lower_ >= upper_) {
+    if (lower_ >= upper_) {
       throw new IllegalArgumentException("Lower bound must be less than upper bound.");
     }
     propsValidated = true;

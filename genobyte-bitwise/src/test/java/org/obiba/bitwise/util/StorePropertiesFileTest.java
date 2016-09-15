@@ -41,7 +41,7 @@ public class StorePropertiesFileTest extends TestCase {
     //Delete test store directory if it already exists, as we are testing here the creation of a new store.
     try {
       FileUtil.deltree(storeLocation_);
-    } catch(IOException e) {
+    } catch (IOException e) {
     }
   }
 
@@ -72,7 +72,7 @@ public class StorePropertiesFileTest extends TestCase {
       //Make sure properties from the default file have been extracted.
       assertEquals(p.getProperty(DefaultConfigurationPropertiesProvider.ROOT_DIR_PROPERTY), storeLocation_);
     } finally {
-      if(myStore != null) {
+      if (myStore != null) {
         myStore.close();
       }
     }
@@ -84,14 +84,14 @@ public class StorePropertiesFileTest extends TestCase {
       assertEquals(p.toString(), p.getProperty("sp.test"), "It works.");
       assertEquals(p.getProperty("overwrittenProperty"), "2");
     } finally {
-      if(myStore != null) {
+      if (myStore != null) {
         myStore.close();
       }
     }
 
     try {
       FileUtil.deltree(storeLocation_);
-    } catch(IOException e) {
+    } catch (IOException e) {
     }
   }
 

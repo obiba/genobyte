@@ -29,7 +29,7 @@ import java.util.*;
 
 /**
  * Utility class to manage instances of com.ibatis.dao.client.DaoManager based on a <tt>DaoKey</tt>.
- *
+ * <p>
  * Each DaoKey has a com.ibatis.dao.client.DaoManager associated. This allows creating, accessing and destroying
  * these instances.
  */
@@ -48,7 +48,7 @@ public class KeyedDaoManager {
 
   static public void createInstance(DaoKey key, Properties p) {
     Properties local = null;
-    if(p != null) {
+    if (p != null) {
       local = new Properties(p);
     } else {
       local = new Properties();
@@ -57,7 +57,7 @@ public class KeyedDaoManager {
     local.setProperty(DAO_MANAGER_KEY, key.toString());
     com.ibatis.dao.client.DaoManager instance = DaoManagerBuilder.buildDaoManager(config, local);
     String context = p.getProperty(DefaultConfigurationPropertiesProvider.BITWISE_DAO_IMPL);
-    if(context == null || context.length() == 0) {
+    if (context == null || context.length() == 0) {
       throw new IllegalArgumentException(
           DefaultConfigurationPropertiesProvider.BITWISE_DAO_IMPL + " property must be set.");
     }
@@ -69,16 +69,16 @@ public class KeyedDaoManager {
   }
 
   static public void destroyInstance(DaoKey key) {
-    if(instanceMap_.containsKey(key)) {
+    if (instanceMap_.containsKey(key)) {
       instanceMap_.remove(key);
-      for(KeyedDaoManagerDestroyListener listener : destroyListener_.remove(key)) {
+      for (KeyedDaoManagerDestroyListener listener : destroyListener_.remove(key)) {
         listener.destroying();
       }
     }
   }
 
   static public void addDestroyListener(DaoKey key, KeyedDaoManagerDestroyListener listener) {
-    if(destroyListener_.containsKey(key) == false) {
+    if (destroyListener_.containsKey(key) == false) {
       destroyListener_.put(key, new LinkedList<KeyedDaoManagerDestroyListener>());
     }
     destroyListener_.get(key).add(listener);

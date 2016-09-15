@@ -22,16 +22,17 @@ package org.obiba.bitwise.client;
  * A row in a Separated Value file
  *
  * @author plaflamm
- *
- * <pre>
- * Date       Author      Changes
- * 21/02/2005 plaflamm    Creation
- * </pre>
+ *         <p>
+ *         <pre>
+ *                         Date       Author      Changes
+ *                         21/02/2005 plaflamm    Creation
+ *                         </pre>
  */
 public interface SeparatedValuesRow {
 
   /**
    * The index of the row in the file (0 based)
+   *
    * @return the row's index in the file
    */
   public int getIndex();
@@ -43,7 +44,7 @@ public interface SeparatedValuesRow {
    * specified type must provide a constructor with a sole String argument.
    *
    * @param index the 0 based column index
-   * @param type the type of the object to instantiate.
+   * @param type  the type of the object to instantiate.
    * @return the column's value
    */
   public <T> T getColumnValue(int index, Class<T> type);

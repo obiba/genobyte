@@ -21,7 +21,7 @@ package org.obiba.bitwise.query;
 import org.obiba.bitwise.BitwiseStore;
 
 /**
- * Provides an interface for query filters, a way to cleanup a query resultset following certain criteria. 
+ * Provides an interface for query filters, a way to cleanup a query resultset following certain criteria.
  */
 public interface Filter {
 

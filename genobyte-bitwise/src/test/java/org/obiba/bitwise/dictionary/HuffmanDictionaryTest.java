@@ -55,8 +55,8 @@ public class HuffmanDictionaryTest extends TestCase {
   public void testBundleIdDictionary() {
     HuffmanDictionary d = new HuffmanDictionary("Bogus");
     d.setSeedString("0123456789_ABCDEFGH");
-    String[] values = { "1536392204_A", "1536392323_A", "1536392332_B" };
-    for(String value : values) {
+    String[] values = {"1536392204_A", "1536392323_A", "1536392332_B"};
+    for (String value : values) {
       d.lookup(value);
       System.out.println(value + ": " + d.dimension());
     }

@@ -34,15 +34,16 @@ public abstract class PersistenceStatsDigester implements StatsDigester {
 
   /**
    * Persists a field from the <tt>StatsPool</tt> into the designated store field.
-   * @param pPool the pool from where to extract the field to be copied.
-   * @param pPoolField the name of the field to be copied.
+   *
+   * @param pPool       the pool from where to extract the field to be copied.
+   * @param pPoolField  the name of the field to be copied.
    * @param pStoreField the name of the destination field in the store.
-   * @param pMask the mask expressing which records in the field should be persisted.
+   * @param pMask       the mask expressing which records in the field should be persisted.
    */
   protected void persistField(StatsPool<?, ?> pPool, String pPoolField, String pStoreField, QueryResult pMask) {
     // Get calculated field from pool
     VolatileField field = (VolatileField) pPool.getPool().get(pPoolField);
-    if(field == null) {
+    if (field == null) {
       return;
     }
 
@@ -50,11 +51,11 @@ public abstract class PersistenceStatsDigester implements StatsDigester {
     BitwiseStore store = pPool.getGenotypingRecordStore().getStore();
 
     log.debug("Persisting [{}] values for field [{}] in store [{}].",
-        new Object[] { pMask.count(), pPoolField, store.getName() });
+        new Object[]{pMask.count(), pPoolField, store.getName()});
 
     // Copy values from VolatileField to persisted field.
     Field destination = store.getField(pStoreField);
-    if(destination != null) {
+    if (destination != null) {
       destination.copyValues(field, pMask);
     }
   }

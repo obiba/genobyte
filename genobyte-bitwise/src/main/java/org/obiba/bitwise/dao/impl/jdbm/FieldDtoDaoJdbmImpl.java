@@ -52,11 +52,11 @@ public class FieldDtoDaoJdbmImpl extends BaseBTreeJdbmDaoImpl<FieldDto, String> 
     try {
       Tuple t = new Tuple();
       TupleBrowser tb = getBtree().browse();
-      while(tb.getNext(t) == true) {
+      while (tb.getNext(t) == true) {
         keys.add((String) t.getKey());
       }
       return keys;
-    } catch(IOException e) {
+    } catch (IOException e) {
       throw new JdbmRuntimeException(e);
     }
   }
@@ -67,11 +67,11 @@ public class FieldDtoDaoJdbmImpl extends BaseBTreeJdbmDaoImpl<FieldDto, String> 
     try {
       Tuple t = new Tuple();
       TupleBrowser tb = getBtree().browse();
-      while(tb.getNext(t) == true) {
+      while (tb.getNext(t) == true) {
         values.add((FieldDto) t.getValue());
       }
       return values;
-    } catch(IOException e) {
+    } catch (IOException e) {
       throw new JdbmRuntimeException(e);
     }
   }

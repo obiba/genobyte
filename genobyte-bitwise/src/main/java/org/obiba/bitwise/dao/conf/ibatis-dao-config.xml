@@ -10,16 +10,16 @@
     <transactionManager type="org.obiba.bitwise.dao.impl.bdb.BdbTransactionManager"/>
 
     <dao interface="org.obiba.bitwise.dao.BitVectorDtoDao"
-        implementation="org.obiba.bitwise.dao.impl.bdb.BitVectorDtoDaoBdbImpl"/>
+         implementation="org.obiba.bitwise.dao.impl.bdb.BitVectorDtoDaoBdbImpl"/>
 
     <dao interface="org.obiba.bitwise.dao.FieldDtoDao"
-        implementation="org.obiba.bitwise.dao.impl.bdb.FieldDtoDaoBdbImpl"/>
+         implementation="org.obiba.bitwise.dao.impl.bdb.FieldDtoDaoBdbImpl"/>
 
     <dao interface="org.obiba.bitwise.dao.DictionaryDtoDao"
-        implementation="org.obiba.bitwise.dao.impl.bdb.DictionaryDtoDaoBdbImpl"/>
+         implementation="org.obiba.bitwise.dao.impl.bdb.DictionaryDtoDaoBdbImpl"/>
 
     <dao interface="org.obiba.bitwise.dao.BitwiseStoreDtoDao"
-        implementation="org.obiba.bitwise.dao.impl.bdb.BitwiseStoreDtoDaoBdbImpl"/>
+         implementation="org.obiba.bitwise.dao.impl.bdb.BitwiseStoreDtoDaoBdbImpl"/>
   </context>
 
   <context id="jdbm">
@@ -27,16 +27,16 @@
     <transactionManager type="org.obiba.bitwise.dao.impl.jdbm.JdbmTransactionManager"/>
 
     <dao interface="org.obiba.bitwise.dao.BitVectorDtoDao"
-        implementation="org.obiba.bitwise.dao.impl.jdbm.BitVectorDtoDaoJdbmImpl"/>
+         implementation="org.obiba.bitwise.dao.impl.jdbm.BitVectorDtoDaoJdbmImpl"/>
 
     <dao interface="org.obiba.bitwise.dao.FieldDtoDao"
-        implementation="org.obiba.bitwise.dao.impl.jdbm.FieldDtoDaoJdbmImpl"/>
+         implementation="org.obiba.bitwise.dao.impl.jdbm.FieldDtoDaoJdbmImpl"/>
 
     <dao interface="org.obiba.bitwise.dao.DictionaryDtoDao"
-        implementation="org.obiba.bitwise.dao.impl.jdbm.DictionaryDtoDaoJdbmImpl"/>
+         implementation="org.obiba.bitwise.dao.impl.jdbm.DictionaryDtoDaoJdbmImpl"/>
 
     <dao interface="org.obiba.bitwise.dao.BitwiseStoreDtoDao"
-        implementation="org.obiba.bitwise.dao.impl.jdbm.BitwiseStoreDtoDaoJdbmImpl"/>
+         implementation="org.obiba.bitwise.dao.impl.jdbm.BitwiseStoreDtoDaoJdbmImpl"/>
   </context>
 
   <context id="lmdb">

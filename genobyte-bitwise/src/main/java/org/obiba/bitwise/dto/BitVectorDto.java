@@ -20,22 +20,28 @@ package org.obiba.bitwise.dto;
 
 /**
  * Transfer object for a <tt>BitVector</tt>.
- *
+ * <p>
  * Allows persisting a <tt>BitVector</tt> object through a BitVectorDao implementation.
  */
 public class BitVectorDto {
 
-  /** The unique identifier of this bit vector (primary key)*/
+  /**
+   * The unique identifier of this bit vector (primary key)
+   */
   long id_ = -1;
 
-  /** The number of bits this vector holds */
+  /**
+   * The number of bits this vector holds
+   */
   private int size_;
 
-  /** Array of bits (holds the actual bit values) */
+  /**
+   * Array of bits (holds the actual bit values)
+   */
   private long[] bits_;
 
   /**
-   * Constructs an empty transfer object. 
+   * Constructs an empty transfer object.
    */
   public BitVectorDto() {
     super();

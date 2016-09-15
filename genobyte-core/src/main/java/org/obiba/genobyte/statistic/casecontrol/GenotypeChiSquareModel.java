@@ -34,7 +34,7 @@ public class GenotypeChiSquareModel extends BaseChiSquareModelImpl implements Ca
     long S = ccgf.getS();
     long N = ccgf.getN();
 
-    if(R == 0 || S == 0 || N == 0) {
+    if (R == 0 || S == 0 || N == 0) {
       return Double.NaN;
     }
 
@@ -43,12 +43,12 @@ public class GenotypeChiSquareModel extends BaseChiSquareModelImpl implements Ca
     int sValues[] = ccgf.getSValues();
     int nValues[] = ccgf.getNValues();
 
-    for(int i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; i++) {
       long r = rValues[i];
       long s = sValues[i];
       long n = nValues[i];
 
-      if(n == 0) {
+      if (n == 0) {
         return Double.NaN;
       }
 

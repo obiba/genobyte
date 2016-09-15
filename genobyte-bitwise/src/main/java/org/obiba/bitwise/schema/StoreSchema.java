@@ -45,6 +45,7 @@ public class StoreSchema implements Serializable {
 
   /**
    * Sets the name of this store schema.
+   *
    * @param name the name to give to this schema.
    */
   public void setName(String name) {
@@ -53,6 +54,7 @@ public class StoreSchema implements Serializable {
 
   /**
    * Sets the version of this store schema.
+   *
    * @param version the version of the schema.
    */
   public void setVersion(String version) {
@@ -61,6 +63,7 @@ public class StoreSchema implements Serializable {
 
   /**
    * Gets the name of this store schema.
+   *
    * @return the name of this schema.
    */
   public String getName() {
@@ -69,6 +72,7 @@ public class StoreSchema implements Serializable {
 
   /**
    * Gets the version of this store schema.
+   *
    * @return the name of this schema.
    */
   public String getVersion() {
@@ -77,6 +81,7 @@ public class StoreSchema implements Serializable {
 
   /**
    * Get the dictionary with given name.
+   *
    * @param name is the name of the dictionary to get from the schema.
    * @return a DictionaryMetaData corresponding to the given name, or <code>null</code> if there is
    * no dictionary with that name.
@@ -87,6 +92,7 @@ public class StoreSchema implements Serializable {
 
   /**
    * Gets contextual information for all dictionaries in use in the store.
+   *
    * @return a <tt>Collection</tt> holding dictionaries contextual information.
    */
   public Collection<DictionaryMetaData> getDictionaries() {
@@ -95,6 +101,7 @@ public class StoreSchema implements Serializable {
 
   /**
    * Adds a dictionary to this store context.
+   *
    * @param d the contextual information for this dictionary.
    */
   public void addDictionary(DictionaryMetaData d) {
@@ -103,14 +110,15 @@ public class StoreSchema implements Serializable {
 
   /**
    * Gets contextual information for field that exists in the store.
+   *
    * @param name the name of the field.
    * @return the contextual information for a field.
    */
   public FieldMetaData getField(String name) {
     FieldMetaData meta = fields_.get(name);
-    if(meta == null) {
-      for(FieldMetaData template : templates_) {
-        if(name.startsWith(template.getName())) {
+    if (meta == null) {
+      for (FieldMetaData template : templates_) {
+        if (name.startsWith(template.getName())) {
           meta = new FieldMetaData();
           meta.setName(name);
           meta.setDictionary(template.getDictionary());
@@ -124,6 +132,7 @@ public class StoreSchema implements Serializable {
 
   /**
    * Gets contextual information for all fields found in the store.
+   *
    * @return a <tt>Collection</tt> holding fields contextual information.
    */
   public Collection<FieldMetaData> getFields() {
@@ -132,10 +141,11 @@ public class StoreSchema implements Serializable {
 
   /**
    * Adds a field to this store context.
+   *
    * @param f the contextual information for this field.
    */
   public void addField(FieldMetaData f) {
-    if(f.isTemplate()) {
+    if (f.isTemplate()) {
       templates_.add(f);
     } else {
       fields_.put(f.getName(), f);

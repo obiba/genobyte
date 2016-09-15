@@ -28,12 +28,14 @@ import org.obiba.bitwise.schema.DictionaryMetaData;
 public interface DictionaryFactory {
   /**
    * Add a new default dictionary in the library.
+   *
    * @param pDict is the new dictionary object.
    */
   public void setDictionary(Class pFieldClass, DefaultDictionary pDictClass);
 
   /**
    * Create a new default dictionary for the provided class.
+   *
    * @param pClass is the class for which we need a new dictionary.
    * @return An unnamed dictionary that can be used for a field with the class pClass, or
    * <code>null</code> if a dictionary couldn't be created.
@@ -43,6 +45,7 @@ public interface DictionaryFactory {
   /**
    * Creates a new <tt>Dictionary</tt> instance that can encode/decode values that are of the type
    * given in parameter. The new instance doesn't have a name.
+   *
    * @param pFieldClass the class for which we need a new dictionary.
    * @return the new dictionary instance.
    */

@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <!--=============================================================================================-->
@@ -26,48 +26,6 @@
       <groupId>org.obiba.genobyte</groupId>
       <artifactId>genobyte-bitwise</artifactId>
     </dependency>
-
-    <dependency>
-      <groupId>commons-beanutils</groupId>
-      <artifactId>commons-beanutils</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>commons-digester</groupId>
-      <artifactId>commons-digester</artifactId>
-      <optional>true</optional>
-    </dependency>
-
-    <dependency>
-      <groupId>commons-cli</groupId>
-      <artifactId>commons-cli</artifactId>
-      <optional>true</optional>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.ibatis</groupId>
-      <artifactId>ibatis-common</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.ibatis</groupId>
-      <artifactId>ibatis-dao</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>com.sleepycat</groupId>
-      <artifactId>je</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>jdbm</groupId>
-      <artifactId>jdbm</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.deephacks.lmdbjni</groupId>
-      <artifactId>lmdbjni-linux64</artifactId>
-    </dependency>
   </dependencies>
 
 
@@ -81,20 +39,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
-      </plugin>
-
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>javacc-maven-plugin</artifactId>
-        <version>2.6</version>
-        <executions>
-          <execution>
-            <id>javacc</id>
-            <goals>
-              <goal>javacc</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
 
       <plugin>
@@ -116,10 +60,6 @@
         <configuration>
           <groups>
             <group>
-              <title>Bitwise Packages</title>
-              <packages>org.obiba.bitwise:org.obiba.bitwise.*</packages>
-            </group>
-            <group>
               <title>GenoByte Packages</title>
               <packages>org.obiba.genobyte:org.obiba.genobyte.*</packages>
             </group>
@@ -128,27 +68,7 @@
               <packages>org.obiba.bitwise.mock:org.obiba.genobyte.mock.*</packages>
             </group>
           </groups>
-          <!-- Hide these from the API Javadoc -->
-          <excludePackageNames>org.obiba.bitwise.dao*:org.obiba.bitwise.dto*</excludePackageNames>
         </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jxr-plugin</artifactId>
-        <configuration>
-          <!--javadocDir>/genobyte/apidocs</javadocDir-->
-          <excludes>
-            <exclude>**/dao/**/*.java</exclude>
-            <exclude>**/dto/*.java</exclude>
-          </excludes>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-report-plugin</artifactId>
-        <version>2.3</version>
       </plugin>
 
     </plugins>

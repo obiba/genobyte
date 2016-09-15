@@ -18,18 +18,13 @@
  *******************************************************************************/
 package org.obiba.genobyte.statistic;
 
+import org.obiba.bitwise.AbstractField;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import org.obiba.bitwise.AbstractField;
+import java.util.*;
 
 /**
  * Provides methods to generate CSV reports for a <tt>StatsPool</tt>. For any column included in the report,
@@ -41,10 +36,14 @@ public class CsvReport implements StatsDigester {
 
   public static final char SEPARATOR_CHAR = ',';
 
-  /** Contains the field names that will be displayed on top of the CSV report. */
+  /**
+   * Contains the field names that will be displayed on top of the CSV report.
+   */
   private Map<String, String> headers_ = null;
 
-  /** Contains the name of the fields which content will be displayed on the report. */
+  /**
+   * Contains the name of the fields which content will be displayed on the report.
+   */
   private List<ReportField> includedFields_ = null;
 
   private PrintStream output_ = null;
@@ -76,8 +75,9 @@ public class CsvReport implements StatsDigester {
 
   /**
    * Sets the name of a Field column header to something else than its default name.
+   *
    * @param pFieldName the name of the field.
-   * @param pHeader the new header to put on top of the column.
+   * @param pHeader    the new header to put on top of the column.
    */
   public void setColumnHeader(String pFieldName, String pHeader) {
     headers_.put(pFieldName, pHeader);
@@ -85,29 +85,30 @@ public class CsvReport implements StatsDigester {
 
   /**
    * Adds a field to be displayed in the report. The Field display order will be the one in which they are added with this method.
+   *
    * @param pField the field to be included in the report.
    */
   public void addPooledField(String pField) {
-    if(pField == null) throw new IllegalArgumentException("Field name cannot be null.");
+    if (pField == null) throw new IllegalArgumentException("Field name cannot be null.");
     includedFields_.add(new ReportField(pField, "pool"));
   }
 
   public void addStoredField(String pField) {
-    if(pField == null) throw new IllegalArgumentException("Field name cannot be null.");
+    if (pField == null) throw new IllegalArgumentException("Field name cannot be null.");
     includedFields_.add(new ReportField(pField, "store"));
   }
 
   private AbstractField getField(StatsPool<?, ?> pPool, ReportField pRf) {
     AbstractField field;
-    if(pRf.getType().equals("pool")) {
+    if (pRf.getType().equals("pool")) {
       field = pPool.getPooledField(pRf.getName());
-      if(field == null) {
+      if (field == null) {
         throw new IllegalArgumentException(
             "The field [" + pRf.getName() + "] could not be found in the pool of statistics.");
       }
     } else {
       field = pPool.getGenotypingRecordStore().getStore().getField(pRf.getName());
-      if(field == null) {
+      if (field == null) {
         throw new IllegalArgumentException("The field [" + pRf.getName() + "] could not be found in the store.");
       }
     }
@@ -121,17 +122,17 @@ public class CsvReport implements StatsDigester {
     Iterator<ReportField> i = includedFields_.iterator();
     Map<String, AbstractField> fieldMap = new LinkedHashMap<String, AbstractField>();
 
-    while(i.hasNext()) {
+    while (i.hasNext()) {
       ReportField rf = i.next();
       AbstractField field = getField(pPool, rf);
       fieldMap.put(rf.getName(), field);
 
       String name = field.getName();
-      if(headers_.containsKey(name)) {
+      if (headers_.containsKey(name)) {
         name = headers_.get(name);
       }
       output_.print(escapeSeparator(name));
-      if(i.hasNext()) {
+      if (i.hasNext()) {
         output_.print(SEPARATOR_CHAR);
       }
     }
@@ -139,21 +140,21 @@ public class CsvReport implements StatsDigester {
     output_.println();
 
     //Iterating on all requested records
-    for(int currentRecord = pPool.getRecordMask().next(0);
-        currentRecord != -1; currentRecord = pPool.getRecordMask().next(currentRecord + 1)) {
+    for (int currentRecord = pPool.getRecordMask().next(0);
+         currentRecord != -1; currentRecord = pPool.getRecordMask().next(currentRecord + 1)) {
       Iterator<String> j = fieldMap.keySet().iterator();
 
-      while(j.hasNext()) {
+      while (j.hasNext()) {
         String fieldName = j.next();
         AbstractField field = fieldMap.get(fieldName);
 
         //Output value if there is one
         Object value = field.getDictionary().reverseLookup(field.getValue(currentRecord));
-        if(value != null) {
+        if (value != null) {
           output_.print(escapeSeparator(value.toString()));
         }
 
-        if(j.hasNext()) {
+        if (j.hasNext()) {
           output_.print(SEPARATOR_CHAR);
         }
       }
@@ -164,12 +165,13 @@ public class CsvReport implements StatsDigester {
   }
 
   /**
-   * Encloses csv field values in double quotes if a column separating character in found in the value. 
+   * Encloses csv field values in double quotes if a column separating character in found in the value.
+   *
    * @param value the orginal value.
    * @return the value, enclosed in double quotes if needed.
    */
   private String escapeSeparator(String value) {
-    if(value != null && value.indexOf(SEPARATOR_CHAR) != -1) {
+    if (value != null && value.indexOf(SEPARATOR_CHAR) != -1) {
       return "\"" + value + "\"";
     }
     return value;

@@ -22,9 +22,9 @@ import com.ibatis.dao.client.Dao;
 
 /**
  * Base interface for DAOs that use a DaoKey to partition the data to be accessed.
- *
+ * <p>
  * Keyed DAOs allows having many DAO implementations of the same DAO interface but that work on different sets of
- * data. The DaoKey is used to partition the different DAO instances. Its value can be anything that is 
+ * data. The DaoKey is used to partition the different DAO instances. Its value can be anything that is
  * meaningful to the Dao implementation.
  *
  * @author plaflamm
@@ -33,6 +33,7 @@ public interface KeyedDao extends Dao {
 
   /**
    * Set the <code>DaoKey</code> of this DAO instance.
+   *
    * @param key the <code>DaoKey</code>
    */
   public void setDaoKey(DaoKey key);

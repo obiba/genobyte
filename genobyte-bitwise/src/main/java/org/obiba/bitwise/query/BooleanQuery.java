@@ -26,7 +26,7 @@ import org.obiba.bitwise.BitwiseStore;
 public class BooleanQuery extends Query {
 
   /**
-   * Enumeration of boolean operators supported by this type of query. 
+   * Enumeration of boolean operators supported by this type of query.
    */
   public enum Operator {
     AND, OR, XOR
@@ -47,7 +47,7 @@ public class BooleanQuery extends Query {
 
   @Override
   public QueryResult execute(BitwiseStore store) throws QueryExecutionException {
-    switch(op_) {
+    switch (op_) {
       case AND:
         return left_.execute(store).and(right_.execute(store));
       case OR:

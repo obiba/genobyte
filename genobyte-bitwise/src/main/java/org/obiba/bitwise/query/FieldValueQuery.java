@@ -40,11 +40,11 @@ public class FieldValueQuery extends Query {
   @Override
   public QueryResult execute(BitwiseStore store) throws QueryExecutionException {
     Field f = store.getField(field_);
-    if(f == null) {
+    if (f == null) {
       throw invalidField(store, field_);
     }
     Object value = null;
-    if(value_ != null && value_.equals("null") == false) {
+    if (value_ != null && value_.equals("null") == false) {
       value = f.getDictionary().convert(value_);
     }
     BitVector v = f.getDictionary().lookup(value);

@@ -18,13 +18,13 @@
  *******************************************************************************/
 package org.obiba.genobyte.statistic.util;
 
-import java.util.Map;
-
 import org.obiba.bitwise.VolatileField;
 import org.obiba.bitwise.query.QueryResult;
 import org.obiba.genobyte.statistic.AbstractStatistic;
 import org.obiba.genobyte.statistic.FieldStatistic;
 import org.obiba.genobyte.statistic.StatsPool;
+
+import java.util.Map;
 
 public class TotalCalls extends AbstractStatistic implements FieldStatistic {
 
@@ -41,7 +41,7 @@ public class TotalCalls extends AbstractStatistic implements FieldStatistic {
     VolatileField freqB = pPool.getPooledField("freqB", Integer.class);
     VolatileField freqH = pPool.getPooledField("freqH", Integer.class);
 
-    for(int i = pFilter.next(0); i != -1; i = pFilter.next(i + 1)) {
+    for (int i = pFilter.next(0); i != -1; i = pFilter.next(i + 1)) {
       int tc = (Integer) freqA.getDictionary().reverseLookup(freqA.getValue(i)) +
           (Integer) freqB.getDictionary().reverseLookup(freqB.getValue(i)) +
           (Integer) freqH.getDictionary().reverseLookup(freqH.getValue(i));

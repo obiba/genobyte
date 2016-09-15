@@ -36,6 +36,7 @@ public interface QueryResult {
 
   /**
    * Get the filter vector.
+   *
    * @return A BitVector of the filter.
    */
   public BitVector getFilter();
@@ -53,7 +54,6 @@ public interface QueryResult {
    *
    * @param index the index of the first hit to test
    * @return the index of the next hit or -1 if none are found
-
    * @see org.obiba.bitwise.BitVector.nextSetBit()
    */
   public int next(int index);
@@ -64,7 +64,7 @@ public interface QueryResult {
    * <code>qrPosition</code> must be a value between 0 and <code>count()-1</code> (inclusive).
    * <br/><br/>
    * Example: A query returned 10 results in a <code>QueryResult</code> instance named <code>qr</code>.
-   * Running <code>qr.hit(4)</code> would return the index of the fifth record matched by the query. 
+   * Running <code>qr.hit(4)</code> would return the index of the fifth record matched by the query.
    *
    * @param qrPosition the index of the hit to return
    * @return the hit at index <code>index</code>

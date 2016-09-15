@@ -45,15 +45,15 @@ public class LmdbContext implements KeyedDaoManagerDestroyListener {
 
     String root = props.getProperty(DefaultConfigurationPropertiesProvider.ROOT_DIR_PROPERTY);
     File rootDir = new File(root);
-    if(rootDir.exists() == false) {
-      if(rootDir.mkdirs() == false) {
+    if (rootDir.exists() == false) {
+      if (rootDir.mkdirs() == false) {
         log.error("Cannot create root directory [{}].", rootDir);
         throw new RuntimeException("Cannot mkdir [" + rootDir + "]");
       }
     }
     File envDir = new File(root, key.toString());
-    if(envDir.exists() == false) {
-      if(envDir.mkdirs() == false) {
+    if (envDir.exists() == false) {
+      if (envDir.mkdirs() == false) {
         log.error("Cannot create environment directory [{}]", envDir);
         throw new RuntimeException("Cannot mkdir [" + envDir + "]");
       }
@@ -70,7 +70,7 @@ public class LmdbContext implements KeyedDaoManagerDestroyListener {
 
   static public void destroyInstance(DaoKey key) {
     LmdbContext ctx = instanceMap_.remove(key);
-    if(ctx != null) {
+    if (ctx != null) {
       ctx.close();
     }
   }

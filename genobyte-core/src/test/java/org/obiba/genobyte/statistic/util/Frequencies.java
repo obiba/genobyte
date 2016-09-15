@@ -18,14 +18,14 @@
  *******************************************************************************/
 package org.obiba.genobyte.statistic.util;
 
-import java.util.Map;
-
 import org.obiba.bitwise.Field;
 import org.obiba.bitwise.query.QueryResult;
 import org.obiba.genobyte.model.SnpCall;
 import org.obiba.genobyte.statistic.AbstractStatistic;
 import org.obiba.genobyte.statistic.RecordStatistic;
 import org.obiba.genobyte.statistic.StatsPool;
+
+import java.util.Map;
 
 /**
  * Implements assay frequency statistics. This includes allele frequencies, MAF (Minor Allele Frequency),

@@ -170,13 +170,13 @@ public class FieldTest extends BaseBdbDaoTestCase {
     Field d = store_.createField(FIELD_3);
     assertNotNull(d);
 
-    for(int i = 1900; i <= 1970; i++) {
+    for (int i = 1900; i <= 1970; i++) {
       d.setValue(store_.nextIndex(), d.getDictionary().lookup(new Integer(i)));
     }
 
     int lower = 1900;
     int upper = 1970;
-    while(lower < upper) {
+    while (lower < upper) {
       QueryResult v = d
           .rangeQuery(d.getDictionary().lookup(new Integer(lower)), d.getDictionary().lookup(new Integer(upper)));
       assertEquals(upper - lower + 1, v.count());
@@ -218,7 +218,7 @@ public class FieldTest extends BaseBdbDaoTestCase {
     Dictionary<Integer> d = sourceField.getDictionary();
     assertNotNull(sourceField);
     // Create 6 records (so they are not deleted)
-    while(store_.nextIndex() < 5) ;
+    while (store_.nextIndex() < 5) ;
     sourceField.setValue(0, d.lookup(1));
     sourceField.setValue(1, d.lookup(1));
     sourceField.setValue(2, d.lookup(2));
@@ -260,7 +260,7 @@ public class FieldTest extends BaseBdbDaoTestCase {
     Dictionary<Integer> d = sourceField.getDictionary();
     assertNotNull(sourceField);
     // Create 6 records (so they are not deleted)
-    while(store_.nextIndex() < 5) ;
+    while (store_.nextIndex() < 5) ;
     sourceField.setValue(0, d.lookup(1));
     sourceField.setValue(1, d.lookup(1));
     sourceField.setValue(2, d.lookup(2));
@@ -302,7 +302,7 @@ public class FieldTest extends BaseBdbDaoTestCase {
     Dictionary<Integer> d = sourceField.getDictionary();
     assertNotNull(sourceField);
     // Create 6 records (so they are not deleted)
-    while(store_.nextIndex() < 5) ;
+    while (store_.nextIndex() < 5) ;
     sourceField.setValue(0, d.lookup(1));
     sourceField.setValue(1, d.lookup(1));
     sourceField.setValue(2, d.lookup(2));

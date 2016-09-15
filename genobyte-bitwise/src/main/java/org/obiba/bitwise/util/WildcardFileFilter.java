@@ -36,7 +36,9 @@ import java.util.regex.Pattern;
  */
 public class WildcardFileFilter implements FileFilter {
 
-  /** The regex */
+  /**
+   * The regex
+   */
   private Pattern pattern;
 
   public WildcardFileFilter(String filter) {
@@ -53,17 +55,17 @@ public class WildcardFileFilter implements FileFilter {
   /**
    * Calls the WildcardFileFilter recursively to handle directories within the filename pattern.
    *
-   * @param cwd the root of the recursive scan
+   * @param cwd    the root of the recursive scan
    * @param filter the pattern
    * @return an array of matching File instances
    */
   public static File[] listFiles(File cwd, String filter) {
     int sep = getIndexOfSeparator(filter);
-    if(sep != -1) {
+    if (sep != -1) {
       Set<File> result = new TreeSet<File>();
 
       int absolutePathSep = getAbsolutePathNextIndex(filter);
-      if(absolutePathSep != -1) {
+      if (absolutePathSep != -1) {
         // It's an absolute path...
         cwd = new File("/");
         filter = filter.substring(absolutePathSep);
@@ -73,23 +75,23 @@ public class WildcardFileFilter implements FileFilter {
       String dirPattern = filter.substring(0, sep);
       String subFilter = filter.substring(sep + 1, filter.length());
 
-      if(dirPattern.equals(".") || dirPattern.equals("..")) {
+      if (dirPattern.equals(".") || dirPattern.equals("..")) {
         try {
           cwd = new File(cwd.getCanonicalPath() + File.separator + dirPattern).getCanonicalFile();
           // Recursive call after removing the relative portions of the cwd.
           File[] subFiles = listFiles(cwd, subFilter);
-          if(subFiles != null && subFiles.length > 0) {
+          if (subFiles != null && subFiles.length > 0) {
             result.addAll(Arrays.asList(subFiles));
           }
-        } catch(IOException e) {
+        } catch (IOException e) {
           throw new RuntimeException(e);
         }
       } else {
         WildcardFileFilter wff = new WildcardFileFilter(dirPattern);
         File[] subDirs = cwd.listFiles(wff);
-        for(File subdir : subDirs) {
+        for (File subdir : subDirs) {
           File[] subFiles = listFiles(subdir, subFilter);
-          if(subFiles != null && subFiles.length > 0) {
+          if (subFiles != null && subFiles.length > 0) {
             result.addAll(Arrays.asList(subFiles));
           }
         }
@@ -104,16 +106,17 @@ public class WildcardFileFilter implements FileFilter {
   /**
    * Finds index of next directory separator. This method aims specifically at supporting the "/" character
    * as a directory separator under Windows.
+   *
    * @param filter the <tt>String</tt> in which directory separator should be identified
    * @return the index of the separator, or -1 if no separator could be found.
    */
   private static int getIndexOfSeparator(String filter) {
     int sep = filter.indexOf(File.separatorChar);
 
-    if(System.getProperty("os.name").contains("Windows")) {
+    if (System.getProperty("os.name").contains("Windows")) {
       int slashSep = filter.indexOf("/");
       //If there is a slash separator occuring before an os-relative separator
-      if((slashSep < sep) || (slashSep != -1 && sep == -1)) {
+      if ((slashSep < sep) || (slashSep != -1 && sep == -1)) {
         sep = slashSep;
       }
     }
@@ -122,14 +125,15 @@ public class WildcardFileFilter implements FileFilter {
 
   /**
    * Finds index of the first character following the absolute path.
+   *
    * @param path the path in which to find index
    * @return index of the first character, or -1 if the path is not an absolute path.
    */
   private static int getAbsolutePathNextIndex(String path) {
-    if(System.getProperty("os.name").contains("Windows")) {
+    if (System.getProperty("os.name").contains("Windows")) {
       //In Windows, the path is absolute when the drive separation character ":" is used in the path.
       int driveSep = path.indexOf(":");
-      if(driveSep != -1) {
+      if (driveSep != -1) {
         return driveSep + 2;
       } else {
         return -1;
@@ -137,7 +141,7 @@ public class WildcardFileFilter implements FileFilter {
     } else {
       //In *nix, we know the path is absolute when the directory separator is put at the beginning of the path.
       int sep = getIndexOfSeparator(path);
-      if(sep == 0) {
+      if (sep == 0) {
         return sep + 1;
       } else {
         return -1;
@@ -156,10 +160,10 @@ public class WildcardFileFilter implements FileFilter {
 
     char[] chars = wild.toCharArray();
 
-    for(int i = 0; i < chars.length; ++i) {
-      if(chars[i] == '*') buffer.append(".*");
-      else if(chars[i] == '?') buffer.append(".");
-      else if("+()^$.{}[]|\\".indexOf(chars[i]) != -1) buffer.append('\\').append(chars[i]);
+    for (int i = 0; i < chars.length; ++i) {
+      if (chars[i] == '*') buffer.append(".*");
+      else if (chars[i] == '?') buffer.append(".");
+      else if ("+()^$.{}[]|\\".indexOf(chars[i]) != -1) buffer.append('\\').append(chars[i]);
       else buffer.append(chars[i]);
     }
 

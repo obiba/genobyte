@@ -71,9 +71,9 @@ public class DefaultDictionaryFactory implements DictionaryFactory {
    */
   public DictionaryMetaData getDictionary(Class pFieldClass) {
     DefaultDictionary dmd = defaultDicts_.get(pFieldClass);
-    if(dmd != null) {
+    if (dmd != null) {
       return dmd.getDict();
-    } else if(pFieldClass.isEnum()) {
+    } else if (pFieldClass.isEnum()) {
       // Fixes GEN-30
       return new DefaultEnumDictionary(pFieldClass).getDict();
     }
@@ -83,8 +83,8 @@ public class DefaultDictionaryFactory implements DictionaryFactory {
 
   public Dictionary getInstance(Class pFieldClass, String pName) {
     DefaultDictionary dd = defaultDicts_.get(pFieldClass);
-    if(dd == null) {
-      if(pFieldClass.isEnum()) {
+    if (dd == null) {
+      if (pFieldClass.isEnum()) {
         // Fixes GEN-30
         return new DefaultEnumDictionary(pFieldClass).getInstance(pName);
       }

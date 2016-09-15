@@ -47,7 +47,8 @@ public class DecimalDictionary extends AbstractStaticDictionary<Double> {
 
   /**
    * Sets the lower bound (minimum) for encoded values. Any value to encode to a <tt>BitVector</tt> must be higher or equal to this value.
-   * @param pLower the lower bound 
+   *
+   * @param pLower the lower bound
    */
   public void setLower(double pLower) {
     lower_ = pLower;
@@ -56,7 +57,8 @@ public class DecimalDictionary extends AbstractStaticDictionary<Double> {
 
   /**
    * Sets the upper bound (maximum) for encoded values. Any value to encode to a <tt>BitVector</tt> must be lower or equal to this value.
-   * @param pUpper the upper bound 
+   *
+   * @param pUpper the upper bound
    */
   public void setUpper(double pUpper) {
     upper_ = pUpper;
@@ -66,7 +68,8 @@ public class DecimalDictionary extends AbstractStaticDictionary<Double> {
   /**
    * Sets the value sampling increment for encoded values. Values that fall between two increment values in this this dictionary
    * will take the value of the closest higher increment.
-   * @param pStep the step between each sampled value. 
+   *
+   * @param pStep the step between each sampled value.
    */
   public void setStep(double pStep) {
     step_ = pStep;
@@ -80,7 +83,7 @@ public class DecimalDictionary extends AbstractStaticDictionary<Double> {
   public Double convert(String value) {
     validateProperties();
     double d = Double.parseDouble(value);
-    if(Double.compare(lower_, d) > 0 || Double.compare(upper_, d) < 0) {
+    if (Double.compare(lower_, d) > 0 || Double.compare(upper_, d) < 0) {
       return null;
     }
     return d;
@@ -88,14 +91,14 @@ public class DecimalDictionary extends AbstractStaticDictionary<Double> {
 
   public BitVector lookup(Double key) {
     validateProperties();
-    if(key == null) {
+    if (key == null) {
       return null;
     }
     double d = key.doubleValue();
-    if(Double.compare(lower_, d) > 0) {
+    if (Double.compare(lower_, d) > 0) {
       return null;
     }
-    if(Double.compare(upper_, d) < 0) {
+    if (Double.compare(upper_, d) < 0) {
       return null;
     }
     long ord = (long) Math.ceil(((d - lower_) / step_) + 1.0d - step_);
@@ -104,7 +107,7 @@ public class DecimalDictionary extends AbstractStaticDictionary<Double> {
 
   public Double reverseLookup(BitVector v) {
     validateProperties();
-    if(v == null) {
+    if (v == null) {
       return null;
     }
     return lower_ + (BitUtil.longValue(v) - 1) * step_;
@@ -112,7 +115,7 @@ public class DecimalDictionary extends AbstractStaticDictionary<Double> {
 
   public int dimension() {
     validateProperties();
-    if(dimension_ == -1) {
+    if (dimension_ == -1) {
       dimension_ = BitUtil.dimension((long) ((upper_ - lower_) / step_ + 1l));
     }
     return dimension_;
@@ -124,7 +127,7 @@ public class DecimalDictionary extends AbstractStaticDictionary<Double> {
 
   @Override
   public boolean equals(Object obj) {
-    if(obj instanceof DecimalDictionary) {
+    if (obj instanceof DecimalDictionary) {
       DecimalDictionary dd = (DecimalDictionary) obj;
       return this.step_ == dd.step_ && this.lower_ == dd.lower_ && this.upper_ == dd.upper_;
     }
@@ -137,20 +140,20 @@ public class DecimalDictionary extends AbstractStaticDictionary<Double> {
    * is no way to know in which order they have been defined.
    */
   private void validateProperties() {
-    if(propsValidated) {
+    if (propsValidated) {
       return;
     }
 
-    if(Double.compare(step_, 0) == 0) {
+    if (Double.compare(step_, 0) == 0) {
       throw new IllegalArgumentException("Argument step cannot be zero.");
     }
 
-    if(Double.compare(lower_, upper_) >= 0) {
+    if (Double.compare(lower_, upper_) >= 0) {
       throw new IllegalArgumentException("Lower bound must be less than upper bound.");
     }
 
     double maxOrder = (upper_ - lower_) / step_;
-    if(Double.compare(Long.MAX_VALUE, maxOrder) < 0) {
+    if (Double.compare(Long.MAX_VALUE, maxOrder) < 0) {
       throw new IllegalArgumentException(
           "Dictionary bounds are too large. Cannot represent values from [" + lower_ + "] to [" + upper_ +
               "] with a step of [" + step_ + "]. Reduce the step or the bounds.");

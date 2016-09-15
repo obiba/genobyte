@@ -29,9 +29,10 @@ import java.util.List;
 
 /**
  * Provides a set of methods to manage records within a store that has been created using Bitwise Annotations.
+ *
  * @param <K> the type of the unique field in this store.
  * @param <T> the class that can hold the data for a record in the store. This class is usually the one that was used to create the store,
- * using Java Annotations.
+ *            using Java Annotations.
  */
 public class AnnotationBasedRecord<K, T> implements BitwiseRecordManager<K, T> {
 
@@ -58,10 +59,11 @@ public class AnnotationBasedRecord<K, T> implements BitwiseRecordManager<K, T> {
 
   /**
    * Creates a new instance of <tt>AnnotationBasedRecord</tt> for a given store and a given class used to represent the store.
-   * @param <K> the type of the unique field in this store.
-   * @param <T> the class that can hold the data for a record in the store. This class is usually the one that was used to create the store,
-   * using Java Annotations.
-   * @param store the store related to this new instance.
+   *
+   * @param <K>         the type of the unique field in this store.
+   * @param <T>         the class that can hold the data for a record in the store. This class is usually the one that was used to create the store,
+   *                    using Java Annotations.
+   * @param store       the store related to this new instance.
    * @param recordClass the class that can hold the data for a record in the store.
    * @return the newly created instance.
    */
@@ -74,9 +76,9 @@ public class AnnotationBasedRecord<K, T> implements BitwiseRecordManager<K, T> {
   public K getKey(T record) {
     try {
       return (K) ba_.getUniqueFieldDescriptor().getReadMethod().invoke(record, (Object[]) null);
-    } catch(RuntimeException e) {
+    } catch (RuntimeException e) {
       throw e;
-    } catch(Exception e) {
+    } catch (Exception e) {
       throw new RuntimeException(e);
     }
   }
@@ -89,19 +91,19 @@ public class AnnotationBasedRecord<K, T> implements BitwiseRecordManager<K, T> {
     try {
       Class<T> c = ba_.getRecordClass();
       return c.newInstance();
-    } catch(Exception e) {
+    } catch (Exception e) {
       throw new RuntimeException(e);
     }
   }
 
   public FieldValueIterator<K> keys() {
-    if(ba_.getUniqueFieldDescriptor() == null) {
+    if (ba_.getUniqueFieldDescriptor() == null) {
       throw new IllegalStateException(
           "No unique field defined for annotation based record=[" + ba_.getRecordClass() + "]");
     }
     String bitwiseField = ba_.getStoredFields().get(ba_.getUniqueFieldDescriptor().getName());
     Field keyField = store_.getField(bitwiseField);
-    if(keyField == null) {
+    if (keyField == null) {
       // This may happen when store is being created inside a transaction (the store exists, but not its fields)
       return new EmptyFieldValueIterator<K>();
     }
@@ -123,7 +125,7 @@ public class AnnotationBasedRecord<K, T> implements BitwiseRecordManager<K, T> {
 
   public int insert(T record) {
     int id = store_.nextIndex();
-    if(id < 0) {
+    if (id < 0) {
       throw new IllegalStateException(
           "store_.nextIndex() returned an illegal index: make sure the store's capacity is large enough.");
     }
@@ -155,22 +157,22 @@ public class AnnotationBasedRecord<K, T> implements BitwiseRecordManager<K, T> {
   }
 
   private void loadRecord(int index, T o) {
-    for(PropertyDescriptor property : ba_.getStoredDescriptors()) {
+    for (PropertyDescriptor property : ba_.getStoredDescriptors()) {
       String propertyName = property.getName();
       String bitwiseField = ba_.getStoredFields().get(propertyName);
       try {
         Field f = store_.getField(bitwiseField);
-        if(f == null) {
+        if (f == null) {
           continue;
         }
         BitVector vector = f.getValue(index);
         Object value = f.getDictionary().reverseLookup(vector);
-        if(property.getWriteMethod() != null) {
+        if (property.getWriteMethod() != null) {
           property.getWriteMethod().invoke(o, value);
         }
-      } catch(RuntimeException e) {
+      } catch (RuntimeException e) {
         throw e;
-      } catch(Exception e) {
+      } catch (Exception e) {
         throw new RuntimeException(e);
       }
     }
@@ -178,20 +180,20 @@ public class AnnotationBasedRecord<K, T> implements BitwiseRecordManager<K, T> {
 
   @SuppressWarnings("unchecked")
   private boolean saveRecord(int id, T record) {
-    if(id == -1) {
+    if (id == -1) {
       throw new IllegalArgumentException("The record index is invalid.");
     }
     boolean modified = false;
-    for(PropertyDescriptor property : ba_.getStoredDescriptors()) {
+    for (PropertyDescriptor property : ba_.getStoredDescriptors()) {
       String propertyName = property.getName();
       String bitwiseField = ba_.getStoredFields().get(propertyName);
       Object value = null;
       try {
         value = property.getReadMethod().invoke(record, (Object[]) null);
         Field f = store_.getField(bitwiseField);
-        if(f == null) {
+        if (f == null) {
           f = store_.createField(bitwiseField);
-          if(f == null) {
+          if (f == null) {
             throw new RuntimeException(
                 "Cannot save property [" + propertyName + "] for record class [" + ba_.getRecordClass().getName() +
                     "]: field name [" + bitwiseField + "] does not exist in store [" + store_.getName() + "].");
@@ -199,28 +201,28 @@ public class AnnotationBasedRecord<K, T> implements BitwiseRecordManager<K, T> {
         }
         Dictionary d = f.getDictionary();
         BitVector v = d.lookup(value);
-        if(value != null && v == null) {
+        if (value != null && v == null) {
           throw new RuntimeException("Dictionary [" + d.getName() + "] cannot encode the value [" + value + "].");
         }
 
-        if(modified == false) {
+        if (modified == false) {
           BitVector currentValue = f.getValue(id);
-          if(currentValue == null && v != null) {
+          if (currentValue == null && v != null) {
             modified = true;
-          } else if(currentValue != null && v == null) {
+          } else if (currentValue != null && v == null) {
             modified = true;
-          } else if(currentValue != null && v != null && currentValue.equals(v) == false) {
+          } else if (currentValue != null && v != null && currentValue.equals(v) == false) {
             modified = true;
           }
         }
         f.setValue(id, v);
-      } catch(RuntimeException e) {
+      } catch (RuntimeException e) {
         log.error("Cannot set value [{}] in bitwise field [{}]: ",
-            new Object[] { value, propertyName, e.getMessage() });
+            new Object[]{value, propertyName, e.getMessage()});
         throw e;
-      } catch(Exception e) {
+      } catch (Exception e) {
         log.error("Cannot set value [{}] in bitwise field [{}]: ",
-            new Object[] { value, propertyName, e.getMessage() });
+            new Object[]{value, propertyName, e.getMessage()});
         throw new RuntimeException(e);
       }
     }
@@ -233,7 +235,7 @@ public class AnnotationBasedRecord<K, T> implements BitwiseRecordManager<K, T> {
     Field f = store_.getField(bitwiseField);
     Dictionary<K> d = f.getDictionary();
     BitVector v = d.lookup(key);
-    if(v == null) {
+    if (v == null) {
       v = new BitVector(d.dimension());
     }
     return f.query(v).next(0);

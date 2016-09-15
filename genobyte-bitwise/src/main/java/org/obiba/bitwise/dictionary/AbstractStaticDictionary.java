@@ -22,6 +22,7 @@ import org.obiba.bitwise.Dictionary;
 
 /**
  * Subtype of dictionaries that contains a static set of possible values, and which encoded values are held in a constant number of bits.
+ *
  * @param <T> the value type that can be handled by this dictionary.
  */
 abstract class AbstractStaticDictionary<T> implements Dictionary<T> {

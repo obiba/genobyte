@@ -37,15 +37,15 @@ public class PrintRecordCommand implements CliCommand {
     try {
       int index = Integer.valueOf(str);
       GenotypingRecordStore<?, ?, ?> store = context.getActiveRecordStore();
-      if(store.getStore().getSize() == 0) {
+      if (store.getStore().getSize() == 0) {
         context.getOutput().println("Store is empty. To load records, use the --load command.");
-      } else if(index < 0 || index >= store.getStore().getSize()) {
+      } else if (index < 0 || index >= store.getStore().getSize()) {
         context.getOutput()
             .println("Record index invalid. Value must be between 0 and " + (store.getStore().getSize() - 1));
       } else {
         context.getOutput().println(store.getRecordManager().load(index));
       }
-    } catch(NumberFormatException e) {
+    } catch (NumberFormatException e) {
       context.getOutput().println("Record index invalid. The argument to this command should be an integer.");
     }
     return false;

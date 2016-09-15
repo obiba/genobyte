@@ -17,11 +17,11 @@ public class MaskedRecordTrioProvider implements MendelianRecordTrioProvider {
    * Builds a new instance of MaskedRecordTrioProvider for the specified delegate and with the specified mask
    *
    * @param delegate the implementation of {@link MendelianRecordTrioProvider} to which calls are delegated
-   * @param mask the {@link QueryResult} used to mask the result vectors
+   * @param mask     the {@link QueryResult} used to mask the result vectors
    */
   public MaskedRecordTrioProvider(MendelianRecordTrioProvider delegate, QueryResult mask) {
-    if(delegate == null) throw new IllegalArgumentException("delegate may not be null");
-    if(mask == null) throw new IllegalArgumentException("mask may not be null");
+    if (delegate == null) throw new IllegalArgumentException("delegate may not be null");
+    if (mask == null) throw new IllegalArgumentException("mask may not be null");
     this.delegate_ = delegate;
     this.mask_ = mask;
   }

@@ -34,12 +34,12 @@ class StringSerializer implements Serializer {
   }
 
   public byte[] serialize(Object str) throws IOException {
-    if(str == null) {
+    if (str == null) {
       throw new NullPointerException("Argument str cannot be null");
     }
     try {
       return ((String) str).getBytes(STORED_ENCODING);
-    } catch(UnsupportedEncodingException e) {
+    } catch (UnsupportedEncodingException e) {
       throw new JdbmRuntimeException(e);
     }
   }

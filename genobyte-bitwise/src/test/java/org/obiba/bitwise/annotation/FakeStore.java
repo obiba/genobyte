@@ -23,30 +23,30 @@ package org.obiba.bitwise.annotation;
     storeName = "MyTestStore",
     version = "25.0",
 
-    dictionary = { @DictionaryDef(
+    dictionary = {@DictionaryDef(
         name = "names",
         dictionaryClassName = "org.obiba.bitwise.dictionary.HuffmanDictionary",
-        property = { @DictionaryProperty(
+        property = {@DictionaryProperty(
             name = "provider",
-            value = "org.obiba.bitwise.annotation.GenericNameProvider") }), @DictionaryDef(
+            value = "org.obiba.bitwise.annotation.GenericNameProvider")}), @DictionaryDef(
         name = "positiveInteger",
         dictionaryClassName = "org.obiba.bitwise.dictionary.IntegerDictionary",
-        property = { @DictionaryProperty(
+        property = {@DictionaryProperty(
             name = "lower",
             value = "0"), @DictionaryProperty(
             name = "upper",
             value = "2147483647"), @DictionaryProperty(
             name = "step",
-            value = "1") }), @DictionaryDef(
+            value = "1")}), @DictionaryDef(
         name = "limitedInteger",
         dictionaryClassName = "org.obiba.bitwise.dictionary.IntegerDictionary",
-        property = { @DictionaryProperty(
+        property = {@DictionaryProperty(
             name = "lower",
             value = "-5"), @DictionaryProperty(
             name = "upper",
             value = "5"), @DictionaryProperty(
             name = "step",
-            value = "1") }) })
+            value = "1")})})
 public class FakeStore {
 
   private Integer id = null;
@@ -79,27 +79,47 @@ public class FakeStore {
 
   //TODO: id is the unique field, the dictionary positiveInteger is properly set.
   @Stored(dictionary = "positiveInteger", unique = true)
-  public Integer getId() { return id; }
+  public Integer getId() {
+    return id;
+  }
 
-  public void setId(Integer pId) { id = pId; }
+  public void setId(Integer pId) {
+    id = pId;
+  }
 
-  public String getName() { return name; }
+  public String getName() {
+    return name;
+  }
 
-  public void setName(String pName) { name = pName; }
+  public void setName(String pName) {
+    name = pName;
+  }
 
   //TODO: snp is set to HuffmanDictionary
-  public String getSnp() { return snp; }
+  public String getSnp() {
+    return snp;
+  }
 
   @Stored
-  public void setSnp(String pSnp) { snp = pSnp; }
+  public void setSnp(String pSnp) {
+    snp = pSnp;
+  }
 
-  public String getGene() { return gene; }
+  public String getGene() {
+    return gene;
+  }
 
-  public void setGene(String pGene) { gene = pGene; }
+  public void setGene(String pGene) {
+    gene = pGene;
+  }
 
-  public Integer getAge() { return age; }
+  public Integer getAge() {
+    return age;
+  }
 
-  public void setAge(Integer pAge) { age = pAge; }
+  public void setAge(Integer pAge) {
+    age = pAge;
+  }
 
 //  public String getAge1() { return "boite"; }
 //  public void setAge1(Integer pAge) { }

@@ -28,26 +28,30 @@ public interface GenotypingField {
 
   /**
    * Returns the name of this genotyping field.
+   *
    * @return the genotyping field name.
    */
   public String getName();
 
   /**
    * Returns <tt>true</tt> if the values of this field should be transposed into the associated <tt>GenotypingRecordStore</tt>.
+   *
    * @return <tt>true</tt> if the values should be transposed, <tt>false</tt> otherwise.
    */
   public boolean isTransposed();
 
   /**
    * Returns <tt>true</tt> if this field can be created when it does not exist in the bitwise.
+   *
    * @return <tt>true</tt> when the field can be created.
    */
   public boolean isCreatable();
 
   /**
    * Returns <tt>true</tt> when the statistics of the associated record should be updated after transposing the values for this field.
-   * @see GenotypingRecordStore.updateStats()
+   *
    * @return <tt>true</tt> to recalculate the record's stats after transposing the values, <tt>false</tt> otherwise.
+   * @see GenotypingRecordStore.updateStats()
    */
   public boolean updateStats();
 

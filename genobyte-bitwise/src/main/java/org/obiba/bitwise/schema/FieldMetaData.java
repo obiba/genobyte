@@ -41,6 +41,7 @@ public class FieldMetaData implements Serializable {
   /**
    * Gets the name of the dictionary used to encode values to <tt>BitVectors</tt> and to decode
    * those vectors back to their original value.
+   *
    * @return the name of the dictionary used by this field.
    */
   public String getDictionary() {
@@ -49,6 +50,7 @@ public class FieldMetaData implements Serializable {
 
   /**
    * Gets the name of this field in this store context.
+   *
    * @return this field name.
    */
   public String getName() {
@@ -57,6 +59,7 @@ public class FieldMetaData implements Serializable {
 
   /**
    * Determines whether this field is a template or an original field.
+   *
    * @return Returns the template.
    */
   //TODO: Clarify isTemplate / setTemplate explanation in Javadoc.
@@ -67,6 +70,7 @@ public class FieldMetaData implements Serializable {
   /**
    * Sets the dictionary that will be used for encoding to <tt>BitVectors</tt> and to decode vectors
    * back to original values.
+   *
    * @param dictionary the name of the dictionary to use for this field.
    */
   public void setDictionary(String dictionary) {
@@ -75,6 +79,7 @@ public class FieldMetaData implements Serializable {
 
   /**
    * Sets the name of this field.
+   *
    * @param name the name to set.
    */
   public void setName(String name) {
@@ -83,6 +88,7 @@ public class FieldMetaData implements Serializable {
 
   /**
    * Sets the template to use for this field.
+   *
    * @param template the template to set.
    */
   public void setTemplate(boolean template) {

@@ -18,14 +18,14 @@
  *******************************************************************************/
 package org.obiba.genobyte;
 
-import java.util.ArrayList;
-
 import org.obiba.bitwise.Field;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+
 /**
- * Allows reading values from one <tt>GenotypingStore</tt> and transpose them into another <tt>GenotypingStore</tt>. 
+ * Allows reading values from one <tt>GenotypingStore</tt> and transpose them into another <tt>GenotypingStore</tt>.
  * Fields that may be transposed are the ones that are present in both stores (such as Calls).
  */
 class FastGenotypingFieldValueTransposer<K> implements Runnable {
@@ -42,20 +42,20 @@ class FastGenotypingFieldValueTransposer<K> implements Runnable {
   private final ArrayList<K> sourceKeys;
 
   public FastGenotypingFieldValueTransposer(Field destField, int destIndex, int[] sourceIndexes, Field[] sourceFields,
-      ArrayList<K> sourceKeys) {
-    if(destField == null) {
+                                            ArrayList<K> sourceKeys) {
+    if (destField == null) {
       throw new NullPointerException("destField argument");
     }
-    if(destIndex < 0) {
+    if (destIndex < 0) {
       throw new IllegalArgumentException("destIndex argument");
     }
-    if(sourceIndexes == null) {
+    if (sourceIndexes == null) {
       throw new NullPointerException("sourceIndexes argument");
     }
-    if(sourceFields == null) {
+    if (sourceFields == null) {
       throw new NullPointerException("sourceFields argument");
     }
-    if(sourceKeys == null) {
+    if (sourceKeys == null) {
       throw new NullPointerException("sourceKeys argument");
     }
 
@@ -68,10 +68,10 @@ class FastGenotypingFieldValueTransposer<K> implements Runnable {
 
   public void run() {
     // Don't mistake idx with a field index. It's just an Array index. 
-    for(int idx = 0; idx < sourceIndexes.length; idx++) {
+    for (int idx = 0; idx < sourceIndexes.length; idx++) {
       // In the destination field, the source is the index and destination is the index
       // in the source. We are working in a transposed world.
-      if(sourceFields[idx] != null) {
+      if (sourceFields[idx] != null) {
         destField.copyValue(sourceIndexes[idx], destIndex, sourceFields[idx]);
       }
     }

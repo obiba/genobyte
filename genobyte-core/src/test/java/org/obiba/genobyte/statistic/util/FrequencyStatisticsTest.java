@@ -21,9 +21,9 @@ package org.obiba.genobyte.statistic.util;
 import org.obiba.bitwise.AbstractField;
 import org.obiba.bitwise.BitVector;
 import org.obiba.bitwise.VolatileField;
+import org.obiba.bitwise.util.BitVectorQueryResult;
 import org.obiba.genobyte.dao.BaseBdbDaoTestCase;
 import org.obiba.genobyte.mock.MockBitwiseStore;
-import org.obiba.bitwise.util.BitVectorQueryResult;
 import org.obiba.genobyte.mock.MockGenotypingStore;
 import org.obiba.genobyte.model.SnpCall;
 import org.obiba.genobyte.statistic.StatsPool;
@@ -153,10 +153,10 @@ public class FrequencyStatisticsTest extends BaseBdbDaoTestCase {
   }
 
   private void assertStatValue(StatsPool sp, Object value, String... statNames) {
-    for(int s = 0; s < statNames.length; s++) {
+    for (int s = 0; s < statNames.length; s++) {
       AbstractField statField = sp.getPooledField(statNames[s]);
       assertNotNull(statField);
-      for(int i = 0; i < statField.getSize(); i++) {
+      for (int i = 0; i < statField.getSize(); i++) {
         assertEquals("Stat [" + statNames[s] + "] for record " + i, value,
             statField.getDictionary().reverseLookup(statField.getValue(i)));
       }

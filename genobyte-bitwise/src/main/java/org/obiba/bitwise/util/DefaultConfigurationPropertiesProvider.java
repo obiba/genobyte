@@ -30,10 +30,14 @@ import java.util.Properties;
  */
 public class DefaultConfigurationPropertiesProvider implements ConfigurationPropertiesProvider {
 
-  /** The configuration key for the root directory of bitwise stores. */
+  /**
+   * The configuration key for the root directory of bitwise stores.
+   */
   public static final String ROOT_DIR_PROPERTY = "bitwise.dir.root";
 
-  /** The configuration key for the bitwise DAO implementation to use. */
+  /**
+   * The configuration key for the bitwise DAO implementation to use.
+   */
   public static final String BITWISE_DAO_IMPL = "bitwise.dao.impl";
 
   private Properties defaultProperties_;
@@ -66,19 +70,19 @@ public class DefaultConfigurationPropertiesProvider implements ConfigurationProp
 
   public void saveSpecificProperties(String storeName, Properties prop) {
     File storeDir = getStoreDir(storeName);
-    if(storeDir != null && storeDir.exists()) {
+    if (storeDir != null && storeDir.exists()) {
       File props = new File(storeDir, "bitwise.properties");
       OutputStream os = null;
       try {
         os = new FileOutputStream(props);
         prop.store(os, null);
-      } catch(IOException e) {
+      } catch (IOException e) {
         throw new RuntimeException(
             "An error occured while saving the bitwise properties for store " + storeName + ": " + e.getMessage(), e);
       } finally {
         try {
-          if(os != null) os.close();
-        } catch(IOException e) {
+          if (os != null) os.close();
+        } catch (IOException e) {
           // ignore
         }
       }
@@ -87,7 +91,7 @@ public class DefaultConfigurationPropertiesProvider implements ConfigurationProp
 
   private void loadBitwiseDefaultProperties() {
     InputStream is = DefaultConfigurationPropertiesProvider.class.getResourceAsStream("/bitwise.properties");
-    if(is == null) {
+    if (is == null) {
       throw new RuntimeException("Factory Default Properties File cannot be found.");
     }
     defaultProperties_ = new Properties();
@@ -96,7 +100,7 @@ public class DefaultConfigurationPropertiesProvider implements ConfigurationProp
 
   private void loadRuntimeProperties() {
     File runtimeProperties = new File("bitwise.properties");
-    if(runtimeProperties.exists() == false) {
+    if (runtimeProperties.exists() == false) {
       return;
     }
     defaultProperties_ = loadPropertiesFile(defaultProperties_, runtimeProperties, false);
@@ -128,8 +132,8 @@ public class DefaultConfigurationPropertiesProvider implements ConfigurationProp
 
   private Properties loadPropertiesFile(Properties defaults, File propsFile, boolean mustExist) {
     Properties props = new Properties(defaults);
-    if(propsFile.exists() == false) {
-      if(mustExist == true) {
+    if (propsFile.exists() == false) {
+      if (mustExist == true) {
         throw new RuntimeException(
             "Tried to load the properties file [" + propsFile.getAbsolutePath() + "] but it does not exist.");
       }
@@ -138,7 +142,7 @@ public class DefaultConfigurationPropertiesProvider implements ConfigurationProp
     try {
       loadPropertiesStream(props, new FileInputStream(propsFile));
       return props;
-    } catch(FileNotFoundException e) {
+    } catch (FileNotFoundException e) {
       throw new RuntimeException("An error occured while loading the bitwise properties: " + e.getMessage(), e);
     }
   }
@@ -146,12 +150,12 @@ public class DefaultConfigurationPropertiesProvider implements ConfigurationProp
   private void loadPropertiesStream(Properties props, InputStream is) {
     try {
       props.load(is);
-    } catch(IOException e) {
+    } catch (IOException e) {
       throw new RuntimeException("An error occured while loading the bitwise properties: " + e.getMessage(), e);
     } finally {
       try {
-        if(is != null) is.close();
-      } catch(IOException e) {
+        if (is != null) is.close();
+      } catch (IOException e) {
         // ignore
       }
     }

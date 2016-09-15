@@ -25,19 +25,20 @@ public final class StringUtil {
 
   /**
    * Aggregates/untokenizes an array of field with the specify token
+   *
    * @param fields the fields to aggregate into a <tt>String</tt>.
-   * @param token the token inserted between the aggregated fields.
+   * @param token  the token inserted between the aggregated fields.
    * @return a string of fields separate by the given token.
    */
   public static String aggregate(String[] fields, String token) {
     StringBuilder untokenize = new StringBuilder("");
 
-    if(fields != null) {
-      for(int i = 0; i < fields.length; i++) {
-        if(i > 0) {
+    if (fields != null) {
+      for (int i = 0; i < fields.length; i++) {
+        if (i > 0) {
           untokenize.append(token);
         }
-        if(fields[i] != null) {
+        if (fields[i] != null) {
           untokenize.append(fields[i].trim());
         }
       }
@@ -47,11 +48,12 @@ public final class StringUtil {
 
   /**
    * Verifies if a string is empty/null.
+   *
    * @param s the <tt>String</tt> to verify.
    * @return <tt>true</tt> if s is null or empty, <tt>false</tt> otherwise.
    */
   public static boolean isEmptyString(String s) {
-    if((s != null) && (!s.equals(""))) {
+    if ((s != null) && (!s.equals(""))) {
       return false;
     }
 
@@ -59,12 +61,13 @@ public final class StringUtil {
   }
 
   /**
-   * Verifies if a string is null or equals to "null". 
+   * Verifies if a string is null or equals to "null".
+   *
    * @param s the <tt>String</tt> to verify.
    * @return <tt>true</tt> if the <tt>String</tt> is null, <tt>false</tt> otherwise.
    */
   public static boolean isNullString(String s) {
-    if((s != null) && (!s.equalsIgnoreCase("null"))) {
+    if ((s != null) && (!s.equalsIgnoreCase("null"))) {
       return false;
     }
 

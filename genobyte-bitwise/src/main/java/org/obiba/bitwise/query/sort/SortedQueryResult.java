@@ -103,10 +103,10 @@ public class SortedQueryResult implements QueryResult {
    * @see org.obiba.bitwise.query.QueryResult#next(int)
    */
   public int hit(int index) {
-    if(sorted_ == null) {
+    if (sorted_ == null) {
       sort();
     }
-    if(index < sorted_.length) {
+    if (index < sorted_.length) {
       return sorted_[index];
     }
     return -1;
@@ -138,12 +138,12 @@ public class SortedQueryResult implements QueryResult {
   }
 
   /**
-   * Sorts the <link>QueryResult</link> according to the contents of <code>sortFields_</code>. 
-   * This method will initialze the <code>sorted_</code> field. 
+   * Sorts the <link>QueryResult</link> according to the contents of <code>sortFields_</code>.
+   * This method will initialze the <code>sorted_</code> field.
    */
   private void sort() {
     PriorityQueue<SortNode> sorted = new PriorityQueue<SortNode>(result_.count());
-    for(int i = result_.next(0); i != -1; i = result_.next(i + 1)) {
+    for (int i = result_.next(0); i != -1; i = result_.next(i + 1)) {
       SortNode node = new SortNode(i);
       // PriorityQueue sorts on insert
       sorted.add(node);
@@ -151,7 +151,7 @@ public class SortedQueryResult implements QueryResult {
 
     int index = 0;
     sorted_ = new int[result_.count()];
-    while(sorted.size() > 0) {
+    while (sorted.size() > 0) {
       // use the remove() method to iterate on sort order
       sorted_[index++] = sorted.remove().recordIndex_;
     }
@@ -160,21 +160,20 @@ public class SortedQueryResult implements QueryResult {
   /**
    * Used to obtain the <link>Comparable</link> instance used to compare a record's field value
    *
-   * @param index the index of the record for which we need the <link>Comparable</link> instance.
+   * @param index     the index of the record for which we need the <link>Comparable</link> instance.
    * @param sortField the <link>SortField</link> instance the <link>Comparable</link> should represent.
    * @return a <link>Comparable</link> instance for the specified record on the specified field
-   *
    * @throws UnknownFieldException when the specified sort field does not exist.
    */
   @SuppressWarnings("unchecked")
   private Comparable<Object> getOrder(int index, SortField sortField) {
     String fieldName = sortField.getField();
     Field field = store_.getField(fieldName);
-    if(field == null) {
+    if (field == null) {
       throw new UnknownFieldException(store_.getName(), fieldName, "Cannot sort on unknown field.");
     }
     BitVector value = field.getValue(index);
-    if(field.getDictionary().isOrdered()) {
+    if (field.getDictionary().isOrdered()) {
       return value;
     }
     return (Comparable<Object>) field.getDictionary().reverseLookup(value);
@@ -182,6 +181,7 @@ public class SortedQueryResult implements QueryResult {
 
   /**
    * Returns the reverse flag of the <code>i</code>th sort clause.
+   *
    * @param index the index of the sort clause to test
    * @return the reverse flag of the <code>i</code>th sort clause.
    */
@@ -191,6 +191,7 @@ public class SortedQueryResult implements QueryResult {
 
   /**
    * A <link>Comparable</link> implementation
+   *
    * @author plaflamm
    */
   private class SortNode implements Comparable {
@@ -204,7 +205,7 @@ public class SortedQueryResult implements QueryResult {
     SortNode(int index) {
       recordIndex_ = index;
       comparables_ = new ArrayList<Comparable<Object>>(sortFields_.length);
-      while(comparables_.size() < sortFields_.length) comparables_.add(null);
+      while (comparables_.size() < sortFields_.length) comparables_.add(null);
       initialized_ = new boolean[sortFields_.length];
     }
 
@@ -220,13 +221,13 @@ public class SortedQueryResult implements QueryResult {
 
     public int compareTo(Object o) {
       SortNode other = (SortNode) o;
-      for(int i = 0; i < comparables_.size(); i++) {
+      for (int i = 0; i < comparables_.size(); i++) {
         Comparable<Object> l = comparable(i);
         Comparable<Object> r = other.comparable(i);
-        if(l == null) return -1;
-        if(r == null) return 1;
+        if (l == null) return -1;
+        if (r == null) return 1;
         int c = l.compareTo(r);
-        if(c != 0) {
+        if (c != 0) {
           return isReverse(i) ? c * -1 : c;
         }
       }
@@ -236,7 +237,7 @@ public class SortedQueryResult implements QueryResult {
 
     private Comparable<Object> comparable(int i) {
       Comparable<Object> c = comparables_.get(i);
-      if(initialized_[i] == false) {
+      if (initialized_[i] == false) {
         c = getOrder(recordIndex_, sortFields_[i]);
         comparables_.set(i, c);
         initialized_[i] = true;

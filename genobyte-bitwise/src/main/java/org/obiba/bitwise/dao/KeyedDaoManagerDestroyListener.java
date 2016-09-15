@@ -19,7 +19,7 @@
 package org.obiba.bitwise.dao;
 
 /**
- * Listener interface for events sent when a DaoManager is being destroyed. 
+ * Listener interface for events sent when a DaoManager is being destroyed.
  */
 public interface KeyedDaoManagerDestroyListener {
 

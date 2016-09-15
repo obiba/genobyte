@@ -38,7 +38,7 @@ public class MockNotQuery extends Query implements MockQuery {
 
   @Override
   public boolean equals(Object o) {
-    if(o instanceof MockNotQuery) {
+    if (o instanceof MockNotQuery) {
       MockNotQuery rhs = (MockNotQuery) o;
       return query_.equals(rhs.query_);
     }

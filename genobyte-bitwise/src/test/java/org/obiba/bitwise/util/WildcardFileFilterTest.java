@@ -35,9 +35,9 @@ public class WildcardFileFilterTest extends TestCase {
 
   public void testRecursive() {
     File[] files = WildcardFileFilter.listFiles(new File("."), "src/*/jav?");
-    File[] required = { new File("./src/main", "java"), new File("./src/test", "java") };
+    File[] required = {new File("./src/main", "java"), new File("./src/test", "java")};
     assertEquals(required.length, files.length);
-    for(File file : required) {
+    for (File file : required) {
       assertContains(file, files);
     }
   }
@@ -45,9 +45,9 @@ public class WildcardFileFilterTest extends TestCase {
   public void testAbsolutePath() throws IOException {
     String absoluteCwd = new File(".").getCanonicalPath();
     File[] files = WildcardFileFilter.listFiles(new File("."), absoluteCwd + "/src/*/jav?");
-    File[] required = { new File("./src/main", "java"), new File("./src/test", "java") };
+    File[] required = {new File("./src/main", "java"), new File("./src/test", "java")};
     assertEquals(required.length, files.length);
-    for(File file : required) {
+    for (File file : required) {
       assertContains(file, files);
     }
   }
@@ -55,9 +55,9 @@ public class WildcardFileFilterTest extends TestCase {
   public void testRelativePath() throws IOException {
     String absoluteCwd = new File(".").getCanonicalPath();
     File[] files = WildcardFileFilter.listFiles(new File("."), absoluteCwd + "/./src/main/../../src/./*/java");
-    File[] required = { new File("./src/main", "java"), new File("./src/test", "java") };
+    File[] required = {new File("./src/main", "java"), new File("./src/test", "java")};
     assertEquals(required.length, files.length);
-    for(File file : required) {
+    for (File file : required) {
       assertContains(file, files);
     }
   }
@@ -66,9 +66,9 @@ public class WildcardFileFilterTest extends TestCase {
     String absoluteCwd = new File(".").getCanonicalPath();
     // This pattern will match the required files multiple times (*/../*)
     File[] files = WildcardFileFilter.listFiles(new File("."), absoluteCwd + "/./src/*/../*/java");
-    File[] required = { new File("./src/main", "java"), new File("./src/test", "java") };
+    File[] required = {new File("./src/main", "java"), new File("./src/test", "java")};
     assertEquals(required.length, files.length);
-    for(File file : required) {
+    for (File file : required) {
       assertContains(file, files);
     }
   }
@@ -76,12 +76,12 @@ public class WildcardFileFilterTest extends TestCase {
   private void assertContains(File required, File[] files) {
     assertNotNull("File list is null", files);
     assertTrue("File list is empty", files.length > 0);
-    for(File file : files) {
+    for (File file : files) {
       try {
-        if(required.getCanonicalFile().equals(file.getCanonicalFile())) {
+        if (required.getCanonicalFile().equals(file.getCanonicalFile())) {
           return;
         }
-      } catch(IOException e) {
+      } catch (IOException e) {
         throw new RuntimeException();
       }
     }

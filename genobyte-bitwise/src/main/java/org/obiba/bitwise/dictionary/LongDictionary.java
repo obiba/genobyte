@@ -45,7 +45,7 @@ public class LongDictionary extends AbstractStaticDictionary<Long> {
   }
 
   public BitVector lookup(Long key) {
-    if(key == null) {
+    if (key == null) {
       return null;
     }
     long ord = key.longValue();
@@ -55,12 +55,12 @@ public class LongDictionary extends AbstractStaticDictionary<Long> {
   }
 
   public Long reverseLookup(BitVector v) {
-    if(v == null) {
+    if (v == null) {
       return null;
     }
 
     //The last bit is used to check if value is zero or null. If it's zero, just convert the 64 first bits to a long value.
-    if(v.get(dimension_ - 1)) {
+    if (v.get(dimension_ - 1)) {
       long tempValue = BitUtil.longValue(v);
       return new Long(tempValue);
     } else {
@@ -70,7 +70,7 @@ public class LongDictionary extends AbstractStaticDictionary<Long> {
 
   @Override
   public boolean equals(Object obj) {
-    if(obj instanceof LongDictionary) {
+    if (obj instanceof LongDictionary) {
       return true;
     }
     return super.equals(obj);

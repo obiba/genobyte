@@ -46,13 +46,13 @@ public class WildcardQuery extends Query {
   @Override
   public QueryResult execute(BitwiseStore store) throws QueryExecutionException {
     Field f = store.getField(field_);
-    if(f == null) {
+    if (f == null) {
       throw invalidField(store, field_);
     }
 
     //Prepare the dictionary for value conversion
     Dictionary<Object> myDict = f.getDictionary();
-    if(myDict instanceof WildcardDictionary == false) {
+    if (myDict instanceof WildcardDictionary == false) {
       // TODO
       throw new QueryExecutionException(
           "Invalid Dictionary type. Expected WildcardDictionary instance for dictionary [" + myDict.getName() + "]");
@@ -66,9 +66,9 @@ public class WildcardQuery extends Query {
     BitVectorQueryResult result = new BitVectorQueryResult(resultVector);
 
     //Search on the value found before the wildcard
-    if(valuePre_ != null) {
+    if (valuePre_ != null) {
       Object valuePre = null;
-      if(valuePre_ != null && valuePre_.equals("null") == false) {
+      if (valuePre_ != null && valuePre_.equals("null") == false) {
         valuePre = f.getDictionary().convert(valuePre_);
       }
       BitVector encodedValuePre = wildcardDict
@@ -78,9 +78,9 @@ public class WildcardQuery extends Query {
     }
 
     //Search on the value found after the wildcard
-    if(valuePost_ != null) {
+    if (valuePost_ != null) {
       Object valuePost = null;
-      if(valuePost_ != null && valuePost_.equals("null") == false) {
+      if (valuePost_ != null && valuePost_.equals("null") == false) {
         valuePost = f.getDictionary().convert(valuePost_);
       }
       BitVector encodedValuePost = wildcardDict.partialLookupRight(valuePost);

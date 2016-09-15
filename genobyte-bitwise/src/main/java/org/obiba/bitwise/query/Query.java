@@ -31,6 +31,7 @@ abstract public class Query {
 
   /**
    * Runs this <tt>Query</tt> on the bitwise store.
+   *
    * @param store the store on which the query will be ran.
    * @return the query result.
    * @throws QueryExecutionException when something in the querying process went wrong.
@@ -39,6 +40,7 @@ abstract public class Query {
 
   /**
    * Gives information on this query in the context of a given bitwise store.
+   *
    * @param store the store on which the query explanation should be ran.
    * @return the <tt>String</tt> containing the information about this query in the context of the provided store.
    * @throws QueryExecutionException when some problem occured at the generation of the explanation string.
@@ -48,8 +50,9 @@ abstract public class Query {
   }
 
   /**
-   * Returns a query exception related to an error handling a field in the store. 
-   * @param store the store on which the query was ran.
+   * Returns a query exception related to an error handling a field in the store.
+   *
+   * @param store     the store on which the query was ran.
    * @param fieldName the field that is the source of the problem.
    * @return an exception that can be thrown by the calling method.
    */
@@ -58,10 +61,11 @@ abstract public class Query {
   }
 
   /**
-   * Returns a query exception related to an error handling a field value in the store. 
-   * @param store the store on which the query was ran.
+   * Returns a query exception related to an error handling a field value in the store.
+   *
+   * @param store     the store on which the query was ran.
    * @param fieldName the field where an invalid value was found.
-   * @param value the field value that is the source of the problem.
+   * @param value     the field value that is the source of the problem.
    * @return an exception that can be thrown by the calling method.
    */
   protected QueryExecutionException invalidFieldValue(BitwiseStore store, String field, String value) {

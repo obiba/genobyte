@@ -18,11 +18,12 @@
  *******************************************************************************/
 package org.obiba.genobyte.inconsistency;
 
+import junit.framework.TestCase;
 import org.obiba.bitwise.Dictionary;
 import org.obiba.bitwise.Field;
-import org.obiba.genobyte.mock.MockBitwiseStore;
 import org.obiba.bitwise.query.QueryResult;
 import org.obiba.genobyte.GenotypingRecordStore;
+import org.obiba.genobyte.mock.MockBitwiseStore;
 import org.obiba.genobyte.mock.MockGenotypingStore;
 import org.obiba.genobyte.model.SnpCall;
 import org.obiba.genobyte.statistic.StatsRunDefinition;
@@ -30,8 +31,6 @@ import org.obiba.genobyte.statistic.util.CallRate;
 import org.obiba.genobyte.statistic.util.Frequencies;
 import org.obiba.genobyte.statistic.util.Maf;
 import org.obiba.genobyte.statistic.util.TotalCalls;
-
-import junit.framework.TestCase;
 
 public class MendelianErrorCalculatorTest extends TestCase {
 
@@ -241,16 +240,17 @@ public class MendelianErrorCalculatorTest extends TestCase {
 
     private int childId = -1;
 
-    MendelianErrorAccum(GenotypingRecordStore store) {}
+    MendelianErrorAccum(GenotypingRecordStore store) {
+    }
 
     public void countInconsistencies(MendelianErrors<String> errors) {
-      if(errors.getMotherIndex() != -1 && errors.getFatherIndex() != -1) {
+      if (errors.getMotherIndex() != -1 && errors.getFatherIndex() != -1) {
         trioTests += errors.getTests().count();
         trioErrors += errors.getInconsistencies().count();
-      } else if(errors.getFatherIndex() != -1) {
+      } else if (errors.getFatherIndex() != -1) {
         fatherDuoTests += errors.getTests().count();
         fatherDuoErrors += errors.getInconsistencies().count();
-      } else if(errors.getMotherIndex() != -1) {
+      } else if (errors.getMotherIndex() != -1) {
         motherDuoTests += errors.getTests().count();
         motherDuoErrors += errors.getInconsistencies().count();
       }
@@ -260,23 +260,41 @@ public class MendelianErrorCalculatorTest extends TestCase {
       childId = errors.getChildIndex();
     }
 
-    public int getTrioTests() { return trioTests; }
+    public int getTrioTests() {
+      return trioTests;
+    }
 
-    public int getFatherDuoTests() { return fatherDuoTests; }
+    public int getFatherDuoTests() {
+      return fatherDuoTests;
+    }
 
-    public int getMotherDuoTests() { return motherDuoTests; }
+    public int getMotherDuoTests() {
+      return motherDuoTests;
+    }
 
-    public int getTrioErrors() { return trioErrors; }
+    public int getTrioErrors() {
+      return trioErrors;
+    }
 
-    public int getFatherDuoErrors() { return fatherDuoErrors; }
+    public int getFatherDuoErrors() {
+      return fatherDuoErrors;
+    }
 
-    public int getMotherDuoErrors() { return motherDuoErrors; }
+    public int getMotherDuoErrors() {
+      return motherDuoErrors;
+    }
 
-    public int getFatherId() { return fatherId; }
+    public int getFatherId() {
+      return fatherId;
+    }
 
-    public int getMotherId() { return motherId; }
+    public int getMotherId() {
+      return motherId;
+    }
 
-    public int getChildId() { return childId; }
+    public int getChildId() {
+      return childId;
+    }
   }
 
   //A fake trio provider that looks at the trio_status field we just created.

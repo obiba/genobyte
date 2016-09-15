@@ -22,8 +22,8 @@ import java.io.*;
 import java.util.Iterator;
 
 /**
- * {@link HuffmanSeedProvider} implementation that returns one <tt>String</tt> 
- * per line of the specified input. 
+ * {@link HuffmanSeedProvider} implementation that returns one <tt>String</tt>
+ * per line of the specified input.
  */
 public class FileLineIterator implements Iterator<String>, HuffmanSeedProvider {
 
@@ -34,7 +34,7 @@ public class FileLineIterator implements Iterator<String>, HuffmanSeedProvider {
   /**
    * Uses the specified filename as the input for reading lines.
    *
-   * @param filename the name of the the file to read 
+   * @param filename the name of the the file to read
    * @throws IOException when an error occurs while reading the file
    */
   public FileLineIterator(String filename) throws IOException {
@@ -43,6 +43,7 @@ public class FileLineIterator implements Iterator<String>, HuffmanSeedProvider {
 
   /**
    * Uses the specified file as the input for reading lines.
+   *
    * @param file the actual file to read
    * @throws IOException when an error occurs while reading the file
    */
@@ -52,6 +53,7 @@ public class FileLineIterator implements Iterator<String>, HuffmanSeedProvider {
 
   /**
    * Uses the specified <tt>Reader</tt> instance as the input for reading lines.
+   *
    * @param r the input of lines
    * @throws IOException when an error occurs while reading the input
    */
@@ -62,6 +64,7 @@ public class FileLineIterator implements Iterator<String>, HuffmanSeedProvider {
 
   /**
    * Indicates whether there are still lines to read in the file.
+   *
    * @return <tt>true</tt> if there are remaining lines, <tt>false</tt> if there aren't.
    */
   public boolean hasNext() {
@@ -70,16 +73,17 @@ public class FileLineIterator implements Iterator<String>, HuffmanSeedProvider {
 
   /**
    * Gets the next unread line in the file.
+   *
    * @return The <tt>String</tt> with content of the next line.
    */
   public String next() {
     String temp = next_;
     try {
       next_ = reader_.readLine();
-      if(next_ == null) {
+      if (next_ == null) {
         reader_.close();
       }
-    } catch(IOException e) {
+    } catch (IOException e) {
       throw new RuntimeException();
     }
     return temp;
@@ -88,7 +92,7 @@ public class FileLineIterator implements Iterator<String>, HuffmanSeedProvider {
   /**
    * This method is not supported by this implementation of <tt>Iterator</tt>.
    *
-   * @throws UnsupportedOperationException always. 
+   * @throws UnsupportedOperationException always.
    */
   public void remove() {
     throw new UnsupportedOperationException();

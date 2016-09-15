@@ -28,6 +28,7 @@ public interface QueryFactory {
 
   /**
    * Prepares a query to search on an exact field value.
+   *
    * @param field the field on which the search will be ran.
    * @param value the value to look for.
    * @return the <tt>Query</tt> object that will be able to run that query.
@@ -36,8 +37,9 @@ public interface QueryFactory {
 
   /**
    * Prepares a query to search on a partial field value, allowing the use of a wildcard in the search.
-   * @param field the field on which the search will be ran.
-   * @param valuePre the part of the field value coming before the wildcard.
+   *
+   * @param field     the field on which the search will be ran.
+   * @param valuePre  the part of the field value coming before the wildcard.
    * @param valuePost the part of the field value coming after the wildcard.
    * @return the <tt>Query</tt> object that will be able to run that query.
    */
@@ -45,17 +47,19 @@ public interface QueryFactory {
 
   /**
    * Prepares a query to search on a range of values. Bounds are inclusive in the search.
+   *
    * @param field the field on which the search will be ran.
-   * @param from the lower bound of the search range.
-   * @param to the upper bound of the search range.
+   * @param from  the lower bound of the search range.
+   * @param to    the upper bound of the search range.
    * @return the <tt>Query</tt> object that will be able to run that query.
    */
   public Query getRangeQuery(String field, String from, String to);
 
   /**
    * Prepares a query that will run two subqueries and join their result with a logical operator.
-   * @param op the logical operator to join the result of the two subqueries.
-   * @param left the subquery to the left of the logical operator.
+   *
+   * @param op    the logical operator to join the result of the two subqueries.
+   * @param left  the subquery to the left of the logical operator.
    * @param right the subquery to the right of the logical operator.
    * @return the <tt>Query</tt> object that will be able to run that query.
    */
@@ -63,6 +67,7 @@ public interface QueryFactory {
 
   /**
    * Prepares a query whose result will be the records that do not fit the condition of the subquery given in parameter.
+   *
    * @param q the subquery that identifies records not wanted in the result set.
    * @return the <tt>Query</tt> object that will be able to run that query.
    */
@@ -71,6 +76,7 @@ public interface QueryFactory {
   /**
    * Prepares a query that will compare the content of two fields and find the records for which the value of these
    * two fields differ.
+   *
    * @param field1 the first field in the comparison.
    * @param field2 the second field in the comparison.
    * @return the <tt>Query</tt> object that will be able to run that query.
@@ -79,7 +85,8 @@ public interface QueryFactory {
 
   /**
    * Prepares a query whose result will be sorted by a given set of criteria.
-   * @param q the query whose resultset will be sorted.
+   *
+   * @param q    the query whose resultset will be sorted.
    * @param sort the sort criteria to apply to the resultset.
    * @return the <tt>Query</tt> object that will be able to run that query.
    */

@@ -18,10 +18,10 @@
  *******************************************************************************/
 package org.obiba.genobyte.statistic.util;
 
-import java.util.Map;
-
 import org.obiba.bitwise.query.QueryResult;
 import org.obiba.genobyte.statistic.StatsPool;
+
+import java.util.Map;
 
 /**
  * Implements sample frequency statistics. This includes allele frequencies, the total number of calls

@@ -50,6 +50,7 @@ public class XmlStoreSchemaBuilder {
 
   /**
    * Analyzes an XML document provided as an <tt>InputSource</tt> and build a <tt>StoreSchema</tt> context object from the XML's content.
+   *
    * @param an <tt>InputSource</tt> to an XML file containing a store definition data.
    * @return a <tt>StoreSchema</tt> built from the information found in the XML.
    */
@@ -97,9 +98,9 @@ public class XmlStoreSchemaBuilder {
     void parse(InputSource is) {
       try {
         digester_.parse(is);
-      } catch(IOException e) {
+      } catch (IOException e) {
         throw new RuntimeException(e);
-      } catch(SAXException e) {
+      } catch (SAXException e) {
         throw new RuntimeException(e);
       }
     }

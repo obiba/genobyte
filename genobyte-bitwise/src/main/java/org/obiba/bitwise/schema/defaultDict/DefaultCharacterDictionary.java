@@ -20,6 +20,7 @@ package org.obiba.bitwise.schema.defaultDict;
 
 /**
  * Default dictionary parameters for dealing with Integer fields.
+ *
  * @author dbujold
  */
 public class DefaultCharacterDictionary extends DefaultDictionary {

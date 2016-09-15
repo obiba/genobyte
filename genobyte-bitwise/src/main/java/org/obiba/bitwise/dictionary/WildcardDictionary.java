@@ -23,12 +23,14 @@ import org.obiba.bitwise.Dictionary;
 
 /**
  * Defines a subtype of {@link Dictionary} that allows partial record field querying, using wildcards.
+ *
  * @param <T> the type of values handled by this dictionary.
  */
 public interface WildcardDictionary<T> extends Dictionary<T> {
 
   /**
    * Encodes bits provided by query value for a partial left side comparison.
+   *
    * @param value the query term to be encoded into bits
    * @return a {@link BitVector} of encoded bits for the left side comparison.
    */
@@ -36,6 +38,7 @@ public interface WildcardDictionary<T> extends Dictionary<T> {
 
   /**
    * Encodes bits provided by query value for a partial right side comparison.
+   *
    * @param value the query term to be encoded into bits
    * @return a {@link BitVector} of encoded bits for the right side comparison.
    */

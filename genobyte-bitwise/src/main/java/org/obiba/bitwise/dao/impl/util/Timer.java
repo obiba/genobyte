@@ -61,7 +61,7 @@ public class Timer {
   }
 
   static public void reset() {
-    for(Timer timer : TIMERS) {
+    for (Timer timer : TIMERS) {
       timer.time_ = 0;
     }
   }

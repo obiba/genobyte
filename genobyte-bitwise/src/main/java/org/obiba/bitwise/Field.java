@@ -31,7 +31,7 @@ import org.obiba.bitwise.query.QueryResult;
 
 public class Field extends AbstractField {
   private boolean dirty_ = false;
-      //If the Field content has changed since it has been persisted the last time.
+  //If the Field content has changed since it has been persisted the last time.
 
   Field(BitwiseStore store, FieldDto data, Dictionary dict, BitVector[] vectors) {
     super();
@@ -43,6 +43,7 @@ public class Field extends AbstractField {
 
   /**
    * Returns true if this field was modified since it was persisted.
+   *
    * @return true if this field was modified since it was persisted.
    */
   public boolean isDirty() {
@@ -50,7 +51,7 @@ public class Field extends AbstractField {
   }
 
   void setDirty(boolean d) {
-    if(d == true && dirty_ == false) {
+    if (d == true && dirty_ == false) {
       super.store_.flushField(this);
     }
     dirty_ = d;
@@ -58,9 +59,10 @@ public class Field extends AbstractField {
 
   /**
    * Increases the number of records that can be held in this <code>Field</code> object.
+   *
    * @param size the new number of records that can be held in the <code>Field</code>. This number
-   * is the new total number of records, not the number of records to increase. It must be equal or
-   * higher than the current maximum number of records.
+   *             is the new total number of records, not the number of records to increase. It must be equal or
+   *             higher than the current maximum number of records.
    */
   public void grow(int size) {
     setDirty(true);
@@ -79,11 +81,12 @@ public class Field extends AbstractField {
 
   /**
    * Compares this <code>Field</code> with the specified Object for equality.
+   *
    * @param o <code>Object</code> to which this Field is to be compared.
    * @return true if the name of both <code>Field</code> objects is the same.
    */
   public boolean equals(Object o) {
-    if(o instanceof Field == false) {
+    if (o instanceof Field == false) {
       return false;
     }
     Field d = (Field) o;
@@ -92,6 +95,7 @@ public class Field extends AbstractField {
 
   /**
    * Returns a hash code for this Field.
+   *
    * @return a hash code value for this object.
    */
   public int hashCode() {

@@ -38,7 +38,7 @@ class PrintRecordCommand implements CliCommand {
       rd.setDisplayType(ResultDisplay.DisplayType.PLAIN);
 
       //Filter out template fields
-      for(String field : store.getFieldList()) {
+      for (String field : store.getFieldList()) {
 //        if (field.matches(".*_\\d+")) {
 //          continue;
 //        }
@@ -47,7 +47,7 @@ class PrintRecordCommand implements CliCommand {
 
       rd.putRecord(store, index);
       System.out.println(rd.getOutput());
-    } catch(NumberFormatException e) {
+    } catch (NumberFormatException e) {
       throw new ParseException(e.getMessage());
     }
     return false;

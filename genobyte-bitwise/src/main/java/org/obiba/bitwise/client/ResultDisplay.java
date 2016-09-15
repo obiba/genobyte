@@ -53,18 +53,20 @@ public class ResultDisplay {
   /**
    * Constructor taking a list of field names, and preparing the data structure
    * to store results.
+   *
    * @param pFields is a list of field names.
    */
   public ResultDisplay(List<String> pFields) {
     super();
-    for(String fieldName : pFields) {
+    for (String fieldName : pFields) {
       addField(fieldName);
     }
   }
 
   /**
    * Sets the way to display resultset in the console.
-   * @param pDt the type of display. 
+   *
+   * @param pDt the type of display.
    */
   public void setDisplayType(DisplayType pDt) {
     dt_ = pDt;
@@ -72,6 +74,7 @@ public class ResultDisplay {
 
   /**
    * Appends one extra field to the data structure.
+   *
    * @param pName is the name of the field to be appended.
    */
   public void addField(String pName) {
@@ -80,12 +83,13 @@ public class ResultDisplay {
 
   /**
    * Adds a new record in the data structure.
+   *
    * @param pRecordData is a map where the key is a string of the field name, and
-   * the value is the field value.
+   *                    the value is the field value.
    */
   public void putRecord(Map<String, String> pRecordData) {
     Iterator<String> it = pRecordData.keySet().iterator();
-    while(it.hasNext()) {
+    while (it.hasNext()) {
       String key = it.next();
       fields_.get(key).put(pRecordData.get(key));
     }
@@ -95,12 +99,13 @@ public class ResultDisplay {
   /**
    * Adds a record to be displayed by this object, by first extracting its data from the store at a given
    * record index.
-   * @param bs the <tt>BitwiseStore</tt>.
+   *
+   * @param bs    the <tt>BitwiseStore</tt>.
    * @param index the record index.
    */
   public void putRecord(BitwiseStore bs, int index) {
     Map<String, String> record = new HashMap<String, String>();
-    for(String field : fields_.keySet()) {
+    for (String field : fields_.keySet()) {
       Field f = bs.getField(field);
       Dictionary dict = f.getDictionary();
       Object value = dict.reverseLookup(f.getValue(index));
@@ -111,12 +116,13 @@ public class ResultDisplay {
 
   /**
    * Gets the results outputed in the required type.
+   *
    * @return A String with the whole result string.
    */
   public String getOutput() {
-    if(dt_ == DisplayType.TABLE) {
+    if (dt_ == DisplayType.TABLE) {
       return getTableOutput();
-    } else if(dt_ == DisplayType.PLAIN) {
+    } else if (dt_ == DisplayType.PLAIN) {
       return getPlainOutput();
     } else {
       throw new RuntimeException("No display type was defined.");
@@ -124,15 +130,16 @@ public class ResultDisplay {
   }
 
   /**
-   * Generates the search results as a plain output <tt>String</tt>. 
+   * Generates the search results as a plain output <tt>String</tt>.
+   *
    * @return
    */
   private String getPlainOutput() {
     StringBuilder result = new StringBuilder();
 
-    for(int i = 0; i < recordCount_; i++) {
+    for (int i = 0; i < recordCount_; i++) {
       result.append("\nRecord ").append(i).append(": ");
-      for(String key : fields_.keySet()) {
+      for (String key : fields_.keySet()) {
         String fieldValue = fields_.get(key).get(i);
         result.append("[").append(key).append(": ").append(fieldValue).append("] ");
       }
@@ -156,7 +163,7 @@ public class ResultDisplay {
     //Print values. If there aren't any, don't print the last box line.
     StringBuilder valueLines = getValues();
 
-    if(valueLines.length() > 0) {
+    if (valueLines.length() > 0) {
       output.append("\n");
       output.append(getValues());
       output.append(boxLine);
@@ -168,13 +175,14 @@ public class ResultDisplay {
   /**
    * Iterates throught all fields and compute how many characters there are in
    * total.
+   *
    * @return The total of the longest character sequence for each field.
    */
   public int getTotalFieldSize() {
     int totalSize = 0;
 
     Iterator<String> it = fields_.keySet().iterator();
-    while(it.hasNext()) {
+    while (it.hasNext()) {
       String key = it.next();
       totalSize += fields_.get(key).getSize();
     }
@@ -184,6 +192,7 @@ public class ResultDisplay {
 
   /**
    * Gets a horizontal line that will delimit the results box.
+   *
    * @return The line as a StringBuilder.
    */
   private StringBuilder getBoxLine() {
@@ -199,13 +208,14 @@ public class ResultDisplay {
 
   /**
    * Gets the results box header, which is the field name for each column.
+   *
    * @return A StringBuilder of the line with the header information.
    */
   private StringBuilder getHeader() {
     StringBuilder header = new StringBuilder();
 
     Iterator<String> it = fields_.keySet().iterator();
-    while(it.hasNext()) {
+    while (it.hasNext()) {
       String key = it.next();
       header.append("| ").append(key);
       header.append(
@@ -217,14 +227,15 @@ public class ResultDisplay {
 
   /**
    * Prepares a StringBuilder table with one record per row.
+   *
    * @return A StringBuilder of all the lines representing the matching values.
    */
   private StringBuilder getValues() {
     StringBuilder result = new StringBuilder();
 
-    for(int i = 0; i < recordCount_; i++) {
+    for (int i = 0; i < recordCount_; i++) {
       Iterator<String> it = fields_.keySet().iterator();
-      while(it.hasNext()) {
+      while (it.hasNext()) {
         String key = it.next();
         String fieldValue = fields_.get(key).get(i);
         result.append("| ").append(fieldValue);
@@ -241,13 +252,14 @@ public class ResultDisplay {
   /**
    * Gets a StringBuilder containing the same character sequence repeated a
    * certain amount of times.
-   * @param pChar is the character sequence to be repeated.
+   *
+   * @param pChar  is the character sequence to be repeated.
    * @param pCount is how many times it must be repeated.
    * @return The resulting StringBuilder.
    */
   private StringBuilder repeatChar(String pChar, int pCount) {
     StringBuilder result = new StringBuilder();
-    for(int j = 0; j < pCount; j++) {
+    for (int j = 0; j < pCount; j++) {
       result.append(pChar);
     }
 
@@ -274,7 +286,7 @@ public class ResultDisplay {
 
     public void put(String pData) {
       data_.add(pData);
-      if(pData.length() > maxSize_) {
+      if (pData.length() > maxSize_) {
         maxSize_ = pData.length();
       }
     }

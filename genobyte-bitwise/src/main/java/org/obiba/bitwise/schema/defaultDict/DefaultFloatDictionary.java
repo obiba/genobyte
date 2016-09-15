@@ -20,6 +20,7 @@ package org.obiba.bitwise.schema.defaultDict;
 
 /**
  * Default dictionary parameters for dealing with Double fields.
+ *
  * @author dbujold
  */
 public class DefaultFloatDictionary extends DefaultDictionary {

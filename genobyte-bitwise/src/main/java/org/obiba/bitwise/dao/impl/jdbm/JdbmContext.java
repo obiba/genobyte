@@ -53,7 +53,7 @@ public class JdbmContext implements KeyedDaoManagerDestroyListener {
 
   static public void destroyInstance(DaoKey key) {
     JdbmContext ctx = instanceMap_.remove(key);
-    if(ctx != null) {
+    if (ctx != null) {
       ctx.close();
     }
   }
@@ -64,15 +64,15 @@ public class JdbmContext implements KeyedDaoManagerDestroyListener {
     String root = props.getProperty(DefaultConfigurationPropertiesProvider.ROOT_DIR_PROPERTY);
     props.setProperty(RecordManagerOptions.DISABLE_TRANSACTIONS, "true");
     File rootDir = new File(root);
-    if(rootDir.exists() == false) {
-      if(rootDir.mkdirs() == false) {
+    if (rootDir.exists() == false) {
+      if (rootDir.mkdirs() == false) {
         log.error("Cannot create root directory [{}].", rootDir);
         throw new RuntimeException("Cannot mkdir [" + rootDir + "]");
       }
     }
     File envDir = new File(root, key.toString());
-    if(envDir.exists() == false) {
-      if(envDir.mkdirs() == false) {
+    if (envDir.exists() == false) {
+      if (envDir.mkdirs() == false) {
         log.error("Cannot create environment directory [{}]", envDir);
         throw new RuntimeException("Cannot mkdir [" + envDir + "]");
       }
@@ -93,14 +93,14 @@ public class JdbmContext implements KeyedDaoManagerDestroyListener {
 
   RecordManager getManager(String name) {
     RecordManager m = managers.get(name);
-    if(m == null) {
-      synchronized(managers) {
+    if (m == null) {
+      synchronized (managers) {
         // Test again due to possible race condition...
         m = managers.get(name);
-        if(m == null) {
+        if (m == null) {
           try {
             m = provider.createRecordManager(name);
-          } catch(IOException e) {
+          } catch (IOException e) {
             throw new JdbmRuntimeException(e);
           }
           managers.put(name, m);
@@ -120,30 +120,30 @@ public class JdbmContext implements KeyedDaoManagerDestroyListener {
   }
 
   synchronized void commit() {
-    for(RecordManager m : managers.values()) {
+    for (RecordManager m : managers.values()) {
       try {
         m.commit();
-      } catch(IOException e) {
+      } catch (IOException e) {
         log.error("Error commiting manager [{}]: {}", m, e.getMessage());
       }
     }
   }
 
   synchronized void rollback() {
-    for(RecordManager m : managers.values()) {
+    for (RecordManager m : managers.values()) {
       try {
         m.rollback();
-      } catch(IOException e) {
+      } catch (IOException e) {
         log.error("Error commiting manager [{}]: {}", m, e.getMessage());
       }
     }
   }
 
   synchronized public void close() {
-    for(RecordManager m : managers.values()) {
+    for (RecordManager m : managers.values()) {
       try {
         m.close();
-      } catch(IOException e) {
+      } catch (IOException e) {
         log.error("Error closing manager [{}]: {}", m, e.getMessage());
       }
     }

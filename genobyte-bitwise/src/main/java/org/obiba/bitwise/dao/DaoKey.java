@@ -20,9 +20,9 @@ package org.obiba.bitwise.dao;
 
 /**
  * Placeholder class used to key different DAO implementations.
- *
+ * <p>
  * Keyed DAOs allows having many DAO implementations of the same DAO interface but that work on different sets of
- * data. The DaoKey is used to partition the different DAO instances. Its value can be anything that is 
+ * data. The DaoKey is used to partition the different DAO instances. Its value can be anything that is
  * meaningful to the Dao implementation.
  *
  * @author plaflamm
@@ -37,7 +37,7 @@ public class DaoKey {
 
   @Override
   public boolean equals(Object o) {
-    if(o instanceof DaoKey) {
+    if (o instanceof DaoKey) {
       return key_ == ((DaoKey) o).key_;
     }
     return false;

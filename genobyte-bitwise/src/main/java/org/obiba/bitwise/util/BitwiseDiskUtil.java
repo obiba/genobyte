@@ -25,16 +25,19 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 /**
- * Utility class for manipulating bitwise stores directly on disk. 
+ * Utility class for manipulating bitwise stores directly on disk.
  */
 public class BitwiseDiskUtil {
 
-  /** The configuration key for the root directory of bitwise stores. */
+  /**
+   * The configuration key for the root directory of bitwise stores.
+   */
   public static final String ROOT_DIR_PROPERTY = "bitwise.dir.root";
 
   /**
    * Returns the root directory where all bitwise store instances are stored under. This
-   * is the value of the {@link BitwiseDiskUtil#ROOT_DIR_PROPERTY} configuration key. 
+   * is the value of the {@link BitwiseDiskUtil#ROOT_DIR_PROPERTY} configuration key.
+   *
    * @return the root directory of all bitwise stores.
    */
   public static String getRoot() {
@@ -52,9 +55,9 @@ public class BitwiseDiskUtil {
     long storeSize = 0;
     String rootName = getRoot();
     File store = new File(rootName + "/" + name);
-    if(store.exists()) {
+    if (store.exists()) {
       File[] files = store.listFiles();
-      for(File file : files) {
+      for (File file : files) {
         storeSize += file.length();
       }
     }
@@ -68,8 +71,8 @@ public class BitwiseDiskUtil {
    * @param names the unique names of the bitwise stores to remove
    */
   public static void deleteStores(String... names) {
-    if(names == null) return;
-    for(String name : names) {
+    if (names == null) return;
+    for (String name : names) {
       deleteStore(name);
     }
   }
@@ -86,10 +89,10 @@ public class BitwiseDiskUtil {
       public void run() {
         String rootName = getRoot();
         File store = new File(rootName + "/" + name);
-        if(store.exists()) {
+        if (store.exists()) {
           try {
             FileUtil.deltree(store);
-          } catch(IOException e) {
+          } catch (IOException e) {
             throw new RuntimeException(e);
           }
         }
@@ -102,7 +105,7 @@ public class BitwiseDiskUtil {
    * overwritten.
    *
    * @param zipFile the zip file to create and write to.
-   * @param names an array of unique bitwise stores to add to the zip file
+   * @param names   an array of unique bitwise stores to add to the zip file
    * @throws IOException when an error occurs
    */
   public static void zipStores(File zipFile, String... names) throws IOException {
@@ -110,18 +113,18 @@ public class BitwiseDiskUtil {
     try {
       zos = new ZipOutputStream(new FileOutputStream(zipFile));
       zos.setLevel(ZipOutputStream.STORED);
-      for(String name : names) {
+      for (String name : names) {
         zipStore(name, zos);
       }
     } finally {
-      if(zos != null) zos.close();
+      if (zos != null) zos.close();
     }
   }
 
   /**
    * Adds the specified store to an existing zip file stream.
    *
-   * @param name the unique name of the bitwise store.
+   * @param name   the unique name of the bitwise store.
    * @param stream the zip file stream to wrtie to.
    */
   public static void zipStore(final String name, final ZipOutputStream stream) {
@@ -131,7 +134,7 @@ public class BitwiseDiskUtil {
         File store = new File(rootName + "/" + name);
         try {
           outputToZip(store, stream);
-        } catch(IOException e) {
+        } catch (IOException e) {
           throw new RuntimeException(e);
         }
       }
@@ -142,7 +145,7 @@ public class BitwiseDiskUtil {
    * Utility method for zipping a bitwise store to an existing zip file.
    *
    * @param store the bitwise store to add
-   * @param zos the zip file to use for output
+   * @param zos   the zip file to use for output
    * @throws IOException when a problem occurs
    */
   private static void outputToZip(File store, ZipOutputStream zos) throws IOException {
@@ -150,9 +153,9 @@ public class BitwiseDiskUtil {
     zos.putNextEntry(new ZipEntry(rootName));
     zos.closeEntry();
 
-    if(store.exists()) {
+    if (store.exists()) {
       File[] files = store.listFiles();
-      for(File file : files) {
+      for (File file : files) {
         zos.putNextEntry(new ZipEntry(rootName + file.getName()));
         copyFile(file, zos);
         zos.closeEntry();
@@ -164,7 +167,7 @@ public class BitwiseDiskUtil {
    * Utility method to copy a file into an {@link java.io.OutputStream}.
    *
    * @param inputFile the file to copy
-   * @param os the stream to copy into
+   * @param os        the stream to copy into
    * @throws IOException when an error occurs during the copy.
    */
   private static void copyFile(File inputFile, OutputStream os) throws IOException {
@@ -174,11 +177,11 @@ public class BitwiseDiskUtil {
       // A 1Mb data buffer
       byte[] buffer = new byte[1024 * 1024];
       int n = 0;
-      while((n = fis.read(buffer)) != -1) {
+      while ((n = fis.read(buffer)) != -1) {
         os.write(buffer, 0, n);
       }
     } finally {
-      if(fis != null) fis.close();
+      if (fis != null) fis.close();
     }
   }
 }

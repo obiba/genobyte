@@ -72,7 +72,7 @@ class ResultVector implements QueryResult {
   }
 
   public int hit(int index) {
-    if(hits_ == null) {
+    if (hits_ == null) {
       makeHits();
     }
     return hits_[index];
@@ -171,28 +171,28 @@ class ResultVector implements QueryResult {
   }
 
   protected void filter() {
-    if(filtered_ == false) {
+    if (filtered_ == false) {
       filtered_ = true;
       result_.andNot(filter_);
     }
   }
 
   protected void cleanDeleted() {
-    if(deletedClean_ == false) {
+    if (deletedClean_ == false) {
       deletedClean_ = true;
       result_.andNot(deleted_);
     }
   }
 
   /**
-   * Creates the hits_ member variable 
+   * Creates the hits_ member variable
    */
   synchronized private void makeHits() {
     cleanDeleted();
     filter();
     hits_ = new int[result_.count()];
     int hitIndex = 0;
-    for(int i = next(0); i != -1; i = next(i + 1)) {
+    for (int i = next(0); i != -1; i = next(i + 1)) {
       hits_[hitIndex++] = i;
     }
   }

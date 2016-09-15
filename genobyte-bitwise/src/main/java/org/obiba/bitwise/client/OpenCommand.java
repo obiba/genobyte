@@ -35,14 +35,14 @@ class OpenCommand implements CliCommand {
     String newStoreName = opt.getValue();
 
     //Make sure the store name exists
-    if(!(bwsUtil.exists(newStoreName))) {
+    if (!(bwsUtil.exists(newStoreName))) {
       System.out.println("Specified store name doesn't exist.\n");
       return false;
     }
 
     //Close the currently opened store
     BitwiseStore currentStore = context.getStore();
-    if(!(currentStore == null)) {
+    if (!(currentStore == null)) {
       currentStore.endTransaction();
       currentStore.close();
     }

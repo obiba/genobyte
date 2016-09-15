@@ -32,6 +32,7 @@ public class ClientContext {
 
   /**
    * Returns the result of the last query ran in a session for a store.
+   *
    * @return The QueryResult obtained from running the last query.
    */
   public QueryResult getLastResult() {
@@ -40,6 +41,7 @@ public class ClientContext {
 
   /**
    * Gets the currently opened store.
+   *
    * @return The BitwiseStore
    */
   public BitwiseStore getStore() {
@@ -48,6 +50,7 @@ public class ClientContext {
 
   /**
    * Saves the result of the last query ran in a session for a store.
+   *
    * @param lastResult is the QueryResult of the last query that has been ran.
    */
   public void setLastResult(QueryResult lastResult) {
@@ -57,6 +60,7 @@ public class ClientContext {
   /**
    * Swtiches the context of the client session to a new store. All following queries will be ran on
    * this new store. The result of the last query ran on the previous store will be lost.
+   *
    * @param store is the newly opened store that will be used in the client to run queries.
    */
   public void setStore(BitwiseStore store) {

@@ -30,13 +30,17 @@ import java.util.Map;
 
 /**
  * A <tt>DefaultDictionary</tt> object holds a dictionary class name and default parameters for it, to be used as default
- * when a field is to be stored in the bitwise, but that the API user didn't provide a dictionary context as to how to encode its values. 
+ * when a field is to be stored in the bitwise, but that the API user didn't provide a dictionary context as to how to encode its values.
  */
 public class DefaultDictionary {
-  /** The name of the <tt>Dictionary</tt> implementation class that should be used for the default dictionary. */
+  /**
+   * The name of the <tt>Dictionary</tt> implementation class that should be used for the default dictionary.
+   */
   protected String className_ = null;
 
-  /** The properties to give to this dictionary */
+  /**
+   * The properties to give to this dictionary
+   */
   protected Map<String, String> properties_ = null;
 
   public DefaultDictionary() {
@@ -45,13 +49,14 @@ public class DefaultDictionary {
 
   /**
    * Creates a new dictionary that can be assigned to a field in a store schema.
+   *
    * @return A new DictionaryMetaData.
    */
   public DictionaryMetaData getDict() {
     DictionaryMetaData dict_ = new DictionaryMetaData();
     dict_.setClass(className_);
 
-    for(String propName : properties_.keySet()) {
+    for (String propName : properties_.keySet()) {
       dict_.addProperty(createProperty(propName, properties_.get(propName)));
     }
     return dict_;
@@ -60,7 +65,7 @@ public class DefaultDictionary {
   public Dictionary getInstance(String pName) {
     Dictionary d = DictionaryInstantiator.createInstance(pName, className_);
     List<Property> lp = new LinkedList<Property>();
-    for(String p : properties_.keySet()) {
+    for (String p : properties_.keySet()) {
       lp.add(new Property(p, properties_.get(p)));
     }
     DictionaryInstantiator.setProperties(d, lp);
@@ -70,7 +75,8 @@ public class DefaultDictionary {
 
   /**
    * Creates a Property object, ready to be added in a DictionaryMetaData object.
-   * @param pName is the name of the property.
+   *
+   * @param pName  is the name of the property.
    * @param pValue is the value of the property.
    * @return The property object.
    */
@@ -83,27 +89,39 @@ public class DefaultDictionary {
 
   /**
    * Gets the name of the <tt>Dictionary</tt> class that will implement this default dictionary.
+   *
    * @return the default dictionary class name.
    */
-  public String getDictClassName() { return className_; }
+  public String getDictClassName() {
+    return className_;
+  }
 
   /**
    * Sets the name of the <tt>Dictionary</tt> class that will implement this default dictionary.
+   *
    * @param pDictClassName the default dictionary class name.
    */
-  public void setDictClassName(String pDictClassName) { className_ = pDictClassName; }
+  public void setDictClassName(String pDictClassName) {
+    className_ = pDictClassName;
+  }
 
   /**
    * Gets the value for a property with the specified name.
+   *
    * @param pName the name of the property.
    * @return the property value.
    */
-  public String getProperty(String pName) { return properties_.get(pName); }
+  public String getProperty(String pName) {
+    return properties_.get(pName);
+  }
 
   /**
    * Sets a property for the default dictionary.
-   * @param pName the name of the property.
+   *
+   * @param pName  the name of the property.
    * @param pValue the value of the property.
    */
-  public void setDictType(String pName, String pValue) { properties_.put(pName, pValue); }
+  public void setDictType(String pName, String pValue) {
+    properties_.put(pName, pValue);
+  }
 }

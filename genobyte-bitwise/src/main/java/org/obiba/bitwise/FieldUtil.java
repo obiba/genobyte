@@ -52,7 +52,7 @@ class FieldUtil {
   }
 
   /**
-   * Clears (sets to 0) the bits specified by the <code>clear</code> <code>BitVector</code> 
+   * Clears (sets to 0) the bits specified by the <code>clear</code> <code>BitVector</code>
    * for every field in the <code>BitwiseStore</code>
    *
    * @param clear a <code>BitVector</code> with bits set for every bit to clear
@@ -66,11 +66,11 @@ class FieldUtil {
     clearMask.not();
 
     List<FieldDto> values = fieldDtoDao.values();
-    for(FieldDto dto : values) {
+    for (FieldDto dto : values) {
       long bits[] = dto.getBitIndex();
-      for(int i = 0; i < bits.length; i++) {
+      for (int i = 0; i < bits.length; i++) {
         long id = bits[i];
-        if(id != -1) {
+        if (id != -1) {
           BitVector v = BitVectorUtil.toVector(bitVectorDtoDao.load(id));
           v.and(clearMask);
           BitVectorDto vectorDto = BitVectorUtil.toDto(id, v);
@@ -91,18 +91,18 @@ class FieldUtil {
     BitVectorDtoDao bitVectorDtoDao = (BitVectorDtoDao) KeyedDaoManager.getInstance(store_.getDaoKey())
         .getDao(BitVectorDtoDao.class);
     FieldDto dto = fieldDtoDao.load(name);
-    if(dto == null) {
+    if (dto == null) {
       return null;
     }
     Dictionary dict = store_.getDictionary(dto.getDictionaryName());
 
     long bits[] = dto.getBitIndex();
     BitVector vectors[] = new BitVector[bits.length];
-    for(int i = 0; i < bits.length; i++) {
+    for (int i = 0; i < bits.length; i++) {
       long bitIndex = bits[i];
-      if(bitIndex != -1) {
+      if (bitIndex != -1) {
         vectors[i] = BitVectorUtil.toVector(bitVectorDtoDao.load(bitIndex));
-        if(vectors[i].size() != dto.getSize()) {
+        if (vectors[i].size() != dto.getSize()) {
           throw new IllegalStateException(
               "Cannot open field [" + name + "]: vector [" + i + "] size [" + vectors[i].size() +
                   "] does not match field size [" + dto.getSize() + "]");
@@ -116,7 +116,7 @@ class FieldUtil {
    * Creates a <code>Field</code> with the specified attributes.
    * The field returned is dirty and not persisted, use the <code>save</code> method to persist it.
    *
-   * @param name the name of the field to create
+   * @param name     the name of the field to create
    * @param dictName the associated dictionary name
    * @param capacity the initial field capacity
    * @return a new <code>Field</code> instance
@@ -124,11 +124,11 @@ class FieldUtil {
    */
   Field create(String name, String dictName, int capacity) {
     FieldDtoDao fieldDtoDao = (FieldDtoDao) KeyedDaoManager.getInstance(store_.getDaoKey()).getDao(FieldDtoDao.class);
-    if(fieldDtoDao.load(name) != null) {
+    if (fieldDtoDao.load(name) != null) {
       throw new IllegalStateException("Field [" + name + "] already exists");
     }
     Dictionary dict = store_.getDictionary(dictName);
-    if(dict == null) {
+    if (dict == null) {
       throw new IllegalStateException(
           "Cannot create field=[" + name + "]: dictionary=[" + dictName + "] does not exist.");
     }
@@ -151,23 +151,23 @@ class FieldUtil {
    * @param f the <code>Field</code> to persist
    */
   void save(Field f) {
-    if(f.isDirty()) {
+    if (f.isDirty()) {
       FieldDtoDao fieldDtoDao = (FieldDtoDao) KeyedDaoManager.getInstance(store_.getDaoKey()).getDao(FieldDtoDao.class);
       BitVectorDtoDao bitVectorDtoDao = (BitVectorDtoDao) KeyedDaoManager.getInstance(store_.getDaoKey())
           .getDao(BitVectorDtoDao.class);
       BitVector[] vectors = f.getBitVectors();
-      for(int i = 0; i < vectors.length; i++) {
+      for (int i = 0; i < vectors.length; i++) {
         BitVector v = vectors[i];
-        if(v != null) {
-          if(v.size() != f.getSize()) {
+        if (v != null) {
+          if (v.size() != f.getSize()) {
             throw new IllegalStateException(
                 "Field [" + f.getName() + "] vector id [" + f.getDto().getBitIndex()[i] + "] size [" + v.size() +
                     "] does not match field size [" + f.getSize() + "]");
           }
           BitVectorDto dto = BitVectorUtil.toDto(f.getDto().getBitIndex()[i], v);
-          if(dto.getId() == -1) {
+          if (dto.getId() == -1) {
             bitVectorDtoDao.create(dto);
-            if(dto.getId() <= 0) throw new IllegalStateException(
+            if (dto.getId() <= 0) throw new IllegalStateException(
                 "Invalid unique key returned after persisting bitvector [" + dto.getId() + "]");
             f.getDto().getBitIndex()[i] = dto.getId();
           } else {
@@ -185,9 +185,9 @@ class FieldUtil {
         .getDao(BitVectorDtoDao.class);
     FieldDtoDao fieldDtoDao = (FieldDtoDao) KeyedDaoManager.getInstance(store_.getDaoKey()).getDao(FieldDtoDao.class);
     FieldDto dto = fieldDtoDao.load(name);
-    if(dto != null) {
-      for(long vectorIndex : dto.getBitIndex()) {
-        if(vectorIndex != -1) bitVectorDtoDao.delete(vectorIndex);
+    if (dto != null) {
+      for (long vectorIndex : dto.getBitIndex()) {
+        if (vectorIndex != -1) bitVectorDtoDao.delete(vectorIndex);
       }
       fieldDtoDao.delete(name);
     }

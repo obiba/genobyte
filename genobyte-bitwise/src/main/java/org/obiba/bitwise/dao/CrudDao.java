@@ -22,7 +22,7 @@ package org.obiba.bitwise.dao;
  * Defines Create, Read (load), Update (save) and Delete DAO methods for any type.
  *
  * @param <T> the type of the transfer object to be persisted
- * @param <K> the type of the primary key of the persisted transfer object 
+ * @param <K> the type of the primary key of the persisted transfer object
  */
 public interface CrudDao<T, K> extends KeyedDao {
   /**

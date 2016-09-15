@@ -31,14 +31,15 @@ public class IntegerFieldHelper {
 
   /**
    * Sets a value in all record for a given field.
-   * @param f the field on which all records must be set to a value.
+   *
+   * @param f     the field on which all records must be set to a value.
    * @param value the value to assign to the records field.
    */
   static public void setAll(Field f, int value) {
-    if(f == null) return;
+    if (f == null) return;
     BitVector bitValue = f.getDictionary().lookup(value);
     FieldValueIterator<Integer> fvi = new FieldValueIterator<Integer>(f);
-    while(fvi.hasNext()) {
+    while (fvi.hasNext()) {
       FieldValueIterator<Integer>.FieldValue fv = fvi.next();
       f.setValue(fv.getIndex(), bitValue);
     }
@@ -47,7 +48,7 @@ public class IntegerFieldHelper {
   /**
    * Adds 1 to a field value for all records in a {@link QueryResult}.
    *
-   * @param f the integer field that must be incremented.
+   * @param f       the integer field that must be incremented.
    * @param indexes the records which field must be incremented.
    */
   static public void increment(Field f, QueryResult indexes) {
@@ -56,16 +57,17 @@ public class IntegerFieldHelper {
 
   /**
    * Adds an integer value to a field value for all records in a {@link QueryResult}.
-   * @param f the integer field that must be incremented.
+   *
+   * @param f       the integer field that must be incremented.
    * @param indexes the records which field must be incremented.
-   * @param value the value that must be added.
+   * @param value   the value that must be added.
    */
   static public void add(Field f, QueryResult indexes, int value) {
-    if(f == null) return;
+    if (f == null) return;
     Dictionary<Integer> d = f.getDictionary();
-    for(int i = indexes.next(0); i != -1; i = indexes.next(i + 1)) {
+    for (int i = indexes.next(0); i != -1; i = indexes.next(i + 1)) {
       Integer v = d.reverseLookup(f.getValue(i));
-      if(v == null) {
+      if (v == null) {
         v = 0;
       }
       f.setValue(i, d.lookup(v + value));
@@ -74,15 +76,16 @@ public class IntegerFieldHelper {
 
   /**
    * Adds an integer value to a field for one record.
-   * @param f the integer field that must be incremented.
+   *
+   * @param f     the integer field that must be incremented.
    * @param index the index of the record which must be incremented.
    * @param value the value that must be added.
    */
   static public void add(Field f, int index, int value) {
-    if(f == null) return;
+    if (f == null) return;
     Dictionary<Integer> d = f.getDictionary();
     Integer v = d.reverseLookup(f.getValue(index));
-    if(v == null) {
+    if (v == null) {
       v = 0;
     }
     f.setValue(index, d.lookup(v + value));
@@ -91,34 +94,35 @@ public class IntegerFieldHelper {
   /**
    * Computes the sum of a field value for all records in a {@link QueryResult}. Result can be no higher than <tt>Long.MAX_VALUE</tt>.
    *
-   * @param f the field used to compute the sum.
+   * @param f       the field used to compute the sum.
    * @param indexes the records that will be used in the sum computation.
    * @return the sum of the records value.
    */
   static public long sum(Field f, QueryResult indexes) {
-    if(f == null) return 0;
+    if (f == null) return 0;
     Dictionary<Integer> d = f.getDictionary();
     long sum = 0;
-    for(int i = indexes.next(0); i != -1; i = indexes.next(i + 1)) {
+    for (int i = indexes.next(0); i != -1; i = indexes.next(i + 1)) {
       Integer v = d.reverseLookup(f.getValue(i));
-      if(v != null) sum += v;
+      if (v != null) sum += v;
     }
     return sum;
   }
 
   /**
    * Computes the sum of a field value for all records. Result can be no higher than <tt>Long.MAX_VALUE</tt>.
+   *
    * @param f the field used to compute the sum.
    * @return the sum of all records value.
    */
   static public long sum(Field f) {
-    if(f == null) return 0;
+    if (f == null) return 0;
     long sum = 0;
     FieldValueIterator<Integer> fvi = new FieldValueIterator<Integer>(f);
-    while(fvi.hasNext()) {
+    while (fvi.hasNext()) {
       FieldValueIterator<Integer>.FieldValue fv = fvi.next();
       Integer v = fv.getValue();
-      if(v != null) sum += v;
+      if (v != null) sum += v;
     }
     return sum;
   }

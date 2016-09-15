@@ -34,7 +34,6 @@ public class StoreFromAnnotationTest extends BaseBdbDaoTestCase {
 
   /**
    * Build a store from an annotated class which uses inheritance.
-   *
    */
   public void testAnnotationInheritance() {
     AnnotationStoreSchemaBuilder sca = new AnnotationStoreSchemaBuilder();
@@ -76,7 +75,7 @@ public class StoreFromAnnotationTest extends BaseBdbDaoTestCase {
 
     try {
       sca.createSchema(storeClass);
-    } catch(InvalidAnnotationException e) {
+    } catch (InvalidAnnotationException e) {
       caughtException = e;
     }
     assertTrue(caughtException != null && caughtException.getMessage().equals(expectedMessage));
@@ -112,7 +111,7 @@ public class StoreFromAnnotationTest extends BaseBdbDaoTestCase {
       try {
         q1 = qp.parse(query1);
         q2 = qp.parse(query2);
-      } catch(Exception e) {
+      } catch (Exception e) {
         throw new RuntimeException(e);
       }
       QueryResult qr1 = q1.execute(myStore);
@@ -121,7 +120,7 @@ public class StoreFromAnnotationTest extends BaseBdbDaoTestCase {
       assertTrue(qr1.bits().toBitString().equals("1011000000"));
       assertTrue(qr2.bits().toBitString().equals("0011111111"));
     } finally {
-      if(myStore != null) {
+      if (myStore != null) {
         myStore.endTransaction();
         myStore.close();
       }
@@ -132,6 +131,7 @@ public class StoreFromAnnotationTest extends BaseBdbDaoTestCase {
 
   /**
    * Build a new store based on class annotations
+   *
    * @param pStoreName is the name of the store to be created.
    * @param pStoreSize is the starting size of the repository (number of records already set to null)
    * @return The newly created store as a BitwiseStore object.
@@ -149,6 +149,7 @@ public class StoreFromAnnotationTest extends BaseBdbDaoTestCase {
 
   /**
    * Enter some testing data in the newly created store.
+   *
    * @param pStore
    */
   public void fillData(BitwiseStore pStore) {
@@ -161,6 +162,7 @@ public class StoreFromAnnotationTest extends BaseBdbDaoTestCase {
 
   /**
    * Create a new row in the store at the next available index.
+   *
    * @param pStore
    * @param pId
    * @param pName

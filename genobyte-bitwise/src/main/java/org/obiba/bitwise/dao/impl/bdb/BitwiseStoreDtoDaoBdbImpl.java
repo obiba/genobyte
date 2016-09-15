@@ -61,7 +61,7 @@ public class BitwiseStoreDtoDaoBdbImpl extends BaseCrudDaoImpl<BitwiseStoreDto, 
 
   @Override
   synchronized protected StoredMap createStoredMap() {
-    if(storeMap_ == null) {
+    if (storeMap_ == null) {
       EntryBinding keyBinding = TupleBinding.getPrimitiveBinding(String.class);
       EntityBinding valueBinding = new BitwiseStoreDtoBinding();
       storeMap_ = new StoredMap(getBitwiseStoreDb(), keyBinding, valueBinding, true);
@@ -72,7 +72,7 @@ public class BitwiseStoreDtoDaoBdbImpl extends BaseCrudDaoImpl<BitwiseStoreDto, 
   private Database getBitwiseStoreDb() {
     try {
       return getContext().getDatabase(BITWISE_DB);
-    } catch(DatabaseException e) {
+    } catch (DatabaseException e) {
       throw new RuntimeException(e);
     }
   }
@@ -96,9 +96,9 @@ public class BitwiseStoreDtoDaoBdbImpl extends BaseCrudDaoImpl<BitwiseStoreDto, 
         ObjectInputStream ois = new ObjectInputStream(dis);
         StoreSchema ss = (StoreSchema) ois.readObject();
         d.setSchema(ss);
-      } catch(IOException e) {
+      } catch (IOException e) {
         throw new RuntimeException(e);
-      } catch(ClassNotFoundException e) {
+      } catch (ClassNotFoundException e) {
         throw new RuntimeException(e);
       }
       return d;
@@ -123,7 +123,7 @@ public class BitwiseStoreDtoDaoBdbImpl extends BaseCrudDaoImpl<BitwiseStoreDto, 
         oos.close();
 
         entry.setData(output.toByteArray());
-      } catch(IOException e) {
+      } catch (IOException e) {
         throw new RuntimeException(e);
       }
     }
@@ -138,22 +138,23 @@ public class BitwiseStoreDtoDaoBdbImpl extends BaseCrudDaoImpl<BitwiseStoreDto, 
 
     /**
      * Writes a {@link BitVector} instance to the specified stream
+     *
      * @param dos the stream to write to
-     * @param v the {@link BitVector} to write to
+     * @param v   the {@link BitVector} to write to
      * @throws IOException when an unexpected error occurs while writing to the stream
      */
     private void writeBitVector(DataOutputStream dos, BitVector v) throws IOException {
       BitVectorDto dto = BitVectorUtil.toDto(-1, v);
       long[] bits = dto.getBits();
-      if(bits == null) bits = new long[0];
+      if (bits == null) bits = new long[0];
       dos.writeInt(bits.length);
-      for(int i = 0; i < bits.length; i++) dos.writeLong(bits[i]);
+      for (int i = 0; i < bits.length; i++) dos.writeLong(bits[i]);
     }
 
     private BitVector readBitVector(int capacity, DataInputStream dis) throws IOException {
       int size = dis.readInt();
       long bits[] = new long[size];
-      for(int i = 0; i < size; i++) {
+      for (int i = 0; i < size; i++) {
         bits[i] = dis.readLong();
       }
       BitVectorDto dto = new BitVectorDto();

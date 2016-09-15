@@ -17,11 +17,11 @@ public class MaskedComparableRecordProvider implements ComparableRecordProvider 
    * applies <code>mask</code> to the result.
    *
    * @param delegate the {@link ComparableRecordProvider} implemementation to delegate to
-   * @param mask the {@link QueryResult} used a as mask
+   * @param mask     the {@link QueryResult} used a as mask
    */
   public MaskedComparableRecordProvider(ComparableRecordProvider delegate, QueryResult mask) {
-    if(delegate == null) throw new IllegalArgumentException("delegate may not be null");
-    if(mask == null) throw new IllegalArgumentException("mask may not be null");
+    if (delegate == null) throw new IllegalArgumentException("delegate may not be null");
+    if (mask == null) throw new IllegalArgumentException("mask may not be null");
     this.delegate_ = delegate;
     this.mask_ = mask;
   }

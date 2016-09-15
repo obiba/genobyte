@@ -38,44 +38,44 @@ abstract class BaseCrudDaoImpl<T, K> extends BaseDaoBdbImpl {
   @Override
   public void setDaoKey(DaoKey key) {
     super.setDaoKey(key);
-    if(enableTiming_ && timer_ == null) {
+    if (enableTiming_ && timer_ == null) {
       timer_ = new Timer(this.getClass().getName(), key.toString());
     }
   }
 
   public void create(T value) {
-    if(enableTiming_) timer_.start();
+    if (enableTiming_) timer_.start();
     K key = getKey(value);
-    if(getMap().containsKey(key) == true) {
+    if (getMap().containsKey(key) == true) {
       throw new IllegalArgumentException("Key [" + key + "] already exists.");
     }
     getMap().put(key, value);
-    if(enableTiming_) timer_.end();
+    if (enableTiming_) timer_.end();
   }
 
   public void delete(K name) {
-    if(enableTiming_) timer_.start();
+    if (enableTiming_) timer_.start();
     getMap().remove(name);
-    if(enableTiming_) timer_.end();
+    if (enableTiming_) timer_.end();
   }
 
   @SuppressWarnings("unchecked")
   public T load(K name) {
-    if(enableTiming_) timer_.start();
+    if (enableTiming_) timer_.start();
     T t = (T) getMap().get(name);
-    if(enableTiming_) timer_.end();
+    if (enableTiming_) timer_.end();
     return t;
   }
 
   public void save(T value) {
-    if(enableTiming_) timer_.start();
+    if (enableTiming_) timer_.start();
     K key = getKey(value);
     getMap().put(key, value);
-    if(enableTiming_) timer_.end();
+    if (enableTiming_) timer_.end();
   }
 
   synchronized protected StoredMap getMap() {
-    if(entityMap_ == null) {
+    if (entityMap_ == null) {
       entityMap_ = createStoredMap();
     }
     return entityMap_;

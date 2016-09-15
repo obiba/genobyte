@@ -25,7 +25,6 @@ import org.obiba.bitwise.query.QueryResult;
 /**
  * This command will print the index of all records matching the last query that
  * has been ran.
- *
  */
 class PrintCommand implements CliCommand {
 
@@ -34,9 +33,9 @@ class PrintCommand implements CliCommand {
    */
   public boolean execute(Option opt, ClientContext context) {
     QueryResult lastResult = context.getLastResult();
-    if(lastResult != null) {
+    if (lastResult != null) {
       int hits = lastResult.count();
-      for(int i = 0; i < hits; i++) {
+      for (int i = 0; i < hits; i++) {
         int hit = lastResult.hit(i);
         System.out.print(hit + " ");
       }

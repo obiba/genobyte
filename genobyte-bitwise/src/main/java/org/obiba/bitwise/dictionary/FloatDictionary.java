@@ -45,7 +45,7 @@ public class FloatDictionary extends AbstractStaticDictionary<Float> {
   }
 
   public BitVector lookup(Float key) {
-    if(key == null) {
+    if (key == null) {
       return null;
     }
     int ord = Float.floatToIntBits(key.floatValue());
@@ -55,12 +55,12 @@ public class FloatDictionary extends AbstractStaticDictionary<Float> {
   }
 
   public Float reverseLookup(BitVector v) {
-    if(v == null) {
+    if (v == null) {
       return null;
     }
 
     //The last bit is used to check if value is zero or null. If it's zero, just convert the 64 first bits to a double value.
-    if(v.get(dimension_ - 1)) {
+    if (v.get(dimension_ - 1)) {
       float tempValue = Float.intBitsToFloat((int) BitUtil.longValue(v));
       return new Float(tempValue);
     } else {
@@ -78,7 +78,7 @@ public class FloatDictionary extends AbstractStaticDictionary<Float> {
 
   @Override
   public boolean equals(Object obj) {
-    if(obj instanceof FloatDictionary) return true;
+    if (obj instanceof FloatDictionary) return true;
     return super.equals(obj);
   }
 }

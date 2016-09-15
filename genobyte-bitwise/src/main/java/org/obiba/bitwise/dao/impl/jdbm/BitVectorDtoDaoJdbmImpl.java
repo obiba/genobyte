@@ -74,7 +74,7 @@ public class BitVectorDtoDaoJdbmImpl extends BaseAutoKeyDaoImpl<BitVectorDto> im
     }
 
     public Object deserialize(byte[] bytes) throws IOException {
-      if(bytes == null || bytes.length == 0) return null;
+      if (bytes == null || bytes.length == 0) return null;
       ByteBuffer bb = BitPackingUtil.toByteBuffer(bytes);
       BitVectorDto d = new BitVectorDto();
       d.setSize(bb.getInt());

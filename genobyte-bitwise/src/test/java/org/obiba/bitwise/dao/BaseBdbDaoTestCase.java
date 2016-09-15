@@ -32,7 +32,7 @@ import java.util.Set;
 
 public class BaseBdbDaoTestCase extends TestCase {
 
-  private static final List<BitwiseStoreTestingHelper> stores_ = new ArrayList<BitwiseStoreTestingHelper>();
+  private static final List<BitwiseStoreTestingHelper> stores_ = new ArrayList<>();
 
   public BaseBdbDaoTestCase() {
     super();
@@ -48,22 +48,22 @@ public class BaseBdbDaoTestCase extends TestCase {
     DefaultConfigurationPropertiesProvider.setAsProvider("./src/test/java/test-bitwise.properties");
     try {
       FileUtil.deltree(BitwiseDiskUtil.getRoot());
-    } catch(IOException e) {
+    } catch (IOException e) {
     }
   }
 
   @Override
   protected void tearDown() throws Exception {
     Set<String> stores = BitwiseStoreUtil.getInstance().list();
-    for(String store : stores) {
+    for (String store : stores) {
       BitwiseStoreUtil.getInstance().forceClose(store);
     }
-    for(BitwiseStoreTestingHelper store : stores_) {
+    for (BitwiseStoreTestingHelper store : stores_) {
       KeyedDaoManager.destroyInstance(store.getDaoKey());
     }
     try {
       FileUtil.deltree(BitwiseDiskUtil.getRoot());
-    } catch(IOException e) {
+    } catch (IOException e) {
     }
     super.tearDown();
   }

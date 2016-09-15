@@ -41,6 +41,7 @@ public class FieldValueIterator<T> implements Iterator<FieldValueIterator<T>.Fie
 
   /**
    * Initializes an iterator on a <tt>Field</tt> instance.
+   *
    * @param f the <tt>Field</tt> on which the iterator will be based.
    */
   public FieldValueIterator(Field f) {
@@ -49,7 +50,7 @@ public class FieldValueIterator<T> implements Iterator<FieldValueIterator<T>.Fie
 
   public FieldValueIterator(Field f, QueryResult mask) {
     super();
-    if(f == null) {
+    if (f == null) {
       throw new NullPointerException("field cannot be null");
     }
     field_ = f;
@@ -62,12 +63,13 @@ public class FieldValueIterator<T> implements Iterator<FieldValueIterator<T>.Fie
 
   /**
    * Returns the next valid index that is a record and part of the mask (if any);
+   *
    * @param current
    * @return
    */
   protected int getNextIndex(int current) {
     int index = store_.nextRecord(current);
-    while(this.mask_ != null && index != -1 && this.mask_.get(index) == false) {
+    while (this.mask_ != null && index != -1 && this.mask_.get(index) == false) {
       index = store_.nextRecord(index + 1);
     }
     return index;
@@ -76,10 +78,12 @@ public class FieldValueIterator<T> implements Iterator<FieldValueIterator<T>.Fie
   /**
    * Initializes a empty <tt>Field</tt> iterator.
    */
-  protected FieldValueIterator() {}
+  protected FieldValueIterator() {
+  }
 
   /**
    * Returns true if the <tt>Field</tt> iteration has more elements.
+   *
    * @return <tt>true</tt> if the iterator has more elements.
    */
   public boolean hasNext() {
@@ -88,10 +92,11 @@ public class FieldValueIterator<T> implements Iterator<FieldValueIterator<T>.Fie
 
   /**
    * Returns the next element in the iteration.
+   *
    * @return the next element in the iteration.
    */
   public FieldValue next() {
-    if(nextIndex_ == -1) {
+    if (nextIndex_ == -1) {
       throw new NoSuchElementException("no more elements while iterating values from field [" + field_.getName() + "]");
     }
     int currentIndex = nextIndex_;
@@ -128,6 +133,7 @@ public class FieldValueIterator<T> implements Iterator<FieldValueIterator<T>.Fie
 
     /**
      * Returns the current record iteration index.
+     *
      * @return the index.
      */
     public int getIndex() {
@@ -136,6 +142,7 @@ public class FieldValueIterator<T> implements Iterator<FieldValueIterator<T>.Fie
 
     /**
      * Returns the current record iteration <tt>Field</tt> value, expressed in the bitwise store native format, <tt>BitVector</tt>.
+     *
      * @return the <tt>BitVector</tt> value at <tt>index</tt>.
      */
     public BitVector getBitValue() {
@@ -144,6 +151,7 @@ public class FieldValueIterator<T> implements Iterator<FieldValueIterator<T>.Fie
 
     /**
      * Returns the current record iteration <tt>Field</tt> value, in its original type.
+     *
      * @return the value.
      */
     public T getValue() {

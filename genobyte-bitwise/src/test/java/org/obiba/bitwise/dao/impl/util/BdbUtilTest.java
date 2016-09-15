@@ -39,7 +39,7 @@ public class BdbUtilTest extends TestCase {
     try {
       ByteBuffer bb = BitPackingUtil.allocate(-1);
       assertFalse("Expected exception not thrown.", true);
-    } catch(RuntimeException e) {
+    } catch (RuntimeException e) {
     }
   }
 
@@ -56,7 +56,7 @@ public class BdbUtilTest extends TestCase {
     ByteBuffer bb = BitPackingUtil.allocate(1024);
 
     int[] testValues = new int[10];
-    for(int i = 0; i < testValues.length; i++) {
+    for (int i = 0; i < testValues.length; i++) {
       testValues[i] = i;
     }
     BitPackingUtil.putIntArray(testValues, bb);
@@ -72,7 +72,7 @@ public class BdbUtilTest extends TestCase {
     ByteBuffer bb = BitPackingUtil.allocate(1024);
 
     long[] testValues = new long[10];
-    for(int i = 0; i < testValues.length; i++) {
+    for (int i = 0; i < testValues.length; i++) {
       testValues[i] = i;
     }
     BitPackingUtil.putLongArray(testValues, bb);

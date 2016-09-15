@@ -47,7 +47,8 @@ public class ShortDictionary extends AbstractStaticDictionary<Short> {
 
   /**
    * Sets the lower bound (minimum) for encoded values. Any value to encode to a <tt>BitVector</tt> must be higher or equal to this value.
-   * @param pLower the lower bound 
+   *
+   * @param pLower the lower bound
    */
   public void setLower(String pLower) {
     lower_ = Short.parseShort(pLower);
@@ -56,7 +57,8 @@ public class ShortDictionary extends AbstractStaticDictionary<Short> {
 
   /**
    * Sets the upper bound (maximum) for encoded values. Any value to encode to a <tt>BitVector</tt> must be lower or equal to this value.
-   * @param pUpper the upper bound 
+   *
+   * @param pUpper the upper bound
    */
   public void setUpper(String pUpper) {
     upper_ = Short.parseShort(pUpper);
@@ -66,7 +68,8 @@ public class ShortDictionary extends AbstractStaticDictionary<Short> {
   /**
    * Sets the value sampling increment for encoded values. Values that fall between two increment values in this this dictionary
    * will take the value of the closest higher increment.
-   * @param pStep the step between each sampled value. 
+   *
+   * @param pStep the step between each sampled value.
    */
   public void setStep(String pStep) {
     step_ = Short.parseShort(pStep);
@@ -79,11 +82,11 @@ public class ShortDictionary extends AbstractStaticDictionary<Short> {
 
   public Short convert(String value) {
     validateProperties();
-    if(value == null) {
+    if (value == null) {
       return null;
     }
     short s = Short.parseShort(value);
-    if(s > upper_ || s < lower_) {
+    if (s > upper_ || s < lower_) {
       return null;
     }
     return s;
@@ -91,14 +94,14 @@ public class ShortDictionary extends AbstractStaticDictionary<Short> {
 
   public BitVector lookup(Short key) {
     validateProperties();
-    if(key == null) {
+    if (key == null) {
       return null;
     }
     short d = key.shortValue();
-    if(lower_ > d) {
+    if (lower_ > d) {
       return null;
     }
-    if(upper_ < d) {
+    if (upper_ < d) {
       return null;
     }
     long ord = ((long) (d - lower_) / step_) + 1;
@@ -107,7 +110,7 @@ public class ShortDictionary extends AbstractStaticDictionary<Short> {
 
   public Short reverseLookup(BitVector v) {
     validateProperties();
-    if(v == null) {
+    if (v == null) {
       return null;
     }
     return (short) (lower_ + (BitUtil.longValue(v) - 1) * step_);
@@ -115,7 +118,7 @@ public class ShortDictionary extends AbstractStaticDictionary<Short> {
 
   public int dimension() {
     validateProperties();
-    if(dimension_ == -1) {
+    if (dimension_ == -1) {
       dimension_ = BitUtil.dimension((((long) upper_ - (long) lower_) / (long) step_ + 1));
     }
     return dimension_;
@@ -127,7 +130,7 @@ public class ShortDictionary extends AbstractStaticDictionary<Short> {
 
   @Override
   public boolean equals(Object obj) {
-    if(obj instanceof ShortDictionary) {
+    if (obj instanceof ShortDictionary) {
       ShortDictionary sd = (ShortDictionary) obj;
       return this.step_ == sd.step_ && this.lower_ == sd.lower_ && this.upper_ == sd.upper_;
     }
@@ -140,13 +143,13 @@ public class ShortDictionary extends AbstractStaticDictionary<Short> {
    * is no way to know in which order they have been defined.
    */
   private void validateProperties() {
-    if(propsValidated) {
+    if (propsValidated) {
       return;
     }
-    if(step_ == 0) {
+    if (step_ == 0) {
       throw new IllegalArgumentException("Argument step cannot be zero.");
     }
-    if(lower_ >= upper_) {
+    if (lower_ >= upper_) {
       throw new IllegalArgumentException("Lower bound must be less than upper bound.");
     }
     propsValidated = true;

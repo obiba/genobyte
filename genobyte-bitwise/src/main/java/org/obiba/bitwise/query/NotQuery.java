@@ -21,7 +21,7 @@ package org.obiba.bitwise.query;
 import org.obiba.bitwise.BitwiseStore;
 
 /**
- * Finds records that do not match the given query. 
+ * Finds records that do not match the given query.
  */
 public class NotQuery extends Query {
 

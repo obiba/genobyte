@@ -105,7 +105,7 @@ class BitwiseAnnotationManager {
    */
   BitwiseAnnotationManager(Class<?> c) {
     //Make sure there is a BitwiseRecord annotation in the provided class.
-    if(c.isAnnotationPresent(BitwiseRecord.class) == false) {
+    if (c.isAnnotationPresent(BitwiseRecord.class) == false) {
       throw new InvalidAnnotationException(
           "Class [" + c.getName() + "] should be annotated with the @BitwiseRecord annotation.");
     }
@@ -130,17 +130,17 @@ class BitwiseAnnotationManager {
     PropertyDescriptor[] properties = null;
     try {
       properties = Introspector.getBeanInfo(c).getPropertyDescriptors();
-    } catch(IntrospectionException e) {
+    } catch (IntrospectionException e) {
       throw new InvalidAnnotationException(e.getMessage());
     }
 
     //Analyze each property. Discard properties having a @NotStored annotation, or if the "storeAll"
     //flag is not set to true.
-    for(int i = 0; i < properties.length; i++) {
+    for (int i = 0; i < properties.length; i++) {
       PropertyDescriptor property = properties[i];
 
       //Skip the class descriptor
-      if("class".equals(property.getName())) continue;
+      if ("class".equals(property.getName())) continue;
 
       //Get the PropertyDescriptor's field (the storing annotation might be there instead of with the get/set accessors)
       java.lang.reflect.Field currentField = extractPropertyField(c, property.getName());
@@ -149,26 +149,26 @@ class BitwiseAnnotationManager {
       Stored stored = null;
       NotStored notStored = null;
       boolean foundAnn = false;
-      Annotation[] storingAnn = { currentField != null ? currentField.getAnnotation(Stored.class) : null,
+      Annotation[] storingAnn = {currentField != null ? currentField.getAnnotation(Stored.class) : null,
           property.getReadMethod() != null ? property.getReadMethod().getAnnotation(Stored.class) : null,
           property.getWriteMethod() != null ? property.getWriteMethod().getAnnotation(Stored.class) : null,
           currentField != null ? currentField.getAnnotation(NotStored.class) : null,
           property.getReadMethod() != null ? property.getReadMethod().getAnnotation(NotStored.class) : null,
-          property.getWriteMethod() != null ? property.getWriteMethod().getAnnotation(NotStored.class) : null, };
+          property.getWriteMethod() != null ? property.getWriteMethod().getAnnotation(NotStored.class) : null,};
 
-      for(int j = 0; j < storingAnn.length; j++) {
+      for (int j = 0; j < storingAnn.length; j++) {
         Annotation currentAnn = storingAnn[j];
 
-        if(currentAnn != null) {
+        if (currentAnn != null) {
           //Make sure there is at most one of (@Stored or @NotStored) for a descriptor and its get/set methods
-          if(foundAnn == true) {
+          if (foundAnn == true) {
             throw new InvalidAnnotationException(
                 "Class [" + c.getName() + "] declares a property [" + property.getName() +
                     "] that has more than one of these annotations (@Stored or @NotStored).");
           }
 
           foundAnn = true;
-          if(currentAnn.annotationType().equals(Stored.class)) {
+          if (currentAnn.annotationType().equals(Stored.class)) {
             stored = (Stored) currentAnn;
           } else {
             notStored = (NotStored) currentAnn;
@@ -177,24 +177,24 @@ class BitwiseAnnotationManager {
       }
 
       //Skip the fields with @NotStored annotation
-      if(notStored != null) {
+      if (notStored != null) {
         continue;
       }
 
       //Skip fields without a @Stored annotation if parameter StoreAll == false
-      if(bitwiseAnnotation.storeAll() == false && stored == null) {
+      if (bitwiseAnnotation.storeAll() == false && stored == null) {
         continue;
       }
 
       //If a name was specified for the given field, use it. Otherwise, use the field name itself.
       String bitwiseField = property.getName();
-      if(stored != null && StringUtil.isEmptyString(stored.field()) == false) {
+      if (stored != null && StringUtil.isEmptyString(stored.field()) == false) {
         bitwiseField = stored.field();
       }
       storedFields_.put(property.getName(), bitwiseField);
 
       //If a dictionary was defined for the field, add the connection.
-      if(stored != null && StringUtil.isEmptyString(stored.dictionary()) == false) {
+      if (stored != null && StringUtil.isEmptyString(stored.dictionary()) == false) {
         propertyDictionary_.put(property.getName(), stored.dictionary());
       }
 
@@ -202,8 +202,8 @@ class BitwiseAnnotationManager {
       storedDescriptors_.add(property);
 
       //If a field is marked "unique", store it. There can only be one unique field.
-      if(stored != null && stored.unique() == true) {
-        if(uniqueFieldDescriptor_ != null) {
+      if (stored != null && stored.unique() == true) {
+        if (uniqueFieldDescriptor_ != null) {
           throw new InvalidAnnotationException(
               "Class [" + c.getName() + "] should can only have one Stored annotation with attribute uniqe == true.");
         }
@@ -215,11 +215,11 @@ class BitwiseAnnotationManager {
   private void extractDictionaryDef(Class<?> c) {
     BitwiseRecord bitwiseAnnotation = c.getAnnotation(BitwiseRecord.class);
 
-    if(bitwiseAnnotation != null) {
+    if (bitwiseAnnotation != null) {
       DictionaryDef dictAnn[] = bitwiseAnnotation.dictionary();
-      for(int i = 0; i < dictAnn.length; i++) {
+      for (int i = 0; i < dictAnn.length; i++) {
         String dictName = dictAnn[i].name();
-        if(dictionaries_.get(dictName) != null) {
+        if (dictionaries_.get(dictName) != null) {
           throw new InvalidAnnotationException(
               "There are two dictionaries with name [" + dictName + "] in the class hierarchy.");
         }
@@ -229,21 +229,22 @@ class BitwiseAnnotationManager {
     }
 
     Class<?> sc = c.getSuperclass();
-    if(sc != null) {
+    if (sc != null) {
       extractDictionaryDef(sc);
     }
   }
 
   /**
    * Processes class <tt>c</tt> to extract template fields from {@link FieldTemplate} annotation
+   *
    * @param c the class to process
    */
   private void extractTemplates(Class<?> c) {
     BitwiseRecord bitwiseAnnotation = c.getAnnotation(BitwiseRecord.class);
 
-    if(bitwiseAnnotation != null) {
+    if (bitwiseAnnotation != null) {
       FieldTemplate[] templates = bitwiseAnnotation.templates();
-      for(int i = 0; i < templates.length; i++) {
+      for (int i = 0; i < templates.length; i++) {
         String name = templates[i].prefix();
         String dictName = templates[i].dictionary();
         this.templateFields_.add(name);
@@ -252,23 +253,24 @@ class BitwiseAnnotationManager {
     }
 
     Class<?> sc = c.getSuperclass();
-    if(sc != null) {
+    if (sc != null) {
       extractTemplates(sc);
     }
   }
 
   /**
    * Looks recursively in a class and all of its super classes for a field with a given name.
-   * @param c is the class from where we will start looking.
+   *
+   * @param c     is the class from where we will start looking.
    * @param pName is the name of the field to look for.
    * @return The field with the name given in parameter.
    */
   private java.lang.reflect.Field extractPropertyField(Class<?> c, String pName) {
     try {
       return c.getDeclaredField(pName);
-    } catch(NoSuchFieldException e) {
+    } catch (NoSuchFieldException e) {
       Class<?> sc = c.getSuperclass();
-      if(sc != null) {
+      if (sc != null) {
         return extractPropertyField(sc, pName);
       } else {
         return null;

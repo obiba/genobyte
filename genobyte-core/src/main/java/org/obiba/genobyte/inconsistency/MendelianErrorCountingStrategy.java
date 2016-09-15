@@ -20,12 +20,14 @@ package org.obiba.genobyte.inconsistency;
 
 /**
  * Handles computed mendelian errors.
+ *
  * @param <K> the type of the compared records key
  */
 public interface MendelianErrorCountingStrategy<K> extends InconsistencyCountingStrategy<MendelianErrors<K>> {
 
   /**
    * Called by the {@link MendelianErrorCalculator} for every analysed trio or duo that produced at least one error.
+   *
    * @param errors the reported errors
    */
   public void countInconsistencies(MendelianErrors<K> errors);

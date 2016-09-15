@@ -32,7 +32,7 @@ public class MockBooleanQuery extends Query implements MockQuery {
 
   @Override
   public QueryResult execute(BitwiseStore store) throws QueryExecutionException {
-    switch(op_) {
+    switch (op_) {
       case AND:
         return left_.execute(store).and(right_.execute(store));
       case OR:
@@ -47,7 +47,7 @@ public class MockBooleanQuery extends Query implements MockQuery {
 
   @Override
   public boolean equals(Object o) {
-    if(o instanceof MockBooleanQuery) {
+    if (o instanceof MockBooleanQuery) {
       MockBooleanQuery rhs = (MockBooleanQuery) o;
       return op_.equals(rhs.op_) && left_.equals(rhs.left_) && right_.equals(rhs.right_);
     }

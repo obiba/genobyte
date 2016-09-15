@@ -70,10 +70,10 @@ public class FieldValueIteratorTest extends BaseBdbDaoTestCase {
     d = store_.getField(FIELD_NAME);
     assertNotNull(d);
     FieldValueIterator iter = new FieldValueIterator(d);
-    for(int i = 0; i < 2; i++) {
+    for (int i = 0; i < 2; i++) {
       assertTrue(iter.hasNext());
       FieldValueIterator.FieldValue value = iter.next();
-      if(i == 1) assertFalse(iter.hasNext());
+      if (i == 1) assertFalse(iter.hasNext());
       else assertTrue(iter.hasNext());
 
       assertNotNull(value);
@@ -104,10 +104,10 @@ public class FieldValueIteratorTest extends BaseBdbDaoTestCase {
     d = store_.getField(FIELD_NAME);
     assertNotNull(d);
     FieldValueIterator iter = new FieldValueIterator(d, new BitVectorQueryResult(mask));
-    for(int i = 0; i < 2; i++) {
+    for (int i = 0; i < 2; i++) {
       assertTrue(iter.hasNext());
       FieldValueIterator.FieldValue value = iter.next();
-      if(i == 1) assertFalse(iter.hasNext());
+      if (i == 1) assertFalse(iter.hasNext());
       else assertTrue(iter.hasNext());
 
       assertNotNull(value);
@@ -122,9 +122,9 @@ public class FieldValueIteratorTest extends BaseBdbDaoTestCase {
     Field f = store_.createField(FIELD_NAME);
     assertNotNull(f);
 
-    Integer[] values = { null, 5000, null };
+    Integer[] values = {null, 5000, null};
 
-    for(int i = 0; i < values.length; i++) {
+    for (int i = 0; i < values.length; i++) {
       int r = store_.nextIndex();
       f.setValue(r, f.getDictionary().lookup(values[i]));
     }
@@ -135,10 +135,10 @@ public class FieldValueIteratorTest extends BaseBdbDaoTestCase {
 
     assertNotNull(f);
     FieldValueIterator iter = new FieldValueIterator(f);
-    for(int i = 0; i < values.length; i++) {
+    for (int i = 0; i < values.length; i++) {
       assertTrue(iter.hasNext());
       FieldValueIterator.FieldValue value = iter.next();
-      if(i == values.length - 1) assertFalse(iter.hasNext());
+      if (i == values.length - 1) assertFalse(iter.hasNext());
       else assertTrue(iter.hasNext());
       assertNotNull(value);
       assertEquals(f.getDictionary().lookup(values[i]), value.getBitValue());

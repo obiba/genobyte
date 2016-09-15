@@ -26,7 +26,7 @@ import java.util.HashSet;
 import java.util.List;
 
 /**
- * Makes sure that default dictionary are well defined for various Java basic types (primitives, Strings, etc.) 
+ * Makes sure that default dictionary are well defined for various Java basic types (primitives, Strings, etc.)
  */
 public class DefaultDictionariesTest extends BaseBdbDaoTestCase {
   DefaultDictionaryFactory df_ = new DefaultDictionaryFactory();
@@ -50,12 +50,12 @@ public class DefaultDictionariesTest extends BaseBdbDaoTestCase {
     //Extract properties defined by this default dictionary instance
     List<Property> pList = meta.getProperties();
     HashSet<String> providedProp = new HashSet<String>();
-    for(Property p : pList) {
+    for (Property p : pList) {
       providedProp.add(p.getName());
     }
 
     //Check that all provided properties are part of the possible properties for an instance of this dictionary.
-    for(String propName : providedProp) {
+    for (String propName : providedProp) {
       assertTrue(pPossibleProp.contains(propName));
     }
   }

@@ -28,7 +28,6 @@ import org.obiba.bitwise.query.QueryResult;
  * first calls the {@link ComparableRecordProvider#getComparableReferenceRecords()} method. Then,
  * for each index set in the returned vector a call to {@link ComparableRecordProvider#getComparableRecords(int)}
  * is made in order to obtain all records that may be compared.
- *
  */
 public interface ComparableRecordProvider {
 

@@ -36,17 +36,24 @@ import org.obiba.genobyte.model.SnpCall;
  */
 public class ReproducibilityErrorCalculator<K> {
 
-  /** The store used to obtain the genotypes */
+  /**
+   * The store used to obtain the genotypes
+   */
   private GenotypingRecordStore<K, ?, ?> store_ = null;
 
-  /** The strategy used to handle reported errors */
+  /**
+   * The strategy used to handle reported errors
+   */
   private ReproducibilityErrorCountingStrategy<K> errorCountingStrategy_ = null;
 
-  /** The provider of records that should be compared */
+  /**
+   * The provider of records that should be compared
+   */
   private ComparableRecordProvider provider_ = null;
 
   /**
    * Constructs a calculator using the specified store (from which {@link DefaultGenotypingField#CALLS} will be obtained).
+   *
    * @param store the store used to obtain the calls
    */
   public ReproducibilityErrorCalculator(GenotypingRecordStore<K, ?, ?> store) {
@@ -55,6 +62,7 @@ public class ReproducibilityErrorCalculator<K> {
 
   /**
    * The instance of {@link ReproducibilityErrorCountingStrategy} that will handle computed errors.
+   *
    * @param strategy the counting strategy instance.
    */
   public void setCountingStrategy(ReproducibilityErrorCountingStrategy<K> strategy) {
@@ -63,6 +71,7 @@ public class ReproducibilityErrorCalculator<K> {
 
   /**
    * The instance of {@link ComparableRecordProvider} that provides the records to be compared.
+   *
    * @param provider the instance used to determine which records to compare
    */
   public void setComparableRecordProvider(ComparableRecordProvider provider) {
@@ -73,32 +82,32 @@ public class ReproducibilityErrorCalculator<K> {
    * Starts the reproducibility error computation process.
    */
   public void calculate() {
-    if(provider_ == null) {
+    if (provider_ == null) {
       provider_ = store_.getComparableRecordProvider();
     }
 
-    if(provider_ == null) {
+    if (provider_ == null) {
       return;
     }
     QueryResult references = provider_.getComparableReferenceRecords();
-    if(references == null) {
+    if (references == null) {
       // No reference records: nothing to do.
       return;
     }
 
     BitwiseRecordManager<K, ?> sampleManager = store_.getRecordManager();
-    for(int referenceIndex = references.next(0);
-        referenceIndex != -1; referenceIndex = references.next(referenceIndex + 1)) {
+    for (int referenceIndex = references.next(0);
+         referenceIndex != -1; referenceIndex = references.next(referenceIndex + 1)) {
       K referenceKey = sampleManager.getKey(referenceIndex);
       QueryResult rep = provider_.getComparableRecords(referenceIndex);
-      if(rep == null) {
+      if (rep == null) {
         // No comparable records
         continue;
       }
-      for(int replicateIndex = rep.next(0); replicateIndex != -1; replicateIndex = rep.next(replicateIndex + 1)) {
+      for (int replicateIndex = rep.next(0); replicateIndex != -1; replicateIndex = rep.next(replicateIndex + 1)) {
         K replicateKey = sampleManager.getKey(replicateIndex);
         ReproducibilityErrors<K> errors = reproErrors(referenceKey, replicateKey);
-        if(errors == null) {
+        if (errors == null) {
           // Either reference of replicate has no calls
           continue;
         }
@@ -120,14 +129,14 @@ public class ReproducibilityErrorCalculator<K> {
    */
   protected ReproducibilityErrors<K> reproErrors(K reference, K replicate) {
     Field refCalls = store_.getGenotypingField(DefaultGenotypingField.COMPARABLE_CALLS.getName(), reference);
-    if(refCalls == null) {
+    if (refCalls == null) {
       refCalls = store_.getGenotypingField(DefaultGenotypingField.CALLS.getName(), reference);
     }
     Field repCalls = store_.getGenotypingField(DefaultGenotypingField.COMPARABLE_CALLS.getName(), replicate);
-    if(repCalls == null) {
+    if (repCalls == null) {
       repCalls = store_.getGenotypingField(DefaultGenotypingField.CALLS.getName(), replicate);
     }
-    if(refCalls == null || repCalls == null) {
+    if (refCalls == null || repCalls == null) {
       return null;
     }
 

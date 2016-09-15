@@ -38,13 +38,13 @@ public @interface DictionaryDef {
 
   /**
    * Java class that defines the mechanics of a dictionary. Dictionary definition can be a class or a class name,
-   * but not both at the same time. Therefore, the elements dictionaryClass and dictionaryClassName are mutually exclusive. 
+   * but not both at the same time. Therefore, the elements dictionaryClass and dictionaryClassName are mutually exclusive.
    */
   Class<?> dictionaryClass() default void.class;
 
   /**
    * Java class that defines the mechanics of a dictionary. Dictionary definition can be a class or a class name,
-   * but not both at the same time. Therefore, the elements dictionaryClass and dictionaryClassName are mutually exclusive. 
+   * but not both at the same time. Therefore, the elements dictionaryClass and dictionaryClassName are mutually exclusive.
    */
   String dictionaryClassName() default "";
 

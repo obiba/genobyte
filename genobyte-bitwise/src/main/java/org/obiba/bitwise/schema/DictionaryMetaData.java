@@ -45,6 +45,7 @@ public class DictionaryMetaData implements Serializable {
 
   /**
    * Gets the dictionary class that will be used to encode/decode between original values and <tt>BitVectors</tt>.
+   *
    * @return the dictionary class.
    */
   public String getClazz() {
@@ -53,6 +54,7 @@ public class DictionaryMetaData implements Serializable {
 
   /**
    * Gets the name given to this <tt>DictionaryMetaData</tt> instance.
+   *
    * @return the name of this instance.
    */
   public String getName() {
@@ -61,6 +63,7 @@ public class DictionaryMetaData implements Serializable {
 
   /**
    * Sets the dictionary class that will be used to encode/decode between original values and <tt>BitVectors</tt>.
+   *
    * @param class1 the dictionary class.
    */
   public void setClass(String class1) {
@@ -69,6 +72,7 @@ public class DictionaryMetaData implements Serializable {
 
   /**
    * Sets the name given to this <tt>DictionaryMetaData</tt> instance.
+   *
    * @param name the name to set.
    */
   public void setName(String name) {
@@ -78,6 +82,7 @@ public class DictionaryMetaData implements Serializable {
   /**
    * Adds a property to this instance of a <tt>Dictionary</tt>. A property is always a name/value couple giving precision
    * about the way this dictionary will be used in a context.
+   *
    * @param prop the property to add to the dictionary.
    */
   public void addProperty(Property prop) {
@@ -86,6 +91,7 @@ public class DictionaryMetaData implements Serializable {
 
   /**
    * Gets the list of properties used for this dictionary in this context.
+   *
    * @return the list of properties.
    */
   public List<Property> getProperties() {
@@ -94,6 +100,7 @@ public class DictionaryMetaData implements Serializable {
 
   /**
    * Returns a string giving information about this dictionary used in this context, with its name and set of properties.
+   *
    * @return A String with the information relevant to this <tt>DictionaryMetaData</tt>.
    */
   @Override

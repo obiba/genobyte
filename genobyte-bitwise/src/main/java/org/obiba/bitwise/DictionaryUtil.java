@@ -56,7 +56,7 @@ class DictionaryUtil {
     dao.create(data);
 
     Dictionary<?> d = DictionaryInstantiator.createInstance(data.getName(), data.getClazz());
-    if(d == null) {
+    if (d == null) {
       throw new IllegalArgumentException("Dictonary meta data is invalid: " + data);
     }
     DictionaryInstantiator.setProperties(d, data.getProperties());
@@ -69,7 +69,7 @@ class DictionaryUtil {
     DictionaryDto data = dao.load(name);
 
     Dictionary<?> d = DictionaryInstantiator.createInstance(data.getName(), data.getClazz());
-    if(d == null) {
+    if (d == null) {
       throw new IllegalArgumentException("Dictonary meta data is invalid: " + data);
     }
     d.setRuntimeData(data.getRuntimeData());
@@ -79,13 +79,14 @@ class DictionaryUtil {
 
   /**
    * Saves a dictionary instance into disk.
+   *
    * @param d the dictionary to be saved.
    */
   void saveDictionary(Dictionary<?> d) {
     DictionaryDtoDao dao = (DictionaryDtoDao) KeyedDaoManager.getInstance(store_.getDaoKey())
         .getDao(DictionaryDtoDao.class);
     DictionaryDto data = dao.load(d.getName());
-    if(Arrays.equals(data.getRuntimeData(), d.getRuntimeData()) == false) {
+    if (Arrays.equals(data.getRuntimeData(), d.getRuntimeData()) == false) {
       data.setRuntimeData(d.getRuntimeData());
       dao.save(data);
     }

@@ -23,4 +23,5 @@ import org.obiba.bitwise.dto.BitwiseStoreDto;
 /**
  * DAO interface for persisting instances of <tt>BitwiseStoreDto</tt>.
  */
-public interface BitwiseStoreDtoDao extends CrudDao<BitwiseStoreDto, String> {}
+public interface BitwiseStoreDtoDao extends CrudDao<BitwiseStoreDto, String> {
+}

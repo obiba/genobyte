@@ -30,7 +30,7 @@ abstract class BaseAutoKeyDaoImpl<T, K> extends BaseCrudDaoImpl<T, K> {
   @Override
   public void create(T v) {
     K k = (K) getMap().append(v);
-    if(k == null) {
+    if (k == null) {
       throw new RuntimeException("Auto incremented key returned was null");
     }
     setAutoKey(k, v);

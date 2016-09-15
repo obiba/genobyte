@@ -20,6 +20,8 @@ package org.obiba.genobyte.model;
 
 /**
  * More specific version of a <tt>TransposedValue</tt> that applies only to <tt>SnpCall</tt> instances.
+ *
  * @param <K> the transposed record key type.
  */
-public class SnpGenotype<K> extends TransposedValue<K, SnpCall> {}
+public class SnpGenotype<K> extends TransposedValue<K, SnpCall> {
+}

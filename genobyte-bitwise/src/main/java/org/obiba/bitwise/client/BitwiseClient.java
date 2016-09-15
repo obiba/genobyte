@@ -53,6 +53,7 @@ public class BitwiseClient {
 
   /**
    * Adds a new command to the shell.
+   *
    * @param command
    */
   public void registerCommand(CliCommand command) {
@@ -63,6 +64,7 @@ public class BitwiseClient {
 
   /**
    * Prints the prompt data preceding every command line.
+   *
    * @param context is the ClientContext of this client.
    */
   private void prompt(ClientContext context) {
@@ -71,6 +73,7 @@ public class BitwiseClient {
 
   /**
    * Activates the command line client without providing any store information.
+   *
    * @throws IOException
    */
   public void execute() throws IOException {
@@ -83,6 +86,7 @@ public class BitwiseClient {
 
   /**
    * Activates the command line client by providing a BitwiseStore name to open.
+   *
    * @param pStoreName the name of the store to open.
    * @throws IOException
    */
@@ -95,6 +99,7 @@ public class BitwiseClient {
 
   /**
    * Activates the command line client by providing a BitwiseStore object.
+   *
    * @param store is the BitwiseStore to be queried
    * @throws IOException
    */
@@ -111,41 +116,41 @@ public class BitwiseClient {
 
     //Loop as long as there are no options asking to quit
     boolean quit = false;
-    while(!quit) {
+    while (!quit) {
       store = context.getStore();   //Store might have been switched
       prompt(context);
       String str = br.readLine();
       CommandLine cl = null;
       try {
         cl = bp.parse(options, str.split(" "));
-      } catch(ParseException e) {
+      } catch (ParseException e) {
         quit = help.execute(null, context);
       }
 
-      if(cl != null) {
+      if (cl != null) {
         Iterator<Option> commands = cl.iterator();
-        while(commands.hasNext()) {
+        while (commands.hasNext()) {
           Option o = commands.next();
           CliCommand c = commandMap.get(o.getOpt());
-          if(c == null) {
+          if (c == null) {
             System.err.println("Cannot find command for option [" + o + "]");
             quit = help.execute(null, context);
           } else {
             try {
               quit = c.execute(o, context);
-            } catch(ParseException e) {
+            } catch (ParseException e) {
               quit = help.execute(null, context);
             }
           }
         }
 
         //The given command is a query, as there are no options specified
-        if(cl.getOptions() == null || cl.getOptions().length == 0) {
+        if (cl.getOptions() == null || cl.getOptions().length == 0) {
           try {
             QueryParser parser = new QueryParser();
             String[] args = cl.getArgs();
             String queryString = StringUtil.aggregate(args, " ");
-            if(StringUtil.isEmptyString(queryString) == false) {
+            if (StringUtil.isEmptyString(queryString) == false) {
               long start = System.currentTimeMillis();
               Query q = parser.parse(queryString);
               QueryResult qr = q.execute(context.getStore());
@@ -155,8 +160,8 @@ public class BitwiseClient {
               //Prepare result display on screen
               List<String> fieldList = new Vector<String>();
               //Filter out template fields
-              for(String field : store.getFieldList()) {
-                if(field.matches(".*_\\d+")) {
+              for (String field : store.getFieldList()) {
+                if (field.matches(".*_\\d+")) {
                   continue;
                 }
                 fieldList.add(field);
@@ -164,7 +169,7 @@ public class BitwiseClient {
               ResultDisplay rd = new ResultDisplay(fieldList);
 //              rd.setDisplayType(ResultDisplay.DisplayType.PLAIN);
               int hitIndex = qr.next(0);
-              while(hitIndex != -1) {
+              while (hitIndex != -1) {
                 rd.putRecord(store, hitIndex);
                 hitIndex = qr.next(hitIndex + 1);
               }
@@ -173,9 +178,9 @@ public class BitwiseClient {
               System.out.println(rd.getOutput());
               System.out.println(qr.count() + " results in " + (end - start) + " milliseconds.\n");
             }
-          } catch(org.obiba.bitwise.query.ParseException e) {
+          } catch (org.obiba.bitwise.query.ParseException e) {
             System.err.println(e.getMessage());
-          } catch(Exception e) {
+          } catch (Exception e) {
             e.printStackTrace();
           }
         }

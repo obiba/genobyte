@@ -31,7 +31,11 @@ public class FakeStoreWithInheritance extends FakeStore {
     super();
   }
 
-  public Double getHappiness() { return happiness; }
+  public Double getHappiness() {
+    return happiness;
+  }
 
-  public void setHappiness(Double pHappiness) { happiness = pHappiness; }
+  public void setHappiness(Double pHappiness) {
+    happiness = pHappiness;
+  }
 }

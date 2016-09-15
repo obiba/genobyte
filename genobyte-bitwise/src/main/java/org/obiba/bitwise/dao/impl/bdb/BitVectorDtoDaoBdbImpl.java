@@ -47,7 +47,7 @@ public class BitVectorDtoDaoBdbImpl extends BaseAutoKeyDaoImpl<BitVectorDto, Lon
   private Database getVectorDb() {
     try {
       return getContext().getDatabase(VECTOR_DB);
-    } catch(DatabaseException e) {
+    } catch (DatabaseException e) {
       throw new RuntimeException(e);
     }
   }

@@ -59,11 +59,11 @@ public class DictionaryDtoDaoJdbmImpl extends BaseBTreeJdbmDaoImpl<DictionaryDto
     try {
       Tuple t = new Tuple();
       TupleBrowser tb = getBtree().browse();
-      while(tb.getNext(t) == true) {
+      while (tb.getNext(t) == true) {
         keys.add((String) t.getKey());
       }
       return keys;
-    } catch(IOException e) {
+    } catch (IOException e) {
       throw new JdbmRuntimeException(e);
     }
   }
@@ -99,21 +99,21 @@ public class DictionaryDtoDaoJdbmImpl extends BaseBTreeJdbmDaoImpl<DictionaryDto
 
         int propertyCount = dis.readInt();
         props = new ArrayList<Property>(propertyCount);
-        for(int i = 0; i < propertyCount; i++) {
+        for (int i = 0; i < propertyCount; i++) {
           String prop = dis.readUTF();
           String value = dis.readUTF();
           props.add(new Property(prop, value));
         }
         byte[] runtime = null;
         int runtimeSize = dis.readInt();
-        if(runtimeSize >= 0) {
+        if (runtimeSize >= 0) {
           runtime = new byte[runtimeSize];
           dis.read(runtime);
         }
 
         dis.close();
         return new DictionaryDto(name, className, props, runtime);
-      } catch(IOException e) {
+      } catch (IOException e) {
         throw new RuntimeException(e);
       }
     }
@@ -130,14 +130,14 @@ public class DictionaryDtoDaoJdbmImpl extends BaseBTreeJdbmDaoImpl<DictionaryDto
         dos.writeUTF(d.getName());
         dos.writeUTF(d.getClazz());
         dos.writeInt(size);
-        if(props != null) {
-          for(Property property : props) {
+        if (props != null) {
+          for (Property property : props) {
             dos.writeUTF(property.getName());
             dos.writeUTF(property.getValue());
           }
         }
         byte[] runtime = d.getRuntimeData();
-        if(runtime != null) {
+        if (runtime != null) {
           dos.writeInt(runtime.length);
           dos.write(runtime);
         } else {
@@ -145,7 +145,7 @@ public class DictionaryDtoDaoJdbmImpl extends BaseBTreeJdbmDaoImpl<DictionaryDto
         }
         dos.flush();
         return baos.toByteArray();
-      } catch(IOException e) {
+      } catch (IOException e) {
         throw new RuntimeException(e);
       }
     }

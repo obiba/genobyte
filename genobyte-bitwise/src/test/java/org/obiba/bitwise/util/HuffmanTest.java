@@ -35,16 +35,16 @@ public class HuffmanTest extends TestCase {
 
     Huffman hm = new Huffman(seed);
 
-    String testStrings[] = { "r", "rs", "rs2", "rs23", "rs232" };
-    for(int i = 0; i < testStrings.length; i++) {
+    String testStrings[] = {"r", "rs", "rs2", "rs23", "rs232"};
+    for (int i = 0; i < testStrings.length; i++) {
       String test = testStrings[i];
       BitVector code = hm.encode(test);
       assertNotNull(code);
       assertEquals(test, hm.decode(code));
     }
     // Test characters not part of original alphabet
-    String badTestStrings[] = { "a", "ab", "rsa", "222a" };
-    for(int i = 0; i < badTestStrings.length; i++) {
+    String badTestStrings[] = {"a", "ab", "rsa", "222a"};
+    for (int i = 0; i < badTestStrings.length; i++) {
       String test = badTestStrings[i];
       BitVector code = hm.encode(test);
       assertNull(code);

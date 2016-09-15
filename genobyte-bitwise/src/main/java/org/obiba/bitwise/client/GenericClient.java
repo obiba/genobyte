@@ -32,11 +32,11 @@ public class GenericClient {
   public static void main(String[] args) {
     String storeLocation = "./";
     String storeName = null;
-    for(int i = 0; i < args.length; i++) {
+    for (int i = 0; i < args.length; i++) {
       String arg = args[i];
-      if(arg.equalsIgnoreCase("--location")) {
+      if (arg.equalsIgnoreCase("--location")) {
         storeLocation = args[++i];
-      } else if(arg.equalsIgnoreCase("--name")) {
+      } else if (arg.equalsIgnoreCase("--name")) {
         storeName = args[++i];
       }
     }
@@ -48,18 +48,18 @@ public class GenericClient {
       //Bitwise client test
       BitwiseClient myClient = new BitwiseClient();
       try {
-        if(storeName != null) {
+        if (storeName != null) {
           myClient.execute(storeName);
         } else {
           myClient.execute();
         }
 
-      } catch(IOException e) {
+      } catch (IOException e) {
         System.out.println("An error has occured: " + e.toString());
       }
 
     } finally {
-      if(myStore != null) {
+      if (myStore != null) {
         myStore.endTransaction();
         myStore.close();
       }

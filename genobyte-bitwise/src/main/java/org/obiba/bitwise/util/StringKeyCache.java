@@ -28,6 +28,7 @@ import java.util.Map;
 
 /**
  * A {@link BitwiseRecordManager} for stores using a <tt>String</tt> unique field.
+ *
  * @param <T> the class holding data for a record in the store.
  */
 abstract public class StringKeyCache<T> implements BitwiseRecordManager<String, T> {
@@ -41,7 +42,7 @@ abstract public class StringKeyCache<T> implements BitwiseRecordManager<String, 
     impl_ = impl;
 
     FieldValueIterator keyIter = impl_.keys();
-    while(keyIter.hasNext()) {
+    while (keyIter.hasNext()) {
       FieldValueIterator.FieldValue value = keyIter.next();
       String key = (String) value.getValue();
       keyCache_.put(key, value.getIndex());
@@ -65,9 +66,9 @@ abstract public class StringKeyCache<T> implements BitwiseRecordManager<String, 
 
   synchronized public void delete(int index) {
     Integer i = new Integer(index);
-    for(Iterator iter = keyCache_.values().iterator(); iter.hasNext(); ) {
+    for (Iterator iter = keyCache_.values().iterator(); iter.hasNext(); ) {
       Integer value = (Integer) iter.next();
-      if(value.equals(i)) {
+      if (value.equals(i)) {
         iter.remove();
         break;
       }

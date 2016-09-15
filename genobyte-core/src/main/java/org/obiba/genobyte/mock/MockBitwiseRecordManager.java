@@ -9,11 +9,11 @@
  */
 package org.obiba.genobyte.mock;
 
-import java.util.List;
-
 import org.obiba.bitwise.BitwiseRecordManager;
 import org.obiba.bitwise.BitwiseStore;
 import org.obiba.bitwise.FieldValueIterator;
+
+import java.util.List;
 
 public class MockBitwiseRecordManager implements BitwiseRecordManager<Integer, Object> {
 

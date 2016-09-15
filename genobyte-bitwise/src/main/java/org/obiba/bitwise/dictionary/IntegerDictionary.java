@@ -47,7 +47,8 @@ public class IntegerDictionary extends AbstractStaticDictionary<Integer> {
 
   /**
    * Sets the lower bound (minimum) for encoded values. Any value to encode to a <tt>BitVector</tt> must be higher or equal to this value.
-   * @param pLower the lower bound 
+   *
+   * @param pLower the lower bound
    */
   public void setLower(String pLower) {
     lower_ = Integer.parseInt(pLower);
@@ -56,7 +57,8 @@ public class IntegerDictionary extends AbstractStaticDictionary<Integer> {
 
   /**
    * Sets the upper bound (maximum) for encoded values. Any value to encode to a <tt>BitVector</tt> must be lower or equal to this value.
-   * @param pUpper the upper bound 
+   *
+   * @param pUpper the upper bound
    */
   public void setUpper(String pUpper) {
     upper_ = Integer.parseInt(pUpper);
@@ -66,7 +68,8 @@ public class IntegerDictionary extends AbstractStaticDictionary<Integer> {
   /**
    * Sets the value sampling increment for encoded values. Values that fall between two increment values in this this dictionary
    * will take the value of the closest higher increment.
-   * @param pStep the step between each sampled value. 
+   *
+   * @param pStep the step between each sampled value.
    */
   public void setStep(String pStep) {
     step_ = Integer.parseInt(pStep);
@@ -79,11 +82,11 @@ public class IntegerDictionary extends AbstractStaticDictionary<Integer> {
 
   public Integer convert(String value) {
     validateProperties();
-    if(value == null) {
+    if (value == null) {
       return null;
     }
     int i = Integer.parseInt(value);
-    if(i > upper_ || i < lower_) {
+    if (i > upper_ || i < lower_) {
       return null;
     }
     return i;
@@ -91,14 +94,14 @@ public class IntegerDictionary extends AbstractStaticDictionary<Integer> {
 
   public BitVector lookup(Integer key) {
     validateProperties();
-    if(key == null) {
+    if (key == null) {
       return null;
     }
     int d = key.intValue();
-    if(lower_ > d) {
+    if (lower_ > d) {
       return null;
     }
-    if(upper_ < d) {
+    if (upper_ < d) {
       return null;
     }
     long ord = ((long) (d - lower_) / step_) + 1;
@@ -107,7 +110,7 @@ public class IntegerDictionary extends AbstractStaticDictionary<Integer> {
 
   public Integer reverseLookup(BitVector v) {
     validateProperties();
-    if(v == null) {
+    if (v == null) {
       return null;
     }
     return lower_ + (int) (BitUtil.longValue(v) - 1) * step_;
@@ -115,7 +118,7 @@ public class IntegerDictionary extends AbstractStaticDictionary<Integer> {
 
   public int dimension() {
     validateProperties();
-    if(dimension_ == -1) {
+    if (dimension_ == -1) {
       dimension_ = BitUtil.dimension(((long) upper_ - (long) lower_) / (long) step_ + 1);
     }
     return dimension_;
@@ -127,7 +130,7 @@ public class IntegerDictionary extends AbstractStaticDictionary<Integer> {
 
   @Override
   public boolean equals(Object obj) {
-    if(obj instanceof IntegerDictionary) {
+    if (obj instanceof IntegerDictionary) {
       IntegerDictionary id = (IntegerDictionary) obj;
       return this.step_ == id.step_ && this.lower_ == id.lower_ && this.upper_ == id.upper_;
     }
@@ -140,13 +143,13 @@ public class IntegerDictionary extends AbstractStaticDictionary<Integer> {
    * is no way to know in which order they have been defined.
    */
   private void validateProperties() {
-    if(propsValidated) {
+    if (propsValidated) {
       return;
     }
-    if(step_ == 0) {
+    if (step_ == 0) {
       throw new IllegalArgumentException("Argument step cannot be zero.");
     }
-    if(lower_ >= upper_) {
+    if (lower_ >= upper_) {
       throw new IllegalArgumentException("Lower bound must be less than upper bound.");
     }
     propsValidated = true;

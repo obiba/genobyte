@@ -20,9 +20,9 @@ package org.obiba.genobyte.statistic;
 
 import org.obiba.bitwise.BitVector;
 import org.obiba.bitwise.VolatileField;
+import org.obiba.bitwise.util.BitVectorQueryResult;
 import org.obiba.genobyte.dao.BaseBdbDaoTestCase;
 import org.obiba.genobyte.mock.MockBitwiseStore;
-import org.obiba.bitwise.util.BitVectorQueryResult;
 import org.obiba.genobyte.mock.MockGenotypingStore;
 import org.obiba.genobyte.model.SnpCall;
 import org.obiba.genobyte.statistic.util.CallRate;

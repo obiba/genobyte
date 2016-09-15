@@ -32,6 +32,7 @@ public class StoreSchemaFactory {
 
   /**
    * Create a schema using the annotations of the class given as parameter.
+   *
    * @param pClass is the model class to build the store schema.
    * @return The newly created store schema.
    */
@@ -42,6 +43,7 @@ public class StoreSchemaFactory {
 
   /**
    * Create a schema using an XML document provided as an InputSource.
+   *
    * @param pIs is the InputSource object linked to the XML Store definition document.
    * @return The newly created store schema.
    */

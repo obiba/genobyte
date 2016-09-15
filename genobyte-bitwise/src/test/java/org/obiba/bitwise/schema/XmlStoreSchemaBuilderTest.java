@@ -42,7 +42,7 @@ public class XmlStoreSchemaBuilderTest extends TestCase {
     StoreSchema ss = null;
     try {
       ss = builder.parse(new InputSource(getTestSchemaStream()));
-    } catch(Throwable t) {
+    } catch (Throwable t) {
       assertFalse("Unexpected exception thrown: " + t.getMessage(), true);
       return;
     }

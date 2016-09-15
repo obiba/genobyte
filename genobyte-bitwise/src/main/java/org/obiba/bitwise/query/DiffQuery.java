@@ -39,17 +39,17 @@ public class DiffQuery extends Query {
   @Override
   public QueryResult execute(BitwiseStore store) throws QueryExecutionException {
     Field field1 = store.getField(field1_);
-    if(field1 == null) {
+    if (field1 == null) {
       throw invalidField(store, field1_);
     }
     Field field2 = store.getField(field2_);
-    if(field2 == null) {
+    if (field2 == null) {
       throw invalidField(store, field2_);
     }
 
     try {
       return field1.diff(field2);
-    } catch(IllegalArgumentException e) {
+    } catch (IllegalArgumentException e) {
       throw new QueryExecutionException(e);
     }
   }

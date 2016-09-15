@@ -90,7 +90,7 @@ public class FieldQueryTest extends BaseBdbDaoTestCase {
     try {
       q1 = qp.parse(query1);
       q2 = qp.parse(query2);
-    } catch(ParseException e) {
+    } catch (ParseException e) {
       throw new RuntimeException(e);
     }
     QueryResult qr1 = q1.execute(store_);
@@ -122,7 +122,7 @@ public class FieldQueryTest extends BaseBdbDaoTestCase {
     try {
       q1 = qp.parse(query1);
       q2 = qp.parse(query2);
-    } catch(ParseException e) {
+    } catch (ParseException e) {
       throw new RuntimeException(e);
     }
     QueryResult qr1 = q1.execute(store_);
@@ -154,7 +154,7 @@ public class FieldQueryTest extends BaseBdbDaoTestCase {
     try {
       q1 = qp.parse(query1);
       q2 = qp.parse(query2);
-    } catch(ParseException e) {
+    } catch (ParseException e) {
       throw new RuntimeException(e);
     }
     QueryResult qr1 = q1.execute(store_);
@@ -174,7 +174,7 @@ public class FieldQueryTest extends BaseBdbDaoTestCase {
 
   /**
    * Testing AND NOT
-   *
+   * <p>
    * andNot operator is not currently used in the query grammar, so let's do it manually with two
    * ResultQuery stems.
    */
@@ -188,7 +188,7 @@ public class FieldQueryTest extends BaseBdbDaoTestCase {
     try {
       q1 = qp.parse(query1);
       q2 = qp.parse(query2);
-    } catch(ParseException e) {
+    } catch (ParseException e) {
       throw new RuntimeException(e);
     }
     QueryResult qr1 = q1.execute(store_);
@@ -219,7 +219,7 @@ public class FieldQueryTest extends BaseBdbDaoTestCase {
     try {
       q1 = qp.parse(query1);
       q2 = qp.parse(query2);
-    } catch(ParseException e) {
+    } catch (ParseException e) {
       throw new RuntimeException(e);
     }
     QueryResult qr1 = q1.execute(store_);
@@ -239,7 +239,7 @@ public class FieldQueryTest extends BaseBdbDaoTestCase {
     try {
       q1 = qp.parse(query1);
       q2 = qp.parse(query2);
-    } catch(ParseException e) {
+    } catch (ParseException e) {
       throw new RuntimeException(e);
     }
     QueryResult qr1 = q1.execute(store_);
@@ -261,7 +261,7 @@ public class FieldQueryTest extends BaseBdbDaoTestCase {
     try {
       q1 = qp.parse(query1);
       q2 = qp.parse(query2);
-    } catch(ParseException e) {
+    } catch (ParseException e) {
       throw new RuntimeException(e);
     }
     QueryResult qr1 = q1.execute(store_);
@@ -281,7 +281,7 @@ public class FieldQueryTest extends BaseBdbDaoTestCase {
     try {
       q1 = qp.parse(query1);
       q2 = qp.parse(query2);
-    } catch(ParseException e) {
+    } catch (ParseException e) {
       throw new RuntimeException(e);
     }
     QueryResult qr1 = q1.execute(store_);

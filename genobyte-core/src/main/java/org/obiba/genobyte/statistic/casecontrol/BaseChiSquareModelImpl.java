@@ -18,10 +18,10 @@
  *******************************************************************************/
 package org.obiba.genobyte.statistic.casecontrol;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * Helper class for implementations of the CaseControlChiSquareModel interface
@@ -38,8 +38,8 @@ public abstract class BaseChiSquareModelImpl implements CaseControlChiSquareMode
   }
 
   public double calculateEmpiricalPValue(double referenceChiSquare,
-      List<CaseControlGenotypeFrequency> empiricalValues) {
-    if(empiricalValues == null || empiricalValues.isEmpty() == true) {
+                                         List<CaseControlGenotypeFrequency> empiricalValues) {
+    if (empiricalValues == null || empiricalValues.isEmpty() == true) {
       return 0;
     }
 
@@ -49,21 +49,21 @@ public abstract class BaseChiSquareModelImpl implements CaseControlChiSquareMode
     // The number of empirical chi-square values higher than the reference chi-square
     int pValue = 0;
 
-    for(CaseControlGenotypeFrequency empiricalValue : empiricalValues) {
+    for (CaseControlGenotypeFrequency empiricalValue : empiricalValues) {
       double chiSquare = calculateChiSquare(empiricalValue);
-      if(Double.compare(chiSquare, 0.0) < 0) {
+      if (Double.compare(chiSquare, 0.0) < 0) {
         log.warn("Chi square model is erronous: chiSquare=[{}] from frequency=[{}]", chiSquare, empiricalValue);
         samplingSize--;
         continue;
       }
 
-      if(Double.compare(chiSquare, referenceChiSquare) > 0) {
+      if (Double.compare(chiSquare, referenceChiSquare) > 0) {
         pValue++;
       }
     }
 
     // Sanity check
-    if(samplingSize == 0) {
+    if (samplingSize == 0) {
       ePValue = Double.NaN;
     } else {
       ePValue = (double) pValue / (double) samplingSize;

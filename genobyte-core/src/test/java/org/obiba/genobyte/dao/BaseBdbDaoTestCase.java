@@ -11,28 +11,17 @@ package org.obiba.genobyte.dao;
 
 import junit.framework.TestCase;
 import org.obiba.bitwise.BitwiseStoreUtil;
-import org.obiba.bitwise.dao.DaoKey;
-import org.obiba.bitwise.dao.KeyedDaoManager;
 import org.obiba.bitwise.util.BitwiseDiskUtil;
-import org.obiba.bitwise.util.BitwiseStoreTestingHelper;
 import org.obiba.bitwise.util.DefaultConfigurationPropertiesProvider;
 import org.obiba.bitwise.util.FileUtil;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 public class BaseBdbDaoTestCase extends TestCase {
 
-  private static final List<BitwiseStoreTestingHelper> stores_ = new ArrayList<BitwiseStoreTestingHelper>();
-
   public BaseBdbDaoTestCase() {
     super();
-  }
-
-  public BaseBdbDaoTestCase(String t) {
-    super(t);
   }
 
   @Override
@@ -41,33 +30,21 @@ public class BaseBdbDaoTestCase extends TestCase {
     DefaultConfigurationPropertiesProvider.setAsProvider("./src/test/java/test-bitwise.properties");
     try {
       FileUtil.deltree(BitwiseDiskUtil.getRoot());
-    } catch(IOException e) {
+    } catch (IOException e) {
     }
   }
 
   @Override
   protected void tearDown() throws Exception {
     Set<String> stores = BitwiseStoreUtil.getInstance().list();
-    for(String store : stores) {
+    for (String store : stores) {
       BitwiseStoreUtil.getInstance().forceClose(store);
-    }
-    for(BitwiseStoreTestingHelper store : stores_) {
-      KeyedDaoManager.destroyInstance(store.getDaoKey());
     }
     try {
       FileUtil.deltree(BitwiseDiskUtil.getRoot());
-    } catch(IOException e) {
+    } catch (IOException e) {
     }
     super.tearDown();
-  }
-
-  protected BitwiseStoreTestingHelper createMockStore(String name, int capacity) {
-    DefaultConfigurationPropertiesProvider provider = new DefaultConfigurationPropertiesProvider(
-        "./src/test/java/test-bitwise.properties");
-    BitwiseStoreTestingHelper store = new BitwiseStoreTestingHelper(name, capacity);
-    stores_.add(store);
-    KeyedDaoManager.createInstance(new DaoKey(name), provider.getDefaultProperties());
-    return store;
   }
 
 }

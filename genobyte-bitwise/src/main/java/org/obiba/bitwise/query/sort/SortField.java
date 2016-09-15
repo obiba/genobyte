@@ -20,14 +20,19 @@ package org.obiba.bitwise.query.sort;
 
 /**
  * Sorting clause on a field, in ascending or descending direction.
+ *
  * @author plaflamm
  */
 public class SortField {
 
-  /** The field name to sort on */
+  /**
+   * The field name to sort on
+   */
   private String field_ = null;
 
-  /** Set to true to sort in reverse order */
+  /**
+   * Set to true to sort in reverse order
+   */
   private boolean reverse_ = false;
 
   public SortField(String field) {
@@ -42,6 +47,7 @@ public class SortField {
 
   /**
    * Gets the field this sort criterion is based on.
+   *
    * @return Returns the field.
    */
   public String getField() {
@@ -50,6 +56,7 @@ public class SortField {
 
   /**
    * Tells whether the sort direction is ascending or descending.
+   *
    * @return <tt>true</tt> is the sort direction is descending, <tt>false</tt> if it is ascending.
    */
   public boolean isReverse() {
@@ -61,7 +68,7 @@ public class SortField {
    */
   @Override
   public boolean equals(Object o) {
-    if(o instanceof SortField) {
+    if (o instanceof SortField) {
       SortField sf = (SortField) o;
       return field_.equals(sf.field_) && reverse_ == sf.reverse_;
     }

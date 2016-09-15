@@ -82,7 +82,7 @@ public class RangeQueryTest extends BaseBdbDaoTestCase {
     try {
       q1 = qp.parse(query1);
       q2 = qp.parse(query2);
-    } catch(ParseException e) {
+    } catch (ParseException e) {
       throw new RuntimeException(e);
     }
 
@@ -90,7 +90,7 @@ public class RangeQueryTest extends BaseBdbDaoTestCase {
     boolean success = false;
     try {
       q1.execute(store_);
-    } catch(InvalidQueryTypeException iqte) {
+    } catch (InvalidQueryTypeException iqte) {
       success = true;
     }
     assertTrue(success);
@@ -99,7 +99,7 @@ public class RangeQueryTest extends BaseBdbDaoTestCase {
     success = false;
     try {
       q2.execute(store_);
-    } catch(InvalidQueryTypeException iqte) {
+    } catch (InvalidQueryTypeException iqte) {
       success = true;
     }
     assertTrue(success);

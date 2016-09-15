@@ -49,18 +49,18 @@ public class MockWildcardQuery extends Query implements MockQuery {
    *    2- The valuePre of both must be null or equal
    *    3- The valuePost of both must be null or equal
    */ public boolean equals(Object o) {
-    if(o instanceof MockWildcardQuery) {
+    if (o instanceof MockWildcardQuery) {
       MockWildcardQuery rhs = (MockWildcardQuery) o;
 
       boolean preEqual = false;
-      if(valuePre_ == null) {
+      if (valuePre_ == null) {
         preEqual = (rhs.valuePre_ == null);
       } else {
         preEqual = valuePre_.equals(rhs.valuePre_);
       }
 
       boolean postEqual = false;
-      if(valuePost_ == null) {
+      if (valuePost_ == null) {
         postEqual = (rhs.valuePost_ == null);
       } else {
         postEqual = valuePost_.equals(rhs.valuePost_);

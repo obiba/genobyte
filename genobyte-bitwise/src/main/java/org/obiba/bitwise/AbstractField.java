@@ -34,7 +34,9 @@ public abstract class AbstractField {
 
   protected BitVector nulls_ = null;
 
-  /** A BitVector of zeroes used to represent the non-initialized vector(s) */
+  /**
+   * A BitVector of zeroes used to represent the non-initialized vector(s)
+   */
   private BitVector EMPTY = null;
 
   BitVector[] getBitVectors() {
@@ -47,7 +49,8 @@ public abstract class AbstractField {
 
   /**
    * Returns the name of this instance of <code>Field</code>. Every field in a <code>BitwiseStore</code>
-   * has a unique name that identifies it. 
+   * has a unique name that identifies it.
+   *
    * @return the name of this <code>Field</code> instance.
    */
   final public String getName() {
@@ -56,6 +59,7 @@ public abstract class AbstractField {
 
   /**
    * Returns the number of records that can currently be holded in this <code>Field</code> object.
+   *
    * @return the maximum number of records that can currently be holded in this <code>Field</code>.
    */
   final public int getSize() {
@@ -64,15 +68,16 @@ public abstract class AbstractField {
 
   /**
    * Increases the number of records that can be holded in this <code>Field</code> object.
+   *
    * @param size the new number of records that can be holded in the <code>Field</code>. This number
-   * is the new total number of records, not the number of records to increase. It must be equal or
-   * higher than the current maximum number of records.
+   *             is the new total number of records, not the number of records to increase. It must be equal or
+   *             higher than the current maximum number of records.
    */
   public void grow(int size) {
     data_.setSize(size);
-    for(int i = 0; i < vectors_.length; i++) {
+    for (int i = 0; i < vectors_.length; i++) {
       BitVector v = vectors_[i];
-      if(v != null) {
+      if (v != null) {
         v.grow(size);
       }
     }
@@ -81,8 +86,9 @@ public abstract class AbstractField {
   }
 
   /**
-   * Returns the dictionary used to encode values from their native type to the Bitwise format and vice versa. 
-   * @return the dictionary object used by this <code>Field</code>. 
+   * Returns the dictionary used to encode values from their native type to the Bitwise format and vice versa.
+   *
+   * @return the dictionary object used by this <code>Field</code>.
    */
   @SuppressWarnings("unchecked")
   public <T> Dictionary<T> getDictionary() {
@@ -93,21 +99,22 @@ public abstract class AbstractField {
    * Returns a <code>ResultVector</code> with ones for every index that has the specified value. If
    * the dictionary lookup fails, the resulting vector will be all zeroes. If the specified
    * value is null, the result will contain ones for every index for which the value is null.
+   *
    * @param value the value, encoded into bits, to be searched for in all records.
    * @return the result of the query.
    */
   public QueryResult query(BitVector query) {
     BitVector result = new BitVector(data_.getSize());
     result.setAll();
-    if(query == null) {
+    if (query == null) {
       //Find records that hold the null value (i.e. all bits holding the value are set to zero)
-      for(int i = 0; i < vectors_.length; i++) {
+      for (int i = 0; i < vectors_.length; i++) {
         result.andNot(safeVector(i));
       }
     } else {
       int qSize = query.size();
-      for(int i = 0; i < qSize; i++) {
-        if(query.get(i)) {
+      for (int i = 0; i < qSize; i++) {
+        if (query.get(i)) {
           result.and(safeVector(i));
         } else {
           result.andNot(safeVector(i));
@@ -121,7 +128,8 @@ public abstract class AbstractField {
    * Runs a bit to bit comparison starting from the right between the
    * <code>query</code> BitVector and the field vectors, for as many bits as
    * there are in the <code>query</code> BitVector.
-   * @param query is the bit sequence searched by the user.
+   *
+   * @param query          is the bit sequence searched by the user.
    * @param variableLength is true if field can be padded with zeros at the end to represent the absence of data.
    * @return A <code>ResultVector</code> with ones for every index that has the specified value. If the dictionary
    * lookup fails, the vector will be all zeroes. If the specified value is null, the result will contain ones for
@@ -130,9 +138,9 @@ public abstract class AbstractField {
   public QueryResult queryRight(BitVector query, boolean variableLength) {
     BitVector result = new BitVector(data_.getSize());
     result.clearAll();
-    if(query == null) {
+    if (query == null) {
       //Find records that hold the null value (i.e. all bits holding the value are set to zero)
-      for(int i = 0; i < vectors_.length; i++) {
+      for (int i = 0; i < vectors_.length; i++) {
         result.andNot(safeVector(i));
       }
     } else {
@@ -145,7 +153,7 @@ public abstract class AbstractField {
       //end of the field might represent the absence of data. If all the records
       //are using the whole field length, no need to iterate throught zero offsets.
       int iterCount = 1;
-      if(variableLength) {
+      if (variableLength) {
         iterCount = bitCount - qSize + 1;
       }
 
@@ -157,7 +165,7 @@ public abstract class AbstractField {
 
       //offset is the number of bits we must skip from the right
       int offset = 0;
-      while((offset < iterCount) && (toProcess.count() != 0)) {
+      while ((offset < iterCount) && (toProcess.count() != 0)) {
         BitVector iterResult = new BitVector(data_.getSize());    //Vector with the current offset iteration results
         iterResult.setAll();
         int areaLastBit = bitCount - offset -
@@ -166,8 +174,8 @@ public abstract class AbstractField {
             safeVector(areaLastBit));          //All records with a one bit shouldn't be checked in following offsets
 
         //Check that all bits in the checked area correspond to the query bits
-        for(int i = 0; i < qSize; i++) {
-          if(query.get(qSize - i - 1)) {
+        for (int i = 0; i < qSize; i++) {
+          if (query.get(qSize - i - 1)) {
             iterResult.and(safeVector(areaLastBit - i));
           } else {
             iterResult.andNot(safeVector(areaLastBit - i));
@@ -181,14 +189,15 @@ public abstract class AbstractField {
   }
 
   /**
-   * Returns a <code>ResultVector</code> with ones for every index that has a 
+   * Returns a <code>ResultVector</code> with ones for every index that has a
    * value between <code>from</code> and <code>to</code> (inclusive). If
    * the dictionary lookup fails, the resulting vector will be all zeroes.
+   *
    * @param value
    * @return the result of th query.
    */
   public QueryResult rangeQuery(BitVector qFrom, BitVector qTo) {
-    if(qFrom == null || qTo == null) {
+    if (qFrom == null || qTo == null) {
       return new ResultVector(new BitVector(data_.getSize()), resultFilter(true), store_.getDeleted());
     }
 
@@ -212,18 +221,19 @@ public abstract class AbstractField {
   /**
    * By comparing values from this field with <code>f2</code>, this method returns a <code>BitVector</code>
    * with ones for every record for which the value differs.
+   *
    * @param f2 the <code>Field</code> to compare.
    * @return a BitVector with bits set for every value that is different in both fields
    */
   public QueryResult diff(AbstractField f2) {
-    if(dictionary_.getName().equals(f2.getDictionary().getName()) == false) {
+    if (dictionary_.getName().equals(f2.getDictionary().getName()) == false) {
       throw new IllegalArgumentException(
           "Cannot diff field [" + this.getName() + "] and [" + f2.getName() + "]: dictionaries are not the same.");
     }
     BitVector result = new BitVector(data_.getSize());
 
     int d = dictionary_.dimension();
-    for(int i = 0; i < d; i++) {
+    for (int i = 0; i < d; i++) {
       BitVector v1 = new BitVector(this.safeVector(i));
       BitVector v2 = f2.safeVector(i);
       result.or(v1.xor(v2));
@@ -232,22 +242,23 @@ public abstract class AbstractField {
   }
 
   /**
-   * Set the value <code>o</code> at the index <code>record</code>. If the value is not null, it is looked up in 
-   * the field's dictionary and its bit value is stored. If the value is null, the field will store the null 
+   * Set the value <code>o</code> at the index <code>record</code>. If the value is not null, it is looked up in
+   * the field's dictionary and its bit value is stored. If the value is null, the field will store the null
    * representation at the index.
+   *
    * @param record the index at which to store the value.
-   * @param value the value to store.
+   * @param value  the value to store.
    */
   public void setValue(int record, BitVector value) {
-    if(record >= getSize()) {
+    if (record >= getSize()) {
       throw new IndexOutOfBoundsException("Record index [" + record + "] >= " + getSize());
     }
 
     //Value to put at index "record" is the null value, represented by zeros in all BitVectors.
-    if(value == null) {
-      for(int i = 0; i < vectors_.length; i++) {
+    if (value == null) {
+      for (int i = 0; i < vectors_.length; i++) {
         BitVector v = vectors_[i];
-        if(v != null) {
+        if (v != null) {
           v.clear(record);
         }
       }
@@ -258,20 +269,20 @@ public abstract class AbstractField {
     //Value to put at index "record" is a non-null value.
     int dimensions = value.size();
     internalGetNulls().clear(record);
-    for(int i = 0; i < dimensions; i++) {
+    for (int i = 0; i < dimensions; i++) {
       BitVector v = null;
-      if(i < vectors_.length) {
+      if (i < vectors_.length) {
         v = vectors_[i];
       }
-      if(value.get(i)) {
-        if(v == null) {
+      if (value.get(i)) {
+        if (v == null) {
           // Either the dictionary grew or it's the first time we are inserting a one in this vector
           createDimension(i);
           v = vectors_[i];
         }
         v.set(record);
       } else {
-        if(i < vectors_.length && v != null) {
+        if (i < vectors_.length && v != null) {
           v.clear(record);
         }
       }
@@ -280,23 +291,24 @@ public abstract class AbstractField {
 
   /**
    * Gets the value found at a specific record index.
+   *
    * @param record the index of the record to be fetched.
    * @return a <code>BitVector</code> with the value encoded in a BitVector.
    */
   public BitVector getValue(int record) {
-    if(record >= getSize()) {
+    if (record >= getSize()) {
       throw new IndexOutOfBoundsException("Record index [" + record + "] >= " + getSize());
     }
 
     // Quick nullness check.
-    if(internalGetNulls().get(record)) {
+    if (internalGetNulls().get(record)) {
       return null;
     }
 
     BitVector v = new BitVector(vectors_.length);
-    for(int i = 0; i < vectors_.length; i++) {
+    for (int i = 0; i < vectors_.length; i++) {
       BitVector vector = vectors_[i];
-      if(vector != null && vector.get(record)) {
+      if (vector != null && vector.get(record)) {
         v.set(i);
       }
     }
@@ -305,25 +317,26 @@ public abstract class AbstractField {
 
   /**
    * Copy the value from sourceIndex in sourceField into this field at targetIndex.
+   *
    * @throws IllegalArgumentException when this field and the source field don't have the same dictionary.
    */
   public void copyValue(int targetIndex, int sourceIndex, AbstractField sourceField) {
-    for(int i = 0; i < this.vectors_.length; i++) {
+    for (int i = 0; i < this.vectors_.length; i++) {
       BitVector targetVector = this.vectors_[i];
       BitVector sourceVector = null;
       // Source vector may be missing for dynamic dictionaries
-      if(i < sourceField.vectors_.length) {
+      if (i < sourceField.vectors_.length) {
         sourceVector = sourceField.vectors_[i];
       }
 
-      if(sourceVector != null && sourceVector.get(sourceIndex)) {
-        if(targetVector == null) {
+      if (sourceVector != null && sourceVector.get(sourceIndex)) {
+        if (targetVector == null) {
           createDimension(i);
           targetVector = vectors_[i];
         }
         targetVector.set(targetIndex);
       } else {
-        if(targetVector != null) {
+        if (targetVector != null) {
           targetVector.clear(targetIndex);
         }
       }
@@ -335,6 +348,7 @@ public abstract class AbstractField {
 
   /**
    * Returns true if the value for recrod <code>record</code> is null.
+   *
    * @param record the record index to test
    * @return true if the value for recrod <code>record</code> is null.
    */
@@ -361,6 +375,7 @@ public abstract class AbstractField {
 
   /**
    * Initializes the dimension <code>d</code> of the field.
+   *
    * @param d the index of the bit vector to initialize
    */
   private void createDimension(int d) {
@@ -369,11 +384,12 @@ public abstract class AbstractField {
 
   /**
    * Initializes the dimension <code>d</code> of the field with the specified {@link BitVector}
+   *
    * @param d the index of the bit vector to initialize
    * @param v the new dimension's vector
    */
   private void createDimension(int d, BitVector v) {
-    if(vectors_.length <= d) {
+    if (vectors_.length <= d) {
       BitVector tempVectors[] = new BitVector[d + 1];
       System.arraycopy(vectors_, 0, tempVectors, 0, vectors_.length);
       vectors_ = tempVectors;
@@ -388,6 +404,7 @@ public abstract class AbstractField {
 
   /**
    * Finds k such that f(k) != t(k) and f(i) == t(i) for every i > k
+   *
    * @param f the lower bound of the range query (inclusive)
    * @param t the upper bound of the range query (inclusive)
    * @return k
@@ -400,8 +417,8 @@ public abstract class AbstractField {
     // find k such that a(k) != b(k) and a(i) == b(i) for every i > k
     // k is the last set bit in vector v
     int k = 0;
-    for(int i = k; i < v.size(); i++) {
-      if(v.get(i)) {
+    for (int i = k; i < v.size(); i++) {
+      if (v.get(i)) {
         // bits are different
         k = i;
       }
@@ -411,6 +428,7 @@ public abstract class AbstractField {
 
   /**
    * Returns N as described in the Taxir paper.
+   *
    * @param a the lower bound value of the range query
    * @param k the value returned by <code>k</code>
    * @return the N characteristic function
@@ -420,8 +438,8 @@ public abstract class AbstractField {
     BitVector result = new BitVector(data_.getSize());
     result.setAll();
     int n = dictionary_.dimension();
-    for(int i = k + 1; i < n; i++) {
-      if(a.get(i)) {
+    for (int i = k + 1; i < n; i++) {
+      if (a.get(i)) {
 //        System.out.print(" AND C" + i);
         result.and(safeVector(i));
       } else {
@@ -435,6 +453,7 @@ public abstract class AbstractField {
 
   /**
    * Returns L as described in the Taxir paper.
+   *
    * @param a the lower bound value of the range query
    * @param k the value returned by <code>k</code>
    * @return the L characteristic function
@@ -443,7 +462,7 @@ public abstract class AbstractField {
     // from low order to high order bits
     // find q such that a(q) == 1, q < k and a(i) == 0 for all i < q
     int q = a.nextSetBit(0);
-    if(q == -1 || q > k) {
+    if (q == -1 || q > k) {
       // special case
       q = 0;
     }
@@ -457,19 +476,20 @@ public abstract class AbstractField {
 
   /**
    * Recursive method used to construct L
+   *
    * @param a the lower bound value of the range query
    * @param i the bit being tested
    * @param q the last bit to test
    * @return part of the L characteristic function for bit i
    */
   private BitVector rL(BitVector a, int i, int q) {
-    if(i < q) {
+    if (i < q) {
 //      System.out.print(" AND ONES");
       return new BitVector(data_.getSize()).setAll();
     }
     BitVector t = new BitVector(safeVector(i));
 
-    if(a.get(i)) {
+    if (a.get(i)) {
 //      System.out.print(" AND C" + i);
       return t.and(rL(a, i - 1, q));
     }
@@ -481,6 +501,7 @@ public abstract class AbstractField {
 
   /**
    * Returns M as described in the Taxir paper.
+   *
    * @param b the upper bound value of the range query
    * @param k the value returned by <code>k</code>
    * @return the M characteristic function
@@ -489,8 +510,8 @@ public abstract class AbstractField {
     // from high order to low order bits
     // find q such that b(q) == 0 and b(i) == 1 for all i < q
     int q = k;
-    for(int i = k; i >= 0; i--) {
-      if(b.get(i) == false) {
+    for (int i = k; i >= 0; i--) {
+      if (b.get(i) == false) {
         q = i;
       }
     }
@@ -503,18 +524,19 @@ public abstract class AbstractField {
 
   /**
    * Recursive method used to construct M
+   *
    * @param b the upper bound value of the range query
    * @param i the bit being tested
    * @param q the last bit to test
    * @return part of the M characteristic function for bit i
    */
   private BitVector rM(BitVector b, int i, int q) {
-    if(i < q) {
+    if (i < q) {
 //      System.out.print(" AND ONES");
       return new BitVector(data_.getSize()).setAll();
     }
     BitVector t = new BitVector(safeVector(i));
-    if(b.get(i) == false) {
+    if (b.get(i) == false) {
 //      System.out.print(" AND NOT C" + i);
       return t.not().and(rM(b, i - 1, q));
     }
@@ -528,10 +550,11 @@ public abstract class AbstractField {
    * Creates a BitVector used to filter out nulls records. When filterNulls is true
    * the resulting vector will include records that contain the null value, otherwise the
    * resulting vector will be filled with zeros.
+   *
    * @return a <code>BitVector</code> used to filter query results.
    */
   BitVector resultFilter(boolean filterNulls) {
-    if(filterNulls == true) {
+    if (filterNulls == true) {
       return internalGetNulls();
     }
     // Return an empty filter (all zeroes)
@@ -540,6 +563,7 @@ public abstract class AbstractField {
 
   /**
    * Get all records for which its value is null in this field.
+   *
    * @return BitVector with all records with a null value in this field.
    */
   public BitVector getNulls() {
@@ -549,13 +573,14 @@ public abstract class AbstractField {
 
   /**
    * Internal method to lazily instantiate the null vector and return it.
+   *
    * @return the internal null vector
    */
   private BitVector internalGetNulls() {
-    if(nulls_ == null) {
+    if (nulls_ == null) {
       nulls_ = new BitVector(getSize());
       nulls_.setAll();
-      for(int i = 0; i < vectors_.length; i++) {
+      for (int i = 0; i < vectors_.length; i++) {
         nulls_.andNot(safeVector(i));
       }
     }
@@ -564,12 +589,13 @@ public abstract class AbstractField {
 
   /**
    * Returns the bit vector i, or a vector of 0s if i is not initialized
+   *
    * @param i the vector index
    * @return bit vector i, or a vector of 0s if i is not initialized
    */
   BitVector safeVector(int i) {
-    if(i >= vectors_.length || vectors_[i] == null) {
-      if(EMPTY == null) {
+    if (i >= vectors_.length || vectors_[i] == null) {
+      if (EMPTY == null) {
         EMPTY = new BitVector(data_.getSize());
       }
       return EMPTY;
@@ -587,14 +613,14 @@ public abstract class AbstractField {
 
     BitVector mask = maskVector.bits();
 
-    if(getDictionary().equals(pSource.getDictionary()) == true) {
-      for(int i = 0; i < pSource.vectors_.length; i++) {
+    if (getDictionary().equals(pSource.getDictionary()) == true) {
+      for (int i = 0; i < pSource.vectors_.length; i++) {
         BitVector sourceVector = pSource.safeVector(i);
         BitVector destVector = safeVector(i);
         BitVector newVector = new BitVector(sourceVector);
 
         //If there was no original value in the destination vector, copy desired values from source vector and leave the rest null
-        if(destVector == EMPTY) {
+        if (destVector == EMPTY) {
           this.vectors_[i] = newVector.and(mask);
         }
         //If there were values in the destination vector, keep them when the source value is filtered.
@@ -610,7 +636,7 @@ public abstract class AbstractField {
     } else {
       Dictionary sourceDict = pSource.getDictionary();
       Dictionary thisDict = getDictionary();
-      for(int i = maskVector.next(0); i != -1; i = maskVector.next(i + 1)) {
+      for (int i = maskVector.next(0); i != -1; i = maskVector.next(i + 1)) {
         Object value = sourceDict.reverseLookup(pSource.getValue(i));
         setValue(i, thisDict.lookup(value));
       }
@@ -621,26 +647,27 @@ public abstract class AbstractField {
   }
 
   /**
-   * Copies the values from the source field into this one. This will overwrite all values in the current field 
+   * Copies the values from the source field into this one. This will overwrite all values in the current field
    * with the ones from the original field. A copy of the original values is made so the source field may be modified
    * without affecting this one.
-   * @param pSource the field from which the values are copied from. 
+   *
+   * @param pSource the field from which the values are copied from.
    */
   public void copyValues(AbstractField pSource) {
     validateSourceField(pSource);
-    if(getDictionary().equals(pSource.getDictionary()) == false) {
+    if (getDictionary().equals(pSource.getDictionary()) == false) {
       throw new IllegalArgumentException(
           "Destination field's dictionary is not equivalent to source's dictionary. Cannot copy values from source field.");
     }
-    for(int i = 0; i < pSource.vectors_.length; i++) {
+    for (int i = 0; i < pSource.vectors_.length; i++) {
       BitVector sourceVector = pSource.safeVector(i);
 
-      if(i >= this.vectors_.length) createDimension(i, new BitVector(sourceVector));
+      if (i >= this.vectors_.length) createDimension(i, new BitVector(sourceVector));
       else this.vectors_[i] = new BitVector(sourceVector);
     }
 
-    if(pSource.vectors_.length < this.vectors_.length) {
-      for(int i = pSource.vectors_.length; i < this.vectors_.length; i++) {
+    if (pSource.vectors_.length < this.vectors_.length) {
+      for (int i = pSource.vectors_.length; i < this.vectors_.length; i++) {
         this.vectors_[i] = new BitVector(getSize());
       }
     }
@@ -651,14 +678,15 @@ public abstract class AbstractField {
 
   /**
    * Makes sure that it is possible to copy content from the source field to this field.
+   *
    * @param pSource the source field to validate.
    */
   private void validateSourceField(AbstractField pSource) {
-    if(pSource == null) {
+    if (pSource == null) {
       throw new IllegalArgumentException("The source field cannot be null.");
     }
     //Make sure they have the same capacity.
-    if(this.getSize() != pSource.getSize()) {
+    if (this.getSize() != pSource.getSize()) {
       throw new IllegalArgumentException("The source and destination fields must have the same size.");
     }
   }

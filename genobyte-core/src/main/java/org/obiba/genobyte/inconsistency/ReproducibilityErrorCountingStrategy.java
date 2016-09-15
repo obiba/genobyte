@@ -20,6 +20,7 @@ package org.obiba.genobyte.inconsistency;
 
 /**
  * Handles computed reproducibility errors.
+ *
  * @param <K> the type of the compared records key
  */
 public interface ReproducibilityErrorCountingStrategy<K>
@@ -27,6 +28,7 @@ public interface ReproducibilityErrorCountingStrategy<K>
 
   /**
    * Called by the {@link ReproducibilityErrorCalculator} for every comparison that produced at least one error.
+   *
    * @param errors the reported errors
    */
   public void countInconsistencies(ReproducibilityErrors<K> errors);

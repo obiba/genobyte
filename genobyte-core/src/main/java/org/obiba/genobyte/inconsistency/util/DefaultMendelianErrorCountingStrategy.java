@@ -27,7 +27,8 @@ import org.obiba.genobyte.model.DefaultGenotypingField;
 
 /**
  * A counting strategy that counts the mendelian errors as-is (no filtering or conditional counting).
- * @param <K> the unique key in the bitwise store where computation is made (usually the sample store).
+ *
+ * @param <K>  the unique key in the bitwise store where computation is made (usually the sample store).
  * @param <TK> the unique key for the transposed bitwise store (usually the assay store).
  */
 public class DefaultMendelianErrorCountingStrategy<K> implements MendelianErrorCountingStrategy<K> {
@@ -45,7 +46,7 @@ public class DefaultMendelianErrorCountingStrategy<K> implements MendelianErrorC
   private Field transposedTestField_ = null;
 
   public DefaultMendelianErrorCountingStrategy(GenotypingRecordStore<K, ?, ?> samples,
-      GenotypingRecordStore<?, ?, K> assays) {
+                                               GenotypingRecordStore<?, ?, K> assays) {
     samples_ = samples;
     assays_ = assays;
 
@@ -66,11 +67,11 @@ public class DefaultMendelianErrorCountingStrategy<K> implements MendelianErrorC
 
     IntegerFieldHelper.add(mendelField_, errors.getChildIndex(), errorCount);
     IntegerFieldHelper.add(testField_, errors.getChildIndex(), tests);
-    if(errors.getMotherKey() != null) {
+    if (errors.getMotherKey() != null) {
       IntegerFieldHelper.add(mendelField_, errors.getMotherIndex(), errorCount);
       IntegerFieldHelper.add(testField_, errors.getMotherIndex(), tests);
     }
-    if(errors.getFatherKey() != null) {
+    if (errors.getFatherKey() != null) {
       IntegerFieldHelper.add(mendelField_, errors.getFatherIndex(), errorCount);
       IntegerFieldHelper.add(testField_, errors.getFatherIndex(), tests);
     }

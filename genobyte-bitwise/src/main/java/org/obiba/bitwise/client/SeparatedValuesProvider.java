@@ -30,15 +30,15 @@ public class SeparatedValuesProvider {
       SeparatedValuesParser p = new SeparatedValuesParser(sourceFile, SeparatedValuesParser.COMMA);
       List<String> values = new ArrayList<String>(60000);
       SeparatedValuesRow row = p.nextRow();
-      while(row != null) {
-        for(int i = 0; i < columns.length; i++) {
+      while (row != null) {
+        for (int i = 0; i < columns.length; i++) {
           String v = row.getColumnValue(columns[i], String.class);
-          if(v != null) values.add(v);
+          if (v != null) values.add(v);
         }
         row = p.nextRow();
       }
       return values;
-    } catch(IOException e) {
+    } catch (IOException e) {
       throw new RuntimeException(e);
     }
   }

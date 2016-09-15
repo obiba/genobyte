@@ -41,7 +41,7 @@ public class MockDiffQuery extends Query implements MockQuery {
 
   @Override
   public boolean equals(Object o) {
-    if(o instanceof MockDiffQuery) {
+    if (o instanceof MockDiffQuery) {
       MockDiffQuery rhs = (MockDiffQuery) o;
       return field1_.equals(rhs.field1_) && field2_.equals(rhs.field2_);
     }

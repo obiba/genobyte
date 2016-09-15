@@ -42,64 +42,64 @@ abstract class BaseBTreeJdbmDaoImpl<T, K> extends BaseRecordManagerDaoImpl<T> {
   @Override
   public void setDaoKey(DaoKey key) {
     super.setDaoKey(key);
-    if(enableTiming_ && timer_ == null) {
+    if (enableTiming_ && timer_ == null) {
       timer_ = new Timer(this.getClass().getName(), key.toString());
     }
   }
 
   public void create(T value) {
-    if(enableTiming_) timer_.start();
+    if (enableTiming_) timer_.start();
     K key = getKey(value);
     try {
       getBtree().insert(key, value, false);
-    } catch(IOException e) {
+    } catch (IOException e) {
       throw new JdbmRuntimeException(e);
     }
-    if(enableTiming_) timer_.end();
+    if (enableTiming_) timer_.end();
   }
 
   public void delete(K name) {
-    if(enableTiming_) timer_.start();
+    if (enableTiming_) timer_.start();
     try {
       getBtree().remove(name);
-    } catch(IOException e) {
+    } catch (IOException e) {
       throw new JdbmRuntimeException(e);
     }
-    if(enableTiming_) timer_.end();
+    if (enableTiming_) timer_.end();
   }
 
   @SuppressWarnings("unchecked")
   public T load(K key) {
-    if(enableTiming_) timer_.start();
+    if (enableTiming_) timer_.start();
     T t;
     try {
       t = (T) getBtree().find(key);
-    } catch(IOException e) {
+    } catch (IOException e) {
       throw new JdbmRuntimeException(e);
     }
-    if(enableTiming_) timer_.end();
+    if (enableTiming_) timer_.end();
     return t;
   }
 
   public void save(T value) {
-    if(enableTiming_) timer_.start();
+    if (enableTiming_) timer_.start();
     K key = getKey(value);
     try {
       getBtree().insert(key, value, true);
-    } catch(IOException e) {
+    } catch (IOException e) {
       throw new JdbmRuntimeException(e);
     }
-    if(enableTiming_) timer_.end();
+    if (enableTiming_) timer_.end();
   }
 
   protected BTree getBtree() {
-    if(btree == null) {
-      synchronized(this) {
+    if (btree == null) {
+      synchronized (this) {
         try {
           // Test again due to possible race condition
-          if(btree == null) {
+          if (btree == null) {
             // If the manager already exists, we must call the load method, not the create method
-            if(managerExists() == false) {
+            if (managerExists() == false) {
               log.debug("RecordManager {} does not exist, creating new BTree instance.", getManagerName());
               btree = BTree.createInstance(getManager(), getKeyComparator(), getKeySerializer(), getValueSerializer());
               log.debug("BTree record id {}", btree.getRecid());
@@ -111,7 +111,7 @@ abstract class BaseBTreeJdbmDaoImpl<T, K> extends BaseRecordManagerDaoImpl<T> {
             }
           }
           return btree;
-        } catch(IOException e) {
+        } catch (IOException e) {
           throw new JdbmRuntimeException(e);
         }
       }

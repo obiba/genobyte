@@ -57,6 +57,7 @@ public class AnnotationStoreSchemaBuilder {
 
   /**
    * Creates a <tt>StoreSchema</tt> based on the annotations found in a given record class.
+   *
    * @param pClass the record class where the annotation will be found.
    * @return the <tt>StoreSchema</tt> created with the help of the Java bitwise annotations.
    */
@@ -70,20 +71,20 @@ public class AnnotationStoreSchemaBuilder {
 
     //Create dictionaries from dictionary annotations
     Map<String, DictionaryDef> declaredDicts = ba.getDictionaries();
-    for(String dictName : declaredDicts.keySet()) {
+    for (String dictName : declaredDicts.keySet()) {
       schema_.addDictionary(createDictionaryFromAnnotation(ba, declaredDicts.get(dictName)));
     }
 
     //Create fields in the store, from annotations
     List<PropertyDescriptor> properties = ba.getStoredDescriptors();
     Map<String, String> fieldNames = ba.getStoredFields();
-    for(PropertyDescriptor property : properties) {
+    for (PropertyDescriptor property : properties) {
       FieldMetaData newField = new FieldMetaData();
       newField.setName(fieldNames.get(property.getName()));
 
       //Get dictionary name. If there is no dictionary defined by annotation, create a default one.
       String dictName = ba.getPropertyDictName(property.getName());
-      if(dictName == null) {
+      if (dictName == null) {
         dictName = getDefaultDictionary(property.getPropertyType());
       }
       newField.setDictionary(dictName);
@@ -91,12 +92,12 @@ public class AnnotationStoreSchemaBuilder {
       schema_.addField(newField);
     }
 
-    for(String template : ba.getTemplateFields()) {
+    for (String template : ba.getTemplateFields()) {
       FieldMetaData newField = new FieldMetaData();
       newField.setName(template);
       newField.setTemplate(true);
       String dName = ba.getPropertyDictName(template);
-      if(dName == null) throw new RuntimeException("no dictionary for template [" + template + "]");
+      if (dName == null) throw new RuntimeException("no dictionary for template [" + template + "]");
       newField.setDictionary(dName);
       schema_.addField(newField);
     }
@@ -107,12 +108,13 @@ public class AnnotationStoreSchemaBuilder {
   /**
    * Get the name of a default dictionary for the given class.
    * First, check if a default dictionary has already been created, and create one if not.
+   *
    * @param pClass is the class of the current field for which we need a default dictionary.
    * @return The name of the default dictionary to use in this case.
    */
   private String getDefaultDictionary(Class<?> pClass) {
     //If a default dictionary has already been generated for this field type
-    if(defaultDicts_.get(pClass) != null) {
+    if (defaultDicts_.get(pClass) != null) {
       return defaultDicts_.get(pClass);
     }
     //Otherwise, create a new dictionary with default values
@@ -134,12 +136,13 @@ public class AnnotationStoreSchemaBuilder {
    * Attempt to create a new dictionary named "Default_" + className. If it already exists, append
    * an underscore at the end of the name and check if that name exists. Do this as long as the
    * automatically generated name is the duplicate of another existing dictionary.
+   *
    * @param pClass
    * @return
    */
   private String createDictionaryNameFromClass(Class<?> pClass) {
     StringBuilder autoName = new StringBuilder("Default_").append(pClass.getName());
-    while(schema_.getDictionary(autoName.toString()) != null) {
+    while (schema_.getDictionary(autoName.toString()) != null) {
       autoName.append("_");
     }
     return autoName.toString();
@@ -147,6 +150,7 @@ public class AnnotationStoreSchemaBuilder {
 
   /**
    * Create a new dictionary from class annotations.
+   *
    * @param pDictionary is the annotation of the dictionary definition.
    * @return is the newly created dictionary to be added in the schema.
    */
@@ -157,14 +161,14 @@ public class AnnotationStoreSchemaBuilder {
     Class<?> dictClass = pDictionary.dictionaryClass();
     String dictClassName = pDictionary.dictionaryClassName();
 
-    if(dictClass != void.class) {
-      if(dictClassName != null && dictClassName.equals("") == false) {
+    if (dictClass != void.class) {
+      if (dictClassName != null && dictClassName.equals("") == false) {
         throw new InvalidAnnotationException("Class [" + ba.getRecordClass().getName() +
             "] can only have one of these attributes: dictionaryClass, dictionaryClassName.");
       }
       newDict.setClass(dictClass.getName());
     } else {
-      if(dictClassName.equals("")) {
+      if (dictClassName.equals("")) {
         throw new InvalidAnnotationException("Class [" + ba.getRecordClass().getName() +
             "] should have at least one of these attributes: dictionaryClass, dictionaryClassName.");
       }
@@ -173,7 +177,7 @@ public class AnnotationStoreSchemaBuilder {
 
     //Loop on all properties
     DictionaryProperty dictProps[] = pDictionary.property();
-    for(int k = 0; k < dictProps.length; k++) {
+    for (int k = 0; k < dictProps.length; k++) {
       Property currentProp = new Property();
       currentProp.setName(dictProps[k].name());
       currentProp.setValue(dictProps[k].value());

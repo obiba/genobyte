@@ -25,30 +25,38 @@ import java.util.List;
 
 /**
  * Transfer object for <tt>Dictionary</tt> implementations.
- *
- * Some <tt>Dictionary</tt> implementations may require persisting data 
+ * <p>
+ * Some <tt>Dictionary</tt> implementations may require persisting data
  * upon reading and writing the BitwiseStore they are associated with.
- * This transfer object is used by DictionaryDao implementations. 
+ * This transfer object is used by DictionaryDao implementations.
  */
 public class DictionaryDto {
 
-  /** The unique name of the dictionary	 */
+  /**
+   * The unique name of the dictionary
+   */
   private String name_ = null;
 
-  /** The implementing class */
+  /**
+   * The implementing class
+   */
   private String class_ = null;
 
-  /** List of Property objects used to configure this instance */
+  /**
+   * List of Property objects used to configure this instance
+   */
   private List<Property> properties_ = new LinkedList<Property>();
 
-  /** Storage for "runtime" data: collected during execution */
+  /**
+   * Storage for "runtime" data: collected during execution
+   */
   private byte[] runtimeData_ = null;
 
   /**
-   * Constructs a <tt>DictionaryDto</tt> instance 
+   * Constructs a <tt>DictionaryDto</tt> instance
    *
-   * @param name the name of the dictionary
-   * @param clazz the implementation of the <tt>Dictionary</tt> interface
+   * @param name       the name of the dictionary
+   * @param clazz      the implementation of the <tt>Dictionary</tt> interface
    * @param properties a <tt>List</tt> of <tt>Property</tt> objects used to initialize/configure the dictionary instance
    */
   public DictionaryDto(String name, String clazz, List<Property> properties) {
@@ -56,12 +64,12 @@ public class DictionaryDto {
   }
 
   /**
-   * Constructs a <tt>DictionaryDto</tt> instance 
+   * Constructs a <tt>DictionaryDto</tt> instance
    *
-   * @param name the name of the dictionary
-   * @param clazz the implementation of the <tt>Dictionary</tt> interface
+   * @param name       the name of the dictionary
+   * @param clazz      the implementation of the <tt>Dictionary</tt> interface
    * @param properties a <tt>List</tt> of <tt>Property</tt> objects used to initialize/configure the dictionary instance
-   * @param runtime an array of bytes that contains data collected during runtime execution of the dictionary
+   * @param runtime    an array of bytes that contains data collected during runtime execution of the dictionary
    */
   public DictionaryDto(String name, String clazz, List<Property> properties, byte[] runtime) {
     name_ = name;

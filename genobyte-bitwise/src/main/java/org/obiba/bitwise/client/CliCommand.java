@@ -28,13 +28,15 @@ public interface CliCommand {
 
   /**
    * Creates an Apache Common option object with its mapping to a command in the shell.
+   *
    * @return the newly created <tt>Option</tt> instance.
    */
   public Option getOption();
 
   /**
    * Defines the routine to be execute when the option is used in the shell client.
-   * @param opt the information on the option executed in the client.
+   *
+   * @param opt     the information on the option executed in the client.
    * @param context the client session contextual information.
    * @return <tt>true</tt> if the shell client session should end after this command.
    * <tt>false</tt> if it should continue.

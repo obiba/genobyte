@@ -40,7 +40,7 @@ public class MockRangeQuery extends Query implements MockQuery {
 
   @Override
   public boolean equals(Object o) {
-    if(o instanceof MockRangeQuery) {
+    if (o instanceof MockRangeQuery) {
       MockRangeQuery rhs = (MockRangeQuery) o;
       return field_.equals(rhs.field_) && from_.equals(rhs.from_) && to_.equals(rhs.to_);
     }

@@ -23,30 +23,40 @@ import org.obiba.bitwise.schema.StoreSchema;
 
 /**
  * Transfer object for a <tt>BitwiseStore</tt>.
- *
+ * <p>
  * Allows persisting a <tt>BitwiseStore</tt> object through a BitwiseStoreDao implementation.
  */
 public class BitwiseStoreDto {
 
-  /** The BitwiseStore's unique name */
+  /**
+   * The BitwiseStore's unique name
+   */
   private String name_ = null;
 
-  /** The maximum number of records this instance may hold */
+  /**
+   * The maximum number of records this instance may hold
+   */
   private int capacity_ = -1;
 
-  /** A vector of deleted records */
+  /**
+   * A vector of deleted records
+   */
   private BitVector deleted_ = null;
 
-  /** A vector of cleared records (deleted records for which the value of all of its fields have been re-initialized) */
+  /**
+   * A vector of cleared records (deleted records for which the value of all of its fields have been re-initialized)
+   */
   private BitVector cleared_ = null;
 
-  /** The BitwiseStore's schema */
+  /**
+   * The BitwiseStore's schema
+   */
   private StoreSchema schema_ = null;
 
   /**
    * Contructs a transfer object with the specified values.
    *
-   * @param name the unique name
+   * @param name     the unique name
    * @param capacity the capacity
    */
   public BitwiseStoreDto(String name, int capacity) {

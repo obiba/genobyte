@@ -50,7 +50,7 @@ public class DictionaryDtoDaoBdbImpl extends BaseCrudDaoImpl<DictionaryDto, Stri
   private Database getDictionaryDb() {
     try {
       return getContext().getDatabase(DICTIONARY_DB);
-    } catch(DatabaseException e) {
+    } catch (DatabaseException e) {
       throw new RuntimeException(e);
     }
   }
@@ -89,21 +89,21 @@ public class DictionaryDtoDaoBdbImpl extends BaseCrudDaoImpl<DictionaryDto, Stri
 
         int propertyCount = dis.readInt();
         props = new ArrayList<Property>(propertyCount);
-        for(int i = 0; i < propertyCount; i++) {
+        for (int i = 0; i < propertyCount; i++) {
           String prop = dis.readUTF();
           String value = dis.readUTF();
           props.add(new Property(prop, value));
         }
         byte[] runtime = null;
         int runtimeSize = dis.readInt();
-        if(runtimeSize >= 0) {
+        if (runtimeSize >= 0) {
           runtime = new byte[runtimeSize];
           dis.read(runtime);
         }
 
         dis.close();
         return new DictionaryDto(name, className, props, runtime);
-      } catch(IOException e) {
+      } catch (IOException e) {
         throw new RuntimeException(e);
       }
     }
@@ -122,14 +122,14 @@ public class DictionaryDtoDaoBdbImpl extends BaseCrudDaoImpl<DictionaryDto, Stri
         DataOutputStream dos = new DataOutputStream(baos);
         dos.writeUTF(d.getClazz());
         dos.writeInt(size);
-        if(props != null) {
-          for(Property property : props) {
+        if (props != null) {
+          for (Property property : props) {
             dos.writeUTF(property.getName());
             dos.writeUTF(property.getValue());
           }
         }
         byte[] runtime = d.getRuntimeData();
-        if(runtime != null) {
+        if (runtime != null) {
           dos.writeInt(runtime.length);
           dos.write(runtime);
         } else {
@@ -137,7 +137,7 @@ public class DictionaryDtoDaoBdbImpl extends BaseCrudDaoImpl<DictionaryDto, Stri
         }
         dos.flush();
         entry.setData(baos.toByteArray());
-      } catch(IOException e) {
+      } catch (IOException e) {
         throw new RuntimeException(e);
       }
     }

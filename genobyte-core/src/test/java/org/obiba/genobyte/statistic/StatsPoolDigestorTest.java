@@ -18,10 +18,9 @@
  *******************************************************************************/
 package org.obiba.genobyte.statistic;
 
+import junit.framework.TestCase;
 import org.obiba.genobyte.mock.MockBitwiseStore;
 import org.obiba.genobyte.mock.MockGenotypingStore;
-
-import junit.framework.TestCase;
 
 public class StatsPoolDigestorTest extends TestCase {
 
@@ -33,7 +32,7 @@ public class StatsPoolDigestorTest extends TestCase {
     try {
       mockStore.getAssayRecordStore().updateStats();
       assertTrue(true);
-    } catch(Exception e) {
+    } catch (Exception e) {
       assertTrue(e.getMessage(), false);
     }
   }

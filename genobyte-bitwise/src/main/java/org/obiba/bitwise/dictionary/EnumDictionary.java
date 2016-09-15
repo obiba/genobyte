@@ -36,7 +36,9 @@ public class EnumDictionary<E extends Enum<E>> extends AbstractStaticDictionary<
 
   private BitVector[] vectors_ = null;
 
-  /** Feature disabled since 0 is a reserved value in the bitwise store */
+  /**
+   * Feature disabled since 0 is a reserved value in the bitwise store
+   */
   private boolean allowOrdinalZero_ = false;
 
   public EnumDictionary(String name) {
@@ -58,11 +60,11 @@ public class EnumDictionary<E extends Enum<E>> extends AbstractStaticDictionary<
   public void setEnumClassName(String className) {
     try {
       Class c = Class.forName(className);
-      if(c.isEnum() == false) {
+      if (c.isEnum() == false) {
         throw new IllegalArgumentException();
       }
       enumClass_ = c;
-    } catch(ClassNotFoundException e) {
+    } catch (ClassNotFoundException e) {
       throw new RuntimeException(e);
     }
     preprocess();
@@ -75,16 +77,16 @@ public class EnumDictionary<E extends Enum<E>> extends AbstractStaticDictionary<
   public E convert(String value) {
     try {
       return Enum.valueOf(enumClass_, value);
-    } catch(IllegalArgumentException e) {
+    } catch (IllegalArgumentException e) {
       return null;
     }
   }
 
   public BitVector lookup(E e) {
-    if(e == null) {
+    if (e == null) {
       return null;
     }
-    if(e.getClass().equals(enumClass_) == false) {
+    if (e.getClass().equals(enumClass_) == false) {
       throw new IllegalArgumentException(
           "Enum " + e.getClass() + " incompatible with EnumDictionary<" + enumClass_ + ">");
     }
@@ -92,7 +94,7 @@ public class EnumDictionary<E extends Enum<E>> extends AbstractStaticDictionary<
   }
 
   public E reverseLookup(BitVector v) {
-    if(v == null) {
+    if (v == null) {
       return null;
     }
     int value = allowOrdinalZero_ ? (int) BitUtil.longValue(v) : (int) BitUtil.longValue(v) - 1;
@@ -109,7 +111,7 @@ public class EnumDictionary<E extends Enum<E>> extends AbstractStaticDictionary<
 
   @Override
   public boolean equals(Object obj) {
-    if(obj instanceof EnumDictionary) {
+    if (obj instanceof EnumDictionary) {
       return this.enumClass_.equals(((EnumDictionary<?>) obj).enumClass_);
     }
     return super.equals(obj);
@@ -130,7 +132,7 @@ public class EnumDictionary<E extends Enum<E>> extends AbstractStaticDictionary<
     int size = allowOrdinalZero_ ? enums_.length : enums_.length + 1;
 
     dimension_ = (int) Math.ceil(Math.log(size) / Math.log(2.0d));
-    for(int i = 0; i < enums_.length; i++) {
+    for (int i = 0; i < enums_.length; i++) {
       E e = enums_[i];
       int ordinal = allowOrdinalZero_ ? e.ordinal() : e.ordinal() + 1;
       vectors_[i] = BitUtil.vectorise(ordinal, dimension_);

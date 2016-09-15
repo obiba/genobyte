@@ -34,8 +34,8 @@ public class DropCommand implements CliCommand {
 
   public boolean execute(Option opt, CliContext context) throws ParseException {
     String storeName = opt.getValue();
-    if(context.getStore() != null) {
-      if(context.getStore().getSampleRecordStore().getStore().getName().equals(storeName + "_samples")) {
+    if (context.getStore() != null) {
+      if (context.getStore().getSampleRecordStore().getStore().getName().equals(storeName + "_samples")) {
         context.getOutput().println("Closing current store.");
         context.getStore().close();
         context.clear();

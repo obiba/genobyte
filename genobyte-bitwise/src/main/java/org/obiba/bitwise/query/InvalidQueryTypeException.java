@@ -19,7 +19,7 @@
 package org.obiba.bitwise.query;
 
 /**
- * When a certain query is being ran on a Field that does not support it, this exception will be thrown. 
+ * When a certain query is being ran on a Field that does not support it, this exception will be thrown.
  */
 public class InvalidQueryTypeException extends QueryExecutionException {
 

@@ -32,33 +32,33 @@ public class DictionaryInstantiator {
   public static Dictionary<?> createInstance(String pName, String pClazz) {
     try {
       Class<?> clazz = Class.forName(pClazz);
-      if(Dictionary.class.isAssignableFrom(clazz) == false) {
+      if (Dictionary.class.isAssignableFrom(clazz) == false) {
         throw new IllegalStateException("Class " + pClazz + " does not implement the Dictionary interface.");
       }
       return (Dictionary<?>) ConstructorUtils.invokeConstructor(clazz, pName);
-    } catch(ClassNotFoundException e) {
+    } catch (ClassNotFoundException e) {
       throw new RuntimeException(e);
-    } catch(InstantiationException e) {
+    } catch (InstantiationException e) {
       throw new RuntimeException(e);
-    } catch(IllegalAccessException e) {
+    } catch (IllegalAccessException e) {
       throw new RuntimeException(e);
-    } catch(NoSuchMethodException e) {
+    } catch (NoSuchMethodException e) {
       throw new RuntimeException(e);
-    } catch(InvocationTargetException e) {
+    } catch (InvocationTargetException e) {
       throw new RuntimeException(e);
     }
   }
 
   public static void setProperties(Dictionary<?> d, List<Property> properties) {
-    if(properties == null) {
+    if (properties == null) {
       return;
     }
-    for(Property property : properties) {
+    for (Property property : properties) {
       try {
         BeanUtils.setProperty(d, property.getName(), property.getValue());
-      } catch(IllegalAccessException e) {
+      } catch (IllegalAccessException e) {
         throw new RuntimeException(e);
-      } catch(InvocationTargetException e) {
+      } catch (InvocationTargetException e) {
         throw new RuntimeException(e);
       }
     }

@@ -24,7 +24,7 @@ import org.obiba.bitwise.schema.DictionaryMetaData;
  * Bounded dictionaries are dictionaries dealing with numeric data, and designed to be compressed when a value transformed
  * into a <tt>BitVector</tt>. The compression is accomplished by determining minimal and maximal bounds in which all values must fit, and
  * a step value (increment). There are therefore three mandatory properties to any dictionary of this type. <tt>lower</tt> is the minimal
- * bound for any value of the field. <tt>upper</tt> is the maximal bound. <tt>step</tt> is the minimal possible increment between two values. 
+ * bound for any value of the field. <tt>upper</tt> is the maximal bound. <tt>step</tt> is the minimal possible increment between two values.
  */
 public abstract class DefaultBoundedDictionary<T> extends DefaultDictionary {
   T lower_;
@@ -48,12 +48,16 @@ public abstract class DefaultBoundedDictionary<T> extends DefaultDictionary {
 
   /**
    * Gets the lower bound for the dictionary.
+   *
    * @return the lower bound.
    */
-  public T getLower() { return lower_; }
+  public T getLower() {
+    return lower_;
+  }
 
   /**
    * Sets the lower bound for the dictionary.
+   *
    * @param pLower the lower bound.
    */
   public void setLower(T pLower) {
@@ -63,12 +67,16 @@ public abstract class DefaultBoundedDictionary<T> extends DefaultDictionary {
 
   /**
    * Gets the upper bound for the dictionary.
+   *
    * @return the upper bound.
    */
-  public T getUpper() { return upper_; }
+  public T getUpper() {
+    return upper_;
+  }
 
   /**
    * Sets the upper bound for the dictionary.
+   *
    * @param pUpper the upper bound.
    */
   public void setUpper(T pUpper) {
@@ -78,12 +86,16 @@ public abstract class DefaultBoundedDictionary<T> extends DefaultDictionary {
 
   /**
    * Gets the step value for the dictionary.
+   *
    * @return the step value.
    */
-  public T getStep() { return step_; }
+  public T getStep() {
+    return step_;
+  }
 
   /**
    * Sets the step value for the dictionary.
+   *
    * @param pStep the step value.
    */
   public void setStep(T pStep) {

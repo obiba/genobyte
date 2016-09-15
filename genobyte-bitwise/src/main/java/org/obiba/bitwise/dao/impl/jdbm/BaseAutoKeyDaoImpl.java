@@ -43,46 +43,46 @@ abstract class BaseAutoKeyDaoImpl<T> extends BaseRecordManagerDaoImpl<T> {
   public void create(T v) {
     try {
       long id = getManager().insert(v, getValueSerializer());
-      if(id <= 0) log.error("Invalid key returned after creating record {}", id);
+      if (id <= 0) log.error("Invalid key returned after creating record {}", id);
       setAutoKey(id, v);
-    } catch(IOException e) {
+    } catch (IOException e) {
       throw new JdbmRuntimeException(e);
     }
   }
 
   public void delete(Long key) {
-    if(enableTiming_) timer_.start();
+    if (enableTiming_) timer_.start();
     try {
       getManager().delete(key);
-    } catch(IOException e) {
+    } catch (IOException e) {
       throw new JdbmRuntimeException(e);
     }
-    if(enableTiming_) timer_.end();
+    if (enableTiming_) timer_.end();
   }
 
   @SuppressWarnings("unchecked")
   public T load(Long key) {
-    if(enableTiming_) timer_.start();
+    if (enableTiming_) timer_.start();
     T t;
     try {
       t = (T) getManager().fetch(key, getValueSerializer());
-      if(t != null) setAutoKey(key, t);
-    } catch(IOException e) {
+      if (t != null) setAutoKey(key, t);
+    } catch (IOException e) {
       throw new JdbmRuntimeException(e);
     }
-    if(enableTiming_) timer_.end();
+    if (enableTiming_) timer_.end();
     return t;
   }
 
   public void save(T value) {
-    if(enableTiming_) timer_.start();
+    if (enableTiming_) timer_.start();
     long key = getKey(value);
     try {
       getManager().update(key, value, getValueSerializer());
-    } catch(IOException e) {
+    } catch (IOException e) {
       throw new JdbmRuntimeException(e);
     }
-    if(enableTiming_) timer_.end();
+    if (enableTiming_) timer_.end();
   }
 
 }

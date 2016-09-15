@@ -47,6 +47,7 @@ public class Huffman implements Serializable {
   /**
    * Builds an Huffman codec instance with the specified file as a seed. File is expected to have
    * one seed string per line.
+   *
    * @param file is a File instance to use as seeding data.
    */
   public Huffman(File file) throws IOException {
@@ -64,6 +65,7 @@ public class Huffman implements Serializable {
 
   /**
    * Builds an Huffman codec instance with the specified seed provider implementation
+   *
    * @param seed used as codec seed
    */
   public Huffman(HuffmanSeedProvider provider) {
@@ -73,7 +75,7 @@ public class Huffman implements Serializable {
 
   @Override
   public boolean equals(Object obj) {
-    if(obj instanceof Huffman) {
+    if (obj instanceof Huffman) {
       Huffman h = (Huffman) obj;
       return Arrays.equals(codes_, h.codes_) && endCode_.equals(h.endCode_);
     }
@@ -82,6 +84,7 @@ public class Huffman implements Serializable {
 
   /**
    * Encodes the specified string into a series of unique codes
+   *
    * @param key the value to encode. If null is specified, returns null.
    * @return a encoded version of the string or null if <code>key</code> was null or if <code>key</code> contains a character not present in the seed.
    */
@@ -92,27 +95,28 @@ public class Huffman implements Serializable {
 
   /**
    * Encodes the specified string into a series of unique codes.
-   * @param key The value to encode. If null is specified, returns null.
+   *
+   * @param key    The value to encode. If null is specified, returns null.
    * @param addEOS If true, add an end of field character to the end of the string.
    * @return
    */
   public BitVector encode(String key, boolean addEOS) {
-    if(key == null) {
+    if (key == null) {
       return null;
     }
     BitVector v = new BitVector(0);
     StringCharacterIterator sci = new StringCharacterIterator(key);
     char c = sci.first();
-    while(c != StringCharacterIterator.DONE) {
+    while (c != StringCharacterIterator.DONE) {
       BitVector codePart = codes_[c];
-      if(codePart == null) {
+      if (codePart == null) {
         // c is not part of original alphabet (seed)
         return null;
       }
       append(v, codePart);
       c = sci.next();
     }
-    if(addEOS) {
+    if (addEOS) {
       append(v, endCode_);
     }
     return v;
@@ -120,6 +124,7 @@ public class Huffman implements Serializable {
 
   /**
    * Decodes the specified code into its original value.
+   *
    * @param v the encoded string value
    * @return the original string
    */
@@ -127,14 +132,14 @@ public class Huffman implements Serializable {
     StringBuilder b = new StringBuilder();
     int i = 0;
     Node node = root_;
-    while(i < v.size()) {
-      if(v.get(i++)) {
+    while (i < v.size()) {
+      if (v.get(i++)) {
         node = node.right;
       } else {
         node = node.left;
       }
-      if(node.isLeaf()) {
-        if(node.c == StringCharacterIterator.DONE) {
+      if (node.isLeaf()) {
+        if (node.c == StringCharacterIterator.DONE) {
           // We hit the end of string code
           break;
         }
@@ -142,7 +147,7 @@ public class Huffman implements Serializable {
         node = root_;
       }
     }
-    if(b.length() > 0) {
+    if (b.length() > 0) {
       return b.toString();
     }
     return null;
@@ -150,6 +155,7 @@ public class Huffman implements Serializable {
 
   /**
    * Deserializes the object. Overriden to restore codes from the serialized tree.
+   *
    * @param in
    * @throws IOException
    * @throws ClassNotFoundException
@@ -174,25 +180,25 @@ public class Huffman implements Serializable {
   private void seed(Iterator<String> seed) {
     int lines = 0;
     long[] freq = new long[Character.MAX_VALUE];
-    while(seed.hasNext()) {
+    while (seed.hasNext()) {
       StringCharacterIterator sci = new StringCharacterIterator(seed.next());
       lines++;
       char c = sci.first();
-      while(c != StringCharacterIterator.DONE) {
+      while (c != StringCharacterIterator.DONE) {
         freq[c]++;
         c = sci.next();
       }
     }
 
     TreeSet<Node> nodes = new TreeSet<Node>();
-    for(int i = 0; i < freq.length; i++) {
+    for (int i = 0; i < freq.length; i++) {
       long l = freq[i];
-      if(l > 0) {
+      if (l > 0) {
         nodes.add(new Node((char) i, l));
       }
     }
 
-    while(nodes.size() > 1) {
+    while (nodes.size() > 1) {
       Iterator<Node> i = nodes.iterator();
       Node n1 = i.next();
       i.remove();
@@ -213,12 +219,12 @@ public class Huffman implements Serializable {
     Node parent = null;
     Node node = root_;
     // Go left until we hit the leaf
-    while(node.isLeaf() == false) {
+    while (node.isLeaf() == false) {
       parent = node;
       node = node.left;
     }
     // No nodes
-    if(parent == null) {
+    if (parent == null) {
       return;
     }
 
@@ -232,6 +238,7 @@ public class Huffman implements Serializable {
 
   /**
    * Gets the <tt>BitVector</tt> that contains the End Of String character code in this Huffman code.
+   *
    * @return the End Of String code.
    */
   public BitVector getEndOfStringCode() {
@@ -249,14 +256,15 @@ public class Huffman implements Serializable {
 
   /**
    * Generates codes in a recursive way.
+   *
    * @param n the current node
    * @param v the prefix of the code this method will generate
    * @param i the index of the current bit value this method must determine
    */
   private void code(Node n, BitVector v, int i) {
     BitVector code = new BitVector(v);
-    if(n.isLeaf()) {
-      if(n.c != StringCharacterIterator.DONE) {
+    if (n.isLeaf()) {
+      if (n.c != StringCharacterIterator.DONE) {
         codes_[n.c] = code;
       } else {
         endCode_ = code;
@@ -264,13 +272,13 @@ public class Huffman implements Serializable {
       return;
     }
     code.grow(i + 1);
-    if(n.left != null) {
+    if (n.left != null) {
       // Going left: encode a zero at i (no need since original vector is all zeroes)
       // code.clear(i);
       code(n.left, code, i + 1);
     }
 
-    if(n.right != null) {
+    if (n.right != null) {
       // Going right: encode a 1 at i
       code.set(i);
       code(n.right, code, i + 1);
@@ -278,15 +286,16 @@ public class Huffman implements Serializable {
   }
 
   /**
-   * Appends vector <code>v2</code> to <code>v</code>. This effectively grows vector <code>v</code> of <code>v2.size()</code> 
+   * Appends vector <code>v2</code> to <code>v</code>. This effectively grows vector <code>v</code> of <code>v2.size()</code>
    * and copies the contents of <code>v2</code> into the newly allocated space.
-   * @param v the vector to append to
+   *
+   * @param v  the vector to append to
    * @param v2 the data to append
    */
   private void append(BitVector v, BitVector v2) {
     int offset = v.size();
     v.grow(v.size() + v2.size());
-    for(int i = v2.nextSetBit(0); i != -1; i = v2.nextSetBit(i + 1)) {
+    for (int i = v2.nextSetBit(0); i != -1; i = v2.nextSetBit(i + 1)) {
       v.set(offset + i);
     }
   }
@@ -322,7 +331,7 @@ public class Huffman implements Serializable {
     }
 
     public int compareTo(Node other) {
-      if(this.weight == other.weight) return -1;
+      if (this.weight == other.weight) return -1;
 
       return (int) (this.weight - other.weight);
     }

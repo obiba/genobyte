@@ -84,7 +84,7 @@ public class BitVectorDtoDaoTest extends BaseBdbDaoTestCase {
     long id = d.getId();
     assertTrue(id > 0);
 
-    for(int i = 0; i < 10000; i += 2) {
+    for (int i = 0; i < 10000; i += 2) {
       v.set(i);
     }
 

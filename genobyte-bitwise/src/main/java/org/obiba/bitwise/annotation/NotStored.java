@@ -27,7 +27,7 @@ import java.lang.annotation.*;
  * There cannot be more than one annotation of type @NotStored or @Stored in total on a field and its accession methods.
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.FIELD, ElementType.METHOD })
+@Target({ElementType.FIELD, ElementType.METHOD})
 @Documented
 public @interface NotStored {
 

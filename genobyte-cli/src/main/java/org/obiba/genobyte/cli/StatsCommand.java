@@ -42,7 +42,7 @@ public class StatsCommand implements CliCommand {
       context.getOutput().println("Computing statistics for all assays.");
       store.getAssayRecordStore().updateStats();
       store.commitTransaction();
-    } catch(RuntimeException e) {
+    } catch (RuntimeException e) {
       context.getOutput()
           .println("An error occured during the statistics computation. Error reported : " + e.getMessage());
     } finally {

@@ -20,21 +20,29 @@ package org.obiba.bitwise.dto;
 
 /**
  * Transfer object for a <tt>Field</tt> object.
- *
+ * <p>
  * Allows persisting a <tt>Field</tt> object through a FieldDao implementation.
  */
 public class FieldDto {
 
-  /** The unique name of this Field */
+  /**
+   * The unique name of this Field
+   */
   private String name_ = null;
 
-  /** Number of bits per bit vector */
+  /**
+   * Number of bits per bit vector
+   */
   private int size_ = -1;
 
-  /** Indexes of every bit vectors of this field. */
+  /**
+   * Indexes of every bit vectors of this field.
+   */
   private long[] bitIndex_ = null;
 
-  /** The name of the field dictionary */
+  /**
+   * The name of the field dictionary
+   */
   private String dictionaryName_ = null;
 
   public FieldDto() {

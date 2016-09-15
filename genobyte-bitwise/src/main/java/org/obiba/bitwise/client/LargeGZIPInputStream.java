@@ -41,9 +41,9 @@ public class LargeGZIPInputStream extends GZIPInputStream {
     try {
       retVal = super.read(buf, off, len);
       nbReadBytes_ += retVal;
-    } catch(IOException e) {
+    } catch (IOException e) {
       // Ignore the error if it's a corrupted trailer for a file larger than 4Gb
-      if(!(nbReadBytes_ > 4 * 1024 * 1024 * 1024 && e.getMessage() != null &&
+      if (!(nbReadBytes_ > 4 * 1024 * 1024 * 1024 && e.getMessage() != null &&
           e.getMessage().startsWith("Corrupt GZIP trailer"))) throw e;
     }
     return retVal;
@@ -61,24 +61,24 @@ public class LargeGZIPInputStream extends GZIPInputStream {
   public static void main(String[] args) {
     BufferedInputStream buffer = null;
 
-    for(int idx = 0; idx < args.length; idx++) {
+    for (int idx = 0; idx < args.length; idx++) {
       String file = args[idx];
       System.out.println("Testing: " + file);
       System.out.println("Reading normally");
       try {
         buffer = new BufferedInputStream(new GZIPInputStream(new FileInputStream(args[0])));
         byte[] bytes = new byte[4 * 1024];
-        while(true) {
+        while (true) {
           int read = buffer.read(bytes);
-          if(read < 0) break;
+          if (read < 0) break;
         }
-      } catch(Exception e) {
+      } catch (Exception e) {
         System.out.println("Normally caught: " + e.getMessage());
       } finally {
-        if(buffer != null) {
+        if (buffer != null) {
           try {
             buffer.close();
-          } catch(Exception e) {
+          } catch (Exception e) {
             // don't care
           }
         }
@@ -90,17 +90,17 @@ public class LargeGZIPInputStream extends GZIPInputStream {
       try {
         buffer = new BufferedInputStream(new LargeGZIPInputStream(new FileInputStream(file)));
         byte[] bytes = new byte[4 * 1024];
-        while(true) {
+        while (true) {
           int read = buffer.read(bytes);
-          if(read < 0) break;
+          if (read < 0) break;
         }
-      } catch(Exception e) {
+      } catch (Exception e) {
         System.out.println("New impl caught: " + e.getMessage());
       } finally {
-        if(buffer != null) {
+        if (buffer != null) {
           try {
             buffer.close();
-          } catch(Exception e) {
+          } catch (Exception e) {
             // don't care
           }
         }
@@ -117,34 +117,34 @@ public class LargeGZIPInputStream extends GZIPInputStream {
         ;
         byte[] bytes = new byte[4 * 1024];
         byte[] bytes2 = new byte[4 * 1024];
-        while(true) {
+        while (true) {
           int read = buffer.read(bytes);
           int read2 = buffer2.read(bytes2);
-          if(read != read2) System.out.println("Read different. New Impl: " + read + " >original: " + read2);
+          if (read != read2) System.out.println("Read different. New Impl: " + read + " >original: " + read2);
 
-          if(read < 0) break;
+          if (read < 0) break;
 
           bytesRead += read;
-          for(int i = 0; i < read; i++) {
-            if(bytes[i] != bytes2[i]) System.out
+          for (int i = 0; i < read; i++) {
+            if (bytes[i] != bytes2[i]) System.out
                 .println("Bytes at " + read + " are different. New Impl: " + bytes[i] + " >original: " + bytes2[i]);
           }
         }
-      } catch(Exception e) {
+      } catch (Exception e) {
         System.out.println("Compare caught: " + e.getMessage());
       } finally {
-        if(buffer != null) {
+        if (buffer != null) {
           try {
             buffer.close();
-          } catch(Exception e) {
+          } catch (Exception e) {
             // don't care
           }
         }
         buffer = null;
-        if(buffer2 != null) {
+        if (buffer2 != null) {
           try {
             buffer2.close();
-          } catch(Exception e) {
+          } catch (Exception e) {
             // don't care
           }
         }

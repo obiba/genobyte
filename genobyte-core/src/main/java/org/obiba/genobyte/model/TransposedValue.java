@@ -20,6 +20,7 @@ package org.obiba.genobyte.model;
 
 /**
  * Bean whose purpose is to transfer data from one bitwise store to the other in a <tt>GenotypingStore</tt>.
+ *
  * @param <K> the transposed record key type.
  * @param <V> the type of the value to be transposed.
  */

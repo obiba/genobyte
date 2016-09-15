@@ -23,15 +23,15 @@ package org.obiba.bitwise.annotation;
     storeName = "MyTestStore",
     version = "25.0",
 
-    dictionary = { @DictionaryDef(
+    dictionary = {@DictionaryDef(
         name = "positiveInteger",
-        property = { @DictionaryProperty(
+        property = {@DictionaryProperty(
             name = "lower",
             value = "0"), @DictionaryProperty(
             name = "upper",
             value = "2147483647"), @DictionaryProperty(
             name = "step",
-            value = "1") }) })
+            value = "1")})})
 public class FakeFaultyStore4<T> {
 
   private Integer id = null;
@@ -41,8 +41,12 @@ public class FakeFaultyStore4<T> {
   }
 
   @Stored(dictionary = "positiveInteger", unique = true)
-  public Integer getId() { return id; }
+  public Integer getId() {
+    return id;
+  }
 
   @NotStored
-  public void setId(Integer pId) { id = pId; }
+  public void setId(Integer pId) {
+    id = pId;
+  }
 }

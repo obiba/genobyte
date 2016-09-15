@@ -28,7 +28,6 @@ import org.obiba.bitwise.query.QueryResult;
  * first calls the {@link MendelianRecordTrioProvider#getChildRecords()} method. Then, for each
  * index set in the returned vector, a call to {@link MendelianRecordTrioProvider#getFatherRecords(int)}
  * and {@link MendelianRecordTrioProvider#getMotherRecords(int)} is made.
- *
  */
 public interface MendelianRecordTrioProvider {
 

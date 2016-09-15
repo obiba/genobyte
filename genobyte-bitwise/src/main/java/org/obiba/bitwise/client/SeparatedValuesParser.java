@@ -32,11 +32,11 @@ import java.util.zip.GZIPInputStream;
  * Utility class to help parse a separated value file (ie: csv, tsv, etc.)
  *
  * @author plaflamm
- *
- * <pre>
- * Date       Author      Changes
- * 21/02/2005 plaflamm    Creation
- * </pre>
+ *         <p>
+ *         <pre>
+ *                         Date       Author      Changes
+ *                         21/02/2005 plaflamm    Creation
+ *                         </pre>
  */
 public class SeparatedValuesParser {
 
@@ -78,7 +78,7 @@ public class SeparatedValuesParser {
   }
 
   public SeparatedValuesRow nextRow() throws IOException {
-    if(setNextRow() == false) {
+    if (setNextRow() == false) {
       return null;
     }
     return row_;
@@ -89,7 +89,7 @@ public class SeparatedValuesParser {
   }
 
   public void reset() throws IOException {
-    if(lnr_ != null) {
+    if (lnr_ != null) {
       lnr_.close();
     }
 
@@ -97,7 +97,7 @@ public class SeparatedValuesParser {
   }
 
   public void close() throws IOException {
-    if(lnr_ != null) {
+    if (lnr_ != null) {
       lnr_.close();
     }
   }
@@ -107,11 +107,11 @@ public class SeparatedValuesParser {
     currentLineIndex_ = lnr_.getLineNumber();
     currentLine_ = lnr_.readLine();
     // Skip empty lines
-    while(currentLine_ != null && StringUtil.isEmptyString(currentLine_) == true) {
+    while (currentLine_ != null && StringUtil.isEmptyString(currentLine_) == true) {
       currentLine_ = lnr_.readLine();
     }
 
-    if(currentLine_ == null) {
+    if (currentLine_ == null) {
       return false;
     }
 
@@ -121,30 +121,30 @@ public class SeparatedValuesParser {
 
   private String[] extractValues() throws IOException {
     String rowValues[] = currentLine_.split(separator_, -1);
-    if(enclosedBy_ == null) {
+    if (enclosedBy_ == null) {
       return rowValues;
     }
 
     List values = new ArrayList();
     StringBuffer buffer = null;
 
-    for(int i = 0; i < rowValues.length; i++) {
+    for (int i = 0; i < rowValues.length; i++) {
       String token = rowValues[i];
 
       int firstIndex = token.indexOf(enclosedBy_);
       int lastIndex = token.lastIndexOf(enclosedBy_);
 
       // Explicitly test both index even though it is redundant.
-      if(firstIndex == -1 && lastIndex == -1) {
-        if(buffer != null) {
+      if (firstIndex == -1 && lastIndex == -1) {
+        if (buffer != null) {
           // Part of an enclosed value that also contains a separator
           // Put the separator back into the buffer
           buffer.append(separator_).append(token);
         } else {
           values.add(token);
         }
-      } else if(firstIndex == lastIndex) {
-        if(buffer == null) {
+      } else if (firstIndex == lastIndex) {
+        if (buffer == null) {
           // Opening enclosing string without closing.
           buffer = new StringBuffer(token);
         } else {
@@ -153,8 +153,8 @@ public class SeparatedValuesParser {
           values.add(buffer.toString().replaceAll(enclosedBy_, ""));
           buffer = null;
         }
-      } else if(firstIndex != lastIndex) {
-        if(buffer != null) {
+      } else if (firstIndex != lastIndex) {
+        if (buffer != null) {
           // We cannot have two enclosing characters in one token when an unterminated token is being processed. 
           throw new IOException("Error on line " + lnr_.getLineNumber() + ": unterminated enclosing string.");
         }
@@ -162,7 +162,7 @@ public class SeparatedValuesParser {
       }
     }
 
-    if(buffer != null) {
+    if (buffer != null) {
       // We cannot have two enclosing characters in obnw token when an unterminated token is being processed. 
       throw new IOException("Error on line " + lnr_.getLineNumber() + ": unterminated enclosing string.");
     }
@@ -186,7 +186,7 @@ public class SeparatedValuesParser {
     ByteBuffer bb = ByteBuffer.wrap(magicBytes);
     bb.order(ByteOrder.LITTLE_ENDIAN);
     int magicNumber = bb.getInt();
-    if(magicNumber == GZIPInputStream.GZIP_MAGIC) {
+    if (magicNumber == GZIPInputStream.GZIP_MAGIC) {
       return new LargeGZIPInputStream(new FileInputStream(f));
     }
     return new FileInputStream(f);
@@ -213,28 +213,28 @@ public class SeparatedValuesParser {
      */
     public <T> T getColumnValue(int index, Class<T> type) throws IllegalArgumentException {
 
-      if(index < 0 || index >= currentRowValues_.length) {
+      if (index < 0 || index >= currentRowValues_.length) {
         throw new IllegalArgumentException("Column index=[" + index + "] does not exist.");
       }
 
       String value = currentRowValues_[index];
-      if(StringUtil.isEmptyString(value)) {
+      if (StringUtil.isEmptyString(value)) {
         return null;
       }
 
-      if(String.class == type) {
+      if (String.class == type) {
         // Make a copy of value, otherwise the VM may keep a reference to the currentRowValues_ array
         return (T) String.copyValueOf(value.toCharArray());
       }
 
       try {
-        Class parameterTypes[] = new Class[] { String.class };
+        Class parameterTypes[] = new Class[]{String.class};
         Constructor ctor = type.getConstructor(parameterTypes);
-        if(ctor != null) {
-          Object param[] = new Object[] { value };
+        if (ctor != null) {
+          Object param[] = new Object[]{value};
           return (T) ctor.newInstance(param);
         }
-      } catch(Exception e) {
+      } catch (Exception e) {
         throw new IllegalArgumentException(e);
       }
 

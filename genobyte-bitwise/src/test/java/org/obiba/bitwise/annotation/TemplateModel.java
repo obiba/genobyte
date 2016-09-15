@@ -22,8 +22,8 @@ import org.obiba.bitwise.dictionary.IntegerDictionary;
 
 @BitwiseRecord(
     storeAll = true,
-    dictionary = { @DictionaryDef(name = "calls", dictionaryClass = IntegerDictionary.class) },
-    templates = { @FieldTemplate(prefix = "calls", dictionary = "calls") })
+    dictionary = {@DictionaryDef(name = "calls", dictionaryClass = IntegerDictionary.class)},
+    templates = {@FieldTemplate(prefix = "calls", dictionary = "calls")})
 public class TemplateModel {
 
   @Stored(unique = true)

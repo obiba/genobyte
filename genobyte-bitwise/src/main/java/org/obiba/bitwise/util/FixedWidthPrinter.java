@@ -31,7 +31,8 @@ public class FixedWidthPrinter {
 
   /**
    * Build a printer that will output a fixed width table to <tt>ps</tt>. The number of columns that will be output must be specified with the <tt>columns</tt> parameter.
-   * @param ps the output stream to print to
+   *
+   * @param ps      the output stream to print to
    * @param columns the number of columns to output
    */
   public FixedWidthPrinter(PrintStream ps, int columns) {
@@ -46,8 +47,8 @@ public class FixedWidthPrinter {
    * @param widths
    */
   public void setWidths(int... widths) {
-    if(widths.length > this.widths.length) throw new IllegalArgumentException("too many widths");
-    for(int i = 0; i < widths.length; i++) {
+    if (widths.length > this.widths.length) throw new IllegalArgumentException("too many widths");
+    for (int i = 0; i < widths.length; i++) {
       this.widths[i] = widths[i];
     }
   }
@@ -56,7 +57,7 @@ public class FixedWidthPrinter {
    * Set the width of the column <tt>column</tt>
    *
    * @param column the column's index
-   * @param width the width to set for the specified column
+   * @param width  the width to set for the specified column
    */
   public void setWidth(int column, int width) {
     widths[column] = width;
@@ -64,15 +65,16 @@ public class FixedWidthPrinter {
 
   /**
    * Print values to the output with padding and truncating the values as needed.
+   *
    * @param columns the values to output
    */
   public void printLine(Object... columns) {
     StringBuilder sb = new StringBuilder();
-    for(int i = 0; i < columns.length; i++) {
-      if(i > 0) sb.append(" ");
+    for (int i = 0; i < columns.length; i++) {
+      if (i > 0) sb.append(" ");
 
       String column = asString(columns[i]);
-      if(i < widths.length && widths[i] > 0) {
+      if (i < widths.length && widths[i] > 0) {
         pad(sb, column, widths[i]);
       } else {
         sb.append(column);
@@ -82,18 +84,18 @@ public class FixedWidthPrinter {
   }
 
   private void pad(StringBuilder sb, String value, int size) {
-    if(value.length() > size) {
+    if (value.length() > size) {
       // need to truncate the value
       value = value.substring(0, size);
     }
     // Pad with spaces up to newSize - value.length()
     int newSize = sb.length() + size - value.length();
-    while(sb.length() < newSize) sb.append(" ");
+    while (sb.length() < newSize) sb.append(" ");
     sb.append(value);
   }
 
   private String asString(Object o) {
-    if(o == null) return "";
+    if (o == null) return "";
     return o.toString();
   }
 

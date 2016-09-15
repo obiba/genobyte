@@ -22,17 +22,20 @@ import org.obiba.bitwise.BitVector;
 import org.obiba.bitwise.query.QueryResult;
 
 /**
- * {@link QueryResult} implementation using a {@link BitVector} instance. This 
+ * {@link QueryResult} implementation using a {@link BitVector} instance. This
  * class is useful to decorate the {@link BitVector} class in order to use
  * it as a {@link QueryResult}.
  */
 public class BitVectorQueryResult implements QueryResult {
 
-  /** The result vector */
+  /**
+   * The result vector
+   */
   BitVector result_ = null;
 
   /**
    * Constructs a {@link QueryResult} using the specified {@link BitVector}
+   *
    * @param result the vector to wrap
    */
   public BitVectorQueryResult(BitVector result) {
@@ -55,7 +58,7 @@ public class BitVectorQueryResult implements QueryResult {
 
   public int hit(int index) {
     int h = -1;
-    while(index-- >= 0) {
+    while (index-- >= 0) {
       h = next(h + 1);
     }
     return h;

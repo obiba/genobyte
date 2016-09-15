@@ -23,7 +23,7 @@ import java.lang.annotation.*;
 /**
  * Indicates that a class is defining a record structure for a bitwise store.
  * The elements of this annotation will give information on the store itself, and on dictionaries used in the store.
- * This annotation type is usually used together with @Stored and @NotStored annotations.   
+ * This annotation type is usually used together with @Stored and @NotStored annotations.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)

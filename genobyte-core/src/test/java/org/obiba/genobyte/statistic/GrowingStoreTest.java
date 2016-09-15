@@ -18,20 +18,19 @@
  *******************************************************************************/
 package org.obiba.genobyte.statistic;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import junit.framework.TestCase;
 import org.obiba.genobyte.mock.MockBitwiseStore;
 import org.obiba.genobyte.mock.MockGenotypingStore;
 import org.obiba.genobyte.model.SnpCall;
 import org.obiba.genobyte.model.SnpGenotype;
 
-import junit.framework.TestCase;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GrowingStoreTest extends TestCase {
 
   /**
-   * There are no assertions in this test because it was created to 
+   * There are no assertions in this test because it was created to
    * reproduce a RuntimeException.
    */
   public void testCalculateStatsAfterStoreGrows() {
@@ -45,7 +44,7 @@ public class GrowingStoreTest extends TestCase {
 
     // Create some calls
     List<SnpGenotype<Integer>> calls = new ArrayList<SnpGenotype<Integer>>(317503);
-    for(int i = 0; i < 317503; i++) {
+    for (int i = 0; i < 317503; i++) {
       SnpGenotype<Integer> call = new SnpGenotype<Integer>();
       call.setTransposedKey(i);
       call.setValue(SnpCall.A);
@@ -58,7 +57,7 @@ public class GrowingStoreTest extends TestCase {
     // Calculate the stats for the sample. This used to throw and ArrayOutOfBoundsException
     try {
       store.getSampleRecordStore().updateStats(new Integer(1901));
-    } catch(RuntimeException e) {
+    } catch (RuntimeException e) {
       fail(e.getMessage());
     }
   }

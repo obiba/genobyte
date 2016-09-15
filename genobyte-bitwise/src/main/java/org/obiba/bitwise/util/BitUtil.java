@@ -27,12 +27,13 @@ public class BitUtil {
 
   /**
    * Returns the index of the last one bit in <code>value</code>.
+   *
    * @param value the value to test
    * @return the index of the last one bit
    */
   static public int dimension(long value) {
-    for(int i = 63; i >= 0; i--) {
-      if((value & ((long) 1 << i)) != 0) {
+    for (int i = 63; i >= 0; i--) {
+      if ((value & ((long) 1 << i)) != 0) {
         return i + 1;
       }
     }
@@ -41,12 +42,13 @@ public class BitUtil {
 
   /**
    * Returns the index of the last one bit in <code>value</code>.
+   *
    * @param value the value to test
    * @return the index of the last one bit
    */
   static public int dimension(int value) {
-    for(int i = 31; i >= 0; i--) {
-      if((value & (1 << i)) != 0) {
+    for (int i = 31; i >= 0; i--) {
+      if ((value & (1 << i)) != 0) {
         return i + 1;
       }
     }
@@ -55,14 +57,15 @@ public class BitUtil {
 
   /**
    * Converts <code>value</code> into a BitVector of size <code>dimension</code>.
-   * @param value the value to convert
+   *
+   * @param value     the value to convert
    * @param dimension the size of the resulting <code>BitVector</code>
    * @return a <code>BitVector</code> of size <code>dimension</code>.
    */
   static public BitVector vectorise(long value, int dimension) {
     BitVector v = new BitVector(dimension);
-    for(int i = 0; i < dimension; i++) {
-      if((value & ((long) 1 << i)) != 0) {
+    for (int i = 0; i < dimension; i++) {
+      if ((value & ((long) 1 << i)) != 0) {
         v.set(i);
       }
     }
@@ -71,14 +74,15 @@ public class BitUtil {
 
   /**
    * Converts <code>value</code> into a BitVector of size <code>dimension</code>.
-   * @param value the value to convert
+   *
+   * @param value     the value to convert
    * @param dimension the size of the resulting <code>BitVector</code>
    * @return a <code>BitVector</code> of size <code>dimension</code>.
    */
   static public BitVector vectorise(int value, int dimension) {
     BitVector v = new BitVector(dimension);
-    for(int i = 0; i < dimension; i++) {
-      if((value & (1 << i)) != 0) {
+    for (int i = 0; i < dimension; i++) {
+      if ((value & (1 << i)) != 0) {
         v.set(i);
       }
     }
@@ -88,6 +92,7 @@ public class BitUtil {
   /**
    * Converts <code>v</code> into a long. If this BitVector is too big to fit in a long,
    * only the low-order 64 bits are returned.
+   *
    * @param v the <code>BitVector</code> to convert
    * @return a long value
    */

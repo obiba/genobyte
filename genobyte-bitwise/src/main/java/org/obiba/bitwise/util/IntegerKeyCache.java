@@ -26,6 +26,7 @@ import java.util.List;
 
 /**
  * A {@link BitwiseRecordManager} for stores using an <tt>Integer</tt> unique field.
+ *
  * @param <T> the class holding data for a record in the store.
  */
 abstract public class IntegerKeyCache<T> implements BitwiseRecordManager<Integer, T> {
@@ -47,18 +48,18 @@ abstract public class IntegerKeyCache<T> implements BitwiseRecordManager<Integer
     impl_ = impl;
 
     FieldValueIterator<Integer> keyIter = impl_.keys();
-    while(keyIter.hasNext()) {
+    while (keyIter.hasNext()) {
       FieldValueIterator<Integer>.FieldValue value = keyIter.next();
       Integer key = value.getValue();
-      if(key == null) {
+      if (key == null) {
         throw new IllegalStateException("Key cannot be null for index=[" + value.getIndex() + "]");
       }
-      while(keyCache_.size() <= key) {
+      while (keyCache_.size() <= key) {
         keyCache_.add(null);
       }
       keyCache_.set(key, value.getIndex());
 
-      while(keyCache2_.size() <= value.getIndex()) keyCache2_.add(null);
+      while (keyCache2_.size() <= value.getIndex()) keyCache2_.add(null);
       keyCache2_.set(value.getIndex(), key);
     }
   }
@@ -74,19 +75,20 @@ abstract public class IntegerKeyCache<T> implements BitwiseRecordManager<Integer
 
   /**
    * Should be overriden by extending classes to provide the key for the specified record.
+   *
    * @return the key of the specified record.
    */
   abstract public Integer getKey(T record);
 
   public Integer getKey(int index) {
-    if(index < 0 || index >= keyCache2_.size()) return null;
+    if (index < 0 || index >= keyCache2_.size()) return null;
     return keyCache2_.get(index);
   }
 
   synchronized public void delete(int index) {
     Integer key = keyCache2_.get(index);
     keyCache2_.set(index, null);
-    if(key != null) {
+    if (key != null) {
       keyCache_.set(key, null);
     }
     impl_.delete(index);
@@ -102,7 +104,7 @@ abstract public class IntegerKeyCache<T> implements BitwiseRecordManager<Integer
   }
 
   public int getIndexFromKey(Integer key) {
-    if(key == null || key >= keyCache_.size()) {
+    if (key == null || key >= keyCache_.size()) {
       return -1;
     }
     Integer index = keyCache_.get(key);
@@ -113,10 +115,10 @@ abstract public class IntegerKeyCache<T> implements BitwiseRecordManager<Integer
     int index = impl_.insert(record);
     int key = getKey(record);
 
-    while(keyCache_.size() <= key) keyCache_.add(null);
+    while (keyCache_.size() <= key) keyCache_.add(null);
     keyCache_.set(key, index);
 
-    while(keyCache2_.size() <= index) keyCache2_.add(null);
+    while (keyCache2_.size() <= index) keyCache2_.add(null);
     keyCache2_.set(index, key);
 
     return index;

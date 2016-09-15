@@ -68,7 +68,7 @@ public class QueryParserTest extends TestCase {
       q = qp.parse("field1:\"quoted string with colon :\"");
       assertEquals(new MockFieldValueQuery("field1", "quoted string with colon :"), q);
 
-    } catch(ParseException e) {
+    } catch (ParseException e) {
       assertTrue(e.getMessage(), false);
     }
   }
@@ -116,7 +116,7 @@ public class QueryParserTest extends TestCase {
       q = qp.parse("field1:1.11*2.22");
       assertEquals(new MockWildcardQuery("field1", "1.11", "2.22"), q);   //Float
 
-    } catch(ParseException e) {
+    } catch (ParseException e) {
       assertTrue(e.getMessage(), false);
     }
   }
@@ -125,21 +125,21 @@ public class QueryParserTest extends TestCase {
     try {
       Query q = qp.parse("field1:");
       assertTrue("Expected exception not thrown", false);
-    } catch(ParseException e) {
+    } catch (ParseException e) {
       assertTrue(true);
     }
 
     try {
       Query q = qp.parse("field1:value allo");
       assertTrue("Expected exception not thrown", false);
-    } catch(ParseException e) {
+    } catch (ParseException e) {
       assertTrue(true);
     }
 
     try {
       Query q = qp.parse(":");
       assertTrue("Expected exception not thrown", false);
-    } catch(ParseException e) {
+    } catch (ParseException e) {
       assertTrue(true);
     }
   }
@@ -177,7 +177,7 @@ public class QueryParserTest extends TestCase {
           new MockBooleanQuery(BooleanQuery.Operator.AND, new MockNotQuery(q2), new MockDiffQuery("field1", "field2")));
       assertEquals(result, q);
 
-    } catch(ParseException e) {
+    } catch (ParseException e) {
       assertTrue(e.getMessage(), false);
     }
   }

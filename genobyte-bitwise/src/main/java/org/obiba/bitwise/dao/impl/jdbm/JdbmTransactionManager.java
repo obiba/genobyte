@@ -46,13 +46,13 @@ public class JdbmTransactionManager implements DaoTransactionManager {
 
   public void commitTransaction(DaoTransaction transaction) {
     JdbmContext.getInstance(key).commit();
-    if(isTransactional_) {
+    if (isTransactional_) {
     }
   }
 
   public void rollbackTransaction(DaoTransaction transaction) {
     JdbmContext.getInstance(key).rollback();
-    if(isTransactional_) {
+    if (isTransactional_) {
     }
   }
 

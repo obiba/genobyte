@@ -60,6 +60,7 @@ public class BitwiseStoreUtil {
 
   /**
    * Returns the <tt>BitwiseStoreUtil</tt> unique instance, used to manage stores.
+   *
    * @return The unique instance of this object.
    */
   public static BitwiseStoreUtil getInstance() {
@@ -68,6 +69,7 @@ public class BitwiseStoreUtil {
 
   /**
    * Sets the object providing properties to the bitwise stores.
+   *
    * @param provider is the properties provider.
    */
   public void setConfigurationPropertiesProvider(ConfigurationPropertiesProvider provider) {
@@ -76,6 +78,7 @@ public class BitwiseStoreUtil {
 
   /**
    * Gets the object that has been set to provide properties to the bitwise stores.
+   *
    * @return The properties provider.
    */
   public ConfigurationPropertiesProvider getConfigurationPropertiesProvider() {
@@ -84,7 +87,8 @@ public class BitwiseStoreUtil {
 
   /**
    * Gets the list of <tt>BitwiseStore</tt> instances currently opened.
-   * @return the list of all opened instances of <tt>BitwiseStore</tt>. 
+   *
+   * @return the list of all opened instances of <tt>BitwiseStore</tt>.
    */
   public Set<String> list() {
     return Collections.unmodifiableSet(STORE_MAP.keySet());
@@ -92,8 +96,9 @@ public class BitwiseStoreUtil {
 
   /**
    * Creates a new bitwise store.
-   * @param name is the name of the newly create store.
-   * @param schema is the data used to define the store, such as the fields and dictionaries.
+   *
+   * @param name     is the name of the newly create store.
+   * @param schema   is the data used to define the store, such as the fields and dictionaries.
    * @param capacity is the initial capacity of the store (in other words, how many records will be initially created with the store.)
    * @return The newly created bitwise store.
    */
@@ -103,38 +108,39 @@ public class BitwiseStoreUtil {
 
   /**
    * Creates a bitwise store with extra parameters that are unique to it.
-   * @param name is the name of the newly create store.
-   * @param schema is the data used to define the store, such as the fields and dictionaries.
-   * @param capacity is the initial capacity of the store (in other words, how many records will be initially created with the store.)
+   *
+   * @param name          is the name of the newly create store.
+   * @param schema        is the data used to define the store, such as the fields and dictionaries.
+   * @param capacity      is the initial capacity of the store (in other words, how many records will be initially created with the store.)
    * @param specificProps the list of extra properties that are specific to this store.
    * @return The newly created bitwise store.
    */
   public BitwiseStore create(String name, StoreSchema schema, int capacity, Properties specificProps) {
-    if(name == null) {
+    if (name == null) {
       throw new IllegalArgumentException("Store name cannot be null");
     }
-    if(schema == null) {
+    if (schema == null) {
       throw new IllegalArgumentException("Store schema cannot be null");
     }
 
-    synchronized(MUTEX) {
+    synchronized (MUTEX) {
       DaoKey key = new DaoKey(name);
       log.debug("Creating store [{}]", key);
 
       //Get default properties
       Properties p = provider_.loadProperties(name);
-      if(p == null) {
+      if (p == null) {
         p = new Properties();
       }
 
       //If store-specific properties were defined, merge them with default properties
       //(giving priority to the store-specific ones).
-      if(specificProps != null) {
+      if (specificProps != null) {
         p.putAll(specificProps);
       }
 
       DaoManager daoManager = KeyedDaoManager.getInstance(key);
-      if(daoManager == null) {
+      if (daoManager == null) {
         KeyedDaoManager.createInstance(key, p);
         daoManager = KeyedDaoManager.getInstance(key);
       }
@@ -161,7 +167,7 @@ public class BitwiseStoreUtil {
         store.flush();
 
         //Save specific properties if provided
-        if(specificProps != null) {
+        if (specificProps != null) {
           provider_.saveSpecificProperties(name, specificProps);
         }
         daoManager.commitTransaction();
@@ -173,17 +179,18 @@ public class BitwiseStoreUtil {
   }
 
   /**
-   * Opens a bitwise store. 
+   * Opens a bitwise store.
+   *
    * @param name is the name of the bitwise store to be opened.
    * @return The requested bitwise store.
    */
   public BitwiseStore open(String name) {
-    synchronized(MUTEX) {
+    synchronized (MUTEX) {
       ReentrantLock storeLock = storeLocks.get(name);
-      while(storeLock != null && storeLock.isLocked()) {
+      while (storeLock != null && storeLock.isLocked()) {
         try {
           MUTEX.wait(10 * 1000);
-        } catch(InterruptedException e) {
+        } catch (InterruptedException e) {
           throw new RuntimeException(e);
         }
       }
@@ -192,12 +199,12 @@ public class BitwiseStoreUtil {
 
       // Get configuration properties for the store
       Properties p = null;
-      if(provider_ != null) {
+      if (provider_ != null) {
         p = provider_.loadProperties(name);
       }
 
       DaoManager daoManager = KeyedDaoManager.getInstance(key);
-      if(daoManager == null) {
+      if (daoManager == null) {
         KeyedDaoManager.createInstance(key, p);
         daoManager = KeyedDaoManager.getInstance(key);
       }
@@ -207,29 +214,29 @@ public class BitwiseStoreUtil {
         BitwiseStoreDtoDao dao = (BitwiseStoreDtoDao) daoManager.getDao(BitwiseStoreDtoDao.class);
         // If the store does not exist, this method will return null
         BitwiseStoreDto data = dao.load(name);
-        if(data != null) {
+        if (data != null) {
           store = new BitwiseStore(data);
           store.open(p);
         }
         daoManager.commitTransaction();
-      } catch(RuntimeException e) {
+      } catch (RuntimeException e) {
         log.error("Fatal error opening store [" + key + "]", e);
         store = null;
         throw e;
       } finally {
         daoManager.endTransaction();
-        if(store == null) {
+        if (store == null) {
           // If we weren't able to open the store and no other reference exists, then we destroy the DaoManager
-          if(STORE_MAP.containsKey(name) == false) {
+          if (STORE_MAP.containsKey(name) == false) {
             try {
               KeyedDaoManager.destroyInstance(key);
-            } catch(RuntimeException e) {
+            } catch (RuntimeException e) {
               log.error("Fatal error destroying instance", e);
             }
           }
         } else {
           // RefCount the store
-          if(STORE_MAP.containsKey(name)) {
+          if (STORE_MAP.containsKey(name)) {
             STORE_MAP.get(name).inc();
           } else {
             STORE_MAP.put(name, new BitwiseStoreRef(key));
@@ -242,6 +249,7 @@ public class BitwiseStoreUtil {
 
   /**
    * Verifies that store with the given pStoreName really exists on the server.
+   *
    * @param pStoreName
    * @return <B>true</B> if a store exists on the server.<BR>
    * <B>false</B> if it doesn't exist.
@@ -249,7 +257,7 @@ public class BitwiseStoreUtil {
   public boolean exists(String pStoreName) {
     BitwiseStore testedStore = this.open(pStoreName);
     boolean storeExists;
-    if(testedStore != null) {
+    if (testedStore != null) {
       storeExists = true;
       this.close(testedStore);
     } else {
@@ -260,11 +268,12 @@ public class BitwiseStoreUtil {
 
   /**
    * Closes an opened bitwise store.
+   *
    * @param store is the store to be closed.
    */
   public void close(BitwiseStore store) {
-    synchronized(MUTEX) {
-      if(STORE_MAP.get(store.getName()).dec() == false) {
+    synchronized (MUTEX) {
+      if (STORE_MAP.get(store.getName()).dec() == false) {
         MUTEX.notify();
         return;
       }
@@ -280,9 +289,9 @@ public class BitwiseStoreUtil {
    * Forces a bitwise store to be closed.
    */
   public void forceClose(String name) {
-    synchronized(MUTEX) {
+    synchronized (MUTEX) {
       BitwiseStoreRef ref = STORE_MAP.remove(name);
-      if(ref != null) {
+      if (ref != null) {
         KeyedDaoManager.destroyInstance(ref.key_);
       }
       storeLocks.remove(name);
@@ -292,21 +301,22 @@ public class BitwiseStoreUtil {
 
   /**
    * Locks a <tt>BitwiseStore</tt> to prevent it from being accessed in the middle of a <tt>Runnable</tt> operation.
+   *
    * @param name the name of the store on which to put the lock.
-   * @param r the code segment to execute in lock mode.
+   * @param r    the code segment to execute in lock mode.
    */
   public void lock(String name, Runnable r) {
-    synchronized(MUTEX) {
+    synchronized (MUTEX) {
       BitwiseStoreRef ref = STORE_MAP.get(name);
 
       storeLocks.putIfAbsent(name, new ReentrantLock());
       ReentrantLock storeLock = storeLocks.get(name);
       // Wait if lock is already held by another thread or if there are more ref counts that this thread accounts for.
-      while((storeLock.isLocked() && storeLock.isHeldByCurrentThread() == false) ||
+      while ((storeLock.isLocked() && storeLock.isHeldByCurrentThread() == false) ||
           (ref != null && ref.isThreadExclusive() == false)) {
-        if(log.isDebugEnabled()) {
-          Object args[] = new Object[] { storeLock.isLocked(), storeLock.isHeldByCurrentThread(), ref != null,
-              ref.isThreadExclusive() };
+        if (log.isDebugEnabled()) {
+          Object args[] = new Object[]{storeLock.isLocked(), storeLock.isHeldByCurrentThread(), ref != null,
+              ref.isThreadExclusive()};
           log.debug(
               "Waiting for lock: (isLocked [{}] && isHeldByCurrentThread() [{}]) or (ref != null [{}] && isThreadExclusive [{}])",
               args);
@@ -315,7 +325,7 @@ public class BitwiseStoreUtil {
           ref = null;
           // Some other thread is holding a reference to the store. Wait for it.
           MUTEX.wait(10 * 1000);
-        } catch(InterruptedException e) {
+        } catch (InterruptedException e) {
           throw new RuntimeException(e);
         }
         ref = STORE_MAP.get(name);
@@ -324,7 +334,7 @@ public class BitwiseStoreUtil {
       storeLock.lock();
 
       log.debug("Thread [{}] is holding [{}] lock(s) on store [{}]",
-          new Object[] { Thread.currentThread().getId(), storeLock.getHoldCount(), name });
+          new Object[]{Thread.currentThread().getId(), storeLock.getHoldCount(), name});
     }
 
     // The Store "name" is locked: no thread may open it.
@@ -332,7 +342,7 @@ public class BitwiseStoreUtil {
     try {
       r.run();
     } finally {
-      synchronized(MUTEX) {
+      synchronized (MUTEX) {
         storeLocks.get(name).unlock();
         MUTEX.notify();
       }
@@ -361,20 +371,20 @@ public class BitwiseStoreUtil {
     DaoKey inc() {
       int refCount = refCount_.incrementAndGet();
       int threadRefCount = getThreadCount().incrementAndGet();
-      log.debug("Store [{}] refCount [{}] threadRefCount [{}]", new Object[] { key_, refCount, threadRefCount });
+      log.debug("Store [{}] refCount [{}] threadRefCount [{}]", new Object[]{key_, refCount, threadRefCount});
       return key_;
     }
 
     boolean dec() {
       int refCount = refCount_.decrementAndGet();
       int threadRefCount = getThreadCount().decrementAndGet();
-      log.debug("Store [{}] refCount [{}] threadRefCount [{}]", new Object[] { key_, refCount, threadRefCount });
+      log.debug("Store [{}] refCount [{}] threadRefCount [{}]", new Object[]{key_, refCount, threadRefCount});
       return refCount == 0;
     }
 
     AtomicInteger getThreadCount() {
       AtomicInteger ai = threadRefCount_.get();
-      if(ai == null) {
+      if (ai == null) {
         threadRefCount_.set(ai = new AtomicInteger());
       }
       return ai;

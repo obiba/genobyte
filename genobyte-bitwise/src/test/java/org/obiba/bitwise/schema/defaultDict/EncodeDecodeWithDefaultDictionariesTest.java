@@ -53,7 +53,7 @@ public class EncodeDecodeWithDefaultDictionariesTest extends BaseBdbDaoTestCase 
       //Make sure the new store has been created
       assertNotNull(myStore);
     } finally {
-      if(myStore != null) {
+      if (myStore != null) {
         myStore.endTransaction();
         myStore.close();
       }
@@ -62,6 +62,7 @@ public class EncodeDecodeWithDefaultDictionariesTest extends BaseBdbDaoTestCase 
 
   /**
    * Build a new store (using class annotations)
+   *
    * @param pStoreName is the name of the store to be created.
    * @param pStoreSize is the starting size of the repository (number of records already set to null)
    * @return The newly created store as a BitwiseStore object.
@@ -79,6 +80,7 @@ public class EncodeDecodeWithDefaultDictionariesTest extends BaseBdbDaoTestCase 
 
   /**
    * Create new rows in the store.
+   *
    * @param pStore the store in which to add new rows.
    */
   private void addRecords(BitwiseStore pStore) {

@@ -41,7 +41,7 @@ public class MockFieldValueQuery extends Query implements MockQuery {
 
   @Override
   public boolean equals(Object o) {
-    if(o instanceof MockFieldValueQuery) {
+    if (o instanceof MockFieldValueQuery) {
       MockFieldValueQuery rhs = (MockFieldValueQuery) o;
       return field_.equals(rhs.field_) && value_.equals(rhs.value_);
     }

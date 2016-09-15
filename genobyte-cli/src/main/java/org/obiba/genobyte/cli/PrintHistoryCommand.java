@@ -39,7 +39,7 @@ public class PrintHistoryCommand implements CliCommand {
 
     // Print header
     printer.printLine("#", "Store", "Count", "Query");
-    for(int i = 0; i < qh.size(); i++) {
+    for (int i = 0; i < qh.size(); i++) {
       QueryExecution qe = qh.get(i);
       printer.printLine(Integer.toString(i + 1), qe.getStore().getStore().getName(), Integer.toString(qe.count()),
           qe.getQuery());

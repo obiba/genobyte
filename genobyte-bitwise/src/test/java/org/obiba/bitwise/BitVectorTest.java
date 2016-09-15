@@ -45,12 +45,12 @@ public class BitVectorTest extends TestCase {
     assertEquals((1 << 8) + 1, v.longValue());
 
     v = new BitVector(63);
-    for(int i = 0; i < 63; i++) {
+    for (int i = 0; i < 63; i++) {
       v.set(i);
     }
     long start = System.currentTimeMillis();
     long value = v.longValue();
-    for(int i = 0; i < 1000000; i++) {
+    for (int i = 0; i < 1000000; i++) {
       v.longValue();
     }
     long end = System.currentTimeMillis();
@@ -58,7 +58,7 @@ public class BitVectorTest extends TestCase {
     System.out.println("BitVector.toValue(): " + (end - start));
     start = System.currentTimeMillis();
     value = BitUtil.longValue(v);
-    for(int i = 0; i < 1000000; i++) {
+    for (int i = 0; i < 1000000; i++) {
       BitUtil.longValue(v);
     }
     end = System.currentTimeMillis();
@@ -79,7 +79,7 @@ public class BitVectorTest extends TestCase {
     assertEquals(1002, v.nextSetBit(1002));
     assertEquals(-1, v.nextSetBit(1003));
 
-    for(int i = v.nextSetBit(0); i >= 0; i = v.nextSetBit(i + 1)) {
+    for (int i = v.nextSetBit(0); i >= 0; i = v.nextSetBit(i + 1)) {
       assertTrue("index should be 1001 or 1002 but was " + i, i == 1001 || i == 1002);
     }
 
@@ -122,8 +122,8 @@ public class BitVectorTest extends TestCase {
     assertEquals(1, v.count());
     v.not();
     assertEquals(size - 1, v.count());
-    for(int i = 0; i < size; i++) {
-      if(i != set) {
+    for (int i = 0; i < size; i++) {
+      if (i != set) {
         assertTrue(v.get(i));
       } else {
         assertFalse(v.get(i));
@@ -135,7 +135,7 @@ public class BitVectorTest extends TestCase {
     final int size = 100000;
     long time = 0;
     BitVector v = new BitVector(size);
-    for(int i = 0; i < size; i += 2) {
+    for (int i = 0; i < size; i += 2) {
       v.set(i);
       long start = System.currentTimeMillis();
       v.count();
@@ -152,9 +152,9 @@ public class BitVectorTest extends TestCase {
     final int size = 100000;
     BitVector v1 = new BitVector(size);
     BitVector v2 = new BitVector(size);
-    for(int i = 0; i < size; i += 2) {
+    for (int i = 0; i < size; i += 2) {
       v1.set(i);
-      if(i + 1 < size) {
+      if (i + 1 < size) {
         v2.set(i + 1);
       }
     }
@@ -169,9 +169,9 @@ public class BitVectorTest extends TestCase {
     final int size = 100000;
     BitVector v1 = new BitVector(size);
     BitVector v2 = new BitVector(size);
-    for(int i = 0; i < size; i += 2) {
+    for (int i = 0; i < size; i += 2) {
       v1.set(i);
-      if(i + 1 < size) {
+      if (i + 1 < size) {
         v2.set(i + 1);
       }
     }
@@ -187,9 +187,9 @@ public class BitVectorTest extends TestCase {
     final int size = 100000;
     BitVector v1 = new BitVector(size);
     BitVector v2 = new BitVector(size);
-    for(int i = 0; i < size; i += 2) {
+    for (int i = 0; i < size; i += 2) {
       v1.set(i);
-      if(i + 1 < size) {
+      if (i + 1 < size) {
         v2.set(i + 1);
       }
     }
@@ -204,9 +204,9 @@ public class BitVectorTest extends TestCase {
     final int size = 100000;
     BitVector v1 = new BitVector(size);
     BitVector v2 = new BitVector(size);
-    for(int i = 0; i < size; i += 2) {
+    for (int i = 0; i < size; i += 2) {
       v1.set(i);
-      if(i + 1 < size) {
+      if (i + 1 < size) {
         v2.set(i + 1);
       }
     }

@@ -43,6 +43,7 @@ public class Property implements Serializable {
 
   /**
    * Gets the name of the property.
+   *
    * @return the name.
    */
   public String getName() {
@@ -51,6 +52,7 @@ public class Property implements Serializable {
 
   /**
    * Gets the property value.
+   *
    * @return the value.
    */
   public String getValue() {
@@ -59,6 +61,7 @@ public class Property implements Serializable {
 
   /**
    * Sets the name of the property.
+   *
    * @param name the name to set.
    */
   public void setName(String name) {
@@ -67,6 +70,7 @@ public class Property implements Serializable {
 
   /**
    * Sets the value of the property.
+   *
    * @param value the value to set.
    */
   public void setValue(String value) {

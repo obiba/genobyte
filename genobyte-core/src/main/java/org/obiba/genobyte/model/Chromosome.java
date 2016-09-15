@@ -22,60 +22,150 @@ package org.obiba.genobyte.model;
  * Chromosome part of the position in the human genome.
  */
 public enum Chromosome {
-  /** Chromosome 1 */chr1,
-  /** Chromosome 2 */chr2,
-  /** Chromosome 3 */chr3,
-  /** Chromosome 4 */chr4,
-  /** Chromosome 5 */chr5,
-  /** Chromosome 6 */chr6,
-  /** Chromosome 7 */chr7,
-  /** Chromosome 8 */chr8,
-  /** Chromosome 9 */chr9,
-  /** Chromosome 10 */chr10,
-  /** Chromosome 11 */chr11,
-  /** Chromosome 12 */chr12,
-  /** Chromosome 13 */chr13,
-  /** Chromosome 14 */chr14,
-  /** Chromosome 15 */chr15,
-  /** Chromosome 16 */chr16,
-  /** Chromosome 17 */chr17,
-  /** Chromosome 18 */chr18,
-  /** Chromosome 19 */chr19,
-  /** Chromosome 20 */chr20,
-  /** Chromosome 21 */chr21,
-  /** Chromosome 22 */chr22,
-  /** Chromosome X */chrX,
-  /** Chromosome Y */chrY,
+  /**
+   * Chromosome 1
+   */chr1,
+  /**
+   * Chromosome 2
+   */chr2,
+  /**
+   * Chromosome 3
+   */chr3,
+  /**
+   * Chromosome 4
+   */chr4,
+  /**
+   * Chromosome 5
+   */chr5,
+  /**
+   * Chromosome 6
+   */chr6,
+  /**
+   * Chromosome 7
+   */chr7,
+  /**
+   * Chromosome 8
+   */chr8,
+  /**
+   * Chromosome 9
+   */chr9,
+  /**
+   * Chromosome 10
+   */chr10,
+  /**
+   * Chromosome 11
+   */chr11,
+  /**
+   * Chromosome 12
+   */chr12,
+  /**
+   * Chromosome 13
+   */chr13,
+  /**
+   * Chromosome 14
+   */chr14,
+  /**
+   * Chromosome 15
+   */chr15,
+  /**
+   * Chromosome 16
+   */chr16,
+  /**
+   * Chromosome 17
+   */chr17,
+  /**
+   * Chromosome 18
+   */chr18,
+  /**
+   * Chromosome 19
+   */chr19,
+  /**
+   * Chromosome 20
+   */chr20,
+  /**
+   * Chromosome 21
+   */chr21,
+  /**
+   * Chromosome 22
+   */chr22,
+  /**
+   * Chromosome X
+   */chrX,
+  /**
+   * Chromosome Y
+   */chrY,
 
-  /** A chromosome that couldn't be read or couldn't be properly entered. */
+  /**
+   * A chromosome that couldn't be read or couldn't be properly entered.
+   */
   chrBad,
 
-  /**Used by illumina for diploid snps on XY*/
+  /**
+   * Used by illumina for diploid snps on XY
+   */
   chrXY,
 
-  /** Mitochondrion */
+  /**
+   * Mitochondrion
+   */
   chrMT,
 
-  /** Heterogametic female gender chromosome. Seen in birds */
+  /**
+   * Heterogametic female gender chromosome. Seen in birds
+   */
   chrW,
 
-  /** Male part of the heterogametic gender chromosome. Seen in birds */
+  /**
+   * Male part of the heterogametic gender chromosome. Seen in birds
+   */
   chrZ,
 
-  /** Chromosome 23 */chr23,
-  /** Chromosome 24 */chr24,
-  /** Chromosome 25 */chr25,
-  /** Chromosome 26 */chr26,
-  /** Chromosome 27 */chr27,
-  /** Chromosome 28 */chr28,
-  /** Chromosome 29 */chr29,
-  /** Chromosome 30 */chr30,
-  /** Chromosome 31 */chr31,
-  /** Chromosome 32 */chr32,
-  /** Chromosome 33 */chr33,
-  /** Chromosome 34 */chr34,
-  /** Chromosome 35 */chr35,
-  /** Chromosome 36 */chr36,
-  /** Chromosome 37 */chr37,
-  /** Chromosome 38 */chr38;
+  /**
+   * Chromosome 23
+   */chr23,
+  /**
+   * Chromosome 24
+   */chr24,
+  /**
+   * Chromosome 25
+   */chr25,
+  /**
+   * Chromosome 26
+   */chr26,
+  /**
+   * Chromosome 27
+   */chr27,
+  /**
+   * Chromosome 28
+   */chr28,
+  /**
+   * Chromosome 29
+   */chr29,
+  /**
+   * Chromosome 30
+   */chr30,
+  /**
+   * Chromosome 31
+   */chr31,
+  /**
+   * Chromosome 32
+   */chr32,
+  /**
+   * Chromosome 33
+   */chr33,
+  /**
+   * Chromosome 34
+   */chr34,
+  /**
+   * Chromosome 35
+   */chr35,
+  /**
+   * Chromosome 36
+   */chr36,
+  /**
+   * Chromosome 37
+   */chr37,
+  /**
+   * Chromosome 38
+   */chr38;
 }

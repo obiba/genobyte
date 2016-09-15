@@ -31,7 +31,7 @@ public class AdditiveChiSquareModel extends BaseChiSquareModelImpl {
     int R = ccgf.getR();
     int N = ccgf.getN();
 
-    if(R == 0 || N == 0) {
+    if (R == 0 || N == 0) {
       return Double.NaN;
     }
 
@@ -47,7 +47,7 @@ public class AdditiveChiSquareModel extends BaseChiSquareModelImpl {
     f = n1 + 2 * n2;
     double denominator = R * (N - R) * (N * (n1 + 4 * n2) - (f * f));
 
-    if(Double.compare(denominator, 0.0d) == 0) {
+    if (Double.compare(denominator, 0.0d) == 0) {
       return Double.NaN;
     }
 

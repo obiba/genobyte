@@ -21,15 +21,15 @@ package org.obiba.bitwise.util;
 import java.util.Iterator;
 
 /**
- * Provides the seed text for the {@link Huffman} encoding algorithm. The <tt>Huffman</tt> 
+ * Provides the seed text for the {@link Huffman} encoding algorithm. The <tt>Huffman</tt>
  * algorithm needs to be seeded with text that closely represents the data that will
- * be encoded. This interface allows providing this text dynamically. 
+ * be encoded. This interface allows providing this text dynamically.
  */
 public interface HuffmanSeedProvider {
 
   /**
-   * Returns an implementation of <tt>Iterator</tt> that iterates on all the 
-   * seeding text. 
+   * Returns an implementation of <tt>Iterator</tt> that iterates on all the
+   * seeding text.
    */
   public Iterator<String> getSeed();
 
