@@ -19,7 +19,6 @@
 package org.obiba.genobyte.mock;
 
 import org.obiba.bitwise.BitwiseStore;
-import org.obiba.bitwise.mock.MockBitwiseStore;
 import org.obiba.genobyte.GenotypingRecordStore;
 import org.obiba.genobyte.GenotypingStore;
 

@@ -21,7 +21,7 @@ package org.obiba.genobyte.statistic;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.obiba.bitwise.mock.MockBitwiseStore;
+import org.obiba.genobyte.mock.MockBitwiseStore;
 import org.obiba.genobyte.mock.MockGenotypingStore;
 import org.obiba.genobyte.model.SnpCall;
 import org.obiba.genobyte.model.SnpGenotype;

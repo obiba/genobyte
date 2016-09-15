@@ -18,7 +18,7 @@
  *******************************************************************************/
 package org.obiba.genobyte.statistic;
 
-import org.obiba.bitwise.mock.MockBitwiseStore;
+import org.obiba.genobyte.mock.MockBitwiseStore;
 import org.obiba.genobyte.mock.MockGenotypingStore;
 
 import junit.framework.TestCase;

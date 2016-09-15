@@ -20,7 +20,7 @@ package org.obiba.genobyte.statistic;
 
 import java.util.List;
 
-import org.obiba.bitwise.dao.BaseBdbDaoTestCase;
+import org.obiba.genobyte.dao.BaseBdbDaoTestCase;
 import org.obiba.genobyte.statistic.util.CallRate;
 import org.obiba.genobyte.statistic.util.Frequencies;
 import org.obiba.genobyte.statistic.util.Maf;

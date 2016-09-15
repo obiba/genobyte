@@ -67,6 +67,7 @@
     <version>2.0-SNAPSHOT</version>
 
     <modules>
+        <module>genobyte-bitwise</module>
         <module>genobyte-core</module>
         <module>genobyte-cli</module>
     </modules>
@@ -90,6 +91,13 @@
     <dependencyManagement>
 
       <dependencies>
+          <dependency>
+              <groupId>org.obiba.genobyte</groupId>
+              <artifactId>genobyte-bitwise</artifactId>
+              <version>${project.version}</version>
+              <type>jar</type>
+          </dependency>
+
         <dependency>
           <groupId>org.obiba.genobyte</groupId>
           <artifactId>genobyte-core</artifactId>

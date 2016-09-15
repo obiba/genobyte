@@ -121,7 +121,7 @@
             </group>
             <group>
               <title>Mock Objects Library</title>
-              <packages>org.obiba.bitwise.mock:org.obiba.bitwise.mock.*</packages>
+              <packages>org.obiba.bitwise.mock:org.obiba.genobyte.mock.*</packages>
             </group>
           </groups>
           <!-- Hide these from the API Javadoc -->

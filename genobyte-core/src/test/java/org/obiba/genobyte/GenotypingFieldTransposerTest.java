@@ -19,7 +19,7 @@
 package org.obiba.genobyte;
 
 import org.obiba.bitwise.Field;
-import org.obiba.bitwise.mock.MockBitwiseStore;
+import org.obiba.genobyte.mock.MockBitwiseStore;
 import org.obiba.genobyte.mock.MockGenotypingStore;
 import org.obiba.genobyte.model.SnpCall;
 

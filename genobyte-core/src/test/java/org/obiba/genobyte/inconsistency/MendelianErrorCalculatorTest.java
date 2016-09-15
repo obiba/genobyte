@@ -20,7 +20,7 @@ package org.obiba.genobyte.inconsistency;
 
 import org.obiba.bitwise.Dictionary;
 import org.obiba.bitwise.Field;
-import org.obiba.bitwise.mock.MockBitwiseStore;
+import org.obiba.genobyte.mock.MockBitwiseStore;
 import org.obiba.bitwise.query.QueryResult;
 import org.obiba.genobyte.GenotypingRecordStore;
 import org.obiba.genobyte.mock.MockGenotypingStore;
