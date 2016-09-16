@@ -25,6 +25,7 @@ public interface StatsDigester {
 
   /**
    * Processes the data available in the StatsPool.
+   *
    * @param pPool the pool containing statistical results,
    */
   public void digest(StatsPool<?, ?> pPool);

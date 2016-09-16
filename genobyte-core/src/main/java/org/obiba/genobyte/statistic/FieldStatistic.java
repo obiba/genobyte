@@ -18,9 +18,9 @@
  *******************************************************************************/
 package org.obiba.genobyte.statistic;
 
-import java.util.Map;
-
 import org.obiba.bitwise.query.QueryResult;
+
+import java.util.Map;
 
 /**
  * Defines a <tt>Statistic</tt> type that calculates results for a whole field at a time.
@@ -29,7 +29,8 @@ public interface FieldStatistic extends Statistic {
 
   /**
    * Computes the statistic with the provided parameters, for a whole field.
-   * @param pPool the <tt>StatsPool</tt> instance containing computed statistical data.
+   *
+   * @param pPool   the <tt>StatsPool</tt> instance containing computed statistical data.
    * @param pFields the map of parameters required to compute the statistic, identified by name.
    * @param pFilter a field filter that says which records to consider for calculation.
    */

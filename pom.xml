@@ -1,404 +1,443 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    
-<!--=============================================================================================-->
-<!-- Project Information                                                                         -->
-<!--=============================================================================================-->
-    <name>Obiba GenoByte</name>
-    <description>Parent POM for GenoByte modules</description>
-    <url>http://www.obiba.org/genobyte</url>
-    <inceptionYear>2007</inceptionYear>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-    <licenses>
-        <license>
-            <name>GNU Public License version 3</name>
-            <url>http://www.gnu.org/licenses/gpl-3.0.txt</url>
-        </license>
-    </licenses>
+  <!--=============================================================================================-->
+  <!-- Project Information                                                                         -->
+  <!--=============================================================================================-->
+  <name>Obiba GenoByte</name>
+  <description>Parent POM for GenoByte modules</description>
+  <url>http://www.obiba.org/genobyte</url>
+  <inceptionYear>2007</inceptionYear>
 
-    <developers>
-        <developer>
-            <name>Vincent Ferretti</name>
-            <id>vferretti</id>
-            <email />
-            <organization>Génome Québec</organization>
-            <roles>
-                <role>Project Manager</role>
-            </roles>
-        </developer>
-        <developer>
-            <name>Philippe Laflamme</name>
-            <id>plaflamm</id>
-            <email />
-            <organization>Génome Québec</organization>
-            <roles>
-                <role>Java Developer</role>
-            </roles>
-        </developer>
-        <developer>
-            <name>David Bujold</name>
-            <id>dbujold</id>
-            <email />
-            <organization>Génome Québec</organization>
-            <roles>
-                <role>Java Developer</role>
-            </roles>
-        </developer>
-    </developers>
+  <licenses>
+    <license>
+      <name>GNU Public License version 3</name>
+      <url>http://www.gnu.org/licenses/gpl-3.0.txt</url>
+    </license>
+  </licenses>
 
-    <contributors>
-        <contributor>
-            <name>Guillaume Barreau</name>
-            <organization>Génome Québec</organization>
-        </contributor>
-    </contributors>
+  <developers>
+    <developer>
+      <name>Vincent Ferretti</name>
+      <id>vferretti</id>
+      <email/>
+      <organization>Génome Québec</organization>
+      <roles>
+        <role>Project Manager</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Philippe Laflamme</name>
+      <id>plaflamm</id>
+      <email/>
+      <organization>Génome Québec</organization>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>David Bujold</name>
+      <id>dbujold</id>
+      <email/>
+      <organization>Génome Québec</organization>
+      <roles>
+        <role>Java Developer</role>
+      </roles>
+    </developer>
+  </developers>
 
-    <organization>
-        <name>Génome Québec</name>
-        <url>http://www.genomequebec.com</url>
-    </organization>
+  <contributors>
+    <contributor>
+      <name>Guillaume Barreau</name>
+      <organization>Génome Québec</organization>
+    </contributor>
+  </contributors>
 
-<!--=============================================================================================-->
-<!-- POM Relationships                                                                           -->
-<!--=============================================================================================-->
-    <groupId>org.obiba.genobyte</groupId>
-    <artifactId>genobyte</artifactId>
-    <version>2.0-SNAPSHOT</version>
+  <organization>
+    <name>Génome Québec</name>
+    <url>http://www.genomequebec.com</url>
+  </organization>
 
-    <modules>
-        <module>genobyte-core</module>
-        <module>genobyte-cli</module>
-    </modules>
+  <!--=============================================================================================-->
+  <!-- POM Relationships                                                                           -->
+  <!--=============================================================================================-->
+  <groupId>org.obiba.genobyte</groupId>
+  <artifactId>genobyte</artifactId>
+  <version>2.0-SNAPSHOT</version>
 
-    <properties>
-        <commons-cli.version>1.1</commons-cli.version>
-        <commons-beanutils.version>1.7.0</commons-beanutils.version>
-        <commons-digester.version>1.8</commons-digester.version>
-        <ibatis.version>2.0.9b_550</ibatis.version>
-        <jdbm.version>1.0</jdbm.version>
-        <je.version>5.0.73</je.version>
-        <junit.version>3.8.1</junit.version>
-        <slf4j.version>1.4.3</slf4j.version>
+  <modules>
+    <module>genobyte-bitwise-api</module>
+    <module>genobyte-bdb</module>
+    <module>genobyte-jdbm</module>
+    <module>genobyte-bitwise</module>
+    <module>genobyte-core</module>
+    <module>genobyte-cli</module>
+  </modules>
 
-        <!-- Default values that may be overriden using profiles -->
-        <obiba.site.url>file://${project.basedir}/target</obiba.site.url>
-        <obiba.site.context>site-deploy</obiba.site.context>
-    </properties>
+  <properties>
+    <commons-cli.version>1.1</commons-cli.version>
+    <commons-beanutils.version>1.7.0</commons-beanutils.version>
+    <commons-digester.version>1.8</commons-digester.version>
+    <ibatis.version>2.0.9b_550</ibatis.version>
+    <jdbm.version>1.0</jdbm.version>
+    <je.version>5.0.73</je.version>
+    <junit.version>3.8.1</junit.version>
+    <slf4j.version>1.4.3</slf4j.version>
 
-    <!-- Specify versions for common dependencies -->
-    <dependencyManagement>
+    <!-- Default values that may be overriden using profiles -->
+    <obiba.site.url>file://${project.basedir}/target</obiba.site.url>
+    <obiba.site.context>site-deploy</obiba.site.context>
+  </properties>
 
-      <dependencies>
-        <dependency>
-          <groupId>org.obiba.genobyte</groupId>
-          <artifactId>genobyte-core</artifactId>
-          <version>${project.version}</version>
-            <type>jar</type>
-        </dependency>
+  <!-- Specify versions for common dependencies -->
+  <dependencyManagement>
 
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-            <type>jar</type>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl104-over-slf4j</artifactId>
-            <version>${slf4j.version}</version>
-            <type>jar</type>
-        </dependency>
-
-        <dependency>
-            <groupId>commons-beanutils</groupId>
-            <artifactId>commons-beanutils</artifactId>
-            <version>${commons-beanutils.version}</version>
-            <type>jar</type>
-            <exclusions>
-              <exclusion>
-                <groupId>commons-logging</groupId>
-                <artifactId>commons-logging</artifactId>
-              </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>commons-digester</groupId>
-            <artifactId>commons-digester</artifactId>
-            <version>${commons-digester.version}</version>
-            <type>jar</type>
-            <exclusions>
-                <exclusion>
-                    <groupId>xml-apis</groupId>
-                    <artifactId>xml-apis</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>commons-cli</groupId>
-            <artifactId>commons-cli</artifactId>
-            <version>${commons-cli.version}</version>
-            <type>jar</type>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.ibatis</groupId>
-            <artifactId>ibatis-common</artifactId>
-            <version>${ibatis.version}</version>
-            <type>jar</type>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.ibatis</groupId>
-            <artifactId>ibatis-dao</artifactId>
-            <version>${ibatis.version}</version>
-            <type>jar</type>
-        </dependency>
-
-        <dependency>
-        	<groupId>com.sleepycat</groupId>
-       		<artifactId>je</artifactId>
-        	<version>${je.version}</version>
-        	<type>jar</type>
-      	</dependency>
-
-        <dependency>
-            <groupId>jdbm</groupId>
-            <artifactId>jdbm</artifactId>
-            <version>${jdbm.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- Use log4j during testing -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j.version}</version>
-            <scope>test</scope>
-        </dependency>        
-      </dependencies>
-    </dependencyManagement>
-
-    <!-- Define common dependencies -->
     <dependencies>
+      <dependency>
+        <groupId>org.obiba.genobyte</groupId>
+        <artifactId>genobyte-bitwise-api</artifactId>
+        <version>${project.version}</version>
+        <type>jar</type>
+      </dependency>
 
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
+      <dependency>
+        <groupId>org.obiba.genobyte</groupId>
+        <artifactId>genobyte-bdb</artifactId>
+        <version>${project.version}</version>
+        <type>jar</type>
+      </dependency>
 
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl104-over-slf4j</artifactId>
-        </dependency>
+      <dependency>
+        <groupId>org.obiba.genobyte</groupId>
+        <artifactId>genobyte-jdbm</artifactId>
+        <version>${project.version}</version>
+        <type>jar</type>
+      </dependency>
 
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
+      <dependency>
+        <groupId>org.obiba.genobyte</groupId>
+        <artifactId>genobyte-bitwise</artifactId>
+        <version>${project.version}</version>
+        <type>jar</type>
+      </dependency>
 
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <scope>test</scope>
-        </dependency>
+      <dependency>
+        <groupId>org.obiba.genobyte</groupId>
+        <artifactId>genobyte-core</artifactId>
+        <version>${project.version}</version>
+        <type>jar</type>
+      </dependency>
 
-    </dependencies>    
-    
-<!--=============================================================================================-->
-<!-- Build Settings                                                                              -->
-<!--=============================================================================================-->
-    <packaging>pom</packaging>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slf4j.version}</version>
+        <type>jar</type>
+      </dependency>
 
-    <build>
-        <!-- Common plugins for modules -->
-        <pluginManagement>
-            <plugins>
-                <!-- Require and build for Java 1.8 -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <configuration>
-                        <source>1.8</source>
-                        <target>1.8</target>
-                    </configuration>
-                </plugin>
-    
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <!-- Using 2.1 breaks due to missing XML implementation -->
-                    <version>2.3</version>
-                    <configuration>
-                        <forkMode>once</forkMode>
-                        <argLine>-Xmx512M</argLine>
-                        <!-- Override the default inclusion to remove **/*Test*.java -->
-                        <includes>
-                            <include>**/*Test.java</include>
-                        </includes>
-                    </configuration>
-                </plugin>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>jcl104-over-slf4j</artifactId>
+        <version>${slf4j.version}</version>
+        <type>jar</type>
+      </dependency>
 
-                <plugin>
-                  <groupId>org.apache.maven.plugins</groupId>
-                  <artifactId>maven-source-plugin</artifactId>
-                  <executions>
-                    <execution>
-                      <id>attach-sources</id>
-                      <phase>verify</phase>
-                      <goals>
-                        <goal>jar</goal>
-                      </goals>
-                    </execution>
-                  </executions>
-                </plugin>
+      <dependency>
+        <groupId>commons-beanutils</groupId>
+        <artifactId>commons-beanutils</artifactId>
+        <version>${commons-beanutils.version}</version>
+        <type>jar</type>
+        <exclusions>
+          <exclusion>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
 
-            </plugins>
-        </pluginManagement>
+      <dependency>
+        <groupId>commons-digester</groupId>
+        <artifactId>commons-digester</artifactId>
+        <version>${commons-digester.version}</version>
+        <type>jar</type>
+        <exclusions>
+          <exclusion>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
 
-        <plugins>
-          <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-release-plugin</artifactId>
-              <version>2.0-beta-8</version>
-              <configuration>
-                  <tagBase>https://svn.obiba.org/genobyte/tags/releases</tagBase>
-              </configuration>
-          </plugin>
-    
-          <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-deploy-plugin</artifactId>
-          </plugin>
-    
-          <plugin>
-              <artifactId>maven-assembly-plugin</artifactId>
-              <configuration>
-                  <appendAssemblyId>true</appendAssemblyId>
-                  <descriptors>
-                      <descriptor>src/assembly/bin-release.xml</descriptor>
-                      <descriptor>src/assembly/src-release.xml</descriptor>
-                  </descriptors>
-                  <finalName>genobyte-${project.version}</finalName>
-                  <!-- Output the generated file directly into genobyte's generated site -->
-                  <outputDirectory>genobyte/target/site/downloads</outputDirectory>
-                  <tarLongFileMode>gnu</tarLongFileMode>
-              </configuration>
-          </plugin>
+      <dependency>
+        <groupId>commons-cli</groupId>
+        <artifactId>commons-cli</artifactId>
+        <version>${commons-cli.version}</version>
+        <type>jar</type>
+      </dependency>
 
-        </plugins>
+      <dependency>
+        <groupId>org.apache.ibatis</groupId>
+        <artifactId>ibatis-common</artifactId>
+        <version>${ibatis.version}</version>
+        <type>jar</type>
+      </dependency>
 
-        <resources>
-            <resource>
-                <directory>${project.basedir}/src/main/java</directory>
-                <includes>
-                    <include>**</include>
-                </includes>
-                <excludes>
-                    <exclude>**/*.java</exclude>
-                    <exclude>**/package.html</exclude>
-                </excludes>
-                <filtering>false</filtering>
-            </resource>
-            <resource>
-                <directory>${project.basedir}/src/main/resources</directory>
-                <includes>
-                    <include>**</include>
-                </includes>
-                <filtering>false</filtering>
-            </resource>
-        </resources>
+      <dependency>
+        <groupId>org.apache.ibatis</groupId>
+        <artifactId>ibatis-dao</artifactId>
+        <version>${ibatis.version}</version>
+        <type>jar</type>
+      </dependency>
 
-        <testResources>
-            <testResource>
-                <directory>${project.basedir}/src/test/java</directory>
-                <excludes>
-                    <exclude>**/*.java</exclude>
-                </excludes>
-                <filtering>false</filtering>
-            </testResource>
-            <testResource>
-                <directory>${project.basedir}/src/test/resources</directory>
-                <includes>
-                    <include>**</include>
-                </includes>
-                <filtering>false</filtering>
-            </testResource>
-        </testResources>
-        
-    </build>
+      <dependency>
+        <groupId>com.sleepycat</groupId>
+        <artifactId>je</artifactId>
+        <version>${je.version}</version>
+        <type>jar</type>
+      </dependency>
 
-<!--=============================================================================================-->
-<!-- Build Environment                                                                           -->
-<!--=============================================================================================-->
-    <repositories>
-			<repository>
-				<id>obiba.org</id>
-				<name>Obiba Maven 2.x Repository</name>
-				<url>http://repo.obiba.org/repo</url>
-				<releases>
-					<enabled>true</enabled>
-				</releases>
-				<snapshots>
-					<enabled>true</enabled>
-				</snapshots>
-			</repository>
-    </repositories>
+      <dependency>
+        <groupId>jdbm</groupId>
+        <artifactId>jdbm</artifactId>
+        <version>${jdbm.version}</version>
+      </dependency>
 
-    <distributionManagement>
-			<repository>
-				<id>obiba-releases</id>
-				<url>http://repo.obiba.org/libs-release-local</url>
-			</repository>
-			<snapshotRepository>
-				<id>obiba-snapshots</id>
-				<url>http://repo.obiba.org/libs-snapshot-local</url>
-			</snapshotRepository>
-    </distributionManagement>
-    
-		<scm>
-			<connection>scm:git:git://github.com/obiba/genobyte.git</connection>
-			<developerConnection>scm:git:https://github.com/obiba/genobyte.git</developerConnection>
-			<url>https://github.com/obiba/genobyte</url>
-		</scm>    
+      <dependency>
+        <groupId>org.deephacks.lmdbjni</groupId>
+        <artifactId>lmdbjni-linux64</artifactId>
+        <version>0.4.6</version>
+      </dependency>
 
-    <issueManagement>
-        <system>JIRA</system>
-        <url>http://jira.obiba.org</url>
-    </issueManagement>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>${junit.version}</version>
+        <scope>test</scope>
+      </dependency>
 
-    <!-- Not live yet -->
-    <ciManagement />
+      <!-- Use log4j during testing -->
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-log4j12</artifactId>
+        <version>${slf4j.version}</version>
+        <scope>test</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
-    <mailingLists>
-        <mailingList>
-            <name>genobyte-dev</name>
-            <subscribe><![CDATA[http://lists.mcgill.ca/scripts/wa.exe?SUBED1=genobyte-dev&A=1]]></subscribe>
-            <unsubscribe><![CDATA[http://lists.mcgill.ca/scripts/wa.exe?SUBED1=genobyte-dev&A=1]]></unsubscribe>
-            <post>genobyte-dev@lists.mcgill.ca</post>
-            <archive>http://lists.mcgill.ca/archives/genobyte-dev.html</archive>
-        </mailingList>
-        <mailingList>
-            <name>genobyte-user</name>
-            <subscribe><![CDATA[http://lists.mcgill.ca/scripts/wa.exe?SUBED1=genobyte-user&A=1]]></subscribe>
-            <unsubscribe><![CDATA[http://lists.mcgill.ca/scripts/wa.exe?SUBED1=genobyte-user&A=1]]></unsubscribe>
-            <post>genobyte-user@lists.mcgill.ca</post>
-            <archive>http://lists.mcgill.ca/archives/genobyte-user.html</archive>
-        </mailingList>
-    </mailingLists>
+  <!-- Define common dependencies -->
+  <dependencies>
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl104-over-slf4j</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
+
+  <!--=============================================================================================-->
+  <!-- Build Settings                                                                              -->
+  <!--=============================================================================================-->
+  <packaging>pom</packaging>
+
+  <build>
+    <!-- Common plugins for modules -->
+    <pluginManagement>
+      <plugins>
+        <!-- Require and build for Java 1.8 -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <configuration>
+            <source>1.8</source>
+            <target>1.8</target>
+          </configuration>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <!-- Using 2.1 breaks due to missing XML implementation -->
+          <version>2.3</version>
+          <configuration>
+            <forkMode>once</forkMode>
+            <argLine>-Xmx512M</argLine>
+            <!-- Override the default inclusion to remove **/*Test*.java -->
+            <includes>
+              <include>**/*Test.java</include>
+            </includes>
+          </configuration>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <executions>
+            <execution>
+              <id>attach-sources</id>
+              <phase>verify</phase>
+              <goals>
+                <goal>jar</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+
+      </plugins>
+    </pluginManagement>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.0-beta-8</version>
+        <configuration>
+          <tagBase>https://svn.obiba.org/genobyte/tags/releases</tagBase>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <appendAssemblyId>true</appendAssemblyId>
+          <descriptors>
+            <descriptor>src/assembly/bin-release.xml</descriptor>
+            <descriptor>src/assembly/src-release.xml</descriptor>
+          </descriptors>
+          <finalName>genobyte-${project.version}</finalName>
+          <!-- Output the generated file directly into genobyte's generated site -->
+          <outputDirectory>genobyte/target/site/downloads</outputDirectory>
+          <tarLongFileMode>gnu</tarLongFileMode>
+        </configuration>
+      </plugin>
+
+    </plugins>
+
+    <resources>
+      <resource>
+        <directory>${project.basedir}/src/main/java</directory>
+        <includes>
+          <include>**</include>
+        </includes>
+        <excludes>
+          <exclude>**/*.java</exclude>
+          <exclude>**/package.html</exclude>
+        </excludes>
+        <filtering>false</filtering>
+      </resource>
+      <resource>
+        <directory>${project.basedir}/src/main/resources</directory>
+        <includes>
+          <include>**</include>
+        </includes>
+        <filtering>false</filtering>
+      </resource>
+    </resources>
+
+    <testResources>
+      <testResource>
+        <directory>${project.basedir}/src/test/java</directory>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
+        <filtering>false</filtering>
+      </testResource>
+      <testResource>
+        <directory>${project.basedir}/src/test/resources</directory>
+        <includes>
+          <include>**</include>
+        </includes>
+        <filtering>false</filtering>
+      </testResource>
+    </testResources>
+
+  </build>
+
+  <!--=============================================================================================-->
+  <!-- Build Environment                                                                           -->
+  <!--=============================================================================================-->
+  <repositories>
+    <repository>
+      <id>obiba.org</id>
+      <name>Obiba Maven 2.x Repository</name>
+      <url>http://repo.obiba.org/repo</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
+  <distributionManagement>
+    <repository>
+      <id>obiba-releases</id>
+      <url>http://repo.obiba.org/libs-release-local</url>
+    </repository>
+    <snapshotRepository>
+      <id>obiba-snapshots</id>
+      <url>http://repo.obiba.org/libs-snapshot-local</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+  <scm>
+    <connection>scm:git:git://github.com/obiba/genobyte.git</connection>
+    <developerConnection>scm:git:https://github.com/obiba/genobyte.git</developerConnection>
+    <url>https://github.com/obiba/genobyte</url>
+  </scm>
+
+  <issueManagement>
+    <system>JIRA</system>
+    <url>http://jira.obiba.org</url>
+  </issueManagement>
+
+  <!-- Not live yet -->
+  <ciManagement/>
+
+  <mailingLists>
+    <mailingList>
+      <name>genobyte-dev</name>
+      <subscribe><![CDATA[http://lists.mcgill.ca/scripts/wa.exe?SUBED1=genobyte-dev&A=1]]></subscribe>
+      <unsubscribe><![CDATA[http://lists.mcgill.ca/scripts/wa.exe?SUBED1=genobyte-dev&A=1]]></unsubscribe>
+      <post>genobyte-dev@lists.mcgill.ca</post>
+      <archive>http://lists.mcgill.ca/archives/genobyte-dev.html</archive>
+    </mailingList>
+    <mailingList>
+      <name>genobyte-user</name>
+      <subscribe><![CDATA[http://lists.mcgill.ca/scripts/wa.exe?SUBED1=genobyte-user&A=1]]></subscribe>
+      <unsubscribe><![CDATA[http://lists.mcgill.ca/scripts/wa.exe?SUBED1=genobyte-user&A=1]]></unsubscribe>
+      <post>genobyte-user@lists.mcgill.ca</post>
+      <archive>http://lists.mcgill.ca/archives/genobyte-user.html</archive>
+    </mailingList>
+  </mailingLists>
 
 </project>

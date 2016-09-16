@@ -1,0 +1,133 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <!--=============================================================================================-->
+  <!-- Project Information                                                                         -->
+  <!--=============================================================================================-->
+  <name>Obiba Genobyte Core</name>
+  <description>An API for storing and manipulating high throughput genotype data</description>
+
+  <!--=============================================================================================-->
+  <!-- POM Relationships                                                                           -->
+  <!--=============================================================================================-->
+  <parent>
+    <groupId>org.obiba.genobyte</groupId>
+    <artifactId>genobyte</artifactId>
+    <version>2.0-SNAPSHOT</version>
+    <relativePath>../</relativePath>
+  </parent>
+
+  <groupId>org.obiba.genobyte</groupId>
+  <artifactId>genobyte-jdbm</artifactId>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.obiba.genobyte</groupId>
+      <artifactId>genobyte-bitwise-api</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>jdbm</groupId>
+      <artifactId>jdbm</artifactId>
+    </dependency>
+  </dependencies>
+
+
+  <!--=============================================================================================-->
+  <!-- Build Settings                                                                              -->
+  <!--=============================================================================================-->
+  <packaging>jar</packaging>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <configuration>
+          <templateFile>../site/maven-site.vm</templateFile>
+        </configuration>
+      </plugin>
+
+    </plugins>
+  </build>
+
+  <reporting>
+    <plugins>
+
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <groups>
+            <group>
+              <title>GenoByte Packages</title>
+              <packages>org.obiba.genobyte:org.obiba.genobyte.*</packages>
+            </group>
+            <group>
+              <title>Mock Objects Library</title>
+              <packages>org.obiba.bitwise.mock:org.obiba.genobyte.mock.*</packages>
+            </group>
+          </groups>
+        </configuration>
+      </plugin>
+
+    </plugins>
+  </reporting>
+
+  <!--=============================================================================================-->
+  <!-- Build Environment                                                                           -->
+  <!--=============================================================================================-->
+
+  <profiles>
+    <profile>
+      <id>default_reporting</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+
+      <reporting>
+        <plugins>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-site-plugin</artifactId>
+          </plugin>
+
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>changes-maven-plugin</artifactId>
+          </plugin>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-pmd-plugin</artifactId>
+            <configuration>
+              <targetJdk>1.5</targetJdk>
+              <rulesets>
+                <ruleset>/rulesets/basic.xml</ruleset>
+                <ruleset>/rulesets/controversial.xml</ruleset>
+              </rulesets>
+              <format>xml</format>
+              <linkXref>true</linkXref>
+              <sourceEncoding>ISO-8859-1</sourceEncoding>
+              <minimumTokens>100</minimumTokens>
+            </configuration>
+          </plugin>
+
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>taglist-maven-plugin</artifactId>
+          </plugin>
+
+        </plugins>
+      </reporting>
+
+    </profile>
+  </profiles>
+
+</project>

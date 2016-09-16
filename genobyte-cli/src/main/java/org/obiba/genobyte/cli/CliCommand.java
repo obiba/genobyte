@@ -39,6 +39,7 @@ public interface CliCommand {
 
   /**
    * Returns the Option instance associated with this command.
+   *
    * @return the option instance associated with this command.
    */
   public Option getOption();
@@ -46,7 +47,7 @@ public interface CliCommand {
   /**
    * Execute the command
    *
-   * @param opt the instance of Option from which arguments may be fetched.
+   * @param opt     the instance of Option from which arguments may be fetched.
    * @param context the current command line interface context.
    * @return true if the shell should exit once the command has been executed.
    * @throws ParseException when an error occurs while parsing arguments.

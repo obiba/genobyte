@@ -23,22 +23,27 @@ package org.obiba.genobyte.model;
  */
 public enum Orientation {
 
-  /** Positive strand */
+  /**
+   * Positive strand
+   */
   FORWARD,
 
-  /** Negative strand */
+  /**
+   * Negative strand
+   */
   REVERSE;
 
   /**
    * Determines the orientation from a <tt>String</tt> containing the strand sign.
+   *
    * @param sign the sign of the strand.
    * @return the <tt>Orientation</tt> corresponding to the given strand sign.
    */
   static public Orientation parseSign(String sign) {
-    if(sign != null) {
-      if(sign.equals("+")) {
+    if (sign != null) {
+      if (sign.equals("+")) {
         return FORWARD;
-      } else if(sign.equals("-")) {
+      } else if (sign.equals("-")) {
         return REVERSE;
       }
     }
@@ -46,12 +51,13 @@ public enum Orientation {
   }
 
   /**
-   * Gets the strand sign for this <tt>Orientation</tt> instance, in a <tt>String</tt> format. 
+   * Gets the strand sign for this <tt>Orientation</tt> instance, in a <tt>String</tt> format.
+   *
    * @return the strand sign.
    */
   public String getSign() {
-    if(this == FORWARD) return "+";
-    if(this == REVERSE) return "-";
+    if (this == FORWARD) return "+";
+    if (this == REVERSE) return "-";
     throw new IllegalStateException();
   }
 }

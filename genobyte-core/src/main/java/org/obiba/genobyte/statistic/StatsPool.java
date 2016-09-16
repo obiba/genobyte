@@ -18,11 +18,6 @@
  *******************************************************************************/
 package org.obiba.genobyte.statistic;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.obiba.bitwise.BitVector;
 import org.obiba.bitwise.VolatileField;
 import org.obiba.bitwise.query.QueryResult;
@@ -32,9 +27,15 @@ import org.obiba.genobyte.GenotypingRecordStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 /**
- * Calculates statistical runs and holds the pool of calculated results. 
- * @param <K> the key for the store using this <tt>StatsPool</tt>.
+ * Calculates statistical runs and holds the pool of calculated results.
+ *
+ * @param <K>  the key for the store using this <tt>StatsPool</tt>.
  * @param <TK> the key for the transposed store.
  */
 public class StatsPool<K, TK> {
@@ -77,6 +78,7 @@ public class StatsPool<K, TK> {
 
   /**
    * Set values for the initial set of parameters used in statistic calculation.
+   *
    * @param pValues the map of values identified by an unique name.
    */
   public void setPredefinedValues(Map<String, Object> pValues) {
@@ -85,6 +87,7 @@ public class StatsPool<K, TK> {
 
   /**
    * Gives to the pool the records on which the <tt>Statistic</tt> implementations calculate method will be ran.
+   *
    * @param pQr the <tt>QueryResult</tt> containing all records to be considered in calculation.
    */
   public void setRecordMask(QueryResult pQr) {
@@ -93,11 +96,12 @@ public class StatsPool<K, TK> {
 
   /**
    * Gives to the pool the records on which the <tt>Statistic</tt> implementations calculate method will be ran.
+   *
    * @param pSet the <tt>Set</tt> of unique keys for all records to be considered in calculation.
    */
   public void setRecordMask(Set<K> pSet) {
     BitVector recordsBv = new BitVector(rs_.getStore().getCapacity());
-    for(K key : pSet) {
+    for (K key : pSet) {
       int index = rs_.getRecordManager().getIndexFromKey(key);
       recordsBv.set(index);
     }
@@ -106,6 +110,7 @@ public class StatsPool<K, TK> {
 
   /**
    * Returns the mask used in this pool to select the records on which statistics will be calculated.
+   *
    * @return a <tt>BitVector</tt> of the selected records mask.
    */
   public QueryResult getRecordMask() {
@@ -114,6 +119,7 @@ public class StatsPool<K, TK> {
 
   /**
    * Sets a mask on the transposed store to select the records used in statistics calculation.
+   *
    * @param pQr the record mask in a <tt>QueryResult</tt> format.
    */
   public void setTransposedMask(QueryResult pQr) {
@@ -122,6 +128,7 @@ public class StatsPool<K, TK> {
 
   /**
    * Returns the record mask applied to the transposed store.
+   *
    * @return the record mask for the transposed store.
    */
   public QueryResult getTransposedMask() {
@@ -130,6 +137,7 @@ public class StatsPool<K, TK> {
 
   /**
    * Returns the pool containing all data processed inputed into and output from statistical calculation.
+   *
    * @return the pool of data.
    */
   public Map<String, Object> getPool() {
@@ -138,6 +146,7 @@ public class StatsPool<K, TK> {
 
   /**
    * Returns the <tt>GenotypingRecordStore</tt> in use by the <tt>StatsPool</tt> instance.
+   *
    * @return the record store.
    */
   public GenotypingRecordStore<K, ?, ?> getGenotypingRecordStore() {
@@ -154,22 +163,22 @@ public class StatsPool<K, TK> {
 
     log.debug("Run requires {} iterations", (this.run_.getMaxIteration() + 1));
     //Run through all iterations
-    for(int i = 0; i <= run_.getMaxIteration(); i++) {
+    for (int i = 0; i <= run_.getMaxIteration(); i++) {
       log.debug("Iteration {}", (i + 1));
 
       //If there are stats that need transposed fields.
       List<RecordStatistic> tStats = run_.getRecordStats(i);
-      if(tStats.size() > 0) {
+      if (tStats.size() > 0) {
         log.debug("Computing {} RecordStatistics", tStats.size());
         calculateRecordStats(tStats);
       }
 
       //Calculate all stats that do not need transposed fields.
       List<FieldStatistic> ntStats = run_.getFieldStats(i);
-      if(ntStats.size() > 0) {
+      if (ntStats.size() > 0) {
         log.debug("Computing {} FieldStatistics", ntStats.size());
         Map<String, Object> params = new HashMap<String, Object>();
-        for(FieldStatistic s : ntStats) {
+        for (FieldStatistic s : ntStats) {
           prepareStatisticFields(s, null, params);
           s.calculate(this, params, recordMask_);
           params.clear();
@@ -179,19 +188,20 @@ public class StatsPool<K, TK> {
   }
 
   /**
-   * Calculates all the <tt>RecordStatistic</tt> instances provided in parameter, by iterating on all store records. 
+   * Calculates all the <tt>RecordStatistic</tt> instances provided in parameter, by iterating on all store records.
+   *
    * @param pStats the list of statistics to be computed.
    */
   private void calculateRecordStats(List<RecordStatistic> pStats) {
     //Iterate on records that are not filtered by keysFilter_.
-    for(int i = recordMask_.next(0); i != -1; i = recordMask_.next(i + 1)) {
+    for (int i = recordMask_.next(0); i != -1; i = recordMask_.next(i + 1)) {
       K key = rs_.getRecordManager().getKey(i);
-      if(key == null) {
+      if (key == null) {
         continue;
       }
 
       Map<String, Object> params = new HashMap<String, Object>();
-      for(RecordStatistic s : pStats) {
+      for (RecordStatistic s : pStats) {
         prepareStatisticFields(s, key, params);
 
         //Results for this statistic have been obtained. Put them in the proper VolatileField.
@@ -202,22 +212,24 @@ public class StatsPool<K, TK> {
   }
 
   /**
-   * Prepares a <tt>Map</tt> structure that contains fields from the <tt>GenotypingStore</tt> stores. 
+   * Prepares a <tt>Map</tt> structure that contains fields from the <tt>GenotypingStore</tt> stores.
+   *
    * @param pStat the statistic for which we prepare the field map.
-   * @param key the key of the record for which we extract fields.
+   * @param key   the key of the record for which we extract fields.
    * @return the map containing the required fields.
    */
   private void prepareStatisticFields(Statistic pStat, K key, Map<String, Object> params) {
     //Prepare the parameter map
-    for(String p : pStat.getInputFields()) {
+    for (String p : pStat.getInputFields()) {
       params.put(p, rs_.getGenotypingField(p, key));
     }
   }
 
   /**
-   * Gets a <tt>VolatileField</tt> from the pool. If it doesn't exist yet, either create it or return null. 
-   * @param pName the name under which the field can be found in the pool.
-   * @param pClass the class of the field content, in case we need to create a new field.
+   * Gets a <tt>VolatileField</tt> from the pool. If it doesn't exist yet, either create it or return null.
+   *
+   * @param pName       the name under which the field can be found in the pool.
+   * @param pClass      the class of the field content, in case we need to create a new field.
    * @param pAutoCreate whether or not to create the field if it doesn't exist.
    * @return the <tt>VolatileField</tt> that was requested.
    */
@@ -225,12 +237,12 @@ public class StatsPool<K, TK> {
     VolatileField field;
 
     //Verify if the field already exists in the pool
-    if(!(pool_.containsKey(pName))) {
+    if (!(pool_.containsKey(pName))) {
       //The field doesn't exist. Either create it or return null.
-      if(pAutoCreate) {
+      if (pAutoCreate) {
         field = new VolatileField(pName, rs_.getStore(), ddf_.getInstance(pClass, pName));
         log.debug("Created volatile field {} of dimension {} and size {}",
-            new Object[] { pName, field.getDictionary().dimension(), field.getSize() });
+            new Object[]{pName, field.getDictionary().dimension(), field.getSize()});
         pool_.put(pName, field);
       } else {
         return null;
@@ -251,7 +263,8 @@ public class StatsPool<K, TK> {
   /**
    * Gets a <tt>VolatileField</tt> from the pool, and creates it if it doesn't exist yet, using the class
    * provided in parameter to determine the dictionary.
-   * @param pName the name under which the field can be found in the pool.
+   *
+   * @param pName  the name under which the field can be found in the pool.
    * @param pClass the class of the field content, in case we need to create a new field.
    * @return the <tt>VolatileField</tt> that was requested.
    */
@@ -261,6 +274,7 @@ public class StatsPool<K, TK> {
 
   /**
    * Gets a <tt>VolatileField</tt> from the pool.
+   *
    * @param pName the name under which the field can be found in the pool.
    * @return the <tt>VolatileField</tt> that was requested, or <tt>null</tt> if it doesn't exist in the pool.
    */
@@ -271,8 +285,9 @@ public class StatsPool<K, TK> {
   /**
    * Sets a statistic result in a <tt>VolatileField</tt> located in the pool. If the <tt>VolatileField</tt>
    * doesn't exist, it will first be created.
-   * @param <T> the type of the value to be stored in a <tt>VolatileField</tt>.
-   * @param pName the name of the field.
+   *
+   * @param <T>    the type of the value to be stored in a <tt>VolatileField</tt>.
+   * @param pName  the name of the field.
    * @param pIndex the record index.
    * @param pValue the value to store.
    */
@@ -283,8 +298,9 @@ public class StatsPool<K, TK> {
 
   /**
    * Gets a value in a <tt>VolatileField</tt> at the given index.
-   * @param <T> the type in which the value will be casted.
-   * @param pName the name of the field.
+   *
+   * @param <T>    the type in which the value will be casted.
+   * @param pName  the name of the field.
    * @param pIndex the record index.
    * @return the fetched value.
    */

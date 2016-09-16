@@ -18,24 +18,20 @@
  *******************************************************************************/
 package org.obiba.genobyte.inconsistency.util;
 
-import java.util.Set;
-import java.util.TreeSet;
-
-import org.obiba.bitwise.BitVector;
-import org.obiba.bitwise.BitwiseStore;
-import org.obiba.bitwise.Dictionary;
-import org.obiba.bitwise.Field;
-import org.obiba.bitwise.FieldValueIterator;
+import org.obiba.bitwise.*;
 import org.obiba.bitwise.query.QueryResult;
 import org.obiba.bitwise.util.BitVectorQueryResult;
 import org.obiba.genobyte.GenotypingRecordStore;
 import org.obiba.genobyte.inconsistency.ComparableRecordProvider;
 
+import java.util.Set;
+import java.util.TreeSet;
+
 /**
- * Implements {@link ComparableRecordProvider} based on two fields: 
+ * Implements {@link ComparableRecordProvider} based on two fields:
  * <ul>
- *   <li>a unique ID field</li>
- *   <li>a reference ID field</li>
+ * <li>a unique ID field</li>
+ * <li>a reference ID field</li>
  * </ul>
  * <p/>
  * The unique ID field should contain the records unique keys. The reference ID field should contain the
@@ -50,15 +46,15 @@ public class ReferenceIdFieldComparableRecordProvider implements ComparableRecor
   private Field idField_;
 
   public ReferenceIdFieldComparableRecordProvider(GenotypingRecordStore store, String idField,
-      String referenceIdField) {
+                                                  String referenceIdField) {
     store_ = store;
     BitwiseStore bs = store_.getStore();
     referenceIdField_ = bs.getField(referenceIdField);
-    if(referenceIdField_ == null) {
+    if (referenceIdField_ == null) {
       throw new IllegalArgumentException("Field [" + referenceIdField + "] does not exist.");
     }
     idField_ = bs.getField(idField);
-    if(idField_ == null) {
+    if (idField_ == null) {
       throw new IllegalArgumentException("Field [" + idField + "] does not exist.");
     }
   }
@@ -77,7 +73,7 @@ public class ReferenceIdFieldComparableRecordProvider implements ComparableRecor
     boolean lookupValues = true;
     Dictionary referenceIdDictionary = referenceIdField_.getDictionary();
     Dictionary idDictionary = idField_.getDictionary();
-    if(referenceIdDictionary.isOrdered() && idDictionary.isOrdered() &&
+    if (referenceIdDictionary.isOrdered() && idDictionary.isOrdered() &&
         referenceIdDictionary.getName().equals(idDictionary.getName())) {
       lookupValues = false;
     }
@@ -91,17 +87,17 @@ public class ReferenceIdFieldComparableRecordProvider implements ComparableRecor
     // Add all values to the set of reference IDs
     FieldValueIterator fvi = new FieldValueIterator<String>(referenceIdField_,
         new BitVectorQueryResult(recordsWithReference));
-    while(fvi.hasNext()) {
+    while (fvi.hasNext()) {
       FieldValueIterator.FieldValue fv = fvi.next();
 
       Object value = null;
-      if(lookupValues == true) {
+      if (lookupValues == true) {
         value = fv.getValue();
       } else {
         value = fv.getBitValue();
       }
       // Sanity check... This may happen with faulty dictionary?
-      if(value == null) {
+      if (value == null) {
         continue;
       }
       referenceSampleIds.add(value);
@@ -109,15 +105,15 @@ public class ReferenceIdFieldComparableRecordProvider implements ComparableRecor
 
     // For every unique referenceId, find the reference record and build vector out of them
     QueryResult references = null;
-    for(Object referenceId : referenceSampleIds) {
+    for (Object referenceId : referenceSampleIds) {
       BitVector value = null;
-      if(lookupValues == true) {
+      if (lookupValues == true) {
         value = idField_.getDictionary().lookup(referenceId);
       } else {
         value = (BitVector) referenceId;
       }
       QueryResult reference = idField_.query(value);
-      if(references == null) {
+      if (references == null) {
         references = reference;
       } else {
         references.or(reference);

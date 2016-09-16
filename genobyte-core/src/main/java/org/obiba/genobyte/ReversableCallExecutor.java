@@ -37,29 +37,29 @@ public class ReversableCallExecutor<K> {
   }
 
   public void reverse() {
-    if(provider_ == null) return;
+    if (provider_ == null) return;
     BitwiseRecordManager<K, ?> manager = store_.getRecordManager();
     QueryResult reversable = provider_.getReversableRecords();
-    for(int i = reversable.next(0); i != -1; i = reversable.next(i + 1)) {
+    for (int i = reversable.next(0); i != -1; i = reversable.next(i + 1)) {
       K key = manager.getKey(i);
       Field calls = store_.getGenotypingField(DefaultGenotypingField.CALLS.toString(), key);
-      if(calls == null) {
+      if (calls == null) {
         continue;
       }
 
       Dictionary<Object> dict = calls.getDictionary();
       Field fwdCalls = store_.getGenotypingField(DefaultGenotypingField.COMPARABLE_CALLS.toString(), key, true);
-      if(fwdCalls == null) {
+      if (fwdCalls == null) {
         throw new IllegalStateException(
             "Cannot create genotyping field [" + DefaultGenotypingField.COMPARABLE_CALLS + "] in store [" +
                 store_.getStore().getName() + "]");
       }
       FieldValueIterator fvi = new FieldValueIterator(calls);
-      while(fvi.hasNext()) {
+      while (fvi.hasNext()) {
         FieldValueIterator.FieldValue fv = fvi.next();
         Object call = fv.getValue();
         Object reversed = provider_.reverseCall(call);
-        if(reversed != null) {
+        if (reversed != null) {
           fwdCalls.setValue(fv.getIndex(), dict.lookup(reversed));
         }
       }

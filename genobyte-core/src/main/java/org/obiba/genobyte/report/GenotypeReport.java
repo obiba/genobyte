@@ -21,10 +21,10 @@
  */
 package org.obiba.genobyte.report;
 
-import java.io.File;
-
 import org.obiba.bitwise.query.QueryResult;
 import org.obiba.genobyte.GenotypingStore;
+
+import java.io.File;
 
 /**
  * Defines the common interface for outputing genotype reports.
@@ -32,7 +32,7 @@ import org.obiba.genobyte.GenotypingStore;
  * Implementations need to provide a unique report type and short report type values. These are used
  * to reference the implementation using a unique name (or unique char).
  * <br/>
- * Reports may output multiple files, specified by the {@link GenotypeReport#getNumberOfOutputFiles()} method. Each 
+ * Reports may output multiple files, specified by the {@link GenotypeReport#getNumberOfOutputFiles()} method. Each
  * output file may have a default/preferred name which is fetched using the
  * {@link GenotypeReport#getDefaultFileName(int)} method.
  */
@@ -40,13 +40,15 @@ public interface GenotypeReport {
 
   /**
    * The unique name of the implementation.
+   *
    * @return a unique string that may be used to reference the implementation.
    */
   public String getReportType();
 
   /**
    * A char version of the unique name.
-   * @return a unique char that may be used to reference the implementation. 
+   *
+   * @return a unique char that may be used to reference the implementation.
    */
   public char getShortReportType();
 
@@ -70,9 +72,9 @@ public interface GenotypeReport {
    * to output subsets of samples and assays in the genotype report. The last parameter is used to pass the output
    * files prepared by the calling mechanism.
    *
-   * @param gs the store from which to obtain samples, assays and genotypes.
-   * @param sampleMask the samples to include in the report.
-   * @param assayMask the assays to include in the report.
+   * @param gs          the store from which to obtain samples, assays and genotypes.
+   * @param sampleMask  the samples to include in the report.
+   * @param assayMask   the assays to include in the report.
    * @param outputFiles the array of files to use for outputing the report.
    */
   public void generateReport(GenotypingStore gs, QueryResult sampleMask, QueryResult assayMask, File... outputFiles);

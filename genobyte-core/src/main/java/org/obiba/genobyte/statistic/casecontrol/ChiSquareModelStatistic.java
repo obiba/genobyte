@@ -18,17 +18,17 @@
  *******************************************************************************/
 package org.obiba.genobyte.statistic.casecontrol;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
 import org.obiba.bitwise.AbstractField;
 import org.obiba.bitwise.query.QueryResult;
 import org.obiba.genobyte.statistic.AbstractStatistic;
 import org.obiba.genobyte.statistic.FieldStatistic;
 import org.obiba.genobyte.statistic.StatsPool;
 import org.obiba.genobyte.statistic.util.ChiSquare;
+
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class ChiSquareModelStatistic extends AbstractStatistic implements FieldStatistic {
 
@@ -49,15 +49,15 @@ public class ChiSquareModelStatistic extends AbstractStatistic implements FieldS
   }
 
   public void calculate(StatsPool<?, ?> pool, Map<String, Object> fields, QueryResult filter) {
-    for(int r = filter.next(0); r != -1; r = filter.next(r + 1)) {
+    for (int r = filter.next(0); r != -1; r = filter.next(r + 1)) {
       CaseControlGenotypeFrequency ccgf = getCcgf(r, pool);
-      for(CaseControlChiSquareModel model : this.models) {
+      for (CaseControlChiSquareModel model : this.models) {
         AbstractField modelChiSquare = pool.getPooledField(model.getName() + CHI_SQUARE_SUFFIX, Double.class);
         AbstractField modelPValue = pool.getPooledField(model.getName() + P_VALUE_SUFFIX, Double.class);
 
         double chiSquare = model.calculateChiSquare(ccgf);
         double pvalue = Double.NaN;
-        if(Double.isNaN(chiSquare) == false) {
+        if (Double.isNaN(chiSquare) == false) {
           pvalue = ChiSquare.chiSquareQ(chiSquare, model.getFreedom());
         }
         modelChiSquare.setValue(r, modelChiSquare.getDictionary().lookup(chiSquare));
@@ -73,23 +73,23 @@ public class ChiSquareModelStatistic extends AbstractStatistic implements FieldS
 
   private GenotypeFrequency getGenotypeFrequency(int r, StatsPool<?, ?> pool, String prefix) {
     AbstractField freqA = (AbstractField) pool.getPooledField(prefix + "FreqA");
-    if(freqA == null) {
+    if (freqA == null) {
       throw new NullPointerException("Field " + prefix + "FreqA is null");
     }
     AbstractField freqB = (AbstractField) pool.getPooledField(prefix + "FreqB");
-    if(freqA == null) {
+    if (freqA == null) {
       throw new NullPointerException("Field " + prefix + "FreqB is null");
     }
     AbstractField freqH = (AbstractField) pool.getPooledField(prefix + "FreqH");
-    if(freqA == null) {
+    if (freqA == null) {
       throw new NullPointerException("Field " + prefix + "FreqH is null");
     }
     AbstractField freqU = (AbstractField) pool.getPooledField(prefix + "FreqU");
-    if(freqA == null) {
+    if (freqA == null) {
       throw new NullPointerException("Field " + prefix + "FreqU is null");
     }
     AbstractField callRate = (AbstractField) pool.getPooledField(prefix + "CallRate");
-    if(freqA == null) {
+    if (freqA == null) {
       throw new NullPointerException("Field " + prefix + "CallRate is null");
     }
 

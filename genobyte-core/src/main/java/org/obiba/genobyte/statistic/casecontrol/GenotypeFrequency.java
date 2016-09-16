@@ -25,28 +25,44 @@ final class GenotypeFrequency {
 
   private int asArray[] = null;
 
-  /** The number of homozygotes A */
+  /**
+   * The number of homozygotes A
+   */
   int aa = 0;
 
-  /** The number of heterozygotes */
+  /**
+   * The number of heterozygotes
+   */
   int ab = 0;
 
-  /** The number of homozygotes B */
+  /**
+   * The number of homozygotes B
+   */
   int bb = 0;
 
-  /** The number of no-calls */
+  /**
+   * The number of no-calls
+   */
   int uu = 0;
 
-  /** The locus' call rate */
+  /**
+   * The locus' call rate
+   */
   double callRate = 0.0d;
 
-  /** The locus' minor allele frequency */
+  /**
+   * The locus' minor allele frequency
+   */
   double maf = 0.0d;
 
-  /** The Hardy-Weinberg Chi Square */
+  /**
+   * The Hardy-Weinberg Chi Square
+   */
   double hwChi2 = 0.0d;
 
-  /** The Hardy-Weinberg p-value */
+  /**
+   * The Hardy-Weinberg p-value
+   */
   double hwPValue = 0.0d;
 
   public GenotypeFrequency() {
@@ -57,8 +73,8 @@ final class GenotypeFrequency {
   }
 
   final public int[] toArray() {
-    if(asArray == null) {
-      asArray = new int[] { aa, ab, bb };
+    if (asArray == null) {
+      asArray = new int[]{aa, ab, bb};
     }
     return asArray;
   }

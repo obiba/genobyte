@@ -20,6 +20,7 @@ package org.obiba.genobyte.inconsistency;
 
 /**
  * Base interface for counting strategies.
+ *
  * @param <T> the type of the record's key
  */
 public interface InconsistencyCountingStrategy<T extends Inconsistencies> {

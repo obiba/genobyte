@@ -18,12 +18,12 @@
  *******************************************************************************/
 package org.obiba.genobyte.cli;
 
-import java.io.PrintStream;
-import java.util.ArrayList;
-
 import org.obiba.bitwise.query.QueryResult;
 import org.obiba.genobyte.GenotypingRecordStore;
 import org.obiba.genobyte.GenotypingStore;
+
+import java.io.PrintStream;
+import java.util.ArrayList;
 
 /**
  * Each instance of {@link BitwiseCli} has a <tt>CliContext</tt> associated that describes the
@@ -31,13 +31,19 @@ import org.obiba.genobyte.GenotypingStore;
  */
 public class CliContext {
 
-  /** The stream to which any user output should be printed to */
+  /**
+   * The stream to which any user output should be printed to
+   */
   private PrintStream output_ = null;
 
-  /** The current opened store (may be null) */
+  /**
+   * The current opened store (may be null)
+   */
   private GenotypingStore<?, ?, ?, ?> store_ = null;
 
-  /** The record store being queried (may be null) */
+  /**
+   * The record store being queried (may be null)
+   */
   private GenotypingRecordStore<?, ?, ?> activeRecordStore_ = null;
 
   private QueryHistory history = new QueryHistory();
@@ -84,12 +90,14 @@ public class CliContext {
 
     private ArrayList<QueryExecution> queries = new ArrayList<QueryExecution>(100);
 
-    /** The QueryResult with the most results in the history. Used for padding the count column */
+    /**
+     * The QueryResult with the most results in the history. Used for padding the count column
+     */
     private int maxCount = -1;
 
     public String pushQuery(String query, QueryResult result) {
       queries.add(new QueryExecution(query, result));
-      if(result.count() > maxCount) {
+      if (result.count() > maxCount) {
         maxCount = result.count();
       }
       return "q" + queries.size();
@@ -101,9 +109,9 @@ public class CliContext {
 
     public QueryExecution getLast(GenotypingRecordStore<?, ?, ?> store) {
       String storeName = store.getStore().getName();
-      for(int i = queries.size() - 1; i >= 0; i--) {
+      for (int i = queries.size() - 1; i >= 0; i--) {
         QueryExecution qe = queries.get(i);
-        if(qe.store.getStore().getName().equals(storeName)) {
+        if (qe.store.getStore().getName().equals(storeName)) {
           return qe;
         }
       }
@@ -111,37 +119,38 @@ public class CliContext {
     }
 
     public boolean isQueryReference(String reference) {
-      if(reference.length() < 2) return false;
+      if (reference.length() < 2) return false;
       String id = reference.substring(1);
       try {
         int index = Integer.parseInt(id) - 1;
         // Matches a query reference format
         return true;
-      } catch(NumberFormatException e) {
+      } catch (NumberFormatException e) {
         return false;
       }
     }
 
     /**
      * Resolve a query reference into the QueryExecution that resulted.
+     *
      * @param reference the reference to a QueryExecution. Format is q# where # is the index (1-based) of the query in the history.
      * @return the QueryExecution associated with the reference.
      * @throws IllegalArgumentException when reference is not a valid query reference.
      */
     public QueryExecution resolveQuery(String reference) {
-      if(queries.size() == 0) throw new IllegalArgumentException(reference +
+      if (queries.size() == 0) throw new IllegalArgumentException(reference +
           " is not a valid query reference. No queries in history: execute at least one query to be able to reference them later.");
-      if(reference.length() < 2)
+      if (reference.length() < 2)
         throw new IllegalArgumentException(reference + " is not a valid query reference. Expected format is \"q#\".");
       String id = reference.substring(1);
       try {
         int index = Integer.parseInt(id) - 1;
-        if(index < 0 || index >= queries.size()) {
+        if (index < 0 || index >= queries.size()) {
           throw new IllegalArgumentException(
               reference + " is not a valid query reference. The index should be between 1 and " + queries.size() + ".");
         }
         return get(index);
-      } catch(NumberFormatException e) {
+      } catch (NumberFormatException e) {
         throw new IllegalArgumentException(reference + " is not a valid query reference. Expected format is \"q#\".");
       }
     }

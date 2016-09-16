@@ -29,7 +29,7 @@ import java.text.StringCharacterIterator;
  * <li>Underscore "_" characters in the middle of the template name are removed and the following charater is put in capital letter.</li>
  * <li>Underscore "_" character at the end of the template name remains.</li>
  * <li>If the field is a transposed one (meaning it be stored in a transposed store, see GenotypingStore Javadoc),
- *     append an underscore "_" followed by the record unique key value.</li>
+ * append an underscore "_" followed by the record unique key value.</li>
  * </ul>
  */
 public class GenotypingFieldNameHelper {
@@ -37,9 +37,10 @@ public class GenotypingFieldNameHelper {
   /**
    * Generates a complete field name for a genotyping field. If the field is a transposed one, the resulting field name will be unique for
    * a given record.
+   *
    * @param field the name of the genotyping field. In the case of transposed fields, this is the name of the template that will be used to
-   * generate a unique name per records.
-   * @param key the unique key to the current record.
+   *              generate a unique name per records.
+   * @param key   the unique key to the current record.
    * @return the complete genotyping field name, ready to be used in the genotyping store.
    */
   static public String generateFieldName(GenotypingField field, Object key) {
@@ -47,16 +48,16 @@ public class GenotypingFieldNameHelper {
   }
 
   static public String generateFieldName(String pName, Object key, boolean isTransposed) {
-    if(pName == null) {
+    if (pName == null) {
       throw new NullPointerException("field cannot be null");
     }
     StringBuilder name = new StringBuilder();
     StringCharacterIterator sci = new StringCharacterIterator(pName);
     char c = sci.first();
-    while(c != StringCharacterIterator.DONE) {
-      if(c == '_') {
+    while (c != StringCharacterIterator.DONE) {
+      if (c == '_') {
         c = sci.next();
-        if(c != StringCharacterIterator.DONE) {
+        if (c != StringCharacterIterator.DONE) {
           name.append(Character.toUpperCase(c));
         } else {
           name.append('_');
@@ -66,8 +67,8 @@ public class GenotypingFieldNameHelper {
       }
       c = sci.next();
     }
-    if(isTransposed) {
-      if(key == null) {
+    if (isTransposed) {
+      if (key == null) {
         throw new IllegalArgumentException(
             "Error generating name: key cannot be null for transposed field [" + pName + "]");
       }

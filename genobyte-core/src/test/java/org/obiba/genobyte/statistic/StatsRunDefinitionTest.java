@@ -18,13 +18,13 @@
  *******************************************************************************/
 package org.obiba.genobyte.statistic;
 
-import java.util.List;
-
-import org.obiba.bitwise.dao.BaseBdbDaoTestCase;
+import org.obiba.genobyte.dao.BaseBdbDaoTestCase;
 import org.obiba.genobyte.statistic.util.CallRate;
 import org.obiba.genobyte.statistic.util.Frequencies;
 import org.obiba.genobyte.statistic.util.Maf;
 import org.obiba.genobyte.statistic.util.TotalCalls;
+
+import java.util.List;
 
 /**
  * Tests AbstractField methods by using a persisted field on a dummy bitwise store.
@@ -64,6 +64,7 @@ public class StatsRunDefinitionTest extends BaseBdbDaoTestCase {
     assertEquals(0, srd.getRecordStats(2).size());
   }
 
-  private class MockStatsRunDefinition extends StatsRunDefinition {}
+  private class MockStatsRunDefinition extends StatsRunDefinition {
+  }
 
 }

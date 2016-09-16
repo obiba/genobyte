@@ -37,7 +37,7 @@ public abstract class OpenCommand implements CliCommand {
 
   public boolean execute(Option opt, CliContext context) throws ParseException {
     String storeName = opt.getValue();
-    if(context.getStore() != null) {
+    if (context.getStore() != null) {
       context.getOutput().println("Closing current store.");
       context.getStore().close();
     }
@@ -45,7 +45,7 @@ public abstract class OpenCommand implements CliCommand {
     context.clear();
     context.getOutput().println("Opening store " + storeName + ".");
     GenotypingStore<?, ?, ?, ?> store = open(storeName);
-    if(store == null) {
+    if (store == null) {
       context.getOutput().println("Store " + storeName + " does not exist");
       return false;
     }
@@ -64,8 +64,8 @@ public abstract class OpenCommand implements CliCommand {
    * Override this method and return an opened instance of the specified store name.
    *
    * @param samples the store holding the sample records
-   * @param assays the store holding the assay records
-   * @return an opened instance of the specified store 
+   * @param assays  the store holding the assay records
+   * @return an opened instance of the specified store
    */
   abstract protected GenotypingStore<?, ?, ?, ?> openStore(BitwiseStore samples, BitwiseStore assays);
 
@@ -73,16 +73,16 @@ public abstract class OpenCommand implements CliCommand {
    * Opens both {@link BitwiseStore} instances and calls {@link OpenCommand#openStore(BitwiseStore, BitwiseStore)}.
    *
    * @param name the name of the store to open
-   * @return an opened instance of the specified store 
+   * @return an opened instance of the specified store
    */
   protected GenotypingStore<?, ?, ?, ?> open(String name) {
     BitwiseStore sampleStore = null;
     BitwiseStore assayStore = null;
     String samplesName = name + "_samples";
     String assaysName = name + "_assays";
-    if(BitwiseStoreUtil.getInstance().exists(samplesName)) {
+    if (BitwiseStoreUtil.getInstance().exists(samplesName)) {
       sampleStore = BitwiseStoreUtil.getInstance().open(samplesName);
-      if(sampleStore == null) {
+      if (sampleStore == null) {
         throw new IllegalArgumentException("Cannot open store [" + samplesName + "]");
       }
     } else {
@@ -90,9 +90,9 @@ public abstract class OpenCommand implements CliCommand {
       BitwiseDiskUtil.deleteStore(samplesName);
       return null;
     }
-    if(BitwiseStoreUtil.getInstance().exists(assaysName)) {
+    if (BitwiseStoreUtil.getInstance().exists(assaysName)) {
       assayStore = BitwiseStoreUtil.getInstance().open(assaysName);
-      if(assayStore == null) {
+      if (assayStore == null) {
         throw new IllegalArgumentException("Cannot open store [" + assaysName + "]");
       }
     } else {

@@ -18,14 +18,6 @@
  *******************************************************************************/
 package org.obiba.genobyte;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-
 import org.obiba.bitwise.BitwiseRecordManager;
 import org.obiba.bitwise.BitwiseStore;
 import org.obiba.bitwise.Dictionary;
@@ -39,12 +31,15 @@ import org.obiba.genobyte.statistic.StatsPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.*;
+
 /**
  * Wrapper to one of the Bitwise stores that make a <tt>GenotypingStore</tt>. There are two stores inside
  * a <tt>GenotypingStore</tt>: a sample store and an assay store.
- * @param <K> Key Type, the type (class) of the unique field for the <tt>BitwiseStore</tt> wrapped here.
- * @param <T> Type, the class stored in the bitwise.
- * @param <TK> Transposed Key Type, the type (class) of the unique field for the other <tt>BitwiseStore</tt> kept in relationship with this one. 
+ *
+ * @param <K>  Key Type, the type (class) of the unique field for the <tt>BitwiseStore</tt> wrapped here.
+ * @param <T>  Type, the class stored in the bitwise.
+ * @param <TK> Transposed Key Type, the type (class) of the unique field for the other <tt>BitwiseStore</tt> kept in relationship with this one.
  */
 abstract public class GenotypingRecordStore<K, T, TK> {
 
@@ -52,20 +47,28 @@ abstract public class GenotypingRecordStore<K, T, TK> {
 
   private static final String TRANSPOSE_MEM_SIZE = "bitwise.transpose.mem.size";
 
-  /** <tt>BitwiseStore</tt> being wrapped by this object. */
+  /**
+   * <tt>BitwiseStore</tt> being wrapped by this object.
+   */
   protected BitwiseStore store_ = null;
 
-  /** The <tt>GenotypingRecordStore</tt> that is connected to this one, in the relationship defined by a <tt>GenotypingStore</tt>. */
+  /**
+   * The <tt>GenotypingRecordStore</tt> that is connected to this one, in the relationship defined by a <tt>GenotypingStore</tt>.
+   */
   protected GenotypingRecordStore<TK, ?, K> transposedStore_ = null;
 
-  /** Map of all genotyping fields for this <tt>GenotypingRecordStore</tt>, organized by field name. */
+  /**
+   * Map of all genotyping fields for this <tt>GenotypingRecordStore</tt>, organized by field name.
+   */
   protected Map<String, GenotypingField> genotypingFields_ = new HashMap<String, GenotypingField>();
 
   protected BitwiseRecordManager<K, T> manager_ = null;
 
   private long transposeMemSize_ = 100 * 1024 * 1024;
 
-  /** Default StatsPool for this record store (calculates all default stats for this <tt>GenotypingRecordStore</tt>). */
+  /**
+   * Default StatsPool for this record store (calculates all default stats for this <tt>GenotypingRecordStore</tt>).
+   */
   private StatsPool<K, TK> mainStatsPool_ = null;
 
   private StatsDigester mainStatsDigester_ = null;
@@ -73,10 +76,10 @@ abstract public class GenotypingRecordStore<K, T, TK> {
   public GenotypingRecordStore(BitwiseStore store) {
     store_ = store;
     String memSize = this.getStore().getConfigurationProperties().getProperty(TRANSPOSE_MEM_SIZE);
-    if(memSize != null) {
+    if (memSize != null) {
       try {
         transposeMemSize_ = Long.parseLong(memSize);
-      } catch(NumberFormatException e) {
+      } catch (NumberFormatException e) {
         throw new IllegalArgumentException("Configuration property [" + TRANSPOSE_MEM_SIZE + "] must be a number.");
       }
     }
@@ -94,6 +97,7 @@ abstract public class GenotypingRecordStore<K, T, TK> {
 
   /**
    * Gets the <tt>BitwiseStore</tt> wrapped in this class, used to store records.
+   *
    * @return the <tt>BitwiseStore</tt> used here.
    */
   public BitwiseStore getStore() {
@@ -104,6 +108,7 @@ abstract public class GenotypingRecordStore<K, T, TK> {
    * Sets the <tt>GenotypingRecordStore</tt> related to this one by a <tt>GenotypingStore</tt>.
    * If this instance is used to contain samples, the transposed store should be an assay store.
    * Reversely, if this instance is containing assays, the transposed store should be a sample store.
+   *
    * @param transposed the related store into which genotype data can be transposed.
    */
   public void setTransposedStore(GenotypingRecordStore<TK, ?, K> transposed) {
@@ -113,6 +118,7 @@ abstract public class GenotypingRecordStore<K, T, TK> {
   /**
    * Returns the record store related to this store by a <tt>GenotypingStore</tt>.
    * If this is a sample store, the related assay store will be returned, and vice versa.
+   *
    * @return the transposed store connected to this store.
    */
   public GenotypingRecordStore<TK, ?, K> getTransposedStore() {
@@ -134,10 +140,11 @@ abstract public class GenotypingRecordStore<K, T, TK> {
   /**
    * Returns the genotyping <tt>Field</tt> matching the given name and record, without creating fields if they do not yet
    * exist in the stores.
-   * @see getGenotypingField(String, K, boolean)
+   *
    * @param fieldName the name of the field to get.
-   * @param key the unique key of the record.
+   * @param key       the unique key of the record.
    * @return the genotyping <tt>Field</tt> for the given name and record key.
+   * @see getGenotypingField(String, K, boolean)
    */
   public Field getGenotypingField(String fieldName, K key) {
     return getGenotypingField(fieldName, key, false);
@@ -148,16 +155,17 @@ abstract public class GenotypingRecordStore<K, T, TK> {
    * That <tt>Field</tt> will be fecthed from the proper store (either this store or the related transposed store), depending
    * if the genotyping field was defined as transposable. If the field doesn't exist in the store for the given key, it is
    * possible to create it, depending if it is set as creatable or not.
-   * @param field the name of the field to get.
-   * @param key the unique key of the record.
-   * @param create if the field should be created in this <tt>BitwiseStore</tt>, when it doesn't exist. 
-   * @return the genotyping <tt>Field</tt> for the given name and record key. 
+   *
+   * @param field  the name of the field to get.
+   * @param key    the unique key of the record.
+   * @param create if the field should be created in this <tt>BitwiseStore</tt>, when it doesn't exist.
+   * @return the genotyping <tt>Field</tt> for the given name and record key.
    */
   public Field getGenotypingField(String fieldName, K key, boolean create) {
     GenotypingField gf = genotypingFields_.get(fieldName);
 
     //There is no defined genotyping field, try extracting a regular field from the store.
-    if(gf == null) {
+    if (gf == null) {
       return store_.getField(fieldName);
     }
 
@@ -166,16 +174,16 @@ abstract public class GenotypingRecordStore<K, T, TK> {
     Field f = null;
     fieldName = getFieldName(gf, key);
     BitwiseStore s = store_;
-    if(gf.isTransposed()) {
+    if (gf.isTransposed()) {
       s = transposedStore_.getStore();
     }
     f = s.getField(fieldName);
 
     //If the field could not be found and it creatable (meaning we can create it if it doesn't exist),
     //and if the calling method wants to create such a field in the store.
-    if(create && f == null && gf.isCreatable()) {
+    if (create && f == null && gf.isCreatable()) {
       f = s.createField(fieldName);
-      if(f == null) {
+      if (f == null) {
         throw new IllegalStateException("Cannot create genotyping field [" + fieldName + "] in store [" + s + "]");
       }
     }
@@ -184,39 +192,40 @@ abstract public class GenotypingRecordStore<K, T, TK> {
 
   /**
    * Set a list of tranposed values for a specific record
-   * @param key the unique key of the record to populate
+   *
+   * @param key    the unique key of the record to populate
    * @param values the list of tranposed values to set
    * @return the number of values overwriten (number of times a value was written over a non-null preivous value)
    */
   public int setTransposedValues(String field, K key, List<? extends TransposedValue<TK, ?>> values) {
-    if(values == null || values.size() == 0) {
+    if (values == null || values.size() == 0) {
       return 0;
     }
 
     log.debug("Store [{}]: setting [{}] transposed values in field [{}] for record key [{}]",
-        new Object[] { this.getStore().getName(), values.size(), field, key });
+        new Object[]{this.getStore().getName(), values.size(), field, key});
 
     int overwriten = 0;
     BitwiseRecordManager<TK, ?> transposedManager_ = transposedStore_.getRecordManager();
     Field bitwiseField = getGenotypingField(field, key, true);
-    if(bitwiseField == null) {
+    if (bitwiseField == null) {
       log.error(
           "GenotypingField [{}] for key [{}] does not exist and cannot be created. Make sure the store schema defines a template field named [{}].",
-          new Object[] { field, key, field });
+          new Object[]{field, key, field});
       return 0;
     }
 
     Dictionary dict = bitwiseField.getDictionary();
-    for(TransposedValue<TK, ?> value : values) {
+    for (TransposedValue<TK, ?> value : values) {
       TK transposedKey = value.getTransposedKey();
       int transposedIndex = transposedManager_.getIndexFromKey(transposedKey);
-      if(transposedIndex == -1) {
+      if (transposedIndex == -1) {
         throw new IllegalStateException(
             "No index for key [" + transposedKey + "] was found in [" + transposedStore_ + "] using manager [" +
                 transposedManager_ + "]");
       }
 
-      if(bitwiseField.isNull(transposedIndex) == false) overwriten++;
+      if (bitwiseField.isNull(transposedIndex) == false) overwriten++;
       bitwiseField.setValue(transposedIndex, dict.lookup(value.getValue()));
     }
     return overwriten;
@@ -239,6 +248,7 @@ abstract public class GenotypingRecordStore<K, T, TK> {
 
   /**
    * Starts the default statistics calculation on a collection of record keys.
+   *
    * @param keys the record keys to include in the stats calculation.
    */
   public void updateStats(Collection<K> keys) {
@@ -255,6 +265,7 @@ abstract public class GenotypingRecordStore<K, T, TK> {
 
   /**
    * Starts the default statistics calculation on a set of record indexes.
+   *
    * @param recordMask the record indexes to include in the stats calculation.
    */
   public void updateStats(QueryResult recordMask) {
@@ -271,8 +282,8 @@ abstract public class GenotypingRecordStore<K, T, TK> {
    */
   private void internalUpdateStats() {
     log.debug("Store {}: updating stats for [{}] records on [{}] transposedRecords",
-        new Object[] { getStore().getName(), mainStatsPool_.getRecordMask().count(),
-            mainStatsPool_.getTransposedMask().count() });
+        new Object[]{getStore().getName(), mainStatsPool_.getRecordMask().count(),
+            mainStatsPool_.getTransposedMask().count()});
     mainStatsPool_.calculate();
     log.debug("Store {}: digesting stats pool", getStore().getName());
     mainStatsDigester_.digest(mainStatsPool_);
@@ -283,10 +294,11 @@ abstract public class GenotypingRecordStore<K, T, TK> {
 
   /**
    * Returns the <tt>BitwiseRecordManager</tt> mapped to the bitwise store in use in this object.
+   *
    * @return the <tt>BitwiseRecordManager</tt>.
    */
   final public BitwiseRecordManager<K, T> getRecordManager() {
-    if(manager_ == null) {
+    if (manager_ == null) {
       manager_ = createRecordManager(store_);
     }
     return manager_;
@@ -302,8 +314,9 @@ abstract public class GenotypingRecordStore<K, T, TK> {
 
   /**
    * Gets the name of the current field in the store, from the template field name and the given record key.
+   *
    * @param field the template name for the genotyping field.
-   * @param key the unique key to the record.
+   * @param key   the unique key to the record.
    * @return the complete field name.
    */
   protected String getFieldName(GenotypingField field, K key) {

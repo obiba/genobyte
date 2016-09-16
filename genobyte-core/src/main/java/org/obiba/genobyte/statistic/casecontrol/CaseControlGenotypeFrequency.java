@@ -23,36 +23,36 @@ package org.obiba.genobyte.statistic.casecontrol;
  * <em>From Genotypes to Genes: Doubling the Sample Size</em>
  * Peter D. Sasieni<br/>
  * Biometrics, Vol. 53, No. 4. (Dec., 1997), pp. 1253-1261.)<br/>
- *
+ * <p>
  * <table>
- *   <tr>
- *     <td/>
- *     <td>A</td>
- *     <td>H</td>
- *     <td>B</td>
- *     <td/>
- *   </tr>
- *   <tr>
- *     <td>Cases</td>
- *     <td>r0</td>
- *     <td>r1</td>
- *     <td>r2</td>
- *     <td>R</td>
- *   </tr>
- *   <tr>
- *     <td>Controls</td>
- *     <td>s0</td>
- *     <td>s1</td>
- *     <td>s2</td>
- *     <td>S</td>
- *   </tr>
- *   <tr>
- *     <td></td>
- *     <td>n0</td>
- *     <td>n1</td>
- *     <td>n2</td>
- *     <td>N</td>
- *   </tr>
+ * <tr>
+ * <td/>
+ * <td>A</td>
+ * <td>H</td>
+ * <td>B</td>
+ * <td/>
+ * </tr>
+ * <tr>
+ * <td>Cases</td>
+ * <td>r0</td>
+ * <td>r1</td>
+ * <td>r2</td>
+ * <td>R</td>
+ * </tr>
+ * <tr>
+ * <td>Controls</td>
+ * <td>s0</td>
+ * <td>s1</td>
+ * <td>s2</td>
+ * <td>S</td>
+ * </tr>
+ * <tr>
+ * <td></td>
+ * <td>n0</td>
+ * <td>n1</td>
+ * <td>n2</td>
+ * <td>N</td>
+ * </tr>
  * </table>
  */
 final public class CaseControlGenotypeFrequency {
@@ -101,8 +101,8 @@ final public class CaseControlGenotypeFrequency {
   }
 
   final public int[] getNValues() {
-    if(asArray_ == null) {
-      asArray_ = new int[] { getN(0), getN(1), getN(2) };
+    if (asArray_ == null) {
+      asArray_ = new int[]{getN(0), getN(1), getN(2)};
     }
     return asArray_;
   }

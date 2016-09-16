@@ -24,7 +24,7 @@ import org.obiba.bitwise.query.QueryResult;
 import org.obiba.genobyte.cli.CliContext.QueryExecution;
 
 /**
- * Prints the record indexes part of the last query result. 
+ * Prints the record indexes part of the last query result.
  */
 public class PrintCommand implements CliCommand {
 
@@ -35,15 +35,15 @@ public class PrintCommand implements CliCommand {
   public boolean execute(Option opt, CliContext context) {
     String str = opt.getValue();
     QueryExecution qe = context.getHistory().resolveQuery(str);
-    if(qe != null) {
+    if (qe != null) {
       context.getOutput().println("Store: " + qe.getStore().getStore().getName());
       context.getOutput().println("Query: " + qe.getQuery());
       context.getOutput().println("Count: " + qe.count());
       context.getOutput().println("Results: ");
-      if(qe.count() > 0) {
+      if (qe.count() > 0) {
         int hits = qe.count();
         QueryResult qr = qe.getResult();
-        for(int i = 0; i < hits; i++) {
+        for (int i = 0; i < hits; i++) {
           int hit = qr.hit(i);
           context.getOutput().print(hit + " ");
         }

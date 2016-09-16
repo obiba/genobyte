@@ -35,7 +35,7 @@ public class SwitchCommand implements CliCommand {
   public boolean execute(Option opt, CliContext context) {
     GenotypingStore<?, ?, ?, ?> s = context.getStore();
     GenotypingRecordStore<?, ?, ?> current = context.getActiveRecordStore();
-    if(current == null || current == s.getAssayRecordStore()) {
+    if (current == null || current == s.getAssayRecordStore()) {
       context.setActiveRecordStore(s.getSampleRecordStore());
     } else {
       context.setActiveRecordStore(s.getAssayRecordStore());

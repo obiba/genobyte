@@ -18,14 +18,14 @@
  *******************************************************************************/
 package org.obiba.genobyte.statistic.util;
 
-import java.util.Map;
-
 import org.obiba.bitwise.Field;
 import org.obiba.bitwise.query.QueryResult;
 import org.obiba.genobyte.model.SnpCall;
 import org.obiba.genobyte.statistic.AbstractStatistic;
 import org.obiba.genobyte.statistic.RecordStatistic;
 import org.obiba.genobyte.statistic.StatsPool;
+
+import java.util.Map;
 
 /**
  * Defines the basic operations to be done by frequency statistics on genotypes. Assays and Samples statistics
@@ -46,7 +46,7 @@ public abstract class FrequencyStatistics extends AbstractStatistic implements R
 
   //@see org.obiba.bitwise.genotyping.statistic.Statistic.calculate()
   protected void calculateFrequencies(StatsPool<?, ?> pPool, Map<String, Object> pFields, QueryResult pFilter,
-      int pIndex) {
+                                      int pIndex) {
     SnpCall alleleA = SnpCall.A;
     SnpCall alleleB = SnpCall.B;
     SnpCall alleleH = SnpCall.H;
@@ -59,7 +59,7 @@ public abstract class FrequencyStatistics extends AbstractStatistic implements R
     int freqU = 0;
     int totalCalls = 0;
     double callRate = 0;
-    if(calls != null) {
+    if (calls != null) {
       //Frequency of each allele
       freqA = calls.query(calls.getDictionary().lookup(alleleA)).and(pFilter).count();
       freqB = calls.query(calls.getDictionary().lookup(alleleB)).and(pFilter).count();

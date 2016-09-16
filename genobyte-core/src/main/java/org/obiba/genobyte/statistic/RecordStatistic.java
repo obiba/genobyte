@@ -18,9 +18,9 @@
  *******************************************************************************/
 package org.obiba.genobyte.statistic;
 
-import java.util.Map;
-
 import org.obiba.bitwise.query.QueryResult;
+
+import java.util.Map;
 
 /**
  * Defines the <tt>Statistic</tt> type that calculates the results for one record at a time.
@@ -29,10 +29,11 @@ public interface RecordStatistic extends Statistic {
 
   /**
    * Computes the statistic with the provided parameters, for one record.
-   * @param pPool the <tt>StatsPool</tt> instance containing computed statistical data.
+   *
+   * @param pPool   the <tt>StatsPool</tt> instance containing computed statistical data.
    * @param pFields the map of parameters required to compute the statistic, identified by name.
    * @param pFilter a field filter that says which records to consider for calculation.
-   * @param pIndex the index of the current record on which calculation is being made.
+   * @param pIndex  the index of the current record on which calculation is being made.
    */
   public void calculate(StatsPool<?, ?> pPool, Map<String, Object> pFields, QueryResult pFilter, int pIndex);
 }

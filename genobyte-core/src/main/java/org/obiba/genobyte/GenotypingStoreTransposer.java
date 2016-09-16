@@ -18,23 +18,14 @@
  *******************************************************************************/
 package org.obiba.genobyte;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import org.obiba.bitwise.BitVector;
-import org.obiba.bitwise.BitwiseStore;
-import org.obiba.bitwise.BitwiseStoreUtil;
-import org.obiba.bitwise.Field;
-import org.obiba.bitwise.FieldValueIterator;
-import org.obiba.bitwise.VolatileField;
+import org.obiba.bitwise.*;
 import org.obiba.bitwise.schema.FieldMetaData;
 import org.obiba.bitwise.schema.StoreSchema;
 import org.obiba.bitwise.util.BitwiseDiskUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.*;
 
 public class GenotypingStoreTransposer<K, TK> implements StoreTransposer {
 
@@ -44,7 +35,9 @@ public class GenotypingStoreTransposer<K, TK> implements StoreTransposer {
 
   private GenotypingRecordStore<K, ?, TK> sourceStore;
 
-  /** Flag that indicates whether or not to delete the destination store before transposing. It has been shown that transpo. */
+  /**
+   * Flag that indicates whether or not to delete the destination store before transposing. It has been shown that transpo.
+   */
   private boolean deleteDestinationStore = true;
 
   private List<GenotypingFieldValueTransposer<K, TK>> fieldTransposers_
@@ -52,8 +45,8 @@ public class GenotypingStoreTransposer<K, TK> implements StoreTransposer {
 
   public GenotypingStoreTransposer(GenotypingRecordStore<K, ?, TK> source) {
     sourceStore = source;
-    for(GenotypingField field : sourceStore.genotypingFields_.values()) {
-      if(field.isTransposed()) {
+    for (GenotypingField field : sourceStore.genotypingFields_.values()) {
+      if (field.isTransposed()) {
         GenotypingFieldValueTransposer<K, TK> transposer = new GenotypingFieldValueTransposer<K, TK>(field, sourceStore,
             sourceStore.getTransposedStore());
         fieldTransposers_.add(transposer);
@@ -75,7 +68,7 @@ public class GenotypingStoreTransposer<K, TK> implements StoreTransposer {
     final BitwiseStore bitwiseSource = sourceStore.getStore();
     final String sourceName = bitwiseSource.getName();
 
-    if(deleteDestinationStore) {
+    if (deleteDestinationStore) {
       log.debug("Locking store [{}]", sourceName);
       BitwiseStoreUtil.getInstance().lock(sourceName, new Runnable() {
         public void run() {
@@ -84,8 +77,8 @@ public class GenotypingStoreTransposer<K, TK> implements StoreTransposer {
 
           Map<String, VolatileField> copy = new HashMap<String, VolatileField>();
           StoreSchema ss = bitwiseSource.getSchema();
-          for(FieldMetaData fmd : ss.getFields()) {
-            if(fmd.isTemplate() == false) {
+          for (FieldMetaData fmd : ss.getFields()) {
+            if (fmd.isTemplate() == false) {
               log.debug("Copying field [{}]", fmd.getName());
               Field sourceField = bitwiseSource.getField(fmd.getName());
               VolatileField destinationField = new VolatileField(fmd.getName(), bitwiseSource,
@@ -99,12 +92,12 @@ public class GenotypingStoreTransposer<K, TK> implements StoreTransposer {
           BitVector deleted = bitwiseSource.getDeleted();
           try {
             bitwiseSource.endTransaction();
-          } catch(RuntimeException e) {
+          } catch (RuntimeException e) {
             // ignore
           } finally {
             try {
               bitwiseSource.close();
-            } catch(RuntimeException e) {
+            } catch (RuntimeException e) {
               // ignore
             }
           }
@@ -116,7 +109,7 @@ public class GenotypingStoreTransposer<K, TK> implements StoreTransposer {
           bitwiseDestination.undeleteAll();
           bitwiseDestination.delete(deleted);
 
-          for(VolatileField copied : copy.values()) {
+          for (VolatileField copied : copy.values()) {
             log.debug("Copying field [{}]", copied.getName());
             Field sourceField = bitwiseDestination.getField(copied.getName());
             sourceField.copyValues(copied);
@@ -135,7 +128,7 @@ public class GenotypingStoreTransposer<K, TK> implements StoreTransposer {
     //Collect the value of the "unique" key for each store record 
     ArrayList<K> sourceKeys = new ArrayList<K>(sourceStore.getStore().getSize());
     int[] sourceIndexes = new int[sourceStore.getStore().getSize()];
-    while(fvi.hasNext()) {
+    while (fvi.hasNext()) {
       FieldValueIterator<K>.FieldValue fv = fvi.next();
       sourceIndexes[sourceKeys.size()] = fv.getIndex();
       sourceKeys.add(fv.getValue());
@@ -145,14 +138,14 @@ public class GenotypingStoreTransposer<K, TK> implements StoreTransposer {
 
     log.debug("Transposing store... (" + (long) fieldTransposers_.size() + " fields to process)");
 
-    if(transposeProgressIndicator != null) {
+    if (transposeProgressIndicator != null) {
       transposeProgressIndicator.setTotalItemsToTranspose((long) fieldTransposers_.size());
       transposeProgressIndicator.setProcessedItems(0);
     }
 
-    for(GenotypingFieldValueTransposer<K, TK> t : fieldTransposers_) {
+    for (GenotypingFieldValueTransposer<K, TK> t : fieldTransposers_) {
       t.transposeValues(sourceKeys, sourceIndexes);
-      if(transposeProgressIndicator != null) {
+      if (transposeProgressIndicator != null) {
         transposeProgressIndicator.setProcessedItems(processedFields++);
       }
     }

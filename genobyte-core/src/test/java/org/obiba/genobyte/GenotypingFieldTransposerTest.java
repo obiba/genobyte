@@ -18,12 +18,11 @@
  *******************************************************************************/
 package org.obiba.genobyte;
 
+import junit.framework.TestCase;
 import org.obiba.bitwise.Field;
-import org.obiba.bitwise.mock.MockBitwiseStore;
+import org.obiba.genobyte.mock.MockBitwiseStore;
 import org.obiba.genobyte.mock.MockGenotypingStore;
 import org.obiba.genobyte.model.SnpCall;
-
-import junit.framework.TestCase;
 
 public class GenotypingFieldTransposerTest extends TestCase {
 
@@ -35,7 +34,7 @@ public class GenotypingFieldTransposerTest extends TestCase {
     MockBitwiseStore assays = new MockBitwiseStore("assays");
 
     // Create some genotypes for the second and third samples in the store (not for the first)... 
-    for(int i = 0; i < assays.getSize(); i++) {
+    for (int i = 0; i < assays.getSize(); i++) {
       samples.setCall(i, 1, SnpCall.A);
       samples.setCall(i, 2, SnpCall.H);
     }
@@ -45,7 +44,7 @@ public class GenotypingFieldTransposerTest extends TestCase {
     transposer.setDeleteDestinationStore(false);
     transposer.transpose();
 
-    for(int i = 0; i < assays.getSize(); i++) {
+    for (int i = 0; i < assays.getSize(); i++) {
       Field calls = store.getAssayRecordStore().getGenotypingField("calls", new Integer(i));
       assertNotNull(calls);
       assertNull(calls.getDictionary().reverseLookup(calls.getValue(0)));

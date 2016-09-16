@@ -34,6 +34,7 @@ public class StatsRunDefinition {
 
   /**
    * Adds a <tt>RecordStatistic</tt> statistic to the calculation run.
+   *
    * @param pStat
    * @param pFieldSources
    */
@@ -46,6 +47,7 @@ public class StatsRunDefinition {
 
   /**
    * Adds a <tt>FieldStatistic</tt> statistic to the calculation run.
+   *
    * @param pStat
    * @param pFieldSources
    */
@@ -58,17 +60,18 @@ public class StatsRunDefinition {
 
   /**
    * Determines the iteration level of the statistic from the list of parameters it fetches from the pool.
+   *
    * @param pPoolSources the list of parameters needed from the pool.
    * @return the iteration level required to be able to get these parameters.
    */
   protected int chooseIteration(Statistic pStat) {
     List<String> input = pStat.getInputParams();
     int maxLevel = 0;
-    for(String param : input) {
-      if(poolDictionary_.containsKey(param)) {
+    for (String param : input) {
+      if (poolDictionary_.containsKey(param)) {
         //The statistic has dependencies calculated by other Statistic objects.
         int currentLevel = poolDictionary_.get(param);
-        if(maxLevel <= currentLevel) {
+        if (maxLevel <= currentLevel) {
           //The newly added stat will be one iteration higher than the highest iteration dependency.
           maxLevel = currentLevel + 1;
         }
@@ -79,8 +82,8 @@ public class StatsRunDefinition {
   }
 
   private void addToPoolDictionary(Statistic pStat, Integer pIter) {
-    for(String outputParam : pStat.getOutputParams()) {
-      if(poolDictionary_.containsKey(outputParam)) {
+    for (String outputParam : pStat.getOutputParams()) {
+      if (poolDictionary_.containsKey(outputParam)) {
         throw new RuntimeException("Duplicate parameter specified by Statistic output.");
       }
       poolDictionary_.put(outputParam, pIter);
@@ -92,7 +95,7 @@ public class StatsRunDefinition {
     Iteration it;
 
     //The iteration level of the new stat hasn't been created yet.
-    if(statByLevel_.size() <= pIter) {
+    if (statByLevel_.size() <= pIter) {
       it = new Iteration();
       statByLevel_.add(pIter, it);
     }
@@ -120,6 +123,7 @@ public class StatsRunDefinition {
 
   /**
    * Returns the number of the highest iteration level in this <tt>StatsRunDefinition</tt>.
+   *
    * @return
    */
   public int getMaxIteration() {

@@ -18,54 +18,91 @@
  *******************************************************************************/
 package org.obiba.genobyte.model;
 
-import java.util.EnumSet;
-
 import org.obiba.genobyte.GenotypingField;
+
+import java.util.EnumSet;
 
 /**
  * Default implementation of the <tt>GenotypingField</tt> interface, defining the genotype-related fields
  * of the two <tt>BitwiseStore</tt> inside a <tt>GenotypingStore</tt> (assay and sample).
+ *
  * @see org.obiba.genobyte.GenotypingField
  */
 public enum DefaultGenotypingField implements GenotypingField {
 
-  /** A call frequency */
+  /**
+   * A call frequency
+   */
   FREQ_A,
-  /** B call frequency */
+  /**
+   * B call frequency
+   */
   FREQ_B,
-  /** H (heterozygote) call frequency */
+  /**
+   * H (heterozygote) call frequency
+   */
   FREQ_H,
-  /** U (unknown) call frequency */
+  /**
+   * U (unknown) call frequency
+   */
   FREQ_U,
-  /** Sum of good (A, B, H) calls */
+  /**
+   * Sum of good (A, B, H) calls
+   */
   TOTAL_CALLS,
-  /** Rate of total calls to all calls */
+  /**
+   * Rate of total calls to all calls
+   */
   CALL_RATE,
-  /** Minor allele frequency */
+  /**
+   * Minor allele frequency
+   */
   MAF,
-  /** Hardy-Weinberg (p-value) */
+  /**
+   * Hardy-Weinberg (p-value)
+   */
   HW,
-  /** Heterozygozity */
+  /**
+   * Heterozygozity
+   */
   HET,
-  /** Date of the last update */
+  /**
+   * Date of the last update
+   */
   LAST_UPDATE,
 
-  /** Number of DNA reproducibility errors */
+  /**
+   * Number of DNA reproducibility errors
+   */
   REPRO_DNA,
-  /** Number of tests (comparisions) done while counting the number of inconsistencies */
+  /**
+   * Number of tests (comparisions) done while counting the number of inconsistencies
+   */
   REPRO_DNA_TESTS,
-  /** Number of Assay reproducibility errors */
+  /**
+   * Number of Assay reproducibility errors
+   */
   REPRO_ASSAY,
-  /** Number of tests (comparisions) done while counting the number of inconsistencies */
+  /**
+   * Number of tests (comparisions) done while counting the number of inconsistencies
+   */
   REPRO_ASSAY_TESTS,
-  /** Number of mendelian errors */
+  /**
+   * Number of mendelian errors
+   */
   MENDEL,
-  /** Number of tests (comparisions) done while counting the number of inconsistencies */
+  /**
+   * Number of tests (comparisions) done while counting the number of inconsistencies
+   */
   MENDEL_TESTS,
 
-  /** Holds the genotypes (calls) */
+  /**
+   * Holds the genotypes (calls)
+   */
   CALLS(true, true, true),
-  /** Holds the comparable genotypes (calls that can be compared using the Field.diff method) */
+  /**
+   * Holds the comparable genotypes (calls that can be compared using the Field.diff method)
+   */
   COMPARABLE_CALLS(true, true);
 
   //Whether this field can be created when it does not exist in the bitwise.
@@ -110,6 +147,7 @@ public enum DefaultGenotypingField implements GenotypingField {
 
   /**
    * Returns a <tt>String</tt> representing a text version of this instance.
+   *
    * @return the <tt>String</tt>.
    */
   @Override
@@ -119,6 +157,7 @@ public enum DefaultGenotypingField implements GenotypingField {
 
   /**
    * Returns a set of all genotyping fields that are used for sample records.
+   *
    * @return the set of genotyping fields.
    */
   public static EnumSet<DefaultGenotypingField> defaultSampleFields() {
@@ -132,6 +171,7 @@ public enum DefaultGenotypingField implements GenotypingField {
 
   /**
    * Returns a set of all genotyping fields that are used for assay records.
+   *
    * @return the set of genotyping fields.
    */
   public static EnumSet<DefaultGenotypingField> defaultAssayFields() {

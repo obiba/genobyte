@@ -18,10 +18,10 @@
  *******************************************************************************/
 package org.obiba.genobyte.statistic.util;
 
-import java.util.Map;
-
 import org.obiba.bitwise.query.QueryResult;
 import org.obiba.genobyte.statistic.StatsPool;
+
+import java.util.Map;
 
 /**
  * Implements assay frequency statistics. This includes allele frequencies, MAF (Minor Allele Frequency),
@@ -51,7 +51,7 @@ public class AssayFrequencies extends FrequencyStatistics {
 
     //Hardy-Weinberg Equilibrium
     double hw = 0.0;
-    if(Double.compare(maf, 0.0) != 0) {
+    if (Double.compare(maf, 0.0) != 0) {
       double p = (2d * freqA + freqH) / (2d * totalCalls);
       double q = 1d - p;
 
@@ -66,7 +66,7 @@ public class AssayFrequencies extends FrequencyStatistics {
 
     //Heterozygosity
     double heterozygosity = 0.0;
-    if(totalCalls != 0) {
+    if (totalCalls != 0) {
       heterozygosity = freqH / (double) totalCalls;
     }
 

@@ -20,26 +20,39 @@ package org.obiba.genobyte.inconsistency;
 
 /**
  * Holds the record keys for the mendelian errors identified by a {@link MendelianErrorCalculator}.
+ *
  * @param <K> the type of the record key
  */
 public class MendelianErrors<K> extends Inconsistencies {
 
-  /** The child record's key */
+  /**
+   * The child record's key
+   */
   private K childKey_ = null;
 
-  /** The child record's store index */
+  /**
+   * The child record's store index
+   */
   private int childIndex_ = -1;
 
-  /** The mother record's key */
+  /**
+   * The mother record's key
+   */
   private K motherKey_ = null;
 
-  /** The mother record's store index */
+  /**
+   * The mother record's store index
+   */
   private int motherIndex_ = -1;
 
-  /** The father record's key */
+  /**
+   * The father record's key
+   */
   private K fatherKey_ = null;
 
-  /** The father record's store index */
+  /**
+   * The father record's store index
+   */
   private int fatherIndex_ = -1;
 
   /**

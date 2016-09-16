@@ -42,7 +42,7 @@ public class InconsistenciesCommand implements CliCommand {
       context.getOutput().println("Computing mendelian errors.");
       context.getStore().mendel();
       context.getStore().commitTransaction();
-    } catch(RuntimeException e) {
+    } catch (RuntimeException e) {
       context.getOutput().println("An error occured during the inconsistencies computation.");
     } finally {
       context.getStore().endTransaction();

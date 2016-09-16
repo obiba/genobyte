@@ -43,7 +43,7 @@ public class DefaultReproducibilityErrorCountingStrategy<K, TK> implements Repro
   private Field transposedTestField_ = null;
 
   public DefaultReproducibilityErrorCountingStrategy(DefaultGenotypingField field, DefaultGenotypingField testField,
-      GenotypingRecordStore<K, ?, TK> store, GenotypingRecordStore<TK, ?, K> transposedStore) {
+                                                     GenotypingRecordStore<K, ?, TK> store, GenotypingRecordStore<TK, ?, K> transposedStore) {
     store_ = store;
     transposedStore_ = transposedStore;
 

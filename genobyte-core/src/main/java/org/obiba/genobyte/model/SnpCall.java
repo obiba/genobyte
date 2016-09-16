@@ -24,7 +24,7 @@ public enum SnpCall {
   U, A, B, C, D, H;
 
   static public SnpCall valueOf(char c) {
-    switch(c) {
+    switch (c) {
       case 'a':
       case 'A':
         return A;

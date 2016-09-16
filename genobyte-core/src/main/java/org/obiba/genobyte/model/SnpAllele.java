@@ -23,37 +23,53 @@ package org.obiba.genobyte.model;
  */
 public enum SnpAllele {
 
-  /** Allele Value A */A,
-  /** Allele Value C */C,
-  /** Allele Value G */G,
-  /** Allele Value T */T,
+  /**
+   * Allele Value A
+   */A,
+  /**
+   * Allele Value C
+   */C,
+  /**
+   * Allele Value G
+   */G,
+  /**
+   * Allele Value T
+   */T,
 
-  /** Allele Value could not be obtained (for example, because of a genotyping error). */
+  /**
+   * Allele Value could not be obtained (for example, because of a genotyping error).
+   */
   U,
 
-  /** A deletion (often represented by '-') */
+  /**
+   * A deletion (often represented by '-')
+   */
   D,
 
-  /** An insertion. These can often be made up of multiple base pairs */
+  /**
+   * An insertion. These can often be made up of multiple base pairs
+   */
   I;
 
   /**
    * Gets the <tt>Enum</tt> value corresponding to the given <tt>String</tt> allele code.
+   *
    * @param v the <tt>String</tt> allele code.
    * @return the corresponding <tt>Enum</tt> value.
    */
   static public SnpAllele parseAllele(String v) {
-    if(v.equals("-")) return D;
+    if (v.equals("-")) return D;
     return valueOf(v);
   }
 
   /**
-   * Returns a <tt>String</tt> representing this <tt>Enum</tt> instance value. 
+   * Returns a <tt>String</tt> representing this <tt>Enum</tt> instance value.
+   *
    * @return the <tt>String</tt> representation.
    */
   @Override
   public String toString() {
-    switch(this) {
+    switch (this) {
       case D:
         return "-";
       default:

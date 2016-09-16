@@ -18,8 +18,6 @@
  *******************************************************************************/
 package org.obiba.genobyte.statistic.casecontrol;
 
-import java.util.Map;
-
 import org.obiba.bitwise.BitVector;
 import org.obiba.bitwise.Field;
 import org.obiba.bitwise.query.QueryResult;
@@ -27,6 +25,8 @@ import org.obiba.genobyte.model.SnpCall;
 import org.obiba.genobyte.statistic.AbstractStatistic;
 import org.obiba.genobyte.statistic.RecordStatistic;
 import org.obiba.genobyte.statistic.StatsPool;
+
+import java.util.Map;
 
 public class CaseControlFrequencies extends AbstractStatistic implements RecordStatistic {
 
@@ -70,16 +70,16 @@ public class CaseControlFrequencies extends AbstractStatistic implements RecordS
 
   public static final String CONTROL_HET = "controlHet";
 
-  public static final String[] PARAMETERS = { CASE_FREQ_A, CASE_FREQ_B, CASE_FREQ_H, CASE_FREQ_U, CASE_TOTAL_CALL,
+  public static final String[] PARAMETERS = {CASE_FREQ_A, CASE_FREQ_B, CASE_FREQ_H, CASE_FREQ_U, CASE_TOTAL_CALL,
       CASE_CALL_RATE, CASE_MAF, CASE_HW, CASE_HET, CONTROL_FREQ_A, CONTROL_FREQ_B, CONTROL_FREQ_H, CONTROL_FREQ_U,
-      CONTROL_TOTAL_CALL, CONTROL_CALL_RATE, CONTROL_MAF, CONTROL_HW, CONTROL_HET };
+      CONTROL_TOTAL_CALL, CONTROL_CALL_RATE, CONTROL_MAF, CONTROL_HW, CONTROL_HET};
 
   public CaseControlFrequencies() {
     super();
 
     super.inputFields_.add("calls");
 
-    for(String param : PARAMETERS) {
+    for (String param : PARAMETERS) {
       super.outputParams_.add(param);
     }
   }
@@ -87,7 +87,7 @@ public class CaseControlFrequencies extends AbstractStatistic implements RecordS
   public void calculate(StatsPool<?, ?> pPool, Map<String, Object> pFields, QueryResult pFilter, int pIndex) {
     Field calls = (Field) pFields.get("calls");
 
-    if(calls != null) {
+    if (calls != null) {
       BitVector alleleA = calls.getDictionary().lookup(SnpCall.A);
       BitVector alleleB = calls.getDictionary().lookup(SnpCall.B);
       BitVector alleleH = calls.getDictionary().lookup(SnpCall.H);
@@ -96,10 +96,10 @@ public class CaseControlFrequencies extends AbstractStatistic implements RecordS
       QueryResult cases = ((QueryResult) pPool.getPool().get(CASES_MASK_PARAMETER)).copy().and(pFilter);
       QueryResult controls = ((QueryResult) pPool.getPool().get(CONTROLS_MASK_PARAMETER)).copy().and(pFilter);
 
-      QueryResult[] filters = { cases, controls };
-      String[] prefixes = { "case", "control" };
+      QueryResult[] filters = {cases, controls};
+      String[] prefixes = {"case", "control"};
 
-      for(int i = 0; i < filters.length; i++) {
+      for (int i = 0; i < filters.length; i++) {
         QueryResult filter = filters[i];
         String paramPrefix = prefixes[i];
 
@@ -129,7 +129,7 @@ public class CaseControlFrequencies extends AbstractStatistic implements RecordS
 
         // Hardy-Weinberg Equilibrium
         double hw = 0.0;
-        if(Double.compare(maf, 0.0) != 0) {
+        if (Double.compare(maf, 0.0) != 0) {
           double p = (2d * freqA + freqH) / (2d * totalCalls);
           double q = 1d - p;
 
@@ -144,7 +144,7 @@ public class CaseControlFrequencies extends AbstractStatistic implements RecordS
 
         // Heterozygosity
         double heterozygosity = 0.0;
-        if(totalCalls != 0) {
+        if (totalCalls != 0) {
           heterozygosity = freqH / (double) totalCalls;
         }
 

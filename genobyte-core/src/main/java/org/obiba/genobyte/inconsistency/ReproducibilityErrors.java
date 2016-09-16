@@ -25,16 +25,24 @@ package org.obiba.genobyte.inconsistency;
  */
 public class ReproducibilityErrors<K> extends Inconsistencies {
 
-  /** The reference record's unique key */
+  /**
+   * The reference record's unique key
+   */
   private K referenceKey_ = null;
 
-  /** The reference record's store index */
+  /**
+   * The reference record's store index
+   */
   private int referenceIndex_ = -1;
 
-  /** The replicate record's unique key */
+  /**
+   * The replicate record's unique key
+   */
   private K replicateKey_ = null;
 
-  /** The replicate record's store index */
+  /**
+   * The replicate record's store index
+   */
   private int replicateIndex_ = -1;
 
   /**

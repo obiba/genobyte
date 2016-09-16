@@ -18,13 +18,6 @@
  *******************************************************************************/
 package org.obiba.genobyte.report;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.obiba.bitwise.BitwiseStore;
 import org.obiba.bitwise.Field;
 import org.obiba.bitwise.FieldValueIterator;
@@ -34,6 +27,13 @@ import org.obiba.genobyte.GenotypingStore;
 import org.obiba.genobyte.model.DefaultGenotypingField;
 import org.obiba.genobyte.model.SnpAllele;
 import org.obiba.genobyte.model.SnpCall;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Base class for "Ped file" report formats. The format is described here http://pngu.mgh.harvard.edu/~purcell/plink/data.shtml.
@@ -47,14 +47,20 @@ import org.obiba.genobyte.model.SnpCall;
  */
 public abstract class AbstractPedFileReport implements GenotypeReport {
 
-  /** The order of this enum must match the order of the columns in the output file */
+  /**
+   * The order of this enum must match the order of the columns in the output file
+   */
   public enum Column {
     FAMILY_ID, INDIVIDUAL_ID(true), PATERNAL_ID, MATERNAL_ID, GENDER, AFFECTION_STATUS(false, "-9");
 
-    /** When true, the column must absolutely be linked to a field in the bitwise store, otherwise the report cannot be generated */
+    /**
+     * When true, the column must absolutely be linked to a field in the bitwise store, otherwise the report cannot be generated
+     */
     private boolean linkRequired;
 
-    /** When the value is missing for the column, this value will be used instead */
+    /**
+     * When the value is missing for the column, this value will be used instead
+     */
     private String missingValueToken = "0";
 
     private Column() {
@@ -94,7 +100,7 @@ public abstract class AbstractPedFileReport implements GenotypeReport {
   }
 
   public String getDefaultFileName(int fileNumber) {
-    if(fileNumber == 0) {
+    if (fileNumber == 0) {
       return "pedfile.ped";
     }
     return null;
@@ -104,7 +110,8 @@ public abstract class AbstractPedFileReport implements GenotypeReport {
    * Links the {@link Column} c to the {@link BitwiseStore} field named <tt>fieldName</tt>.
    * When outputing values for the column, the field is used as the source. Each value is passed
    * to the {@link AbstractPedFileReport#convertColumnValue(Column, Object)} method.
-   * @param c the columnd to link
+   *
+   * @param c         the columnd to link
    * @param fieldName the linked field's name
    */
   public void linkColumnToField(Column c, String fieldName) {
@@ -113,12 +120,12 @@ public abstract class AbstractPedFileReport implements GenotypeReport {
 
   public void generateReport(GenotypingStore gs, QueryResult sampleMask, QueryResult assayMask, File... outputFiles) {
 
-    if(outputFiles == null || outputFiles.length != 1) {
+    if (outputFiles == null || outputFiles.length != 1) {
       return;
     }
 
-    for(Column column : Column.values()) {
-      if(column.isLinkRequired() == true && this.fieldNameMap_.get(column) == null) {
+    for (Column column : Column.values()) {
+      if (column.isLinkRequired() == true && this.fieldNameMap_.get(column) == null) {
         throw new IllegalStateException("The report column [" + column +
             "] must be linked to a field name. Make sure the method linkColumnToField is called when setting up the report object.");
       }
@@ -127,38 +134,38 @@ public abstract class AbstractPedFileReport implements GenotypeReport {
     PrintStream ps;
     try {
       ps = new PrintStream(new FileOutputStream(outputFiles[0]));
-    } catch(FileNotFoundException e) {
+    } catch (FileNotFoundException e) {
       throw new RuntimeException(e);
     }
 
     GenotypingRecordStore assays = gs.getAssayRecordStore();
 
     SnpAllele[][] assayAlleles = new SnpAllele[gs.getAssayCount()][];
-    for(int i = 0; i < assayAlleles.length; i++) {
+    for (int i = 0; i < assayAlleles.length; i++) {
       assayAlleles[i] = getAssayAlleles(assays, i);
     }
 
     GenotypingRecordStore samples = gs.getSampleRecordStore();
     StringBuilder sb = new StringBuilder();
-    for(int s = sampleMask.next(0); s != -1; s = sampleMask.next(s + 1)) {
+    for (int s = sampleMask.next(0); s != -1; s = sampleMask.next(s + 1)) {
       Field sampleCalls = samples
           .getGenotypingField(DefaultGenotypingField.CALLS.getName(), samples.getRecordManager().getKey(s));
-      if(sampleCalls == null) {
+      if (sampleCalls == null) {
         continue;
       }
 
-      for(Column column : Column.values()) {
+      for (Column column : Column.values()) {
         Object value = getColumnValue(column, gs.getSampleRecordStore().getStore(), s);
         sb.append(value).append(" ");
       }
 
       sb.ensureCapacity(sb.length() + assayMask.count() * 2);
       FieldValueIterator<SnpCall> genotypes = new FieldValueIterator<SnpCall>(sampleCalls, assayMask);
-      while(genotypes.hasNext()) {
+      while (genotypes.hasNext()) {
         FieldValueIterator<SnpCall>.FieldValue fv = genotypes.next();
         SnpCall call = fv.getValue();
         sb.append(convertCall(call, assayAlleles[fv.getIndex()]));
-        if(genotypes.hasNext()) sb.append(" ");
+        if (genotypes.hasNext()) sb.append(" ");
       }
       ps.println(sb.toString());
       sb.setLength(0);
@@ -175,8 +182,8 @@ public abstract class AbstractPedFileReport implements GenotypeReport {
   protected abstract SnpAllele[] getAssayAlleles(GenotypingRecordStore assays, int assayIndex);
 
   private String convertCall(SnpCall call, SnpAllele[] alleles) {
-    if(call != null) {
-      switch(call) {
+    if (call != null) {
+      switch (call) {
         case A:
           return alleles[0].toString() + " " + alleles[0].toString();
         case B:
@@ -192,22 +199,22 @@ public abstract class AbstractPedFileReport implements GenotypeReport {
   /**
    * Utility method to get a field's value for the specified record index
    *
-   * @param c the column for which to get the value
-   * @param bs the store from which to get the linked field (if any)
+   * @param c     the column for which to get the value
+   * @param bs    the store from which to get the linked field (if any)
    * @param index the record's index
    * @return the converted value of the specified record for the specified column.
    */
   private Object getColumnValue(Column c, BitwiseStore bs, int index) {
     String fieldName = this.fieldNameMap_.get(c);
     Field f = null;
-    if(fieldName != null) {
+    if (fieldName != null) {
       f = bs.getField(fieldName);
-      if(f != null) {
+      if (f != null) {
         Object value = f.getDictionary().reverseLookup(f.getValue(index));
-        if(value != null) {
+        if (value != null) {
           try {
             value = convertColumnValue(c, value);
-          } catch(RuntimeException e) {
+          } catch (RuntimeException e) {
             System.out.println(
                 "Cannot convert value [" + value + "] of type [" + value.getClass().getName() + "] for column [" + c +
                     "]");
