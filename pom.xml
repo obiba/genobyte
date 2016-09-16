@@ -68,6 +68,9 @@
   <version>2.0-SNAPSHOT</version>
 
   <modules>
+    <module>genobyte-bitwise-api</module>
+    <module>genobyte-bdb</module>
+    <module>genobyte-jdbm</module>
     <module>genobyte-bitwise</module>
     <module>genobyte-core</module>
     <module>genobyte-cli</module>
@@ -92,6 +95,27 @@
   <dependencyManagement>
 
     <dependencies>
+      <dependency>
+        <groupId>org.obiba.genobyte</groupId>
+        <artifactId>genobyte-bitwise-api</artifactId>
+        <version>${project.version}</version>
+        <type>jar</type>
+      </dependency>
+
+      <dependency>
+        <groupId>org.obiba.genobyte</groupId>
+        <artifactId>genobyte-bdb</artifactId>
+        <version>${project.version}</version>
+        <type>jar</type>
+      </dependency>
+
+      <dependency>
+        <groupId>org.obiba.genobyte</groupId>
+        <artifactId>genobyte-jdbm</artifactId>
+        <version>${project.version}</version>
+        <type>jar</type>
+      </dependency>
+
       <dependency>
         <groupId>org.obiba.genobyte</groupId>
         <artifactId>genobyte-bitwise</artifactId>

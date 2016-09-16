@@ -30,15 +30,6 @@ import java.util.Properties;
  */
 public class DefaultConfigurationPropertiesProvider implements ConfigurationPropertiesProvider {
 
-  /**
-   * The configuration key for the root directory of bitwise stores.
-   */
-  public static final String ROOT_DIR_PROPERTY = "bitwise.dir.root";
-
-  /**
-   * The configuration key for the bitwise DAO implementation to use.
-   */
-  public static final String BITWISE_DAO_IMPL = "bitwise.dao.impl";
 
   private Properties defaultProperties_;
 
